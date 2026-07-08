@@ -1,9 +1,7 @@
 import fs from "node:fs";
-import path from "node:path";
 import { isDatabaseEnabled, query } from "@/lib/db/pool";
 import { listProjectsFromDb } from "@/lib/db/repositories/projects";
 import { MANIFEST_PATHS } from "@/lib/admin/manifests";
-import { resolveProjectCover } from "@/lib/catalog/project-cover";
 
 const root = process.cwd();
 
