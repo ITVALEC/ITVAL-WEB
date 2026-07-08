@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750" viewBox="0 0 1200 750" role="img" aria-label="products/coversExteriors">
+  <rect width="100%" height="100%" fill="#1A2E44"/>
+  <rect x="96" y="90" width="1008" height="570" rx="12" fill="none" stroke="#6495ED" stroke-width="3" stroke-dasharray="12 8"/>
+  <text x="50%" y="46%" text-anchor="middle" fill="#6495ED" font-family="Arial,sans-serif" font-size="30" font-weight="700">ITVAL</text>
+  <text x="50%" y="54%" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-size="15">products/coversExteriors</text>
+  <text x="50%" y="62%" text-anchor="middle" fill="#A6A9AB" font-family="Arial,sans-serif" font-size="15">Reemplazar con foto propia</text>
+</svg>

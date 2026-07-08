@@ -1,0 +1,7 @@
+{
+  "description": "Imágenes que no deben publicarse (personas trabajando, IA, etc.).",
+  "files": [],
+  "patterns": [
+    "^DSC0060[0-9]\\.(jpe?g|png)$"
+  ]
+}

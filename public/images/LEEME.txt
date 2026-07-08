@@ -1,0 +1,33 @@
+ITVAL — Imágenes del sitio web
+=============================
+
+Coloque aquí las fotos reales de la empresa. Cada archivo tiene un nombre fijo;
+sustituya el .svg por su foto (.jpg o .webp) con el MISMO nombre.
+
+Ejemplo: reemplace  site/hero.svg  por  site/hero.jpg
+         y en src/lib/assets.ts cambie "hero.svg" por "hero.jpg"
+
+Carpetas y uso
+--------------
+site/          → Foto principal del inicio (hero)
+pages/         → Banners de Productos, Proyectos, Nosotros, Contacto
+products/      → Una imagen por línea de producto (10 categorías)
+projects/      → Una foto por proyecto del portafolio
+about/         → Fotos de la página Nosotros
+
+Tamaños recomendados
+--------------------
+Banners (site, pages):  1920 × 1080 px  |  JPG/WebP, máx. ~400 KB
+Productos:              1200 × 750 px   |  Proyectos y Nosotros: 1200 × 900 px
+
+Consejos
+--------
+- Use fotos de obras reales de ITVAL (fachadas, instalaciones, detalle).
+- Nombre de archivo en minúsculas, sin espacios ni tildes.
+- Para regenerar placeholders SVG: npm run images:placeholders
+
+Más adelante (sin tocar código cada vez)
+----------------------------------------
+Si los dueños quieren subir fotos solos desde un panel, conviene un CMS
+(Sanity, Payload) o almacén en la nube (Cloudinary). Eso no requiere
+base de datos propia en muchos casos.

@@ -1,0 +1,260 @@
+{
+  "metadata": {
+    "home": {
+      "title": "ITVAL — Aluminio y vidrio para proyectos de escala",
+      "description": "Soluciones en fachadas, muro cortina y cancelería arquitectónica para proyectos empresariales en Ecuador."
+    },
+    "projects": {
+      "title": "Proyectos — ITVAL",
+      "description": "Portafolio real de obras en vidrio, aluminio y estructuras metálicas en Quito, Guayaquil y todo el Ecuador."
+    },
+    "products": {
+      "title": "Productos — ITVAL",
+      "description": "Catálogo de fachadas, cancelería, seguridad, exteriores, vidrio y acero inoxidable para proyectos de escala."
+    },
+    "about": {
+      "title": "Nosotros — ITVAL",
+      "description": "Misión, perfil y valores de ITVAL: más de 14 años de experiencia en aluminio y vidrio arquitectónico en Ecuador."
+    },
+    "contact": {
+      "title": "Contacto — ITVAL",
+      "description": "Solicite una cotización o consulte con nuestro equipo de ingeniería para su próximo proyecto."
+    }
+  },
+  "common": {
+    "skipToContent": "Saltar al contenido",
+    "quoteNow": "Cotizar ahora",
+    "learnMore": "Conocer más",
+    "viewAllProjects": "Ver todos los proyectos",
+    "loading": "Enviando…",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
+    "languageSwitcher": "Seleccionar idioma",
+    "logoAlt": "ITVAL — Vidrio y aluminio",
+    "breadcrumbNav": "Migas de pan",
+    "locales": {
+      "es": "Español",
+      "en": "English"
+    }
+  },
+  "nav": {
+    "home": "Inicio",
+    "products": "Productos",
+    "projects": "Proyectos",
+    "about": "Nosotros",
+    "contact": "Contacto"
+  },
+  "hero": {
+    "title": "Proyectos emblemáticos y complejos: ingeniería de escala",
+    "subtitle": "Diseñamos, fabricamos e instalamos soluciones en aluminio y vidrio para estructuras de gran envergadura: fachadas unitizadas, muro cortina y cancelería arquitectónica de alto desempeño.",
+    "technicalBox1Title": "Fachada unitizada",
+    "technicalBox1Desc": "Sistemas modulares prefabricados para instalación rápida en obra con control dimensional milimétrico.",
+    "technicalBox2Title": "Muro cortina estructural",
+    "technicalBox2Desc": "Ingeniería de vidrio laminado y DVH para envolventes de gran altura con máximo aprovechamiento lumínico.",
+    "imageAlt": "Fachada arquitectónica de vidrio y aluminio en edificio corporativo",
+    "carousel": {
+      "navLabel": "Galería de proyectos en inicio",
+      "goToSlide": "Ver imagen {index}"
+    },
+    "taglines": {
+      "designBuild": "Diseñamos y construimos sistemas de aluminio y vidrio de calidad que garantizan ambientes seguros y confortables.",
+      "innovative": "Soluciones innovadoras en vidrio y aluminio para arquitectura moderna y sostenible.",
+      "experience": "Ponemos a su disposición nuestra experiencia y calidad para hacer realidad las grandes ideas."
+    }
+  },
+  "products": {
+    "title": "Soluciones por categoría",
+    "subtitle": "Explore fachadas, cancelería, seguridad, exteriores y más — con ingeniería, fabricación e instalación ITVAL.",
+    "carouselNav": "Categorías de productos",
+    "previous": "Ver categorías anteriores",
+    "next": "Ver más categorías"
+  },
+  "metrics": {
+    "title": "Resultados medibles",
+    "subtitle": "Trayectoria comprobada en vidrio, aluminio y estructuras metálicas en Ecuador.",
+    "years": { "value": "14+", "label": "Años de experiencia" },
+    "projects": { "label": "Proyectos en portafolio" },
+    "cities": { "label": "Ciudades atendidas" }
+  },
+  "featuredProjects": {
+    "title": "Proyectos destacados",
+    "subtitle": "Referentes en fachadas y cancelería para el sector empresarial.",
+    "viewProject": "Ver proyecto"
+  },
+  "process": {
+    "title": "Nuestro proceso",
+    "subtitle": "Metodología probada para proyectos complejos con plazos y presupuestos definidos.",
+    "steps": {
+      "consultation": {
+        "title": "Consultoría técnica",
+        "description": "Análisis de requerimientos, visita a sitio y propuesta preliminar de sistemas."
+      },
+      "engineering": {
+        "title": "Ingeniería y diseño",
+        "description": "Desarrollo de planos, especificaciones y modelado BIM para aprobación."
+      },
+      "fabrication": {
+        "title": "Fabricación",
+        "description": "Producción en planta con control dimensional y pruebas de calidad."
+      },
+      "installation": {
+        "title": "Instalación y entrega",
+        "description": "Montaje en obra, pruebas de estanqueidad y acta de entrega."
+      }
+    }
+  },
+  "cta": {
+    "title": "¿Listo para escalar su próximo proyecto?",
+    "subtitle": "Nuestro equipo de ingeniería está preparado para evaluar su fachada o cancelería con respuesta en 48 horas hábiles.",
+    "button": "Solicitar cotización"
+  },
+  "projectsPage": {
+    "title": "Proyectos",
+    "subtitle": "Portafolio de obras reales en vidrio, aluminio y estructuras metálicas en Ecuador.",
+    "year": "Año",
+    "resultsAll": "Portafolio completo: {total, plural, one {# obra} other {# obras}}",
+    "resultsFiltered": "Se encontraron {count} de {total} obras",
+    "resultsPageRange": "Viendo {from}–{to} de {total}",
+    "empty": "No hay proyectos con estos filtros",
+    "emptyHint": "Prueba otra combinación o limpia los filtros para ver todo el portafolio.",
+    "filters": {
+      "allSolutions": "Todas las soluciones",
+      "allCities": "Todas las ciudades",
+      "allPeriods": "Todos los años",
+      "clear": "Limpiar filtros",
+      "activeLabel": "Filtros activos",
+      "chipCity": "{city}",
+      "solutionLabel": "1. Tipo de solución",
+      "cityLabel": "2. Ciudad",
+      "cityHintForSolution": "Ciudades con obras de {solution}",
+      "periodLabel": "3. Período",
+      "periodHint": "Según el año de la obra",
+      "cityOption": "{city} ({count})",
+      "periodOption": "{period} ({count})",
+      "solutions": {
+        "facades": "Fachadas y muro cortina",
+        "doors": "Puertas y accesos",
+        "security": "Seguridad",
+        "exteriors": "Cubiertas y exteriores"
+      },
+      "periods": {
+        "2020s": "2020 en adelante",
+        "2015s": "2015 – 2019",
+        "2010s": "2010 – 2014",
+        "legacy": "Antes de 2010"
+      }
+    },
+    "pagination": {
+      "label": "Paginación de proyectos",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "page": "Página {current} de {total}"
+    }
+  },
+  "projectDetail": {
+    "metaDescription": "{name} — obra de {location} en el portafolio ITVAL.",
+    "about": "Sobre el proyecto",
+    "details": "Datos del proyecto",
+    "location": "Ubicación",
+    "year": "Año",
+    "system": "Sistema",
+    "photos": "Fotografías",
+    "gallery": "Galería del proyecto",
+    "galleryClose": "Cerrar imagen",
+    "galleryPaginationNav": "Paginación de galería",
+    "galleryPreviousPage": "Anterior",
+    "galleryNextPage": "Siguiente",
+    "galleryPageStatus": "Página {page} de {totalPages}",
+    "galleryGoToPage": "Ir a la página {page}",
+    "galleryShowingRange": "Mostrando {from}–{to} de {total}",
+    "description": "En ITVAL desarrollamos {name}, un proyecto de {type} ubicado en {location}. Nuestro equipo técnico garantizó precisión en medidas, instalación y acabados para entregar un resultado durable y estético.",
+    "requestQuote": "Solicitar cotización"
+  },
+  "aboutPage": {
+    "title": "Nosotros",
+    "subtitle": "Especialistas en aluminio y vidrio con más de 14 años de experiencia en Ecuador.",
+    "mission": {
+      "title": "Misión.",
+      "banner": "En ITVAL transformamos espacios con precisión y diseño",
+      "imageAlt": "Proyecto ITVAL en vidrio y aluminio",
+      "body": "Proveer soluciones integrales en vidrio, aluminio y estructuras metálicas. Nos comprometemos a entregar productos de alto diseño, respaldados por un equipo multidisciplinario que garantiza seguridad, durabilidad y estética en cada proyecto, desde viviendas particulares hasta grandes complejos."
+    },
+    "profile": {
+      "title": "Perfil de la empresa",
+      "body": "ITVAL es una empresa que cuenta con personal técnico altamente calificado y cuya mano de obra está constituida por gente de amplia experiencia en el mundo del aluminio y el vidrio. Ponemos a su disposición nuestra experiencia y calidad para hacer realidad las grandes ideas de los diseñadores, la seguridad del constructor y el confort del cliente. Al usar vidrios más eficientes y con coeficiente U más bajos conseguimos reducir el consumo de energía, iluminación, refrigeración o aire acondicionado. El aluminio y el vidrio en la construcción es una gran solución, con mucha variedad de sistemas resistentes, eficientes y estéticos."
+    },
+    "values": {
+      "title": "Nuestros valores",
+      "items": {
+        "ethics": {
+          "title": "Ética profesional",
+          "body": "Actuamos con transparencia, honestidad e integridad en nuestras relaciones con clientes, proveedores y colaboradores. Para nosotros, la confianza es el cimiento de cada estructura que construimos."
+        },
+        "responsibility": {
+          "title": "Responsabilidad",
+          "body": "Asumimos un compromiso serio con la seguridad, los plazos de entrega y la calidad de los materiales. Entendemos el impacto de nuestro trabajo en la protección y estética de las edificaciones."
+        },
+        "precision": {
+          "title": "Precisión técnica",
+          "body": "Buscamos la perfección en el detalle. Desde la toma de medidas hasta la instalación final, aplicamos rigurosidad técnica para garantizar que cada sistema de vidrio y aluminio funcione impecablemente."
+        },
+        "excellence": {
+          "title": "Excelencia en el servicio",
+          "body": "Combinamos más de 14 años de experiencia con una atención personalizada, asegurando que cada solución — desde la más sencilla hasta la más compleja — supere las expectativas del cliente."
+        }
+      }
+    }
+  },
+  "contactPage": {
+    "title": "Contacto",
+    "subtitle": "Cuéntenos sobre su proyecto. Respondemos en un máximo de 48 horas hábiles.",
+    "form": {
+      "name": "Nombre completo",
+      "email": "Correo electrónico",
+      "phone": "Teléfono",
+      "company": "Empresa",
+      "projectType": "Tipo de proyecto",
+      "message": "Descripción del proyecto",
+      "submit": "Enviar solicitud",
+      "success": "Su mensaje ha sido recibido. Nos pondremos en contacto pronto.",
+      "projectTypes": {
+        "facades": "Fachadas arquitectónicas",
+        "aluminumWindows": "Ventanas y aluminio",
+        "doorsAccess": "Puertas y accesos",
+        "automaticDoors": "Puertas automáticas",
+        "security": "Seguridad especializada",
+        "coversExteriors": "Cubiertas y exteriores",
+        "acmLouvers": "ACM y quiebrasoles",
+        "corporateInteriors": "Interiores corporativos",
+        "architecturalGlass": "Vidrio arquitectónico",
+        "stainlessSteel": "Acero inoxidable",
+        "other": "Otro"
+      },
+      "errors": {
+        "nameRequired": "Ingrese su nombre",
+        "emailRequired": "Ingrese un correo electrónico",
+        "emailInvalid": "Ingrese un correo electrónico válido",
+        "messageRequired": "Describa brevemente su proyecto"
+      }
+    },
+    "info": {
+      "title": "Datos de contacto",
+      "email": "Correo",
+      "phone": "Teléfono",
+      "address": "Dirección",
+      "addressValue": "Quito, Ecuador",
+      "hours": "Horario",
+      "hoursValue": "Lunes a viernes, 9:00 – 18:00"
+    }
+  },
+  "footer": {
+    "tagline": "Soluciones integrales en vidrio, aluminio y estructuras metálicas.",
+    "experience": "Más de 14 años de experiencia en Ecuador.",
+    "rights": "Todos los derechos reservados.",
+    "nav": "Navegación",
+    "contact": "Contacto",
+    "ctaTitle": "¿Tienes un proyecto?",
+    "ctaText": "Cuéntanos sobre tu obra y nuestro equipo técnico te responderá en 48 horas hábiles.",
+    "location": "Quito · Guayaquil · Ecuador"
+  }
+}

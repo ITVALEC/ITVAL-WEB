@@ -1,0 +1,3520 @@
+{
+  "categories": {
+    "facades": "/images/products/facades.jpg",
+    "aluminumWindows": "/images/products/aluminumWindows.jpg",
+    "doorsAccess": "/images/products/doorsAccess.jpg",
+    "automaticDoors": "/images/products/automaticDoors.jpeg",
+    "security": "/images/products/security.jpeg",
+    "coversExteriors": "/images/products/coversExteriors.jpg",
+    "acmLouvers": "/images/products/acmLouvers.jpg",
+    "corporateInteriors": "/images/products/corporateInteriors.png",
+    "architecturalGlass": "/images/products/architecturalGlass.jpg",
+    "stainlessSteel": "/images/products/stainlessSteel.jpg"
+  },
+  "subcategories": {
+    "facades": {
+      "curtainWallStick": "/images/products/facades/curtainWallStick.jpeg",
+      "stickRpt": "/images/products/facades/stickRpt.jpg",
+      "structuralGlazing": "/images/products/facades/structuralGlazing.jpg",
+      "glassSkin": "/images/products/facades/glassSkin.jpg"
+    },
+    "aluminumWindows": {
+      "projected": "/images/products/aluminumWindows/projected.jpg",
+      "sliding": "/images/products/aluminumWindows/sliding.jpg",
+      "visusFemec": "/images/products/aluminumWindows/visusFemec.jpeg",
+      "thermalSolar": "/images/products/aluminumWindows/thermalSolar.jpeg"
+    },
+    "doorsAccess": {
+      "slidingDoors": "/images/products/doorsAccess/slidingDoors.jpg",
+      "hingedDoors": "/images/products/doorsAccess/hingedDoors.jpg",
+      "foldingDoors": "/images/products/doorsAccess/foldingDoors.jpg",
+      "hermeticDoors": "/images/products/doorsAccess/hermeticDoors.jpeg"
+    },
+    "automaticDoors": {
+      "standardAuto": "/images/products/automaticDoors/standardAuto.jpeg",
+      "telescopicAuto": "/images/products/automaticDoors/telescopicAuto.jpeg",
+      "armoredAuto": "/images/products/automaticDoors/armoredAuto.jpeg"
+    },
+    "security": {
+      "armoredPartitions": "/images/products/security/armoredPartitions.jpeg",
+      "ballisticSteel": "/images/products/security/ballisticSteel.jpeg",
+      "gesellGlass": "/images/products/security/gesellGlass.jpeg",
+      "guardBooths": "/images/products/security/guardBooths.jpg"
+    },
+    "coversExteriors": {
+      "roofsSkylights": "/images/products/coversExteriors/roofsSkylights.jpg",
+      "pergolas": "/images/products/coversExteriors/pergolas.jpg",
+      "marquees": "/images/products/coversExteriors/marquees.jpg",
+      "glassEnclosures": "/images/products/coversExteriors/glassEnclosures.jpeg"
+    },
+    "acmLouvers": {
+      "acmPanels": "/images/products/acmLouvers/acmPanels.jpg",
+      "louvers": "/images/products/acmLouvers/louvers.jpg",
+      "sunBreakers": "/images/products/acmLouvers/sunBreakers.jpeg",
+      "compositeFacades": "/images/products/acmLouvers/compositeFacades.jpg"
+    },
+    "corporateInteriors": {
+      "glassPartitions": "/images/products/corporateInteriors/glassPartitions.jpg",
+      "officeDivision": "/images/products/corporateInteriors/officeDivision.jpg",
+      "lobbies": "/images/products/corporateInteriors/lobbies.jpg",
+      "signage": "/images/products/corporateInteriors/signage.jpg"
+    },
+    "architecturalGlass": {
+      "glassFloors": "/images/products/architecturalGlass/glassFloors.jpg",
+      "handrailsMirrors": "/images/products/architecturalGlass/handrailsMirrors.jpg",
+      "decorativeGlass": "/images/products/architecturalGlass/decorativeGlass.jpeg",
+      "wineCellars": "/images/products/architecturalGlass/wineCellars.jpg"
+    },
+    "stainlessSteel": {
+      "handrails": "/images/products/stainlessSteel/handrails.jpg",
+      "ssSlidingDoors": "/images/products/stainlessSteel/ssSlidingDoors.jpeg",
+      "bathroomPartitions": "/images/products/stainlessSteel/bathroomPartitions.jpg"
+    }
+  },
+  "galleries": {
+    "acmLouvers": {
+      "acmPanels": [
+        {
+          "src": "/images/products/gallery/acmLouvers/acmPanels/20230116-124339-jpg.jpg",
+          "caption": "20230116 124339"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/acmPanels/abn-panel-blanco-jpg.jpg",
+          "caption": "ABN Panel Blanco"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/acmPanels/dsc02814-jpg.jpg",
+          "caption": "DSC02814"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/acmPanels/dsc02815-jpg.jpg",
+          "caption": "DSC02815"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/acmPanels/dsc02835-jpg.jpg",
+          "caption": "DSC02835"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/acmPanels/dsc02838-jpg.jpg",
+          "caption": "DSC02838"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/acmPanels/dsc02839-jpg.jpg",
+          "caption": "DSC02839"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/acmPanels/dsc02840-jpg.jpg",
+          "caption": "DSC02840"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/acmPanels/dsc02844-jpg.jpg",
+          "caption": "DSC02844"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/acmPanels/dsc02845-jpg.jpg",
+          "caption": "DSC02845"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/acmPanels/dsc02847-jpg.jpg",
+          "caption": "DSC02847"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/acmPanels/dsc02848-jpg.jpg",
+          "caption": "DSC02848"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/acmPanels/dsc02849-jpg.jpg",
+          "caption": "DSC02849"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/acmPanels/dsc02850-jpg.jpg",
+          "caption": "DSC02850"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/acmPanels/dscn1120-jpg.jpg",
+          "caption": "DSCN1120"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/acmPanels/dscn1126-jpg.jpg",
+          "caption": "DSCN1126"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/acmPanels/panel-compuesto-b-pichincha-ficoa-ambato-2-jpg.jpg",
+          "caption": "Panel compuesto B Pichincha Ficoa Ambato 2"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/acmPanels/panel-compuesto-b-pichincha-ficoa-ambato-3-jpg.jpg",
+          "caption": "Panel compuesto B Pichincha Ficoa Ambato 3"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/acmPanels/panel-compuesto-b-pichincha-ficoa-ambato-jpg.jpg",
+          "caption": "Panel compuesto B Pichincha Ficoa Ambato"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/acmPanels/qph-cortasoles-en-panel-aluminio-jpg.jpg",
+          "caption": "QPH Cortasoles en panel aluminio"
+        }
+      ],
+      "compositeFacades": [
+        {
+          "src": "/images/products/gallery/acmLouvers/compositeFacades/20230116-124339-jpg.jpg",
+          "caption": "20230116 124339"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/compositeFacades/abn-panel-blanco-jpg.jpg",
+          "caption": "ABN Panel Blanco"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/compositeFacades/dsc02814-jpg.jpg",
+          "caption": "DSC02814"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/compositeFacades/dsc02815-jpg.jpg",
+          "caption": "DSC02815"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/compositeFacades/dsc02835-jpg.jpg",
+          "caption": "DSC02835"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/compositeFacades/dsc02838-jpg.jpg",
+          "caption": "DSC02838"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/compositeFacades/dsc02839-jpg.jpg",
+          "caption": "DSC02839"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/compositeFacades/dsc02840-jpg.jpg",
+          "caption": "DSC02840"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/compositeFacades/dsc02844-jpg.jpg",
+          "caption": "DSC02844"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/compositeFacades/dsc02845-jpg.jpg",
+          "caption": "DSC02845"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/compositeFacades/dsc02847-jpg.jpg",
+          "caption": "DSC02847"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/compositeFacades/dsc02848-jpg.jpg",
+          "caption": "DSC02848"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/compositeFacades/dsc02849-jpg.jpg",
+          "caption": "DSC02849"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/compositeFacades/dsc02850-jpg.jpg",
+          "caption": "DSC02850"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/compositeFacades/dscn1120-jpg.jpg",
+          "caption": "DSCN1120"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/compositeFacades/dscn1126-jpg.jpg",
+          "caption": "DSCN1126"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/compositeFacades/panel-compuesto-b-pichincha-ficoa-ambato-2-jpg.jpg",
+          "caption": "Panel compuesto B Pichincha Ficoa Ambato 2"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/compositeFacades/panel-compuesto-b-pichincha-ficoa-ambato-3-jpg.jpg",
+          "caption": "Panel compuesto B Pichincha Ficoa Ambato 3"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/compositeFacades/panel-compuesto-b-pichincha-ficoa-ambato-jpg.jpg",
+          "caption": "Panel compuesto B Pichincha Ficoa Ambato"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/compositeFacades/qph-cortasoles-en-panel-aluminio-jpg.jpg",
+          "caption": "QPH Cortasoles en panel aluminio"
+        }
+      ],
+      "louvers": [
+        {
+          "src": "/images/products/gallery/acmLouvers/louvers/20150205-105125-jpg.jpg",
+          "caption": "20150205 105125"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/louvers/20150429-102803-jpg.jpg",
+          "caption": "20150429 102803"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/louvers/ayemsa-jpeg.jpeg",
+          "caption": "AYEMSA"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/louvers/aymesa-3-jpeg.jpeg",
+          "caption": "AYMESA 3"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/louvers/aymesa2-jpeg.jpeg",
+          "caption": "AYMESA2"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/louvers/dscn1542-jpg.jpg",
+          "caption": "DSCN1542"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/louvers/fachada-sur-norte-jpg.jpg",
+          "caption": "FACHADA SUR NORTE"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/louvers/image1-jpg.jpg",
+          "caption": "Image1"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/louvers/louvers-fijos-y-moviles-jpg.jpg",
+          "caption": "Louvers fijos y moviles"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/louvers/louvers-bala-1-jpg.jpg",
+          "caption": "louvers bala 1"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/louvers/qph-louver-moviles-jpg.jpg",
+          "caption": "QPH Louver moviles"
+        }
+      ],
+      "sunBreakers": [
+        {
+          "src": "/images/products/gallery/acmLouvers/sunBreakers/20150205-105125-jpg.jpg",
+          "caption": "20150205 105125"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/sunBreakers/20150429-102803-jpg.jpg",
+          "caption": "20150429 102803"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/sunBreakers/ayemsa-jpeg.jpeg",
+          "caption": "AYEMSA"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/sunBreakers/aymesa-3-jpeg.jpeg",
+          "caption": "AYMESA 3"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/sunBreakers/aymesa2-jpeg.jpeg",
+          "caption": "AYMESA2"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/sunBreakers/dscn1542-jpg.jpg",
+          "caption": "DSCN1542"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/sunBreakers/fachada-sur-norte-jpg.jpg",
+          "caption": "FACHADA SUR NORTE"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/sunBreakers/image1-jpg.jpg",
+          "caption": "Image1"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/sunBreakers/louvers-fijos-y-moviles-jpg.jpg",
+          "caption": "Louvers fijos y moviles"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/sunBreakers/louvers-bala-1-jpg.jpg",
+          "caption": "louvers bala 1"
+        },
+        {
+          "src": "/images/products/gallery/acmLouvers/sunBreakers/qph-louver-moviles-jpg.jpg",
+          "caption": "QPH Louver moviles"
+        }
+      ]
+    },
+    "aluminumWindows": {
+      "projected": [
+        {
+          "src": "/images/products/gallery/aluminumWindows/projected/img-20151113-wa0004-jpg.jpg",
+          "caption": "IMG 20151113 WA0004"
+        },
+        {
+          "src": "/images/products/gallery/aluminumWindows/projected/img-20151113-wa0005-jpg.jpg",
+          "caption": "IMG 20151113 WA0005"
+        },
+        {
+          "src": "/images/products/gallery/aluminumWindows/projected/img-20151201-wa0030-jpg.jpg",
+          "caption": "IMG 20151201 WA0030"
+        },
+        {
+          "src": "/images/products/gallery/aluminumWindows/projected/ventanas-2-jpeg.jpeg",
+          "caption": "ventanas 2"
+        },
+        {
+          "src": "/images/products/gallery/aluminumWindows/projected/ventanas-proyectables-jpg.jpg",
+          "caption": "Ventanas proyectables"
+        },
+        {
+          "src": "/images/products/gallery/aluminumWindows/projected/whatsapp-image-2026-04-01-at-16-18-42-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 16.18.42"
+        }
+      ],
+      "sliding": [
+        {
+          "src": "/images/products/gallery/aluminumWindows/sliding/t45-jpeg.jpeg",
+          "caption": "t45"
+        },
+        {
+          "src": "/images/products/gallery/aluminumWindows/sliding/ventanas-corredizas-jpg.jpg",
+          "caption": "Ventanas corredizas"
+        },
+        {
+          "src": "/images/products/gallery/aluminumWindows/sliding/visus-corredizo-jpeg.jpeg",
+          "caption": "visus corredizo"
+        }
+      ],
+      "thermalSolar": [
+        {
+          "src": "/images/products/gallery/aluminumWindows/thermalSolar/t45-jpeg.jpeg",
+          "caption": "t45"
+        },
+        {
+          "src": "/images/products/gallery/aluminumWindows/thermalSolar/ventanas-corredizas-jpg.jpg",
+          "caption": "Ventanas corredizas"
+        },
+        {
+          "src": "/images/products/gallery/aluminumWindows/thermalSolar/visus-corredizo-jpeg.jpeg",
+          "caption": "visus corredizo"
+        }
+      ],
+      "visusFemec": [
+        {
+          "src": "/images/products/gallery/aluminumWindows/visusFemec/t45-jpeg.jpeg",
+          "caption": "t45"
+        },
+        {
+          "src": "/images/products/gallery/aluminumWindows/visusFemec/ventanas-corredizas-jpg.jpg",
+          "caption": "Ventanas corredizas"
+        },
+        {
+          "src": "/images/products/gallery/aluminumWindows/visusFemec/visus-corredizo-jpeg.jpeg",
+          "caption": "visus corredizo"
+        }
+      ]
+    },
+    "architecturalGlass": {
+      "decorativeGlass": [
+        {
+          "src": "/images/products/gallery/architecturalGlass/decorativeGlass/whatsapp-image-2026-04-02-at-17-13-24-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 17.13.24"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/decorativeGlass/whatsapp-image-2026-04-02-at-17-13-36-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 17.13.36"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/decorativeGlass/whatsapp-image-2026-04-02-at-17-13-37-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 17.13.37"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/decorativeGlass/whatsapp-image-2026-04-02-at-17-13-38-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 17.13.38"
+        }
+      ],
+      "glassFloors": [
+        {
+          "src": "/images/products/gallery/architecturalGlass/glassFloors/20160908-130639-jpg.jpg",
+          "caption": "20160908 130639"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/glassFloors/dsc-8469-jpg.jpg",
+          "caption": "DSC 8469"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/glassFloors/dsc-8509-jpg.jpg",
+          "caption": "DSC 8509"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/glassFloors/piso-de-vidrio-edificio-aranjuez-jpg.jpg",
+          "caption": "PISO DE VIDRIO Edificio Aranjuez"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/glassFloors/piso-vidrio-kia-ex-jpeg.jpeg",
+          "caption": "piso vidrio kia ex"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/glassFloors/piso-vidrio-kia-matriz-2-jpeg.jpeg",
+          "caption": "piso vidrio kia matriz 2"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/glassFloors/piso-vidrio-kia-matriza-jpeg.jpeg",
+          "caption": "piso vidrio kia matriza"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/glassFloors/qph-piso-de-vidrio-v-inferior-jpg.jpg",
+          "caption": "QPH piso de vidrio v.inferior"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/glassFloors/qph-piso-de-vidrio-v-superior-jpg.jpg",
+          "caption": "QPH Piso de vidrio v.superior"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/glassFloors/qph-piso-de-vidrio-jpg.jpg",
+          "caption": "QPH piso de vidrio"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/glassFloors/whatsapp-image-2026-04-02-at-17-13-27-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 17.13.27"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/glassFloors/whatsapp-image-2026-04-02-at-17-13-271-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 17.13.271"
+        }
+      ],
+      "handrailsMirrors": [
+        {
+          "src": "/images/products/gallery/architecturalGlass/handrailsMirrors/20160908-131418-jpg.jpg",
+          "caption": "20160908 131418"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/handrailsMirrors/20160908-131553-jpg.jpg",
+          "caption": "20160908 131553"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/handrailsMirrors/e-jpeg.jpeg",
+          "caption": "e"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/handrailsMirrors/whatsapp-image-2026-04-01-at-15-35-54-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 15.35.54"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/handrailsMirrors/whatsapp-image-2026-04-01-at-16-40-44-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 16.40.44"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/handrailsMirrors/dsc0133-jpg.jpg",
+          "caption": "DSC0133"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/handrailsMirrors/dsc0365-jpg.jpg",
+          "caption": "DSC0365"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/handrailsMirrors/dsc0381-jpg.jpg",
+          "caption": "DSC0381"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/handrailsMirrors/dsc0440-jpg.jpg",
+          "caption": "DSC0440"
+        }
+      ],
+      "wineCellars": [
+        {
+          "src": "/images/products/gallery/architecturalGlass/wineCellars/20170406-120234-jpg.jpg",
+          "caption": "20170406 120234"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/wineCellars/20170406-120238-jpg.jpg",
+          "caption": "20170406 120238"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/wineCellars/20170406-120239-jpg.jpg",
+          "caption": "20170406 120239"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/wineCellars/mueble-botellas-3-1-jpg.jpg",
+          "caption": "Mueble botellas 3 1"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/wineCellars/varios-1-jpg.jpg",
+          "caption": "varios 1"
+        },
+        {
+          "src": "/images/products/gallery/architecturalGlass/wineCellars/dsc0422-jpg.jpg",
+          "caption": "DSC0422"
+        }
+      ]
+    },
+    "automaticDoors": {
+      "armoredAuto": [
+        {
+          "src": "/images/products/gallery/automaticDoors/armoredAuto/kia-1-jpeg.jpeg",
+          "caption": "KIA 1"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/armoredAuto/kia-2-jpeg.jpeg",
+          "caption": "KIA 2"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/armoredAuto/kia-3-jpeg.jpeg",
+          "caption": "KIA 3"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/armoredAuto/kia-4-jpeg.jpeg",
+          "caption": "KIA 4"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/armoredAuto/whatsapp-image-2026-03-27-at-18-52-37-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 03 27 at 18.52.37"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/armoredAuto/whatsapp-image-2026-04-02-at-17-13-39-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 17.13.39"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/armoredAuto/whatsapp-image-2026-04-02-at-17-13-40-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 17.13.40"
+        }
+      ],
+      "standardAuto": [
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/puerta-face-jpeg.jpeg",
+          "caption": "PUERTA FACE"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/whatsapp-image-2026-04-02-at-17-13-36-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 17.13.36"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/whatsapp-image-2026-04-13-at-09-31-46-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 13 at 09.31.46"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/whatsapp-image-2026-04-13-at-09-31-47-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 13 at 09.31.47"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/whatsapp-image-2026-04-13-at-09-31-471-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 13 at 09.31.471"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/whatsapp-image-2026-04-13-at-09-31-472-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 13 at 09.31.472"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/whatsapp-image-2026-04-13-at-09-31-4721-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 13 at 09.31.4721"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2018-kia-matriz-quito-0-jpeg.jpeg",
+          "caption": "2018 KIA MATRIZ — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2018-kia-matriz-quito-kia-matriz-jpg.jpg",
+          "caption": "2018 KIA MATRIZ — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2018-kia-matriz-quito-kia-motors-2018-png.png",
+          "caption": "2018 KIA MATRIZ — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2018-kia-matriz-quito-piso-vidrio-jpg.jpg",
+          "caption": "2018 KIA MATRIZ — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2023-kia-matriz-guayaquil-0-jpeg.jpeg",
+          "caption": "2023 KIA MATRIZ — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2023-kia-matriz-guayaquil-00-jpeg.jpeg",
+          "caption": "2023 KIA MATRIZ — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2023-kia-matriz-guayaquil-000-jpeg.jpeg",
+          "caption": "2023 KIA MATRIZ — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2023-kia-matriz-guayaquil-0000-jpeg.jpeg",
+          "caption": "2023 KIA MATRIZ — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2023-kia-matriz-guayaquil-10-jpeg.jpeg",
+          "caption": "2023 KIA MATRIZ — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2023-kia-matriz-guayaquil-2-jpeg.jpeg",
+          "caption": "2023 KIA MATRIZ — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2023-kia-matriz-guayaquil-3-jpeg.jpeg",
+          "caption": "2023 KIA MATRIZ — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2023-kia-matriz-guayaquil-9-jpeg.jpeg",
+          "caption": "2023 KIA MATRIZ — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2023-kia-matriz-guayaquil-whatsapp-image-2026-03-09-at-22-12-00-jpeg.jpeg",
+          "caption": "2023 KIA MATRIZ — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2023-kia-matriz-guayaquil-whatsapp-image-2026-03-09-at-22-12-000-jpeg.jpeg",
+          "caption": "2023 KIA MATRIZ — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2023-kia-matriz-guayaquil-whatsapp-image-2026-03-09-at-22-12-01-jpeg.jpeg",
+          "caption": "2023 KIA MATRIZ — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2024-suzuki-guayaquil-11-jpeg.jpeg",
+          "caption": "2024 SUZUKI — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2024-suzuki-guayaquil-22-jpeg.jpeg",
+          "caption": "2024 SUZUKI — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2024-suzuki-guayaquil-33-jpeg.jpeg",
+          "caption": "2024 SUZUKI — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2024-suzuki-guayaquil-whatsapp-image-2026-04-11-at-12-53-334-jpeg.jpeg",
+          "caption": "2024 SUZUKI — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2024-suzuki-guayaquil-whatsapp-image-2026-04-13-at-14-53-415-jpeg.jpeg",
+          "caption": "2024 SUZUKI — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2024-suzuki-guayaquil-whatsapp-image-2026-04-13-at-14-53-435-jpeg.jpeg",
+          "caption": "2024 SUZUKI — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2024-suzuki-guayaquil-whatsapp-image-2026-04-13-at-14-53-45-jpeg.jpeg",
+          "caption": "2024 SUZUKI — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2024-suzuki-guayaquil-whatsapp-image-2026-04-13-at-14-53-463-jpeg.jpeg",
+          "caption": "2024 SUZUKI — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2025-hyundai-tumbaco-quito-0-jpeg.jpeg",
+          "caption": "2025 HYUNDAI TUMBACO — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2025-hyundai-tumbaco-quito-2-jpeg.jpeg",
+          "caption": "2025 HYUNDAI TUMBACO — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2025-hyundai-tumbaco-quito-3-jpeg.jpeg",
+          "caption": "2025 HYUNDAI TUMBACO — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2025-hyundai-tumbaco-quito-whatsapp-image-2026-03-09-at-21-54-52-jpeg.jpeg",
+          "caption": "2025 HYUNDAI TUMBACO — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2025-hyundai-tumbaco-quito-whatsapp-image-2026-03-09-at-21-54-53-jpeg.jpeg",
+          "caption": "2025 HYUNDAI TUMBACO — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2025-kia-agencia-el-coca-0-jpeg.jpeg",
+          "caption": "2025 KIA AGENCIA EL COCA"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2025-kia-agencia-el-coca-1-jpeg.jpeg",
+          "caption": "2025 KIA AGENCIA EL COCA"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2025-kia-valle-chillos-whatsapp-image-2026-03-09-at-21-56-21-jpeg.jpeg",
+          "caption": "2025 KIA VALLE CHILLOS"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2025-kia-valle-chillos-whatsapp-image-2026-03-09-at-21-56-22-jpeg.jpeg",
+          "caption": "2025 KIA VALLE CHILLOS"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/standardAuto/projects/2025-kia-valle-chillos-whatsapp-image-2026-03-09-at-21-56-222-jpeg.jpeg",
+          "caption": "2025 KIA VALLE CHILLOS"
+        }
+      ],
+      "telescopicAuto": [
+        {
+          "src": "/images/products/gallery/automaticDoors/telescopicAuto/puerta-face-jpeg.jpeg",
+          "caption": "PUERTA FACE"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/telescopicAuto/whatsapp-image-2026-04-02-at-17-13-36-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 17.13.36"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/telescopicAuto/whatsapp-image-2026-04-13-at-09-31-46-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 13 at 09.31.46"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/telescopicAuto/whatsapp-image-2026-04-13-at-09-31-47-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 13 at 09.31.47"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/telescopicAuto/whatsapp-image-2026-04-13-at-09-31-471-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 13 at 09.31.471"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/telescopicAuto/whatsapp-image-2026-04-13-at-09-31-472-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 13 at 09.31.472"
+        },
+        {
+          "src": "/images/products/gallery/automaticDoors/telescopicAuto/whatsapp-image-2026-04-13-at-09-31-4721-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 13 at 09.31.4721"
+        }
+      ]
+    },
+    "corporateInteriors": {
+      "glassPartitions": [
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc02860-jpg.jpg",
+          "caption": "DSC02860"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc02862-jpg.jpg",
+          "caption": "DSC02862"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc02865-jpg.jpg",
+          "caption": "DSC02865"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc02871-jpg.jpg",
+          "caption": "DSC02871"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/whatsapp-image-2026-04-02-at-09-55-01-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 09.55.01"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0044-jpg.jpg",
+          "caption": "DSC0044"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0056-jpg.jpg",
+          "caption": "DSC0056"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0060-jpg.jpg",
+          "caption": "DSC0060"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0072-jpg.jpg",
+          "caption": "DSC0072"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0074-jpg.jpg",
+          "caption": "DSC0074"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0091-jpg.jpg",
+          "caption": "DSC0091"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0110-jpg.jpg",
+          "caption": "DSC0110"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0113-jpg.jpg",
+          "caption": "DSC0113"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0131-jpg.jpg",
+          "caption": "DSC0131"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0135-jpg.jpg",
+          "caption": "DSC0135"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0143-jpg.jpg",
+          "caption": "DSC0143"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0149-jpg.jpg",
+          "caption": "DSC0149"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0158-jpg.jpg",
+          "caption": "DSC0158"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0161-jpg.jpg",
+          "caption": "DSC0161"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0166-jpg.jpg",
+          "caption": "DSC0166"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0172-jpg.jpg",
+          "caption": "DSC0172"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0176-jpg.jpg",
+          "caption": "DSC0176"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0178-jpg.jpg",
+          "caption": "DSC0178"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0184-jpg.jpg",
+          "caption": "DSC0184"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0226-jpg.jpg",
+          "caption": "DSC0226"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0244-jpg.jpg",
+          "caption": "DSC0244"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0256-jpg.jpg",
+          "caption": "DSC0256"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0317-jpg.jpg",
+          "caption": "DSC0317"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0422-jpg.jpg",
+          "caption": "DSC0422"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0480-jpg.jpg",
+          "caption": "DSC0480"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/glassPartitions/dsc0904-jpg.jpg",
+          "caption": "DSC0904"
+        }
+      ],
+      "lobbies": [
+        {
+          "src": "/images/products/gallery/corporateInteriors/lobbies/20141204-110247-jpg.jpg",
+          "caption": "20141204 110247"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/lobbies/20221213-112915-jpg.jpg",
+          "caption": "20221213 112915"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/lobbies/bgr-ventaneria-fija-jpg.jpg",
+          "caption": "BGR Ventaneria fija"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/lobbies/carrara-ventaneria-jpg.jpg",
+          "caption": "Carrara Ventaneria"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/lobbies/dsc02872-jpg.jpg",
+          "caption": "DSC02872"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/lobbies/dsc-8506-jpg.jpg",
+          "caption": "DSC 8506"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/lobbies/dsc-8507-jpg.jpg",
+          "caption": "DSC 8507"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/lobbies/dsc-8513-jpg.jpg",
+          "caption": "DSC 8513"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/lobbies/dsc-8518-jpg.jpg",
+          "caption": "DSC 8518"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/lobbies/maparas-1-avif.avif",
+          "caption": "Maparas #1"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/lobbies/maparas-2-png.png",
+          "caption": "Maparas#2"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/lobbies/maparas-3-avif.avif",
+          "caption": "Maparas#3"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/lobbies/maparas-4-avif.avif",
+          "caption": "Maparas#4"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/lobbies/maparas-5-avif.avif",
+          "caption": "Maparas#5"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/lobbies/maparas-6-avif.avif",
+          "caption": "Maparas#6"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/lobbies/mp-1-jpg.jpg",
+          "caption": "Mp #1"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/lobbies/mp-2-jpg.jpg",
+          "caption": "Mp #2"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/lobbies/mp-3-jpg.jpg",
+          "caption": "Mp #3"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/lobbies/qph-divisiones-interiores-2-jpg.jpg",
+          "caption": "QPH Divisiones interiores (2)"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/lobbies/whatsapp-image-2026-04-01-at-16-40-44-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 16.40.44"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/lobbies/whatsapp-image-2026-04-01-at-16-40-44-jpeg2-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 16.40.44.jpeg2"
+        }
+      ],
+      "officeDivision": [
+        {
+          "src": "/images/products/gallery/corporateInteriors/officeDivision/20141204-110247-jpg.jpg",
+          "caption": "20141204 110247"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/officeDivision/20221213-112915-jpg.jpg",
+          "caption": "20221213 112915"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/officeDivision/bgr-ventaneria-fija-jpg.jpg",
+          "caption": "BGR Ventaneria fija"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/officeDivision/carrara-ventaneria-jpg.jpg",
+          "caption": "Carrara Ventaneria"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/officeDivision/dsc02872-jpg.jpg",
+          "caption": "DSC02872"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/officeDivision/dsc-8506-jpg.jpg",
+          "caption": "DSC 8506"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/officeDivision/dsc-8507-jpg.jpg",
+          "caption": "DSC 8507"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/officeDivision/dsc-8513-jpg.jpg",
+          "caption": "DSC 8513"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/officeDivision/dsc-8518-jpg.jpg",
+          "caption": "DSC 8518"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/officeDivision/maparas-1-avif.avif",
+          "caption": "Maparas #1"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/officeDivision/maparas-2-png.png",
+          "caption": "Maparas#2"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/officeDivision/maparas-3-avif.avif",
+          "caption": "Maparas#3"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/officeDivision/maparas-4-avif.avif",
+          "caption": "Maparas#4"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/officeDivision/maparas-5-avif.avif",
+          "caption": "Maparas#5"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/officeDivision/maparas-6-avif.avif",
+          "caption": "Maparas#6"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/officeDivision/mp-1-jpg.jpg",
+          "caption": "Mp #1"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/officeDivision/mp-2-jpg.jpg",
+          "caption": "Mp #2"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/officeDivision/mp-3-jpg.jpg",
+          "caption": "Mp #3"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/officeDivision/qph-divisiones-interiores-2-jpg.jpg",
+          "caption": "QPH Divisiones interiores (2)"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/officeDivision/whatsapp-image-2026-04-01-at-16-40-44-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 16.40.44"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/officeDivision/whatsapp-image-2026-04-01-at-16-40-44-jpeg2-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 16.40.44.jpeg2"
+        }
+      ],
+      "signage": [
+        {
+          "src": "/images/products/gallery/corporateInteriors/signage/dsc02884-jpg.jpg",
+          "caption": "DSC02884"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/signage/dsc-8515-jpg.jpg",
+          "caption": "DSC 8515"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/signage/qph-cajero-jpg.jpg",
+          "caption": "QPH Cajero"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/signage/qph-letreros-jpg.jpg",
+          "caption": "QPH Letreros"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/signage/vidrio-antimotin-jpg.jpg",
+          "caption": "vidrio antimotin"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/signage/vidrios-con-serigrafia-jpg.jpg",
+          "caption": "Vidrios con serigrafia"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/signage/whatsapp-image-2026-04-01-at-16-40-45-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 16.40.45"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/signage/whatsapp-image-2026-04-01-at-16-40-46-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 16.40.46"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/signage/whatsapp-image-2026-04-11-at-12-53-35-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 11 at 12.53.35"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/signage/dsc0075-jpg.jpg",
+          "caption": "DSC0075"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/signage/dsc0088-jpg.jpg",
+          "caption": "DSC0088"
+        },
+        {
+          "src": "/images/products/gallery/corporateInteriors/signage/dsc0099-jpg.jpg",
+          "caption": "DSC0099"
+        }
+      ]
+    },
+    "coversExteriors": {
+      "glassEnclosures": [
+        {
+          "src": "/images/products/gallery/coversExteriors/glassEnclosures/0-jpeg.jpeg",
+          "caption": "0"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/glassEnclosures/1-jpeg.jpeg",
+          "caption": "1"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/glassEnclosures/3-jpeg.jpeg",
+          "caption": "3"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/glassEnclosures/4-jpeg.jpeg",
+          "caption": "4"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/glassEnclosures/5-jpeg.jpeg",
+          "caption": "5"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/glassEnclosures/c-jpeg.jpeg",
+          "caption": "c"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/glassEnclosures/cerramiento-kia-jpeg.jpeg",
+          "caption": "cerramiento kia"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/glassEnclosures/img01302-20120906-1327-jpg.jpg",
+          "caption": "IMG01302 20120906 1327"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/glassEnclosures/img01303-20120906-1330-jpg.jpg",
+          "caption": "IMG01303 20120906 1330"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/glassEnclosures/img01305-20120906-1332-jpg.jpg",
+          "caption": "IMG01305 20120906 1332"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/glassEnclosures/img01306-20120906-1332-jpg.jpg",
+          "caption": "IMG01306 20120906 1332"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/glassEnclosures/whatsapp-image-2026-04-01-at-16-40-444-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 16.40.444"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/glassEnclosures/whatsapp-image-2026-04-01-at-16-40-45-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 16.40.45"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/glassEnclosures/whatsapp-image-2026-04-02-at-17-13-25-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 17.13.25"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/glassEnclosures/whatsapp-image-2026-04-02-at-17-13-26-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 17.13.26"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/glassEnclosures/whatsapp-image-2026-04-02-at-17-13-29-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 17.13.29"
+        }
+      ],
+      "marquees": [
+        {
+          "src": "/images/products/gallery/coversExteriors/marquees/abn-marquesina-de-aluminio-jpg.jpg",
+          "caption": "ABN Marquesina de aluminio"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/marquees/abn-marquesina-jpg.jpg",
+          "caption": "ABN Marquesina"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/marquees/aranjuez-marquesina-jpg.jpg",
+          "caption": "Aranjuez Marquesina"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/marquees/dsc02819-jpg.jpg",
+          "caption": "DSC02819"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/marquees/dsc02820-jpg.jpg",
+          "caption": "DSC02820"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/marquees/dsc02878-jpg.jpg",
+          "caption": "DSC02878"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/marquees/dsc02928-jpg.jpg",
+          "caption": "DSC02928"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/marquees/dscn1128-jpg.jpg",
+          "caption": "DSCN1128"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/marquees/whatsapp-image-2026-04-02-at-09-55-02-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 09.55.02"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/marquees/projects/2019-portal-shopping-quito-0-jpeg.jpeg",
+          "caption": "2019 - PORTAL SHOPPING — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/marquees/projects/2019-portal-shopping-quito-0-jpg.jpg",
+          "caption": "2019 - PORTAL SHOPPING — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/marquees/projects/2019-portal-shopping-quito-1-jpeg.jpeg",
+          "caption": "2019 - PORTAL SHOPPING — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/marquees/projects/2019-portal-shopping-quito-2-jpeg.jpeg",
+          "caption": "2019 - PORTAL SHOPPING — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/marquees/projects/2019-portal-shopping-quito-3-jpeg.jpeg",
+          "caption": "2019 - PORTAL SHOPPING — QUITO"
+        }
+      ],
+      "pergolas": [
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/20150831-091400-jpg.jpg",
+          "caption": "20150831 091400"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/20170308-104325-jpg.jpg",
+          "caption": "20170308 104325"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/aymesa-jpeg.jpeg",
+          "caption": "AYMESA"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/claraboya-mcdonald-jpg.jpg",
+          "caption": "Claraboya McDonald"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/claraboya-publing-jpg.jpg",
+          "caption": "CLARABOYA PUBLING"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/claraboya-uce-pagina-2-jpg.jpg",
+          "caption": "Claraboya UCE Página 2"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/espe-jpeg.jpeg",
+          "caption": "ESPE"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/espe2-jpeg.jpeg",
+          "caption": "ESPE2"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/espe3-jpeg.jpeg",
+          "caption": "ESPE3"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/espe4-jpeg.jpeg",
+          "caption": "ESPE4"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/imagen10-png.png",
+          "caption": "Imagen10"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/imagen11-png.png",
+          "caption": "Imagen11"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/imagen12-png.png",
+          "caption": "Imagen12"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/imagen2-png.png",
+          "caption": "Imagen2"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/imagen3-png.png",
+          "caption": "Imagen3"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/imagen4-png.png",
+          "caption": "Imagen4"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/imagen5-png.png",
+          "caption": "Imagen5"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/imagen7-png.png",
+          "caption": "Imagen7"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/imagen8-png.png",
+          "caption": "Imagen8"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/imagen9-png.png",
+          "caption": "Imagen9"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/img01014-20120718-1129-jpg.jpg",
+          "caption": "IMG01014 20120718 1129"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/img01019-20120718-1132-jpg.jpg",
+          "caption": "IMG01019 20120718 1132"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/tensoestructura-jpg.jpg",
+          "caption": "Tensoestructura"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/whatsapp-image-2026-03-27-at-17-11-38-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 03 27 at 17.11.38"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/whatsapp-image-2026-03-27-at-17-11-41-1-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 03 27 at 17.11.41 (1)"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/whatsapp-image-2026-03-27-at-17-11-44-1-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 03 27 at 17.11.44 (1)"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/whatsapp-image-2026-03-27-at-17-11-44-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 03 27 at 17.11.44"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/whatsapp-image-2026-03-27-at-17-11-45-2-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 03 27 at 17.11.45 (2)"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/whatsapp-image-2026-03-27-at-17-11-45-3-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 03 27 at 17.11.45 (3)"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/whatsapp-image-2026-03-27-at-17-11-45-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 03 27 at 17.11.45"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/whatsapp-image-2026-03-27-at-17-11-46-1-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 03 27 at 17.11.46 (1)"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/whatsapp-image-2026-03-27-at-17-11-46-2-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 03 27 at 17.11.46 (2)"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/whatsapp-image-2026-03-27-at-17-11-46-4-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 03 27 at 17.11.46 (4)"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/pergolas/whatsapp-image-2026-04-02-at-09-55-03-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 09.55.03"
+        }
+      ],
+      "roofsSkylights": [
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/20150831-091400-jpg.jpg",
+          "caption": "20150831 091400"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/20170308-104325-jpg.jpg",
+          "caption": "20170308 104325"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/aymesa-jpeg.jpeg",
+          "caption": "AYMESA"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/claraboya-mcdonald-jpg.jpg",
+          "caption": "Claraboya McDonald"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/claraboya-publing-jpg.jpg",
+          "caption": "CLARABOYA PUBLING"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/claraboya-uce-pagina-2-jpg.jpg",
+          "caption": "Claraboya UCE Página 2"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/espe-jpeg.jpeg",
+          "caption": "ESPE"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/espe2-jpeg.jpeg",
+          "caption": "ESPE2"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/espe3-jpeg.jpeg",
+          "caption": "ESPE3"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/espe4-jpeg.jpeg",
+          "caption": "ESPE4"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/imagen10-png.png",
+          "caption": "Imagen10"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/imagen11-png.png",
+          "caption": "Imagen11"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/imagen12-png.png",
+          "caption": "Imagen12"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/imagen2-png.png",
+          "caption": "Imagen2"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/imagen3-png.png",
+          "caption": "Imagen3"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/imagen4-png.png",
+          "caption": "Imagen4"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/imagen5-png.png",
+          "caption": "Imagen5"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/imagen7-png.png",
+          "caption": "Imagen7"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/imagen8-png.png",
+          "caption": "Imagen8"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/imagen9-png.png",
+          "caption": "Imagen9"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/img01014-20120718-1129-jpg.jpg",
+          "caption": "IMG01014 20120718 1129"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/img01019-20120718-1132-jpg.jpg",
+          "caption": "IMG01019 20120718 1132"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/tensoestructura-jpg.jpg",
+          "caption": "Tensoestructura"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/whatsapp-image-2026-03-27-at-17-11-38-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 03 27 at 17.11.38"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/whatsapp-image-2026-03-27-at-17-11-41-1-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 03 27 at 17.11.41 (1)"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/whatsapp-image-2026-03-27-at-17-11-44-1-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 03 27 at 17.11.44 (1)"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/whatsapp-image-2026-03-27-at-17-11-44-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 03 27 at 17.11.44"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/whatsapp-image-2026-03-27-at-17-11-45-2-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 03 27 at 17.11.45 (2)"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/whatsapp-image-2026-03-27-at-17-11-45-3-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 03 27 at 17.11.45 (3)"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/whatsapp-image-2026-03-27-at-17-11-45-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 03 27 at 17.11.45"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/whatsapp-image-2026-03-27-at-17-11-46-1-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 03 27 at 17.11.46 (1)"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/whatsapp-image-2026-03-27-at-17-11-46-2-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 03 27 at 17.11.46 (2)"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/whatsapp-image-2026-03-27-at-17-11-46-4-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 03 27 at 17.11.46 (4)"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/whatsapp-image-2026-04-02-at-09-55-03-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 09.55.03"
+        },
+        {
+          "src": "/images/products/gallery/coversExteriors/roofsSkylights/projects/2013-local-mcdonald-s-quito-mcdonald-s-quito-jpg.jpg",
+          "caption": "2013 LOCAL McDONALD'S — QUITO"
+        }
+      ]
+    },
+    "doorsAccess": {
+      "foldingDoors": [
+        {
+          "src": "/images/products/gallery/doorsAccess/foldingDoors/20150827-173308-jpg.jpg",
+          "caption": "20150827 173308"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/foldingDoors/20160406-140907-jpg.jpg",
+          "caption": "20160406 140907"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/foldingDoors/img-20160822-wa0012-jpg.jpg",
+          "caption": "IMG 20160822 WA0012"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/foldingDoors/img-20160822-wa0013-jpg.jpg",
+          "caption": "IMG 20160822 WA0013"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/foldingDoors/itval-bisagra-jpg.jpg",
+          "caption": "itval BISAGRA"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/foldingDoors/itval-zocalos-inf-jpg.jpg",
+          "caption": "itval ZOCALOS INF"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/foldingDoors/itval-zocalos-sup-jpg.jpg",
+          "caption": "itval ZOCALOS SUP"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/foldingDoors/whatsapp-image-2026-03-27-at-16-49-56-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 03 27 at 16.49.56"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/foldingDoors/whatsapp-image-2026-03-27-at-16-50-47-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 03 27 at 16.50.47"
+        }
+      ],
+      "hermeticDoors": [
+        {
+          "src": "/images/products/gallery/doorsAccess/hermeticDoors/whatsapp-image-2026-04-01-at-15-28-06-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 15.28.06"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hermeticDoors/whatsapp-image-2026-04-02-at-09-47-29-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 09.47.29"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hermeticDoors/projects/2019-hospital-general-napoleon-davila-cordova-chone-0-jpeg.jpeg",
+          "caption": "2019 - Hospital General Napoleón Dávila Córdova — CHONE"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hermeticDoors/projects/2019-hospital-general-napoleon-davila-cordova-chone-0-jpg.jpg",
+          "caption": "2019 - Hospital General Napoleón Dávila Córdova — CHONE"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hermeticDoors/projects/2019-hospital-general-napoleon-davila-cordova-chone-00-jpeg.jpeg",
+          "caption": "2019 - Hospital General Napoleón Dávila Córdova — CHONE"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hermeticDoors/projects/2019-hospital-general-napoleon-davila-cordova-chone-1-jpeg.jpeg",
+          "caption": "2019 - Hospital General Napoleón Dávila Córdova — CHONE"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hermeticDoors/projects/2019-laboratorio-fitoterapia-calacali-dscn2188-jpg.jpg",
+          "caption": "2019 LABORATORIO FITOTERAPIA — CALACALÍ"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hermeticDoors/projects/2019-laboratorio-fitoterapia-calacali-dscn2189-jpg.jpg",
+          "caption": "2019 LABORATORIO FITOTERAPIA — CALACALÍ"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hermeticDoors/projects/2019-laboratorio-fitoterapia-calacali-dscn2201-jpg.jpg",
+          "caption": "2019 LABORATORIO FITOTERAPIA — CALACALÍ"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hermeticDoors/projects/2019-laboratorio-fitoterapia-calacali-dscn2247-jpg.jpg",
+          "caption": "2019 LABORATORIO FITOTERAPIA — CALACALÍ"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hermeticDoors/projects/2019-laboratorio-fitoterapia-calacali-ventana-inox-ext-2-jpg.jpg",
+          "caption": "2019 LABORATORIO FITOTERAPIA — CALACALÍ"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hermeticDoors/projects/2019-laboratorio-fitoterapia-calacali-ventana-inox-interior-1-jpg.jpg",
+          "caption": "2019 LABORATORIO FITOTERAPIA — CALACALÍ"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hermeticDoors/projects/2019-laboratorio-fitoterapia-calacali-whatsapp-image-2019-01-16-at-09-17-23-jpeg.jpeg",
+          "caption": "2019 LABORATORIO FITOTERAPIA — CALACALÍ"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hermeticDoors/projects/2019-laboratorio-fitoterapia-calacali-whatsapp-image-2019-02-26-at-16-24-30-jpeg.jpeg",
+          "caption": "2019 LABORATORIO FITOTERAPIA — CALACALÍ"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hermeticDoors/projects/2019-laboratorio-fitoterapia-calacali-whatsapp-image-2019-06-19-at-09-32-15-jpeg.jpeg",
+          "caption": "2019 LABORATORIO FITOTERAPIA — CALACALÍ"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hermeticDoors/projects/2020-laboratorio-zaphire-calacali-1-jpg.jpg",
+          "caption": "2020 - LABORATORIO ZAPHIRE — CALACALÍ"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hermeticDoors/projects/2020-laboratorio-zaphire-calacali-20200210-134854-jpg.jpg",
+          "caption": "2020 - LABORATORIO ZAPHIRE — CALACALÍ"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hermeticDoors/projects/2020-laboratorio-zaphire-calacali-ventanas-sanitarias-jpg.jpg",
+          "caption": "2020 - LABORATORIO ZAPHIRE — CALACALÍ"
+        }
+      ],
+      "hingedDoors": [
+        {
+          "src": "/images/products/gallery/doorsAccess/hingedDoors/20150928-103123-jpg.jpg",
+          "caption": "20150928 103123"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hingedDoors/dsc02905-jpg.jpg",
+          "caption": "DSC02905"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hingedDoors/dsc02914-jpg.jpg",
+          "caption": "DSC02914"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hingedDoors/dscn1133-jpg.jpg",
+          "caption": "DSCN1133"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hingedDoors/dscn1135-jpg.jpg",
+          "caption": "DSCN1135"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hingedDoors/dsc-8508-jpg.jpg",
+          "caption": "DSC 8508"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hingedDoors/img-20150304-wa0003-jpg.jpg",
+          "caption": "IMG 20150304 WA0003"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hingedDoors/img01038-20120718-1158-jpg.jpg",
+          "caption": "IMG01038 20120718 1158"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hingedDoors/puerta-batiente-con-barra-1-jpg.jpg",
+          "caption": "Puerta batiente con barra 1"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/hingedDoors/puerta-batiente-con-barra-jpg.jpg",
+          "caption": "Puerta batiente con barra"
+        }
+      ],
+      "slidingDoors": [
+        {
+          "src": "/images/products/gallery/doorsAccess/slidingDoors/20150304-121531-jpg.jpg",
+          "caption": "20150304 121531"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/slidingDoors/20150630-123256-jpg.jpg",
+          "caption": "20150630 123256"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/slidingDoors/dsc-8517-jpg.jpg",
+          "caption": "DSC 8517"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/slidingDoors/img-20151113-wa0007-jpg.jpg",
+          "caption": "IMG 20151113 WA0007"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/slidingDoors/qph-puertas-corredizas-jpg.jpg",
+          "caption": "QPH Puertas Corredizas"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/slidingDoors/whatsapp-image-2026-04-02-at-09-47-13-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 09.47.13"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/slidingDoors/whatsapp-image-2026-04-02-at-10-15-16-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 10.15.16"
+        },
+        {
+          "src": "/images/products/gallery/doorsAccess/slidingDoors/whatsapp-image-2026-04-02-at-10-35-39-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 10.35.39"
+        }
+      ]
+    },
+    "facades": {
+      "curtainWallStick": [
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/aranjuez-curtainwall-jpg.jpg",
+          "caption": "Aranjuez CURTAINWALL"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/curtain-wall-jpeg.jpeg",
+          "caption": "curtain wall"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/espe-jpeg.jpeg",
+          "caption": "ESPE"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/ministerio-turismo-jpg.jpg",
+          "caption": "MINISTERIO TURISMO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/qph-curtain-wall-acero-jpg.jpg",
+          "caption": "QPH Curtain Wall ACERO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2011-edificio-administracion-zonal-m-d-m-quito-quito-whatsapp-image-2026-03-06-a.jpeg",
+          "caption": "2011 EDIFICIO ADMINISTRACION ZONAL M.D.M.QUITO — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2011-edificio-centro-de-informacion-integral-de-la-universidad-central-del-ecuad.jpeg",
+          "caption": "2011 EDIFICIO CENTRO DE INFORMACION INTEgRAL DE LA UNIVERSIDAD CENTRAL DEL ECUADOR — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2011-edificio-centro-de-informacion-integral-de-la-universidad-central-del-ecuad.jpg",
+          "caption": "2011 EDIFICIO CENTRO DE INFORMACION INTEGRAL DE LA UNIVERSIDAD CENTRAL DEL ECUADOR – QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2011-hotel-casa-gangotena-quito-hotel-casa-gangotena-estructura-de-cubierta-inte.jpg",
+          "caption": "2011 HOTEL CASA GANGOTENA — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2012-edificio-icon-quito-whatsapp-image-2026-03-06-at-15-49-22-jpeg.jpeg",
+          "caption": "2012 - EDIFICIO ICON — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2012-banco-de-guayaquil-quito-dsc00466-jpg.jpg",
+          "caption": "2012 BANCO DE GUAYAQUIL — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2012-banco-de-guayaquil-quito-dsc00550-jpg.jpg",
+          "caption": "2012 BANCO DE GUAYAQUIL — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2012-banco-de-guayaquil-quito-remodelacion-banco-de-guayaquil-quito-jpg.jpg",
+          "caption": "2012 BANCO DE GUAYAQUIL — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2012-banco-de-guayaquil-quito-whatsapp-image-2026-03-06-at-15-49-35-jpeg.jpeg",
+          "caption": "2012 BANCO DE GUAYAQUIL — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2012-banco-de-guayaquil-quito-whatsapp-image-2026-03-06-at-15-49-43-jpeg.jpeg",
+          "caption": "2012 BANCO DE GUAYAQUIL — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2012-banco-de-guayaquil-quito-whatsapp-image-2026-03-06-at-15-49-56-jpeg.jpeg",
+          "caption": "2012 BANCO DE GUAYAQUIL — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2012-banco-de-guayaquil-quito-whatsapp-image-2026-03-06-at-15-50-05-jpeg.jpeg",
+          "caption": "2012 BANCO DE GUAYAQUIL — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2012-edificio-icon-edifico-icon-quito-jpg.jpg",
+          "caption": "2012 EDIFICIO ICON"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2012-uce-biblioteca-1-jpg.jpg",
+          "caption": "2012 UCE"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2012-uce-biblioteca-jpg.jpg",
+          "caption": "2012 UCE"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2012-uce-universidad-quito-jpg.jpg",
+          "caption": "2012 UCE"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2013-antigua-fabrica-imbabura-atuntaqui-antigua-fabrica-imbabura-atuntaqui-jpg.jpg",
+          "caption": "2013 ANTIGUA FABRICA IMBABURA — ATUNTAQUI"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2013-hotel-finlandia-quito-hotel-finlandia-quito-jpg.jpg",
+          "caption": "2013 HOTEL FINLANDIA — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2014-banco-pichincha-ccscala-cumbaya-dscn1531-jpg.jpg",
+          "caption": "2014 BANCO PICHINCHA CCSCALA — CUMBAYA"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2014-banco-pichincha-ccscala-cumbaya-dscn1532-jpg.jpg",
+          "caption": "2014 BANCO PICHINCHA CCSCALA — CUMBAYA"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2014-banco-pichincha-ccscala-cumbaya-dscn1533-jpg.jpg",
+          "caption": "2014 BANCO PICHINCHA CCSCALA — CUMBAYA"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2014-banco-pichincha-ccscala-cumbaya-dscn1534-jpg.jpg",
+          "caption": "2014 BANCO PICHINCHA CCSCALA — CUMBAYA"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2014-edificio-quito-publishing-house-quito-20150630-123256-jpg.jpg",
+          "caption": "2014 EDIFICIO QUITO PUBLISHING HOUSE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2014-edificio-quito-publishing-house-quito-dsc-8479-jpg.jpg",
+          "caption": "2014 EDIFICIO QUITO PUBLISHING HOUSE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2014-edificio-quito-publishing-house-quito-dsc-8482-jpg.jpg",
+          "caption": "2014 EDIFICIO QUITO PUBLISHING HOUSE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2014-edificio-quito-publishing-house-quito-dsc-8484-jpg.jpg",
+          "caption": "2014 EDIFICIO QUITO PUBLISHING HOUSE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2014-edificio-quito-publishing-house-quito-dsc-8488-jpg.jpg",
+          "caption": "2014 EDIFICIO QUITO PUBLISHING HOUSE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2014-edificio-quito-publishing-house-quito-lucernario-jpg.jpg",
+          "caption": "2014 EDIFICIO QUITO PUBLISHING HOUSE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2014-edificio-quito-publishing-house-quito-pios-de-vidrio-jpg.jpg",
+          "caption": "2014 EDIFICIO QUITO PUBLISHING HOUSE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2014-edificio-quito-publishing-house-quito-qph-divisiones-interiores-2-jpg.jpg",
+          "caption": "2014 EDIFICIO QUITO PUBLISHING HOUSE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2014-edificio-quito-publishing-house-quito-qph-divisiones-interiores-jpg.jpg",
+          "caption": "2014 EDIFICIO QUITO PUBLISHING HOUSE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2014-edificio-quito-publishing-house-quito-qph-puertas-corredizas-jpg.jpg",
+          "caption": "2014 EDIFICIO QUITO PUBLISHING HOUSE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2014-edificio-quito-publishing-house-quito-qph-jpg.jpg",
+          "caption": "2014 EDIFICIO QUITO PUBLISHING HOUSE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2014-edificio-quito-publishing-house-quito-toldos-jpg.jpg",
+          "caption": "2014 EDIFICIO QUITO PUBLISHING HOUSE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2014-edificio-quito-publishing-house-quito-whatsapp-image-2026-03-06-at-15-47-12.jpeg",
+          "caption": "2014 EDIFICIO QUITO PUBLISHING HOUSE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2014-edificio-quito-publishing-house-quito-whatsapp-image-2026-03-06-at-15-47-28.jpeg",
+          "caption": "2014 EDIFICIO QUITO PUBLISHING HOUSE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2014-edificio-quito-publishing-house-quito-whatsapp-image-2026-03-06-at-15-47-43.jpeg",
+          "caption": "2014 EDIFICIO QUITO PUBLISHING HOUSE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2014-edificio-quito-publishing-house-quito-whatsapp-image-2026-03-06-at-15-48-21.jpeg",
+          "caption": "2014 EDIFICIO QUITO PUBLISHING HOUSE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2014-teatro-capitol-teatro-capitol-1-jpg.jpg",
+          "caption": "2014 TEATRO CAPITOL"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2014-teatro-capitol-teatro-capitol-2-jpg.jpg",
+          "caption": "2014 TEATRO CAPITOL"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2014-teatro-capitol-teatro-capitol-3-jpg.jpg",
+          "caption": "2014 TEATRO CAPITOL"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2014-teatro-capitol-teatro-capitol-4-jpg.jpg",
+          "caption": "2014 TEATRO CAPITOL"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2015-diners-club-del-ecuador-quito-centro-de-negocios-diners-quito-jpg.jpg",
+          "caption": "2015 DINERS CLUB DEL ECUADOR — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2015-diners-club-del-ecuador-quito-diners-jpg.jpg",
+          "caption": "2015 DINERS CLUB DEL ECUADOR — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2015-edificio-aranjuez-quito-edificio-aranjuez-quito-jpg.jpg",
+          "caption": "2015 EDIFICIO ARANJUEZ — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2015-edificio-aranjuez-quito-whatsapp-image-2026-03-06-at-15-46-51-jpeg.jpeg",
+          "caption": "2015 EDIFICIO ARANJUEZ — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2015-edificio-aranjuez-quito-whatsapp-image-2026-03-06-at-15-47-00-jpeg.jpeg",
+          "caption": "2015 EDIFICIO ARANJUEZ — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2015-ministerior-de-turismo-quito-filantropica-jpg.jpg",
+          "caption": "2015 MINISTERIOR DE TURISMO — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2015-ministerior-de-turismo-quito-ministerior-de-turismo-quito-jpg.jpg",
+          "caption": "2015 MINISTERIOR DE TURISMO — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2015-ministerior-de-turismo-quito-ministerior-turismo-jpeg.jpeg",
+          "caption": "2015 MINISTERIOR DE TURISMO — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-remodelacion-banco-guayaquil-ccplaza-americas-quito-dscn1535-jpg.jpg",
+          "caption": "2016 - REMODELACION BANCO GUAYAQUIL CCPLAZA AMERICAS — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-remodelacion-banco-guayaquil-ccplaza-americas-quito-dscn1536-jpg.jpg",
+          "caption": "2016 - REMODELACION BANCO GUAYAQUIL CCPLAZA AMERICAS — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-remodelacion-banco-guayaquil-ccplaza-americas-quito-dscn1537-jpg.jpg",
+          "caption": "2016 - REMODELACION BANCO GUAYAQUIL CCPLAZA AMERICAS — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-banco-pichincha-ambato-banco-pichincha-ambato-jpg.jpg",
+          "caption": "2016 BANCO PICHINCHA — AMBATO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-banco-pichincha-ambato-whatsapp-image-2026-03-06-at-15-45-26-jpeg.jpeg",
+          "caption": "2016 BANCO PICHINCHA — AMBATO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-banco-pichincha-ambato-whatsapp-image-2026-03-06-at-15-45-34-jpeg.jpeg",
+          "caption": "2016 BANCO PICHINCHA — AMBATO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-banco-pichincha-ambato-whatsapp-image-2026-03-06-at-15-45-51-jpeg.jpeg",
+          "caption": "2016 BANCO PICHINCHA — AMBATO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-edificio-bosques-de-navarra-quito-whatsapp-image-2026-03-06-at-15-33-26-jpe.jpeg",
+          "caption": "2016 EDIFICIO BOSQUES DE NAVARRA — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-edificio-bosques-de-navarra-quito-whatsapp-image-2026-03-06-at-15-33-35-jpe.jpeg",
+          "caption": "2016 EDIFICIO BOSQUES DE NAVARRA — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-edificio-cervino-quito-20161108-155250-jpg.jpg",
+          "caption": "2016 EDIFICIO CERVINO — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-edificio-cervino-quito-whatsapp-image-2026-03-06-at-15-43-12-jpeg.jpeg",
+          "caption": "2016 EDIFICIO CERVINO — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-edificio-cervino-quito-whatsapp-image-2026-03-06-at-15-43-44-jpeg.jpeg",
+          "caption": "2016 EDIFICIO CERVINO — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-edificio-cervino-quito-whatsapp-image-2026-03-06-at-15-43-52-jpeg.jpeg",
+          "caption": "2016 EDIFICIO CERVINO — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-edificio-fenix-latacunga-edificio-fenix-latacunga-jpg.jpg",
+          "caption": "2016 EDIFICIO FENIX — LATACUNGA"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-edificio-mapfre-atlas-quito-edificio-mapfre-atlas-quito-jpg.jpg",
+          "caption": "2016 EDIFICIO MAPFRE ATLAS — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-edificio-martel-20160715-100839-jpg.jpg",
+          "caption": "2016 Edificio Martel"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-edificio-martel-autos-mb-jpg.jpg",
+          "caption": "2016 Edificio Martel"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-edificio-martel-edificio-martel-quito-jpg.jpg",
+          "caption": "2016 Edificio Martel"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-edificio-matriz-banco-general-ruminahui-quito-20150618-165808-jpg.jpg",
+          "caption": "2016 EDIFICIO MATRIZ BANCO GENERAL RUMIÑAHUI — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-edificio-matriz-banco-general-ruminahui-quito-dsc-8536-jpg.jpg",
+          "caption": "2016 EDIFICIO MATRIZ BANCO GENERAL RUMIÑAHUI — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-edificio-matriz-banco-general-ruminahui-quito-dsc-8537-jpg.jpg",
+          "caption": "2016 EDIFICIO MATRIZ BANCO GENERAL RUMIÑAHUI — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-edificio-matriz-banco-general-ruminahui-quito-edificio-matriz-banco-general.jpg",
+          "caption": "2016 EDIFICIO MATRIZ BANCO GENERAL RUMIÑAHUI — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-edificio-matriz-banco-general-ruminahui-quito-image1-jpg.jpg",
+          "caption": "2016 EDIFICIO MATRIZ BANCO GENERAL RUMIÑAHUI — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-edificio-matriz-banco-general-ruminahui-quito-whatsapp-image-2026-03-06-at-.jpeg",
+          "caption": "2016 EDIFICIO MATRIZ BANCO GENERAL RUMIÑAHUI — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-edificio-matriz-banco-general-ruminahui-quito-dscn1526-jpg.jpg",
+          "caption": "2016 EDIFICIO MATRIZ BANCO GENERAL RUMIÑAHUI – QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-edificio-matriz-banco-general-ruminahui-quito-dscn1527-jpg.jpg",
+          "caption": "2016 EDIFICIO MATRIZ BANCO GENERAL RUMIÑAHUI – QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-edificio-matriz-banco-general-ruminahui-quito-dscn1528-jpg.jpg",
+          "caption": "2016 EDIFICIO MATRIZ BANCO GENERAL RUMIÑAHUI – QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2016-edificio-matriz-banco-general-ruminahui-quito-dscn1529-jpg.jpg",
+          "caption": "2016 EDIFICIO MATRIZ BANCO GENERAL RUMIÑAHUI – QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-edificio-diners-club-guayaquil-whatsapp-image-2026-03-06-at-15-29-33-jpeg.jpeg",
+          "caption": "2017 EDIFICIO DINERS CLUB — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-edificio-diners-club-guayaquil-whatsapp-image-2026-03-06-at-15-29-41-jpeg.jpeg",
+          "caption": "2017 EDIFICIO DINERS CLUB — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-escuela-politecnica-del-ejercito-espe-quito-thumbnail-jpg.jpg",
+          "caption": "2017 ESCUELA POLITECNICA DEL EJERCITO ESPE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-escuela-politecnica-del-ejercito-espe-quito-whatsapp-image-2026-03-06-at-15.jpeg",
+          "caption": "2017 ESCUELA POLITECNICA DEL EJERCITO ESPE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-escuela-politecnica-del-ejercito-espe-quito-c-10-jpg.jpg",
+          "caption": "2017 ESCUELA POLITECNICA DEL EJERCITO ESPE – QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-escuela-politecnica-del-ejercito-espe-quito-c-14-jpg.jpg",
+          "caption": "2017 ESCUELA POLITECNICA DEL EJERCITO ESPE – QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-escuela-politecnica-del-ejercito-espe-quito-c-4-jpg.jpg",
+          "caption": "2017 ESCUELA POLITECNICA DEL EJERCITO ESPE – QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-financiera-quito-ascensor-pf-jpg.jpg",
+          "caption": "2017 PLATAFORMA FINANCIERA — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-29-4-2018-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-dscn2299-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-dscn2300-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-dscn2301-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-dscn2302-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-dscn2303-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-dscn2304-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-dscn2305-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-dscn2306-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-dscn2307-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-dscn2308-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-dscn2309-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-dscn2310-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-dscn2311-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-dscn2312-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-dscn2313-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-dscn2314-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-dscn2315-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-dscn2316-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-img-20170517-wa0015-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-img-20170517-wa0016-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-img-20170517-wa0017-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-img-20170517-wa0018-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-img-20170517-wa0021-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-img-20170517-wa0022-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-img-20170523-wa0030-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-plataforma-gubernamental-social-jpg.jpg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-whatsapp-image-2026-03-06-at-15-27-26-jp.jpeg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-whatsapp-image-2026-03-06-at-15-27-34-jp.jpeg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-whatsapp-image-2026-03-06-at-15-27-42-jp.jpeg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamenta-social-sur-whatsapp-image-2026-03-06-at-15-27-51-jp.jpeg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTA SOCIAL SUR"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2017-plataforma-gubernamental-financiera-quito-whatsapp-image-2026-03-06-at-15-2.jpeg",
+          "caption": "2017 PLATAFORMA GUBERNAMENTAL FINANCIERA — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2018-centro-ecuatoriano-americano-quito-o-jpg.jpg",
+          "caption": "2018 CENTRO ECUATORIANO AMERICANO — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2018-centro-ecuatoriano-americano-quito-whatsapp-image-2026-03-06-at-15-19-05-jp.jpeg",
+          "caption": "2018 CENTRO ECUATORIANO AMERICANO — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2018-edificio-equivida-quito-whatsapp-image-2026-03-06-at-15-19-20-jpeg.jpeg",
+          "caption": "2018 EDIFICIO  EQUIVIDA — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2018-edificio-equivida-quito-whatsapp-image-2026-03-06-at-15-20-01-jpeg.jpeg",
+          "caption": "2018 EDIFICIO  EQUIVIDA — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2018-edificio-equivida-quito-whatsapp-image-2026-03-06-at-15-20-10-jpeg.jpeg",
+          "caption": "2018 EDIFICIO  EQUIVIDA — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2018-edificio-equivida-quito-whatsapp-image-2026-03-06-at-15-20-19-jpeg.jpeg",
+          "caption": "2018 EDIFICIO  EQUIVIDA — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2018-planta-industrial-toni-guayaquil-img-20161126-wa0045-jpg.jpg",
+          "caption": "2018 PLANTA INDUSTRIAL TONI — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2018-planta-industrial-toni-guayaquil-img-20161126-wa0048-jpg.jpg",
+          "caption": "2018 PLANTA INDUSTRIAL TONI — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2018-planta-industrial-toni-guayaquil-img-20161126-wa0052-jpg.jpg",
+          "caption": "2018 PLANTA INDUSTRIAL TONI — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2018-planta-industrial-toni-guayaquil-img-20161126-wa0056-jpg.jpg",
+          "caption": "2018 PLANTA INDUSTRIAL TONI — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2018-planta-industrial-toni-guayaquil-img-20161126-wa0057-jpg.jpg",
+          "caption": "2018 PLANTA INDUSTRIAL TONI — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2018-planta-industrial-toni-guayaquil-img-20161126-wa0058-jpg.jpg",
+          "caption": "2018 PLANTA INDUSTRIAL TONI — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2019-mercado-calderon-quito-0-jpeg.jpeg",
+          "caption": "2019 - MERCADO CALDERON — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2019-mercado-calderon-quito-0-jpg.jpg",
+          "caption": "2019 - MERCADO CALDERON — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2019-mercado-calderon-quito-1-jpeg.jpeg",
+          "caption": "2019 - MERCADO CALDERON — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2019-mercado-calderon-quito-1-jpg.jpg",
+          "caption": "2019 - MERCADO CALDERON — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2019-mercado-calderon-quito-2-jpeg.jpeg",
+          "caption": "2019 - MERCADO CALDERON — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2019-mercado-calderon-quito-3-jpeg.jpeg",
+          "caption": "2019 - MERCADO CALDERON — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2019-mercado-calderon-quito-3-jpg.jpg",
+          "caption": "2019 - MERCADO CALDERON — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2020-ahcorp-revestimiento-panel-jpeg.jpeg",
+          "caption": "2020 — AHCORP"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2020-ahcorp-revestimiento-panel-1-jpeg.jpeg",
+          "caption": "2020 — AHCORP"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2020-ahcorp-ventanas-jpeg.jpeg",
+          "caption": "2020 — AHCORP"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2020-edificio-oriel-tumbaco-0-jpeg.jpeg",
+          "caption": "2020 - EDIFICIO ORIEL — TUMBACO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2020-edificio-oriel-tumbaco-1-jpeg.jpeg",
+          "caption": "2020 - EDIFICIO ORIEL — TUMBACO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2020-armoni-tumbaco-quito-0-jpg.jpg",
+          "caption": "2020 ARMONI — TUMBACO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2020-armoni-tumbaco-quito-image15-jpg.jpg",
+          "caption": "2020 ARMONI — TUMBACO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-centro-comercial-plaza-marquezina-puembo-quito-0-jpg.jpg",
+          "caption": "2023 CENTRO COMERCIAL PLAZA MARQUEZINA — PUEMBO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-centro-comercial-plaza-marquezina-puembo-quito-1-jpeg.jpeg",
+          "caption": "2023 CENTRO COMERCIAL PLAZA MARQUEZINA — PUEMBO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-centro-comercial-plaza-marquezina-puembo-quito-2-jpeg.jpeg",
+          "caption": "2023 CENTRO COMERCIAL PLAZA MARQUEZINA — PUEMBO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-centro-comercial-plaza-marquezina-puembo-quito-3-jpeg.jpeg",
+          "caption": "2023 CENTRO COMERCIAL PLAZA MARQUEZINA — PUEMBO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-centro-comercial-plaza-marquezina-puembo-quito-4-jpeg.jpeg",
+          "caption": "2023 CENTRO COMERCIAL PLAZA MARQUEZINA — PUEMBO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-centro-comercial-plaza-marquezina-puembo-quito-5-jpeg.jpeg",
+          "caption": "2023 CENTRO COMERCIAL PLAZA MARQUEZINA — PUEMBO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-centro-comercial-plaza-marquezina-puembo-quito-6-jpeg.jpeg",
+          "caption": "2023 CENTRO COMERCIAL PLAZA MARQUEZINA — PUEMBO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-centro-comercial-plaza-marquezina-puembo-quito-7-jpeg.jpeg",
+          "caption": "2023 CENTRO COMERCIAL PLAZA MARQUEZINA — PUEMBO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-edif-parqueaderos-el-aguacate-quito-whatsapp-image-2026-03-06-at-12-00-40-j.jpeg",
+          "caption": "2023 EDIF. PARQUEADEROS EL AGUACATE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-edif-parqueaderos-el-aguacate-quito-w-jpeg.jpeg",
+          "caption": "2023 EDIF. PARQUEADEROS EL AGUACATE – QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-edif-parqueaderos-el-aguacate-quito-whatsapp-image-2026-03-27-at-09-31-46-j.jpeg",
+          "caption": "2023 EDIF. PARQUEADEROS EL AGUACATE – QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-edif-parqueaderos-el-aguacate-quito-whatsapp-image-2026-03-27-at-09-33-21-j.jpeg",
+          "caption": "2023 EDIF. PARQUEADEROS EL AGUACATE – QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-provenzana-pifo-quito-1-jpeg.jpeg",
+          "caption": "2023 PROVENZANA — PIFO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-provenzana-pifo-quito-2-jpeg.jpeg",
+          "caption": "2023 PROVENZANA — PIFO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-provenzana-pifo-quito-3-jpeg.jpeg",
+          "caption": "2023 PROVENZANA — PIFO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-provenzana-pifo-quito-image1-jpg.jpg",
+          "caption": "2023 PROVENZANA — PIFO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-provenzana-pifo-quito-20221213-111750-jpg.jpg",
+          "caption": "2023 PROVENZANA – PIFO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-provenzana-pifo-quito-20221213-112824-jpg.jpg",
+          "caption": "2023 PROVENZANA – PIFO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-provenzana-pifo-quito-20221213-112855-jpg.jpg",
+          "caption": "2023 PROVENZANA – PIFO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-provenzana-pifo-quito-20221213-112915-jpg.jpg",
+          "caption": "2023 PROVENZANA – PIFO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-uniandes-ambato-2-jpeg.jpeg",
+          "caption": "2023 UNIANDES — AMBATO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-uniandes-ambato-3-jpeg.jpeg",
+          "caption": "2023 UNIANDES — AMBATO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-uniandes-ambato-4-jpeg.jpeg",
+          "caption": "2023 UNIANDES — AMBATO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-uniandes-ambato-476191550-595410043456219-5781143875056325308-n-jpg.jpg",
+          "caption": "2023 UNIANDES — AMBATO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-uniandes-ambato-5-jpeg.jpeg",
+          "caption": "2023 UNIANDES — AMBATO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-uniandes-ambato-cielo-jpg.jpg",
+          "caption": "2023 UNIANDES — AMBATO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2023-uniandes-ambato-f1-jpeg.jpeg",
+          "caption": "2023 UNIANDES — AMBATO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-inselec-quito-ins-jpeg.jpeg",
+          "caption": "2024 INSELEC — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-inselec-quito-ins2-jpeg.jpeg",
+          "caption": "2024 INSELEC — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-inselec-quito-ins3-jpeg.jpeg",
+          "caption": "2024 INSELEC — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-inselec-quito-ins4-jpeg.jpeg",
+          "caption": "2024 INSELEC — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-inselec-quito-ins5-jpeg.jpeg",
+          "caption": "2024 INSELEC — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-inselec-quito-inselec-jpeg.jpeg",
+          "caption": "2024 INSELEC — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-inselec-quito-insl-jpeg.jpeg",
+          "caption": "2024 INSELEC — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-itulpark-pifo-quito-1-jpeg.jpeg",
+          "caption": "2024 ITULPARK-PIFO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-itulpark-pifo-quito-2-jpeg.jpeg",
+          "caption": "2024 ITULPARK-PIFO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-itulpark-pifo-quito-3-jpeg.jpeg",
+          "caption": "2024 ITULPARK-PIFO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-itulpark-pifo-quito-4-jpeg.jpeg",
+          "caption": "2024 ITULPARK-PIFO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-itulpark-pifo-quito-5-jpeg.jpeg",
+          "caption": "2024 ITULPARK-PIFO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-itulpark-pifo-quito-ingreso2-jpeg.jpeg",
+          "caption": "2024 ITULPARK-PIFO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-itulpark-pifo-quito-ingrso-jpeg.jpeg",
+          "caption": "2024 ITULPARK-PIFO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-itulpark-pifo-quito-whatsapp-image-2026-03-09-at-22-16-54-jpeg.jpeg",
+          "caption": "2024 ITULPARK-PIFO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230215-122921-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230215-122930-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230215-122955-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230215-123006-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230215-123012-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230215-124015-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230215-124020-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230215-124034-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230215-124036-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230215-124928-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230215-125945-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230215-130001-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230215-130003-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230215-130026-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230215-130135-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230215-130606-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230215-130640-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230215-130735-0-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230215-130735-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230215-130924-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230215-130926-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230303-134301-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230303-134453-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230303-134456-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230329-104823-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230329-104826-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230329-105054-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230329-105152-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230329-105402-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230329-114526-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-095018-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-095706-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-095735-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-095741-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-100602-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101121-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101122-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101130-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101133-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101145-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101150-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101207-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101431-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101535-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101536-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101612-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101626-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101651-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101703-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101740-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101743-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101751-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101757-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101759-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101810-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101814-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101826-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101829-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101836-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101840-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101848-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101915-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101935-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-101957-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-102008-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-102050-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-102106-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-102131-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-102153-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-102200-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-102415-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-102438-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-102506-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-102510-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-102742-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-103046-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-103314-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2024-obra-conjunto-savani-20230523-103316-jpg.jpg",
+          "caption": "2024 Obra Conjunto Savani"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2025-carce-el-encuentro-santa-elenea-acero-balistico-jpeg.jpeg",
+          "caption": "2025 CARCE EL ENCUENTRO-SANTA ELENEA"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2025-carce-el-encuentro-santa-elenea-instalacion-jpeg.jpeg",
+          "caption": "2025 CARCE EL ENCUENTRO-SANTA ELENEA"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2025-carce-el-encuentro-santa-elenea-transporte-jpeg.jpeg",
+          "caption": "2025 CARCE EL ENCUENTRO-SANTA ELENEA"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2025-carce-el-encuentro-santa-elenea-vidrios-blindados-jpeg.jpeg",
+          "caption": "2025 CARCE EL ENCUENTRO-SANTA ELENEA"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2025-cesantia-policial-quito-cesantia-1-jpeg.jpeg",
+          "caption": "2025 CESANTIA POLICIAL — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2025-cesantia-policial-quito-cesantia-2-jpeg.jpeg",
+          "caption": "2025 CESANTIA POLICIAL — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2025-cesantia-policial-quito-cesantia-jpeg.jpeg",
+          "caption": "2025 CESANTIA POLICIAL — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2025-monteolivo-quito-0-jpeg.jpeg",
+          "caption": "2025 MONTEOLIVO — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2025-monteolivo-quito-00-jpeg.jpeg",
+          "caption": "2025 MONTEOLIVO — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2025-monteolivo-quito-1-jpeg.jpeg",
+          "caption": "2025 MONTEOLIVO — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2025-obra-aymesa-quito-2-jpeg.jpeg",
+          "caption": "2025 Obra Aymesa QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2025-obra-aymesa-quito-3-jpeg.jpeg",
+          "caption": "2025 Obra Aymesa QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2025-obra-aymesa-quito-whatsapp-image-2026-04-09-at-15-30-38-jpeg.jpeg",
+          "caption": "2025 Obra Aymesa QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2025-obra-aymesa-quito-whatsapp-image-2026-04-09-at-15-31-10-jpeg.jpeg",
+          "caption": "2025 Obra Aymesa QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2025-plodis-salcedo-0-jpeg.jpeg",
+          "caption": "2025 PLODIS-SALCEDO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2025-plodis-salcedo-00-jpeg.jpeg",
+          "caption": "2025 PLODIS-SALCEDO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2025-plodis-salcedo-000-jpeg.jpeg",
+          "caption": "2025 PLODIS-SALCEDO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2025-plodis-salcedo-1-jpeg.jpeg",
+          "caption": "2025 PLODIS-SALCEDO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2025-plodis-salcedo-2-jpeg.jpeg",
+          "caption": "2025 PLODIS-SALCEDO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2025-plodis-salcedo-3-jpeg.jpeg",
+          "caption": "2025 PLODIS-SALCEDO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2025-plodis-salcedo-4-jpeg.jpeg",
+          "caption": "2025 PLODIS-SALCEDO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2025-plodis-salcedo-5-jpeg.jpeg",
+          "caption": "2025 PLODIS-SALCEDO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2026-iglesia-iurd-quito-0-jpeg.jpeg",
+          "caption": "2026 IGLESIA IURD — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2026-iglesia-iurd-quito-00-jpeg.jpeg",
+          "caption": "2026 IGLESIA IURD — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2026-iglesia-iurd-quito-whatsapp-image-2026-03-27-at-12-29-01-jpeg.jpeg",
+          "caption": "2026 IGLESIA IURD – QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2026-iglesia-iurd-quito-whatsapp-image-2026-03-27-at-12-29-02-jpeg.jpeg",
+          "caption": "2026 IGLESIA IURD – QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2026-lundin-gold-morona-santiago-curtain-wall-jpeg.jpeg",
+          "caption": "2026 LUNDIN GOLD — MORONA SANTIAGO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2026-lundin-gold-morona-santiago-divisiones-interiores-jpeg.jpeg",
+          "caption": "2026 LUNDIN GOLD — MORONA SANTIAGO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2026-lundin-gold-morona-santiago-lundin-puertas-jpeg.jpeg",
+          "caption": "2026 LUNDIN GOLD — MORONA SANTIAGO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2026-lundin-gold-morona-santiago-mamparas-interiores-lundin-gold-jpeg.jpeg",
+          "caption": "2026 LUNDIN GOLD — MORONA SANTIAGO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2026-lundin-gold-morona-santiago-ventanas-2-jpeg.jpeg",
+          "caption": "2026 LUNDIN GOLD — MORONA SANTIAGO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2026-lundin-gold-morona-santiago-ventanas-galpon-jpeg.jpeg",
+          "caption": "2026 LUNDIN GOLD — MORONA SANTIAGO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2026-lundin-gold-morona-santiago-ventanas-jpeg.jpeg",
+          "caption": "2026 LUNDIN GOLD — MORONA SANTIAGO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2026-lundin-gold-morona-santiago-whatsapp-image-2026-03-11-at-18-17-59-jpeg.jpeg",
+          "caption": "2026 LUNDIN GOLD — MORONA SANTIAGO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2026-stihl-puembo-quito-whatsapp-image-2026-03-03-at-16-17-41-jpeg.jpeg",
+          "caption": "2026 STIHL — PUEMBO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2026-stihl-puembo-quito-whatsapp-image-2026-03-03-at-16-17-42-jpeg.jpeg",
+          "caption": "2026 STIHL — PUEMBO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2026-stihl-puembo-quito-whatsapp-image-2026-03-03-at-16-19-14-jpeg.jpeg",
+          "caption": "2026 STIHL — PUEMBO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2026-stihl-puembo-quito-whatsapp-image-2026-03-27-at-17-11-41-jpeg.jpeg",
+          "caption": "2026 STIHL – PUEMBO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2026-stihl-puembo-quito-whatsapp-image-2026-03-27-at-17-11-45-4-jpeg.jpeg",
+          "caption": "2026 STIHL – PUEMBO QUITO"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2026-the-hills-guayaquil-2-jpeg.jpeg",
+          "caption": "2026 THE HILLS — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2026-the-hills-guayaquil-fachada-2-jpeg.jpeg",
+          "caption": "2026 THE HILLS — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2026-the-hills-guayaquil-fachada-jpeg.jpeg",
+          "caption": "2026 THE HILLS — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2026-the-hills-guayaquil-m3-jpeg.jpeg",
+          "caption": "2026 THE HILLS — GUAYAQUIL"
+        },
+        {
+          "src": "/images/products/gallery/facades/curtainWallStick/projects/2026-the-hills-guayaquil-mamparas-jpeg.jpeg",
+          "caption": "2026 THE HILLS — GUAYAQUIL"
+        }
+      ],
+      "glassSkin": [
+        {
+          "src": "/images/products/gallery/facades/glassSkin/dsc02825-jpg.jpg",
+          "caption": "DSC02825"
+        },
+        {
+          "src": "/images/products/gallery/facades/glassSkin/dsc02831-jpg.jpg",
+          "caption": "DSC02831"
+        },
+        {
+          "src": "/images/products/gallery/facades/glassSkin/dsc02832-jpg.jpg",
+          "caption": "DSC02832"
+        },
+        {
+          "src": "/images/products/gallery/facades/glassSkin/dsc02843-jpg.jpg",
+          "caption": "DSC02843"
+        },
+        {
+          "src": "/images/products/gallery/facades/glassSkin/dsc02873-jpg.jpg",
+          "caption": "DSC02873"
+        },
+        {
+          "src": "/images/products/gallery/facades/glassSkin/image1-jpg.jpg",
+          "caption": "Image1"
+        },
+        {
+          "src": "/images/products/gallery/facades/glassSkin/whatsapp-image-2026-03-03-at-16-19-14-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 03 03 at 16.19.14"
+        }
+      ],
+      "stickRpt": [
+        {
+          "src": "/images/products/gallery/facades/stickRpt/uniandes-tisaleo-jpg.jpg",
+          "caption": "UNIANDES TISALEO"
+        }
+      ],
+      "structuralGlazing": [
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/dsc00666-jpg.jpg",
+          "caption": "DSC00666"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/dsc02816-jpg.jpg",
+          "caption": "DSC02816"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/dsc02817-jpg.jpg",
+          "caption": "DSC02817"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/dsc02836-jpg.jpg",
+          "caption": "DSC02836"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/dsc02837-jpg.jpg",
+          "caption": "DSC02837"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/dsc02846-jpg.jpg",
+          "caption": "DSC02846"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/dsc02880-jpg.jpg",
+          "caption": "DSC02880"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/dsc02886-jpg.jpg",
+          "caption": "DSC02886"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/dsc02887-jpg.jpg",
+          "caption": "DSC02887"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/dsc02925-jpg.jpg",
+          "caption": "DSC02925"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/dsc02927-jpg.jpg",
+          "caption": "DSC02927"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/dsc02929-jpg.jpg",
+          "caption": "DSC02929"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/dsc02930-jpg.jpg",
+          "caption": "DSC02930"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/dscn1527-jpg.jpg",
+          "caption": "DSCN1527"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/img-20171102-wa0005-jpg.jpg",
+          "caption": "IMG 20171102 WA0005"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/img-20171102-wa0012-jpg.jpg",
+          "caption": "IMG 20171102 WA0012"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/img01010-20120718-1127-jpg.jpg",
+          "caption": "IMG01010 20120718 1127"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/img01011-20120718-1128-jpg.jpg",
+          "caption": "IMG01011 20120718 1128"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/img01030-20120718-1155-jpg.jpg",
+          "caption": "IMG01030 20120718 1155"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/img01059-20120718-1204-jpg.jpg",
+          "caption": "IMG01059 20120718 1204"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/kia-2-jpeg.jpeg",
+          "caption": "KIA 2"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/kia-valle-2-jpeg.jpeg",
+          "caption": "kia valle 2"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/kia-valle-jpeg.jpeg",
+          "caption": "kia valle"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/whatsapp-image-2026-04-01-at-16-40-44-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 16.40.44"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/whatsapp-image-2026-04-01-at-16-40-45-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 16.40.45"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/whatsapp-image-2026-04-01-at-16-40-452-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 16.40.452"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/whatsapp-image-2026-04-02-at-09-50-55-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 09.50.55"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/whatsapp-image-2026-04-02-at-09-50-56-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 09.50.56"
+        },
+        {
+          "src": "/images/products/gallery/facades/structuralGlazing/whatsapp-image-2026-04-02-at-09-51-42-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 09.51.42"
+        }
+      ]
+    },
+    "security": {
+      "armoredPartitions": [
+        {
+          "src": "/images/products/gallery/security/armoredPartitions/2-jpeg.jpeg",
+          "caption": "2"
+        },
+        {
+          "src": "/images/products/gallery/security/armoredPartitions/3-jpeg.jpeg",
+          "caption": "3"
+        },
+        {
+          "src": "/images/products/gallery/security/armoredPartitions/4-jpeg.jpeg",
+          "caption": "4"
+        },
+        {
+          "src": "/images/products/gallery/security/armoredPartitions/whatsapp-image-2026-04-01-at-17-03-41-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 17.03.41"
+        },
+        {
+          "src": "/images/products/gallery/security/armoredPartitions/projects/2013-edificio-securitas-quito-securitas-jpg.jpg",
+          "caption": "2013 EDIFICIO SECURITAS — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/armoredPartitions/projects/2013-edificio-securitas-quito-dscn1539-jpg.jpg",
+          "caption": "2013 EDIFICIO SECURITAS – QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/armoredPartitions/projects/2013-edificio-securitas-quito-dscn1540-jpg.jpg",
+          "caption": "2013 EDIFICIO SECURITAS – QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/armoredPartitions/projects/2013-edificio-securitas-quito-dscn1542-jpg.jpg",
+          "caption": "2013 EDIFICIO SECURITAS – QUITO"
+        }
+      ],
+      "ballisticSteel": [
+        {
+          "src": "/images/products/gallery/security/ballisticSteel/2-jpeg.jpeg",
+          "caption": "2"
+        },
+        {
+          "src": "/images/products/gallery/security/ballisticSteel/3-jpeg.jpeg",
+          "caption": "3"
+        },
+        {
+          "src": "/images/products/gallery/security/ballisticSteel/4-jpeg.jpeg",
+          "caption": "4"
+        },
+        {
+          "src": "/images/products/gallery/security/ballisticSteel/whatsapp-image-2026-04-01-at-17-03-41-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 17.03.41"
+        }
+      ],
+      "gesellGlass": [
+        {
+          "src": "/images/products/gallery/security/gesellGlass/gesell-loja-jpeg.jpeg",
+          "caption": "GESELL LOJA"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/gesell-loja2-jpeg.jpeg",
+          "caption": "GESELL LOJA2"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/gesell-tabacundo-jpeg.jpeg",
+          "caption": "GESELL TABACUNDO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/whatsapp-image-2026-04-15-at-10-08-49-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 15 at 10.08.49"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/2017-edificio-complejo-judicial-norte-quito-20170517-092558-jpg.jpg",
+          "caption": "2017 EDIFICIO COMPLEJO JUDICIAL NORTE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/2017-edificio-complejo-judicial-norte-quito-20170517-092722-jpg.jpg",
+          "caption": "2017 EDIFICIO COMPLEJO JUDICIAL NORTE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/2017-edificio-complejo-judicial-norte-quito-20170517-093501-jpg.jpg",
+          "caption": "2017 EDIFICIO COMPLEJO JUDICIAL NORTE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/2017-edificio-complejo-judicial-norte-quito-20250422-113014-jpg.jpg",
+          "caption": "2017 EDIFICIO COMPLEJO JUDICIAL NORTE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/2017-edificio-complejo-judicial-norte-quito-20250422-113935-jpg.jpg",
+          "caption": "2017 EDIFICIO COMPLEJO JUDICIAL NORTE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/2017-edificio-complejo-judicial-norte-quito-complejo-judicial-norte-1-jpg.jpg",
+          "caption": "2017 EDIFICIO COMPLEJO JUDICIAL NORTE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/2017-edificio-complejo-judicial-norte-quito-img-20161117-wa0021-jpg.jpg",
+          "caption": "2017 EDIFICIO COMPLEJO JUDICIAL NORTE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/2017-edificio-complejo-judicial-norte-quito-img-20161228-wa0041-jpg.jpg",
+          "caption": "2017 EDIFICIO COMPLEJO JUDICIAL NORTE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/2017-edificio-complejo-judicial-norte-quito-psx-20250422-114201-jpg.jpg",
+          "caption": "2017 EDIFICIO COMPLEJO JUDICIAL NORTE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/2017-edificio-complejo-judicial-norte-quito-whatsapp-image-2026-03-06-at-15-22-5.jpeg",
+          "caption": "2017 EDIFICIO COMPLEJO JUDICIAL NORTE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/2017-edificio-complejo-judicial-norte-quito-whatsapp-image-2026-03-09-at-21-59-3.jpeg",
+          "caption": "2017 EDIFICIO COMPLEJO JUDICIAL NORTE — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/2017-edificio-complejo-judicial-sur-quito-complejo-judicial-sur-jpg.jpg",
+          "caption": "2017 EDIFICIO COMPLEJO JUDICIAL SUR — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/2017-edificio-complejo-judicial-sur-quito-img-20170517-wa0023-jpg.jpg",
+          "caption": "2017 EDIFICIO COMPLEJO JUDICIAL SUR — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/2017-edificio-complejo-judicial-sur-quito-img-20170517-wa0024-jpg.jpg",
+          "caption": "2017 EDIFICIO COMPLEJO JUDICIAL SUR — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/2017-edificio-complejo-judicial-sur-quito-img-20170517-wa0025-jpg.jpg",
+          "caption": "2017 EDIFICIO COMPLEJO JUDICIAL SUR — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/2017-edificio-complejo-judicial-sur-quito-img-20170517-wa0026-jpg.jpg",
+          "caption": "2017 EDIFICIO COMPLEJO JUDICIAL SUR — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/2017-edificio-complejo-judicial-sur-quito-img-20170517-wa0028-jpg.jpg",
+          "caption": "2017 EDIFICIO COMPLEJO JUDICIAL SUR — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/2017-edificio-complejo-judicial-sur-quito-img-20170517-wa0029-jpg.jpg",
+          "caption": "2017 EDIFICIO COMPLEJO JUDICIAL SUR — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/2017-edificio-complejo-judicial-sur-quito-img-20170517-wa0030-jpg.jpg",
+          "caption": "2017 EDIFICIO COMPLEJO JUDICIAL SUR — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/2017-edificio-complejo-judicial-sur-quito-img-20170517-wa0031-jpg.jpg",
+          "caption": "2017 EDIFICIO COMPLEJO JUDICIAL SUR — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/2017-edificio-complejo-judicial-sur-quito-img-20170517-wa0032-jpg.jpg",
+          "caption": "2017 EDIFICIO COMPLEJO JUDICIAL SUR — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/2017-edificio-complejo-judicial-sur-quito-whatsapp-image-2026-03-06-at-15-24-34-.jpeg",
+          "caption": "2017 EDIFICIO COMPLEJO JUDICIAL SUR — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/2017-edificio-complejo-judicial-sur-quito-whatsapp-image-2026-03-06-at-15-25-48-.jpeg",
+          "caption": "2017 EDIFICIO COMPLEJO JUDICIAL SUR — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/2017-edificio-complejo-judicial-sur-quito-whatsapp-image-2026-03-06-at-15-25-57-.jpeg",
+          "caption": "2017 EDIFICIO COMPLEJO JUDICIAL SUR — QUITO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/2021-judicatura-tabacundo-gesell-tabacundo-jpeg.jpeg",
+          "caption": "2021 JUDICATURA — TABACUNDO"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/judicatura-loja-gesell-loja-jpeg.jpeg",
+          "caption": "JUDICATURA — LOJA"
+        },
+        {
+          "src": "/images/products/gallery/security/gesellGlass/projects/judicatura-loja-gesell-loja2-jpeg.jpeg",
+          "caption": "JUDICATURA — LOJA"
+        }
+      ],
+      "guardBooths": [
+        {
+          "src": "/images/products/gallery/security/guardBooths/dsc02884-jpg.jpg",
+          "caption": "DSC02884"
+        },
+        {
+          "src": "/images/products/gallery/security/guardBooths/dsc-8515-jpg.jpg",
+          "caption": "DSC 8515"
+        },
+        {
+          "src": "/images/products/gallery/security/guardBooths/qph-cajero-jpg.jpg",
+          "caption": "QPH Cajero"
+        },
+        {
+          "src": "/images/products/gallery/security/guardBooths/qph-letreros-jpg.jpg",
+          "caption": "QPH Letreros"
+        },
+        {
+          "src": "/images/products/gallery/security/guardBooths/vidrio-antimotin-jpg.jpg",
+          "caption": "vidrio antimotin"
+        },
+        {
+          "src": "/images/products/gallery/security/guardBooths/vidrios-con-serigrafia-jpg.jpg",
+          "caption": "Vidrios con serigrafia"
+        },
+        {
+          "src": "/images/products/gallery/security/guardBooths/whatsapp-image-2026-04-01-at-16-40-45-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 16.40.45"
+        },
+        {
+          "src": "/images/products/gallery/security/guardBooths/whatsapp-image-2026-04-01-at-16-40-46-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 16.40.46"
+        },
+        {
+          "src": "/images/products/gallery/security/guardBooths/whatsapp-image-2026-04-11-at-12-53-35-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 11 at 12.53.35"
+        },
+        {
+          "src": "/images/products/gallery/security/guardBooths/dsc0075-jpg.jpg",
+          "caption": "DSC0075"
+        },
+        {
+          "src": "/images/products/gallery/security/guardBooths/dsc0088-jpg.jpg",
+          "caption": "DSC0088"
+        },
+        {
+          "src": "/images/products/gallery/security/guardBooths/dsc0099-jpg.jpg",
+          "caption": "DSC0099"
+        }
+      ]
+    },
+    "stainlessSteel": {
+      "bathroomPartitions": [
+        {
+          "src": "/images/products/gallery/stainlessSteel/bathroomPartitions/2-jpeg.jpeg",
+          "caption": "2"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/bathroomPartitions/3-jpeg.jpeg",
+          "caption": "3"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/bathroomPartitions/4-jpeg.jpeg",
+          "caption": "4"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/bathroomPartitions/5-jpeg.jpeg",
+          "caption": "5"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/bathroomPartitions/d-jpeg.jpeg",
+          "caption": "d"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/bathroomPartitions/whatsapp-image-2026-04-01-at-15-35-53-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 15.35.53"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/bathroomPartitions/whatsapp-image-2026-04-01-at-15-35-55-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 15.35.55"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/bathroomPartitions/dsc0179-jpg.jpg",
+          "caption": "DSC0179"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/bathroomPartitions/dsc0181-jpg.jpg",
+          "caption": "DSC0181"
+        }
+      ],
+      "handrails": [
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/20141204-105758-jpg.jpg",
+          "caption": "20141204 105758"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/20141204-112207-jpg.jpg",
+          "caption": "20141204 112207"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/20141204-112211-jpg.jpg",
+          "caption": "20141204 112211"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/20150904-161619-jpg.jpg",
+          "caption": "20150904 161619"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/20150904-161622-jpg.jpg",
+          "caption": "20150904 161622"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/20150904-161627-jpg.jpg",
+          "caption": "20150904 161627"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/20150904-161630-jpg.jpg",
+          "caption": "20150904 161630"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/20150904-161633-jpg.jpg",
+          "caption": "20150904 161633"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/20150904-161638-jpg.jpg",
+          "caption": "20150904 161638"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/cables-acero-inox-jpg.jpg",
+          "caption": "Cables acero inox"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/dscn1124-jpg.jpg",
+          "caption": "DSCN1124"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/dscn1125-jpg.jpg",
+          "caption": "DSCN1125"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/dsc-8404-jpg.jpg",
+          "caption": "DSC 8404"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/dsc-8478-jpg.jpg",
+          "caption": "DSC 8478"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/dsc-8479-jpg.jpg",
+          "caption": "DSC 8479"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/dsc-8490-jpg.jpg",
+          "caption": "DSC 8490"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/dsc-8497-jpg.jpg",
+          "caption": "DSC 8497"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/martes-pasamanos-jpg.jpg",
+          "caption": "Martes Pasamanos"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/pasamanos-2-jpg.jpg",
+          "caption": "Pasamanos 2"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/pasamanos-jpg.jpg",
+          "caption": "Pasamanos"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/qph-pasamanos-inox-vidrio-19mm-jpg.jpg",
+          "caption": "QPH Pasamanos inox vidrio 19mm"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/whatsapp-image-2026-04-01-at-16-40-44-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 16.40.44"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/whatsapp-image-2026-04-02-at-17-12-50-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 17.12.50"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/dsc0259-jpg.jpg",
+          "caption": "DSC0259"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/dsc0282-jpg.jpg",
+          "caption": "DSC0282"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/dsc0608-jpg.jpg",
+          "caption": "DSC0608"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/handrails/dsc0668-jpg.jpg",
+          "caption": "DSC0668"
+        }
+      ],
+      "ssSlidingDoors": [
+        {
+          "src": "/images/products/gallery/stainlessSteel/ssSlidingDoors/whatsapp-image-2026-04-01-at-16-21-35-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 16.21.35"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/ssSlidingDoors/whatsapp-image-2026-04-01-at-16-21-36-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 16.21.36"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/ssSlidingDoors/whatsapp-image-2026-04-01-at-16-21-37-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 16.21.37"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/ssSlidingDoors/whatsapp-image-2026-04-01-at-16-21-38-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 01 at 16.21.38"
+        },
+        {
+          "src": "/images/products/gallery/stainlessSteel/ssSlidingDoors/whatsapp-image-2026-04-02-at-09-49-13-jpeg.jpeg",
+          "caption": "WhatsApp Image 2026 04 02 at 09.49.13"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,800 @@
+{
+  "hub": {
+    "title": "Products",
+    "subtitle": "Explore solutions by category: facades, fenestration, security, exteriors and more.",
+    "viewCategory": "View category",
+    "viewDetail": "View details"
+  },
+  "detail": {
+    "applications": "Applications",
+    "benefits": "Benefits",
+    "materials": "Materials",
+    "standards": "Technical standards",
+    "options": "Options & variants",
+    "relatedProjects": "Related projects",
+    "projectGallery": "Project gallery & references",
+    "closeGallery": "Close image",
+    "galleryPaginationNav": "Gallery pagination",
+    "galleryPreviousPage": "Previous",
+    "galleryNextPage": "Next",
+    "galleryPageStatus": "Page {page} of {totalPages}",
+    "galleryGoToPage": "Go to page {page}",
+    "galleryShowingRange": "Showing {from}–{to} of {total} images",
+    "requestQuote": "Request a quote"
+  },
+  "explorer": {
+    "sectionTitle": "Solution explorer",
+    "searchLabel": "Search solutions",
+    "searchPlaceholder": "Search product, system or solution...",
+    "primaryLabel": "Filter by line",
+    "primary": {
+      "all": "All",
+      "facades": "Facades",
+      "windows": "Windows",
+      "doors": "Doors",
+      "security": "Security",
+      "exteriors": "Exteriors",
+      "interiors": "Interiors",
+      "steel": "Steel"
+    },
+    "sectorLabel": "Sector",
+    "materialLabel": "Material",
+    "systemLabel": "System",
+    "applicationLabel": "Application",
+    "allOption": "All",
+    "sectors": {
+      "corporate": "Corporate",
+      "commercial": "Commercial",
+      "judicial": "Judicial",
+      "pharmaceutical": "Pharmaceutical",
+      "residential": "Residential",
+      "institutional": "Institutional"
+    },
+    "materials": {
+      "temperedGlass": "Tempered glass",
+      "laminatedGlass": "Laminated glass",
+      "aluminum": "Aluminum",
+      "stainlessSteel": "Stainless steel",
+      "acm": "ACM"
+    },
+    "systems": {
+      "automatic": "Automatic",
+      "armored": "Armored",
+      "hermetic": "Hermetic",
+      "rpt": "RPT",
+      "structural": "Structural",
+      "sliding": "Sliding"
+    },
+    "applications": {
+      "facade": "Facade",
+      "access": "Access",
+      "division": "Division",
+      "roof": "Roof",
+      "protection": "Protection",
+      "decoration": "Decoration"
+    },
+    "resultsCount": "{count} solutions found",
+    "clearFilters": "Clear filters",
+    "activeFilters": "Active filters",
+    "removeFilter": "Remove filter: {filter}",
+    "advancedFilters": "Advanced filters",
+    "emptyTitle": "No solutions match those filters.",
+    "emptyHint": "Tip: try searching by material, sector or system type.",
+    "showingRange": "Showing {from}–{to} of {total} solutions",
+    "paginationNav": "Results pagination",
+    "previousPage": "Previous",
+    "nextPage": "Next",
+    "pageStatus": "Page {page} of {totalPages}",
+    "goToPage": "Go to page {page}"
+  },
+  "categories": {
+    "facades": {
+      "title": "Architectural facades",
+      "description": "Curtain wall, structural glazing and glass skin systems for corporate, commercial and institutional buildings."
+    },
+    "aluminumWindows": {
+      "title": "Aluminum windows & systems",
+      "description": "Projected, sliding and high thermal-performance systems for comfort, ventilation and energy efficiency."
+    },
+    "doorsAccess": {
+      "title": "Doors & access",
+      "description": "Sliding, hinged, folding and hermetic doors for buildings, retail and industrial facilities."
+    },
+    "automaticDoors": {
+      "title": "Automatic doors",
+      "description": "Standard, telescopic and armored systems for accessibility, high traffic and security."
+    },
+    "security": {
+      "title": "Specialized security",
+      "description": "Armored partitions, ballistic steel, Gesell glass, guard booths and institutional solutions."
+    },
+    "coversExteriors": {
+      "title": "Roofs, pergolas & marquees",
+      "description": "Sun protection, skylights and exterior enclosures with architectural design."
+    },
+    "acmLouvers": {
+      "title": "ACM cladding & sun breakers",
+      "description": "Composite panels, louvers and solar control systems for contemporary facades."
+    },
+    "corporateInteriors": {
+      "title": "Corporate interiors",
+      "description": "Partitions, office divisions, lobbies, reception and signage for workspaces."
+    },
+    "architecturalGlass": {
+      "title": "Architectural glass",
+      "description": "Floors, handrails, mirrors, shelves and high-aesthetic decorative solutions."
+    },
+    "stainlessSteel": {
+      "title": "Stainless steel",
+      "description": "Handrails, doors and partitions with durability, hygiene and premium finish."
+    }
+  },
+  "subcategories": {
+    "facades": {
+      "curtainWallStick": {
+        "title": "Stick curtain wall",
+        "description": "Stick curtain wall: ITVAL aluminum and glass solution for architectural facades, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "stickRpt": {
+        "title": "Stick RPT (thermal break)",
+        "description": "Stick RPT (thermal break): ITVAL aluminum and glass solution for architectural facades, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "structuralGlazing": {
+        "title": "Structural glazing",
+        "description": "Structural glazing: ITVAL aluminum and glass solution for architectural facades, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "glassSkin": {
+        "title": "Glass skin",
+        "description": "Glass skin: ITVAL aluminum and glass solution for architectural facades, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      }
+    },
+    "aluminumWindows": {
+      "projected": {
+        "title": "Projected windows",
+        "description": "Projected windows: ITVAL aluminum and glass solution for aluminum windows & systems, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "sliding": {
+        "title": "Sliding windows",
+        "description": "Sliding windows: ITVAL aluminum and glass solution for aluminum windows & systems, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "visusFemec": {
+        "title": "Visus Femec system",
+        "description": "Visus Femec system: ITVAL aluminum and glass solution for aluminum windows & systems, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "thermalSolar": {
+        "title": "Thermal & solar control",
+        "description": "Thermal & solar control: ITVAL aluminum and glass solution for aluminum windows & systems, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      }
+    },
+    "doorsAccess": {
+      "slidingDoors": {
+        "title": "Sliding doors",
+        "description": "Sliding doors: ITVAL aluminum and glass solution for doors & access, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "hingedDoors": {
+        "title": "Hinged doors",
+        "description": "Hinged doors: ITVAL aluminum and glass solution for doors & access, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "foldingDoors": {
+        "title": "Folding doors",
+        "description": "Folding doors: ITVAL aluminum and glass solution for doors & access, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "hermeticDoors": {
+        "title": "Hermetic doors",
+        "description": "Hermetic doors: ITVAL aluminum and glass solution for doors & access, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      }
+    },
+    "automaticDoors": {
+      "standardAuto": {
+        "title": "Standard automatic doors",
+        "description": "Standard automatic doors: ITVAL aluminum and glass solution for automatic doors, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "telescopicAuto": {
+        "title": "Telescopic doors",
+        "description": "Telescopic doors: ITVAL aluminum and glass solution for automatic doors, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "armoredAuto": {
+        "title": "Armored automatic doors",
+        "description": "Armored automatic doors: ITVAL aluminum and glass solution for automatic doors, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      }
+    },
+    "security": {
+      "armoredPartitions": {
+        "title": "Armored partitions",
+        "description": "Armored partitions: ITVAL aluminum and glass solution for specialized security, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "ballisticSteel": {
+        "title": "Ballistic steel",
+        "description": "Ballistic steel: ITVAL aluminum and glass solution for specialized security, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "gesellGlass": {
+        "title": "Gesell glass",
+        "description": "Gesell glass: ITVAL aluminum and glass solution for specialized security, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "guardBooths": {
+        "title": "Guard booths",
+        "description": "Guard booths: ITVAL aluminum and glass solution for specialized security, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      }
+    },
+    "coversExteriors": {
+      "roofsSkylights": {
+        "title": "Roofs & skylights",
+        "description": "Roofs & skylights: ITVAL aluminum and glass solution for roofs, pergolas & marquees, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "pergolas": {
+        "title": "Pergolas",
+        "description": "Pergolas: ITVAL aluminum and glass solution for roofs, pergolas & marquees, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "marquees": {
+        "title": "Marquees",
+        "description": "Marquees: ITVAL aluminum and glass solution for roofs, pergolas & marquees, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "glassEnclosures": {
+        "title": "Glass enclosures",
+        "description": "Glass enclosures: ITVAL aluminum and glass solution for roofs, pergolas & marquees, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      }
+    },
+    "acmLouvers": {
+      "acmPanels": {
+        "title": "ACM panels",
+        "description": "ACM panels: ITVAL aluminum and glass solution for acm cladding & sun breakers, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "louvers": {
+        "title": "Louvers",
+        "description": "Louvers: ITVAL aluminum and glass solution for acm cladding & sun breakers, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "sunBreakers": {
+        "title": "Sun breakers",
+        "description": "Sun breakers: ITVAL aluminum and glass solution for acm cladding & sun breakers, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "compositeFacades": {
+        "title": "Composite facades",
+        "description": "Composite facades: ITVAL aluminum and glass solution for acm cladding & sun breakers, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      }
+    },
+    "corporateInteriors": {
+      "glassPartitions": {
+        "title": "Glass partitions",
+        "description": "Glass partitions: ITVAL aluminum and glass solution for corporate interiors, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "officeDivision": {
+        "title": "Office divisions",
+        "description": "Office divisions: ITVAL aluminum and glass solution for corporate interiors, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "lobbies": {
+        "title": "Lobbies & entrances",
+        "description": "Lobbies & entrances: ITVAL aluminum and glass solution for corporate interiors, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "signage": {
+        "title": "Signage",
+        "description": "Signage: ITVAL aluminum and glass solution for corporate interiors, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      }
+    },
+    "architecturalGlass": {
+      "glassFloors": {
+        "title": "Glass floors",
+        "description": "Glass floors: ITVAL aluminum and glass solution for architectural glass, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "handrailsMirrors": {
+        "title": "Handrails & mirrors",
+        "description": "Handrails & mirrors: ITVAL aluminum and glass solution for architectural glass, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "decorativeGlass": {
+        "title": "Decorative glass",
+        "description": "Decorative glass: ITVAL aluminum and glass solution for architectural glass, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      },
+      "wineCellars": {
+        "title": "Wine cellars & shelves",
+        "description": "Wine cellars & shelves: ITVAL aluminum and glass solution for architectural glass, with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "Aluminum, laminated/tempered glass, steel, hardware and structural sealants per specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 where applicable.",
+        "options": "Finishes, dimensions, glass types and custom configurations per project."
+      }
+    },
+    "stainlessSteel": {
+      "handrails": {
+        "title": "Handrails",
+        "description": "Handrails: ITVAL stainless steel solution with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "AISI 304/316 stainless steel, hardware and finishes per project specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI; finishes and tolerances per applicable standards.",
+        "options": "Satin/mirror finishes, diameters, brackets and custom configurations."
+      },
+      "ssSlidingDoors": {
+        "title": "Sliding doors",
+        "description": "Sliding doors: ITVAL stainless steel solution with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "AISI 304/316 stainless steel, hardware and finishes per project specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI; finishes and tolerances per applicable standards.",
+        "options": "Finishes, dimensions and custom configurations per project."
+      },
+      "bathroomPartitions": {
+        "title": "Bathroom partitions",
+        "description": "Bathroom partitions: ITVAL stainless steel solution with engineering, fabrication and certified installation.",
+        "applications": {
+          "i1": "Corporate and commercial buildings",
+          "i2": "Institutional and healthcare projects",
+          "i3": "Premium residential developments"
+        },
+        "benefits": {
+          "i1": "Proven technical performance and durability",
+          "i2": "Architectural aesthetics and brand value",
+          "i3": "End-to-end support from quote to installation"
+        },
+        "materials": "AISI 304/316 stainless steel, hardware and finishes per project specification.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI; finishes and tolerances per applicable standards.",
+        "options": "Finishes, modules and custom configurations per project."
+      }
+    }
+  }
+}

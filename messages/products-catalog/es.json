@@ -1,0 +1,800 @@
+{
+  "hub": {
+    "title": "Productos",
+    "subtitle": "Explore soluciones por categoría: fachadas, cancelería, seguridad, exteriores y más.",
+    "viewCategory": "Ver categoría",
+    "viewDetail": "Ver ficha"
+  },
+  "detail": {
+    "applications": "Aplicaciones",
+    "benefits": "Beneficios",
+    "materials": "Materiales",
+    "standards": "Normas técnicas",
+    "options": "Opciones y variantes",
+    "relatedProjects": "Proyectos relacionados",
+    "projectGallery": "Galería de obras y referencias",
+    "closeGallery": "Cerrar imagen",
+    "galleryPaginationNav": "Paginación de la galería",
+    "galleryPreviousPage": "Anterior",
+    "galleryNextPage": "Siguiente",
+    "galleryPageStatus": "Página {page} de {totalPages}",
+    "galleryGoToPage": "Ir a la página {page}",
+    "galleryShowingRange": "Mostrando {from}–{to} de {total} imágenes",
+    "requestQuote": "Solicitar cotización"
+  },
+  "explorer": {
+    "sectionTitle": "Explorador de soluciones",
+    "searchLabel": "Buscar soluciones",
+    "searchPlaceholder": "Buscar producto, sistema o solución...",
+    "primaryLabel": "Filtrar por línea",
+    "primary": {
+      "all": "Todos",
+      "facades": "Fachadas",
+      "windows": "Ventanas",
+      "doors": "Puertas",
+      "security": "Seguridad",
+      "exteriors": "Exteriores",
+      "interiors": "Interiores",
+      "steel": "Acero"
+    },
+    "sectorLabel": "Sector",
+    "materialLabel": "Material",
+    "systemLabel": "Sistema",
+    "applicationLabel": "Aplicación",
+    "allOption": "Todos",
+    "sectors": {
+      "corporate": "Corporativo",
+      "commercial": "Comercial",
+      "judicial": "Judicial",
+      "pharmaceutical": "Farmacéutico",
+      "residential": "Residencial",
+      "institutional": "Institucional"
+    },
+    "materials": {
+      "temperedGlass": "Vidrio templado",
+      "laminatedGlass": "Vidrio laminado",
+      "aluminum": "Aluminio",
+      "stainlessSteel": "Acero inoxidable",
+      "acm": "ACM"
+    },
+    "systems": {
+      "automatic": "Automático",
+      "armored": "Blindado",
+      "hermetic": "Hermético",
+      "rpt": "RPT",
+      "structural": "Estructural",
+      "sliding": "Corredizo"
+    },
+    "applications": {
+      "facade": "Fachada",
+      "access": "Acceso",
+      "division": "División",
+      "roof": "Cubierta",
+      "protection": "Protección",
+      "decoration": "Decoración"
+    },
+    "resultsCount": "{count} soluciones encontradas",
+    "clearFilters": "Limpiar filtros",
+    "activeFilters": "Filtros activos",
+    "removeFilter": "Quitar filtro: {filter}",
+    "advancedFilters": "Filtros avanzados",
+    "emptyTitle": "No encontramos soluciones con esos filtros.",
+    "emptyHint": "Sugerencia: intenta buscar por material, sector o tipo de sistema.",
+    "showingRange": "Mostrando {from}–{to} de {total} soluciones",
+    "paginationNav": "Paginación de resultados",
+    "previousPage": "Anterior",
+    "nextPage": "Siguiente",
+    "pageStatus": "Página {page} de {totalPages}",
+    "goToPage": "Ir a la página {page}"
+  },
+  "categories": {
+    "facades": {
+      "title": "Fachadas arquitectónicas",
+      "description": "Muro cortina, piel de vidrio y sistemas estructurales para edificios corporativos, comerciales e institucionales."
+    },
+    "aluminumWindows": {
+      "title": "Ventanas y sistemas de aluminio",
+      "description": "Proyectables, corredizas y sistemas de alto desempeño térmico para confort, ventilación y eficiencia energética."
+    },
+    "doorsAccess": {
+      "title": "Puertas y accesos",
+      "description": "Corredizas, batientes, plegables y herméticas para edificios, locales comerciales e industria."
+    },
+    "automaticDoors": {
+      "title": "Puertas automáticas",
+      "description": "Sistemas estándar, telescópicos y blindados para accesibilidad, alto tráfico y seguridad."
+    },
+    "security": {
+      "title": "Seguridad especializada",
+      "description": "Mamparas blindadas, acero balístico, vidrios Gesell, garitas y soluciones institucionales."
+    },
+    "coversExteriors": {
+      "title": "Cubiertas, pérgolas y marquesinas",
+      "description": "Protección solar, claraboyas y cerramientos exteriores con diseño arquitectónico."
+    },
+    "acmLouvers": {
+      "title": "Revestimientos ACM y quiebrasoles",
+      "description": "Paneles compuestos, louvers y sistemas de control solar para fachadas contemporáneas."
+    },
+    "corporateInteriors": {
+      "title": "Interiores corporativos",
+      "description": "Mamparas, divisiones de oficina, lobbies, recepción y señalética para espacios de trabajo."
+    },
+    "architecturalGlass": {
+      "title": "Vidrio arquitectónico",
+      "description": "Pisos, pasamanos, espejos, repisas y soluciones decorativas de alto valor estético."
+    },
+    "stainlessSteel": {
+      "title": "Acero inoxidable",
+      "description": "Pasamanos, puertas y divisiones con durabilidad, higiene y acabado premium."
+    }
+  },
+  "subcategories": {
+    "facades": {
+      "curtainWallStick": {
+        "title": "Muro cortina Stick",
+        "description": "Muro cortina Stick: solución ITVAL en aluminio y vidrio para fachadas arquitectónicas, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "stickRpt": {
+        "title": "Stick RPT",
+        "description": "Stick RPT: solución ITVAL en aluminio y vidrio para fachadas arquitectónicas, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "structuralGlazing": {
+        "title": "Vidriado estructural",
+        "description": "Vidriado estructural: solución ITVAL en aluminio y vidrio para fachadas arquitectónicas, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "glassSkin": {
+        "title": "Piel de vidrio",
+        "description": "Piel de vidrio: solución ITVAL en aluminio y vidrio para fachadas arquitectónicas, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      }
+    },
+    "aluminumWindows": {
+      "projected": {
+        "title": "Ventanas proyectables",
+        "description": "Ventanas proyectables: solución ITVAL en aluminio y vidrio para ventanas y sistemas de aluminio, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "sliding": {
+        "title": "Ventanas corredizas",
+        "description": "Ventanas corredizas: solución ITVAL en aluminio y vidrio para ventanas y sistemas de aluminio, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "visusFemec": {
+        "title": "Sistema Visus Femec",
+        "description": "Sistema Visus Femec: solución ITVAL en aluminio y vidrio para ventanas y sistemas de aluminio, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "thermalSolar": {
+        "title": "Control térmico y solar",
+        "description": "Control térmico y solar: solución ITVAL en aluminio y vidrio para ventanas y sistemas de aluminio, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      }
+    },
+    "doorsAccess": {
+      "slidingDoors": {
+        "title": "Puertas corredizas",
+        "description": "Puertas corredizas: solución ITVAL en aluminio y vidrio para puertas y accesos, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "hingedDoors": {
+        "title": "Puertas batientes",
+        "description": "Puertas batientes: solución ITVAL en aluminio y vidrio para puertas y accesos, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "foldingDoors": {
+        "title": "Puertas plegables",
+        "description": "Puertas plegables: solución ITVAL en aluminio y vidrio para puertas y accesos, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "hermeticDoors": {
+        "title": "Puertas herméticas",
+        "description": "Puertas herméticas: solución ITVAL en aluminio y vidrio para puertas y accesos, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      }
+    },
+    "automaticDoors": {
+      "standardAuto": {
+        "title": "Puertas automáticas estándar",
+        "description": "Puertas automáticas estándar: solución ITVAL en aluminio y vidrio para puertas automáticas, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "telescopicAuto": {
+        "title": "Puertas telescópicas",
+        "description": "Puertas telescópicas: solución ITVAL en aluminio y vidrio para puertas automáticas, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "armoredAuto": {
+        "title": "Puertas automáticas blindadas",
+        "description": "Puertas automáticas blindadas: solución ITVAL en aluminio y vidrio para puertas automáticas, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      }
+    },
+    "security": {
+      "armoredPartitions": {
+        "title": "Mamparas blindadas",
+        "description": "Mamparas blindadas: solución ITVAL en aluminio y vidrio para seguridad especializada, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "ballisticSteel": {
+        "title": "Acero balístico",
+        "description": "Acero balístico: solución ITVAL en aluminio y vidrio para seguridad especializada, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "gesellGlass": {
+        "title": "Vidrios Gesell",
+        "description": "Vidrios Gesell: solución ITVAL en aluminio y vidrio para seguridad especializada, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "guardBooths": {
+        "title": "Garitas y cajas",
+        "description": "Garitas y cajas: solución ITVAL en aluminio y vidrio para seguridad especializada, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      }
+    },
+    "coversExteriors": {
+      "roofsSkylights": {
+        "title": "Cubiertas y claraboyas",
+        "description": "Cubiertas y claraboyas: solución ITVAL en aluminio y vidrio para cubiertas, pérgolas y marquesinas, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "pergolas": {
+        "title": "Pérgolas",
+        "description": "Pérgolas: solución ITVAL en aluminio y vidrio para cubiertas, pérgolas y marquesinas, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "marquees": {
+        "title": "Marquesinas",
+        "description": "Marquesinas: solución ITVAL en aluminio y vidrio para cubiertas, pérgolas y marquesinas, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "glassEnclosures": {
+        "title": "Cerramientos de vidrio",
+        "description": "Cerramientos de vidrio: solución ITVAL en aluminio y vidrio para cubiertas, pérgolas y marquesinas, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      }
+    },
+    "acmLouvers": {
+      "acmPanels": {
+        "title": "Paneles ACM",
+        "description": "Paneles ACM: solución ITVAL en aluminio y vidrio para revestimientos ACM y quiebrasoles, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "louvers": {
+        "title": "Louvers",
+        "description": "Louvers: solución ITVAL en aluminio y vidrio para revestimientos ACM y quiebrasoles, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "sunBreakers": {
+        "title": "Quiebrasoles",
+        "description": "Quiebrasoles: solución ITVAL en aluminio y vidrio para revestimientos ACM y quiebrasoles, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "compositeFacades": {
+        "title": "Fachadas compuestas",
+        "description": "Fachadas compuestas: solución ITVAL en aluminio y vidrio para revestimientos ACM y quiebrasoles, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      }
+    },
+    "corporateInteriors": {
+      "glassPartitions": {
+        "title": "Mamparas de vidrio",
+        "description": "Mamparas de vidrio: solución ITVAL en aluminio y vidrio para interiores corporativos, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "officeDivision": {
+        "title": "Divisiones de oficina",
+        "description": "Divisiones de oficina: solución ITVAL en aluminio y vidrio para interiores corporativos, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "lobbies": {
+        "title": "Lobbies e ingresos",
+        "description": "Lobbies e ingresos: solución ITVAL en aluminio y vidrio para interiores corporativos, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "signage": {
+        "title": "Letreros y señalética",
+        "description": "Letreros y señalética: solución ITVAL en aluminio y vidrio para interiores corporativos, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      }
+    },
+    "architecturalGlass": {
+      "glassFloors": {
+        "title": "Pisos de vidrio",
+        "description": "Pisos de vidrio: solución ITVAL en aluminio y vidrio para vidrio arquitectónico, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "handrailsMirrors": {
+        "title": "Pasamanos y espejos",
+        "description": "Pasamanos y espejos: solución ITVAL en aluminio y vidrio para vidrio arquitectónico, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "decorativeGlass": {
+        "title": "Vidrio decorativo",
+        "description": "Vidrio decorativo: solución ITVAL en aluminio y vidrio para vidrio arquitectónico, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      },
+      "wineCellars": {
+        "title": "Cavas y repisas",
+        "description": "Cavas y repisas: solución ITVAL en aluminio y vidrio para vidrio arquitectónico, con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
+        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+      }
+    },
+    "stainlessSteel": {
+      "handrails": {
+        "title": "Pasamanos",
+        "description": "Pasamanos: solución ITVAL en acero inoxidable con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Acero inoxidable AISI 304/316, herrajes y acabados según especificación del proyecto.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI; acabados y tolerancias según norma aplicable.",
+        "options": "Acabados satinado/espejo, diámetros, soportes y configuraciones personalizadas."
+      },
+      "ssSlidingDoors": {
+        "title": "Puertas corredizas",
+        "description": "Puertas corredizas: solución ITVAL en acero inoxidable con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Acero inoxidable AISI 304/316, herrajes y acabados según especificación del proyecto.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI; acabados y tolerancias según norma aplicable.",
+        "options": "Acabados, dimensiones y configuraciones personalizadas según proyecto."
+      },
+      "bathroomPartitions": {
+        "title": "Divisiones para baños",
+        "description": "Divisiones para baños: solución ITVAL en acero inoxidable con ingeniería, fabricación e instalación certificada.",
+        "applications": {
+          "i1": "Edificios corporativos y comerciales",
+          "i2": "Proyectos institucionales y de salud",
+          "i3": "Desarrollos residenciales premium"
+        },
+        "benefits": {
+          "i1": "Desempeño técnico y durabilidad comprobada",
+          "i2": "Estética arquitectónica y valor de marca",
+          "i3": "Acompañamiento integral desde cotización a instalación"
+        },
+        "materials": "Acero inoxidable AISI 304/316, herrajes y acabados según especificación del proyecto.",
+        "standards": "NEC, ASTM, ASCE, AISC, AISI; acabados y tolerancias según norma aplicable.",
+        "options": "Acabados, módulos y configuraciones personalizadas según proyecto."
+      }
+    }
+  }
+}

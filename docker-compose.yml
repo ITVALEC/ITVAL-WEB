@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: itval-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-itval}
+      POSTGRES_USER: ${POSTGRES_USER:-itval}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-itval_dev_password}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - itval_pg_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-itval} -d ${POSTGRES_DB:-itval}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  postgrest:
+    image: postgrest/postgrest:v12.2.8
+    container_name: itval-postgrest
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${POSTGREST_PORT:-3001}:3000"
+    environment:
+      PGRST_DB_URI: postgres://${POSTGRES_USER:-itval}:${POSTGRES_PASSWORD:-itval_dev_password}@db:5432/${POSTGRES_DB:-itval}
+      PGRST_DB_SCHEMAS: public
+      PGRST_DB_ANON_ROLE: web_anon
+      PGRST_JWT_SECRET: ${PGRST_JWT_SECRET:-cambiar_este_secreto_en_produccion}
+      PGRST_OPENAPI_SERVER_PROXY_URI: http://localhost:${POSTGREST_PORT:-3001}
+
+volumes:
+  itval_pg_data:

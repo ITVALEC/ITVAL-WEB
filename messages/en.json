@@ -1,0 +1,260 @@
+{
+  "metadata": {
+    "home": {
+      "title": "ITVAL — Aluminum and glass for large-scale projects",
+      "description": "Facade, curtain wall and architectural fenestration solutions for medium and large corporate projects in Ecuador."
+    },
+    "projects": {
+      "title": "Projects — ITVAL",
+      "description": "Portfolio of facades, curtain walls and architectural fenestration in commercial, residential and institutional projects."
+    },
+    "products": {
+      "title": "Products — ITVAL",
+      "description": "Catalog of facades, fenestration, security, exteriors, glass and stainless steel for large-scale projects."
+    },
+    "about": {
+      "title": "About — ITVAL",
+      "description": "History, technical capabilities and certifications of ITVAL, specialists in aluminum and glass for the corporate sector."
+    },
+    "contact": {
+      "title": "Contact — ITVAL",
+      "description": "Request a quote or consult with our engineering team for your next project."
+    }
+  },
+  "common": {
+    "skipToContent": "Skip to content",
+    "quoteNow": "Get a quote",
+    "learnMore": "Learn more",
+    "viewAllProjects": "View all projects",
+    "loading": "Sending…",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "languageSwitcher": "Select language",
+    "logoAlt": "ITVAL — Glass and aluminum",
+    "breadcrumbNav": "Breadcrumb",
+    "locales": {
+      "es": "Español",
+      "en": "English"
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "products": "Products",
+    "projects": "Projects",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "hero": {
+    "title": "Landmark and complex projects: engineering at scale",
+    "subtitle": "We design, manufacture and install aluminum and glass solutions for large-scale structures: unitized facades, curtain walls and high-performance architectural fenestration.",
+    "technicalBox1Title": "Unitized facade",
+    "technicalBox1Desc": "Prefabricated modular systems for fast on-site installation with millimeter dimensional control.",
+    "technicalBox2Title": "Structural curtain wall",
+    "technicalBox2Desc": "Engineering of laminated and IGU glass for high-rise envelopes with maximum daylight utilization.",
+    "imageAlt": "Architectural glass and aluminum facade on a corporate building",
+    "carousel": {
+      "navLabel": "Homepage project gallery",
+      "goToSlide": "View image {index}"
+    },
+    "taglines": {
+      "designBuild": "We design and build quality aluminum and glass systems that guarantee safe and comfortable environments.",
+      "innovative": "Innovative solutions in glass and aluminum for modern and sustainable architecture.",
+      "experience": "We place our experience and quality at your disposal to bring big ideas to life."
+    }
+  },
+  "products": {
+    "title": "Solutions by category",
+    "subtitle": "Explore facades, fenestration, security, exteriors and more — with ITVAL engineering, fabrication and installation.",
+    "carouselNav": "Product categories",
+    "previous": "View previous categories",
+    "next": "View more categories"
+  },
+  "metrics": {
+    "title": "Measurable results",
+    "subtitle": "Proven track record in glass, aluminum and metal structures across Ecuador.",
+    "years": { "value": "14+", "label": "Years of experience" },
+    "projects": { "label": "Projects in portfolio" },
+    "cities": { "label": "Cities served" }
+  },
+  "featuredProjects": {
+    "title": "Featured projects",
+    "subtitle": "Benchmark facades and fenestration for the corporate sector.",
+    "viewProject": "View project"
+  },
+  "process": {
+    "title": "Our process",
+    "subtitle": "Proven methodology for complex projects with defined timelines and budgets.",
+    "steps": {
+      "consultation": {
+        "title": "Technical consultation",
+        "description": "Requirements analysis, site visit and preliminary system proposal."
+      },
+      "engineering": {
+        "title": "Engineering and design",
+        "description": "Drawing development, specifications and BIM modeling for approval."
+      },
+      "fabrication": {
+        "title": "Fabrication",
+        "description": "In-plant production with dimensional control and quality testing."
+      },
+      "installation": {
+        "title": "Installation and delivery",
+        "description": "On-site assembly, watertightness testing and delivery certificate."
+      }
+    }
+  },
+  "cta": {
+    "title": "Ready to scale your next project?",
+    "subtitle": "Our engineering team is ready to evaluate your facade or fenestration with a response within 48 business hours.",
+    "button": "Request a quote"
+  },
+  "projectsPage": {
+    "title": "Projects",
+    "subtitle": "Real portfolio of glass, aluminum and metal structure works across Ecuador.",
+    "year": "Year",
+    "resultsAll": "Full portfolio: {total, plural, one {# project} other {# projects}}",
+    "resultsFiltered": "Showing {count} of {total} projects",
+    "resultsPageRange": "Viewing {from}–{to} of {total}",
+    "empty": "No projects match these filters",
+    "emptyHint": "Try a different combination or clear filters to see the full portfolio.",
+    "filters": {
+      "allSolutions": "All solutions",
+      "allCities": "All cities",
+      "allPeriods": "All years",
+      "clear": "Clear filters",
+      "activeLabel": "Active filters",
+      "chipCity": "{city}",
+      "solutionLabel": "1. Solution type",
+      "cityLabel": "2. City",
+      "cityHintForSolution": "Cities with {solution} projects",
+      "periodLabel": "3. Period",
+      "periodHint": "Based on project year",
+      "cityOption": "{city} ({count})",
+      "periodOption": "{period} ({count})",
+      "solutions": {
+        "facades": "Facades & curtain wall",
+        "doors": "Doors & access",
+        "security": "Security",
+        "exteriors": "Covers & exteriors"
+      },
+      "periods": {
+        "2020s": "2020 onwards",
+        "2015s": "2015 – 2019",
+        "2010s": "2010 – 2014",
+        "legacy": "Before 2010"
+      }
+    },
+    "pagination": {
+      "label": "Project pagination",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {current} of {total}"
+    }
+  },
+  "projectDetail": {
+    "metaDescription": "{name} — project in {location} from the ITVAL portfolio.",
+    "about": "About the project",
+    "details": "Project details",
+    "location": "Location",
+    "year": "Year",
+    "system": "System",
+    "photos": "Photos",
+    "gallery": "Project gallery",
+    "galleryClose": "Close image",
+    "galleryPaginationNav": "Gallery pagination",
+    "galleryPreviousPage": "Previous",
+    "galleryNextPage": "Next",
+    "galleryPageStatus": "Page {page} of {totalPages}",
+    "galleryGoToPage": "Go to page {page}",
+    "galleryShowingRange": "Showing {from}–{to} of {total}",
+    "description": "At ITVAL we delivered {name}, a {type} project located in {location}. Our technical team ensured precision in measurement, installation and finishing for a durable, aesthetic result.",
+    "requestQuote": "Request a quote"
+  },
+  "aboutPage": {
+    "title": "About us",
+    "subtitle": "Specialists in aluminum and glass with over 14 years of experience in Ecuador.",
+    "mission": {
+      "title": "Mission.",
+      "banner": "At ITVAL we transform spaces with precision and design",
+      "imageAlt": "ITVAL glass and aluminum project",
+      "body": "To provide comprehensive solutions in glass, aluminum and metal structures. We are committed to delivering high-design products backed by a multidisciplinary team that guarantees safety, durability and aesthetics in every project — from private homes to large complexes."
+    },
+    "profile": {
+      "title": "Company profile",
+      "body": "ITVAL is a company with highly qualified technical staff and a workforce with extensive experience in aluminum and glass. We put our experience and quality at your service to bring designers' big ideas to life, builders' safety requirements and clients' comfort. By using more efficient glass with lower U-values we reduce energy consumption for lighting, cooling and air conditioning. Aluminum and glass in construction is a great solution with a wide variety of resistant, efficient and aesthetic systems."
+    },
+    "values": {
+      "title": "Our values",
+      "items": {
+        "ethics": {
+          "title": "Professional ethics",
+          "body": "We act with transparency, honesty and integrity in our relationships with clients, suppliers and collaborators. For us, trust is the foundation of every structure we build."
+        },
+        "responsibility": {
+          "title": "Responsibility",
+          "body": "We take a serious commitment to safety, delivery deadlines and material quality. We understand the impact of our work on the protection and aesthetics of buildings."
+        },
+        "precision": {
+          "title": "Technical precision",
+          "body": "We pursue perfection in detail. From measurement to final installation, we apply rigorous technical standards so every glass and aluminum system performs flawlessly."
+        },
+        "excellence": {
+          "title": "Service excellence",
+          "body": "We combine over 14 years of experience with personalized attention, ensuring every solution — from the simplest to the most complex — exceeds client expectations."
+        }
+      }
+    }
+  },
+  "contactPage": {
+    "title": "Contact",
+    "subtitle": "Tell us about your project. We respond within 48 business hours.",
+    "form": {
+      "name": "Full name",
+      "email": "Email address",
+      "phone": "Phone",
+      "company": "Company",
+      "projectType": "Project type",
+      "message": "Project description",
+      "submit": "Send request",
+      "success": "Your message has been received. We will contact you soon.",
+      "projectTypes": {
+        "facades": "Architectural facades",
+        "aluminumWindows": "Aluminum windows",
+        "doorsAccess": "Doors & access",
+        "automaticDoors": "Automatic doors",
+        "security": "Specialized security",
+        "coversExteriors": "Roofs & exteriors",
+        "acmLouvers": "ACM & sun breakers",
+        "corporateInteriors": "Corporate interiors",
+        "architecturalGlass": "Architectural glass",
+        "stainlessSteel": "Stainless steel",
+        "other": "Other"
+      },
+      "errors": {
+        "nameRequired": "Please enter your name",
+        "emailRequired": "Please enter an email address",
+        "emailInvalid": "Please enter a valid email address",
+        "messageRequired": "Please briefly describe your project"
+      }
+    },
+    "info": {
+      "title": "Contact information",
+      "email": "Email",
+      "phone": "Phone",
+      "address": "Address",
+      "addressValue": "Quito, Ecuador",
+      "hours": "Hours",
+      "hoursValue": "Monday to Friday, 8:00 AM – 5:00 PM"
+    }
+  },
+  "footer": {
+    "tagline": "Integrated solutions in glass, aluminum, and metal structures.",
+    "experience": "Over 14 years of experience in Ecuador.",
+    "rights": "All rights reserved.",
+    "nav": "Navigation",
+    "contact": "Contact",
+    "ctaTitle": "Have a project?",
+    "ctaText": "Tell us about your build and our technical team will respond within 48 business hours.",
+    "location": "Quito · Guayaquil · Ecuador"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "facades": [
+    "curtainWallStick",
+    "stickRpt",
+    "structuralGlazing",
+    "glassSkin"
+  ],
+  "aluminumWindows": [
+    "projected",
+    "sliding",
+    "visusFemec",
+    "thermalSolar"
+  ],
+  "doorsAccess": [
+    "slidingDoors",
+    "hingedDoors",
+    "foldingDoors",
+    "hermeticDoors"
+  ],
+  "automaticDoors": [
+    "standardAuto",
+    "telescopicAuto",
+    "armoredAuto"
+  ],
+  "security": [
+    "armoredPartitions",
+    "ballisticSteel",
+    "gesellGlass",
+    "guardBooths"
+  ],
+  "coversExteriors": [
+    "roofsSkylights",
+    "pergolas",
+    "marquees",
+    "glassEnclosures"
+  ],
+  "acmLouvers": [
+    "acmPanels",
+    "louvers",
+    "sunBreakers",
+    "compositeFacades"
+  ],
+  "corporateInteriors": [
+    "glassPartitions",
+    "officeDivision",
+    "lobbies",
+    "signage"
+  ],
+  "architecturalGlass": [
+    "glassFloors",
+    "handrailsMirrors",
+    "decorativeGlass",
+    "wineCellars"
+  ],
+  "stainlessSteel": [
+    "handrails",
+    "ssSlidingDoors",
+    "bathroomPartitions"
+  ]
+}
