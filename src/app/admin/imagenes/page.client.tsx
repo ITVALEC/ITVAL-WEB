@@ -176,7 +176,7 @@ export default function AdminImagenesPage() {
               Filtro: {filterCategory}
               {filterSubcategory ? ` / ${filterSubcategory}` : ""}
             </span>
-            <Link href="/admin/imagenes" className="font-semibold text-cornflower underline">
+            <Link href="/admin/imagenes" className="font-semibold text-cornflower-ink underline">
               Ver todas
             </Link>
           </div>

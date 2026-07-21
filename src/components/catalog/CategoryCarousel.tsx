@@ -117,7 +117,7 @@ function CarouselButton({
       onClick={onClick}
       disabled={disabled}
       aria-label={label}
-      className="inline-flex min-h-10 min-w-10 items-center justify-center rounded-md border border-grey/30 bg-white text-lg font-semibold text-navy transition-colors hover:border-cornflower hover:text-cornflower focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40 motion-reduce:transition-none"
+      className="inline-flex min-h-10 min-w-10 items-center justify-center rounded-md border border-grey/30 bg-white text-lg font-semibold text-navy transition-colors hover:border-cornflower hover:text-cornflower-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40 motion-reduce:transition-none"
     >
       <span aria-hidden="true">{direction === "prev" ? "←" : "→"}</span>
     </button>

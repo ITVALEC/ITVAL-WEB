@@ -22,7 +22,7 @@ export function Breadcrumbs({
   const separator = light ? "text-white/40" : "text-grey";
   const linkClass = light
     ? "text-white/90 hover:text-white"
-    : "text-cornflower hover:text-action";
+    : "text-cornflower-ink hover:text-action";
   const currentClass = light ? "font-medium text-white" : "font-medium text-navy";
 
   return (

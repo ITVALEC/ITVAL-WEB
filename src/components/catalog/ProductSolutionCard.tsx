@@ -47,13 +47,13 @@ export function ProductSolutionCard({
         </div>
       )}
       <div className="flex flex-1 flex-col p-5">
-        <h3 className="text-base font-semibold text-navy group-hover:text-cornflower sm:text-lg">
+        <h3 className="text-base font-semibold text-navy group-hover:text-cornflower-ink sm:text-lg">
           {title}
         </h3>
         <p className="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-grey-dark">
           {description}
         </p>
-        <span className="mt-4 inline-block text-xs font-semibold uppercase tracking-wider text-cornflower">
+        <span className="mt-4 inline-block text-xs font-semibold uppercase tracking-wider text-cornflower-ink">
           {t("hub.viewDetail")} →
         </span>
       </div>

@@ -166,6 +166,7 @@ export default function AdminCatalogoPage() {
     filtered.find((c) => c.key === selectedCategory) ?? filtered[0] ?? null;
 
   function openEdit(target: EditTarget) {
+    setFeedback(null);
     setEditing(target);
     setLocaleTab("es");
     setTitleEs(target.item.titleEs);
@@ -315,9 +316,10 @@ export default function AdminCatalogoPage() {
       <AdminPanel>
         <AdminCrudToolbar
           title="Líneas de producto"
-          description="Edita nombes o agrega categorías y productos nuevos."
+          description="Edita nombres o agrega categorías y productos nuevos."
           action={
             <AdminButton onClick={() => {
+              setFeedback(null);
               setCreateCategoryOpen(true);
               setTitleEs("");
               setTitleEn("");
@@ -361,8 +363,9 @@ export default function AdminCatalogoPage() {
                 <button
                   key={cat.key}
                   type="button"
+                  aria-pressed={activeCategory?.key === cat.key}
                   onClick={() => setSelectedCategory(cat.key)}
-                  className={`flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2.5 text-left text-sm transition ${
+                  className={`flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2.5 text-left text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2 ${
                     activeCategory?.key === cat.key
                       ? "bg-navy text-white"
                       : "text-navy hover:bg-white"
@@ -423,6 +426,7 @@ export default function AdminCatalogoPage() {
                     <AdminButton
                       variant="secondary"
                       onClick={() => {
+                        setFeedback(null);
                         setCreateSubOpen(true);
                         setTitleEs("");
                         setTitleEn("");
@@ -475,7 +479,7 @@ export default function AdminCatalogoPage() {
                         </AdminButton>
                         <Link
                           href={`/admin/imagenes?kind=product&category=${sub.categoryKey}&subcategory=${sub.key}`}
-                          className="inline-flex min-h-11 items-center justify-center rounded-lg px-3 text-sm font-semibold text-cornflower hover:bg-cornflower/10"
+                          className="inline-flex min-h-11 items-center justify-center rounded-lg px-3 text-sm font-semibold text-cornflower-ink hover:bg-cornflower/10"
                         >
                           Ver {sub.imageCount} fotos
                         </Link>

@@ -52,14 +52,14 @@ export function ProjectCard({
       </div>
       <div className="p-4 sm:p-5">
         {solutionLabel ? (
-          <p className="text-xs font-semibold uppercase tracking-wider text-cornflower">
+          <p className="text-xs font-semibold uppercase tracking-wider text-cornflower-ink">
             {solutionLabel}
           </p>
         ) : null}
         <Heading
           className={`text-base font-semibold text-navy sm:text-lg ${
             solutionLabel ? "mt-1" : ""
-          } group-hover:text-cornflower`}
+          } group-hover:text-cornflower-ink`}
         >
           {project.name}
         </Heading>

@@ -12,7 +12,7 @@ export const variantClasses: Record<ButtonVariant, string> = {
   secondary:
     "border border-white/30 bg-transparent text-white hover:bg-white/10 focus-visible:ring-white",
   ghost:
-    "bg-transparent text-cornflower hover:text-cornflower/80 focus-visible:ring-cornflower",
+    "bg-transparent text-cornflower-ink hover:text-cornflower-ink/80 focus-visible:ring-cornflower",
 };
 
 type ButtonProps = ComponentPropsWithoutRef<"button"> & {

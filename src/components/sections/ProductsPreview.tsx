@@ -22,7 +22,7 @@ export function ProductsPreview() {
           />
           <AppLink
             href={NAV_PATHS.products}
-            className="shrink-0 rounded-sm text-sm font-semibold text-cornflower transition-colors hover:text-action focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower"
+            className="shrink-0 rounded-sm text-sm font-semibold text-cornflower-ink transition-colors hover:text-action focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower"
           >
             {tHub("viewCategory")} →
           </AppLink>

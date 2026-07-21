@@ -283,7 +283,7 @@ export function ProductCatalogExplorer() {
                 <span className="flex items-center justify-between gap-2">
                   {t("advancedFilters")}
                   <span
-                    className="text-cornflower transition-transform group-open:rotate-180"
+                    className="text-cornflower-ink transition-transform group-open:rotate-180"
                     aria-hidden="true"
                   >
                     ▾
@@ -309,7 +309,7 @@ export function ProductCatalogExplorer() {
                 <button
                   type="button"
                   onClick={clearFilters}
-                  className="self-start rounded-md text-sm font-semibold text-cornflower hover:text-action focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2 sm:self-auto"
+                  className="self-start rounded-md text-sm font-semibold text-cornflower-ink hover:text-action focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2 sm:self-auto"
                 >
                   {t("clearFilters")}
                 </button>

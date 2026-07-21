@@ -58,7 +58,13 @@ export function ContactForm() {
     e.preventDefault();
     const validationErrors = validate();
     setErrors(validationErrors);
-    if (Object.keys(validationErrors).length > 0) return;
+    const firstInvalid = (["name", "email", "message"] as const).find(
+      (field) => validationErrors[field],
+    );
+    if (firstInvalid) {
+      document.getElementById(firstInvalid)?.focus();
+      return;
+    }
 
     setStatus("loading");
     // v1: envío simulado — reemplazar con API route en v2

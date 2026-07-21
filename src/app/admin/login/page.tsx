@@ -39,7 +39,7 @@ export default function AdminLoginPage() {
         id="admin-login-main"
         className="w-full max-w-md rounded-2xl border border-grey/20 bg-white p-6 shadow-lg sm:p-8"
       >
-        <p className="text-xs font-semibold uppercase tracking-wider text-cornflower">
+        <p className="text-xs font-semibold uppercase tracking-wider text-cornflower-ink">
           ITVAL
         </p>
         <h1 className="mt-2 text-2xl font-bold text-navy">Panel de administración</h1>

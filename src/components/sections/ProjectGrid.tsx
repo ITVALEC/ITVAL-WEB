@@ -242,7 +242,7 @@ export function ProjectGrid() {
                     <button
                       type="button"
                       onClick={clearFilters}
-                      className="self-start text-sm font-semibold text-cornflower hover:text-action sm:self-auto"
+                      className="self-start text-sm font-semibold text-cornflower-ink hover:text-action sm:self-auto"
                     >
                       {t("filters.clear")}
                     </button>

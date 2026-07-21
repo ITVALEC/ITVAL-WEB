@@ -30,7 +30,7 @@ export function AdminButton({
       "border border-grey/40 bg-white text-navy hover:bg-slate-50 disabled:opacity-60",
     danger:
       "border border-red-200 bg-white text-red-700 hover:bg-red-50 disabled:opacity-60",
-    ghost: "text-cornflower hover:bg-cornflower/10 disabled:opacity-60",
+    ghost: "text-cornflower-ink hover:bg-cornflower/10 disabled:opacity-60",
   } as const;
 
   return (
@@ -188,8 +188,42 @@ export function AdminModal({
     const previous = document.activeElement as HTMLElement | null;
     panelRef.current?.focus();
 
+    const getFocusable = (): HTMLElement[] => {
+      const panel = panelRef.current;
+      if (!panel) return [];
+      return Array.from(
+        panel.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter((el) => el.offsetParent !== null || el === document.activeElement);
+    };
+
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") onClose();
+      if (event.key === "Escape") {
+        onClose();
+        return;
+      }
+      // Atrapa el foco dentro del diálogo (patrón WAI-ARIA modal).
+      if (event.key === "Tab") {
+        const focusables = getFocusable();
+        if (focusables.length === 0) {
+          event.preventDefault();
+          panelRef.current?.focus();
+          return;
+        }
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        const active = document.activeElement;
+        if (event.shiftKey) {
+          if (active === first || active === panelRef.current) {
+            event.preventDefault();
+            last.focus();
+          }
+        } else if (active === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
     }
 
     document.addEventListener("keydown", onKeyDown);

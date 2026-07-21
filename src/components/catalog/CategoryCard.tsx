@@ -49,7 +49,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
         <p className="text-sm leading-relaxed text-grey-dark">
           {t(`categories.${category}.description`)}
         </p>
-        <span className="mt-3 inline-block text-sm font-semibold text-cornflower group-hover:text-action">
+        <span className="mt-3 inline-block text-sm font-semibold text-cornflower-ink group-hover:text-action">
           {t("hub.viewCategory")} →
         </span>
       </div>

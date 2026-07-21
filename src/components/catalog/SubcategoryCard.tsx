@@ -18,13 +18,13 @@ export function SubcategoryCard({ category, subcategory }: SubcategoryCardProps)
       href={getProductSubcategoryPath(category, subcategory)}
       className="group block rounded-lg border border-grey/30 bg-white p-6 transition-shadow hover:border-cornflower/40 hover:shadow-md motion-reduce:transition-none"
     >
-      <h3 className="text-base font-semibold text-navy group-hover:text-cornflower">
+      <h3 className="text-base font-semibold text-navy group-hover:text-cornflower-ink">
         {tSub(`${subcategory}.title`)}
       </h3>
       <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-grey-dark">
         {tSub(`${subcategory}.description`)}
       </p>
-      <span className="mt-4 inline-block text-xs font-semibold uppercase tracking-wider text-cornflower">
+      <span className="mt-4 inline-block text-xs font-semibold uppercase tracking-wider text-cornflower-ink">
         {t("hub.viewDetail")} →
       </span>
     </AppLink>

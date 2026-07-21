@@ -54,7 +54,7 @@ export default async function ContactPage({ params }: LocalePageProps) {
                   <dd className="mt-1">
                     <a
                       href={`mailto:${contact.email}`}
-                      className="rounded-sm text-cornflower hover:text-action focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower"
+                      className="rounded-sm text-cornflower-ink hover:text-action focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower"
                     >
                       {contact.email}
                     </a>
@@ -67,7 +67,7 @@ export default async function ContactPage({ params }: LocalePageProps) {
                   <dd className="mt-1">
                     <a
                       href={`tel:${contact.phone.replace(/\s/g, "")}`}
-                      className="rounded-sm text-navy hover:text-cornflower focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower"
+                      className="rounded-sm text-navy hover:text-cornflower-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower"
                     >
                       {contact.phone}
                     </a>

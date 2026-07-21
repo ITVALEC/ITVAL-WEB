@@ -9,10 +9,13 @@ import { PRODUCT_LIST_ITEM_KEYS } from "@/lib/content-keys";
 import { getProjectsForProductSubcategory } from "@/lib/catalog";
 import { getProductImage, getProductGallery } from "@/lib/assets";
 import { ProductGallery } from "@/components/catalog/ProductGallery";
+import { ProductPreviewCarousel } from "@/components/catalog/ProductPreviewCarousel";
 import { breadcrumbTrail, productCategoryPath } from "@/lib/breadcrumbs";
 import { CATALOG_NS, subcategoryNamespace } from "@/lib/i18n/namespaces";
 import { NAV_PATHS } from "@/lib/routes";
 import { type ProductKey } from "@/lib/catalog";
+
+const PREVIEW_IMAGE_LIMIT = 6;
 
 type ProductDetailViewProps = {
   locale: string;
@@ -40,6 +43,18 @@ export async function ProductDetailView({
   const relatedProjects = getProjectsForProductSubcategory(subcategory);
   const heroImage = getProductImage(category, subcategory);
   const galleryImages = getProductGallery(category, subcategory);
+
+  const subtitle = tSub(`${subcategory}.title`);
+  const worksGallery = galleryImages.filter(
+    (image) => image.src !== heroImage,
+  );
+  const previewImages = [
+    ...(heroImage ? [{ src: heroImage, alt: subtitle }] : []),
+    ...worksGallery.map((image) => ({
+      src: image.src,
+      alt: image.caption || subtitle,
+    })),
+  ].slice(0, PREVIEW_IMAGE_LIMIT);
 
   return (
     <>
@@ -80,45 +95,70 @@ export async function ProductDetailView({
         </Container>
       </section>
 
-      <section className="py-16 lg:py-24">
+      <section className="border-b border-grey/15 bg-white py-12 lg:py-16">
         <Container>
-          <div className="grid gap-12 lg:grid-cols-3">
-            <div className="space-y-10 lg:col-span-2">
-              <ProductInfoBlock
-                title={tCatalog("detail.applications")}
-                items={PRODUCT_LIST_ITEM_KEYS.map((key) =>
-                  tSub(`${subcategory}.applications.${key}`),
-                )}
-              />
-              <ProductInfoBlock
-                title={tCatalog("detail.benefits")}
-                items={PRODUCT_LIST_ITEM_KEYS.map((key) =>
-                  tSub(`${subcategory}.benefits.${key}`),
-                )}
-              />
+          <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-12">
+            {previewImages.length > 0 ? (
+              <div className="min-w-0">
+                <ProductPreviewCarousel images={previewImages} />
+              </div>
+            ) : null}
+
+            <div className="flex min-w-0 flex-col gap-6">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-wider text-cornflower-ink">
+                  {tCatalog("detail.previewTitle")}
+                </p>
+                <h2 className="mt-2 text-2xl font-bold text-navy sm:text-3xl">
+                  {tSub(`${subcategory}.title`)}
+                </h2>
+                <p className="mt-3 text-base leading-relaxed text-grey-dark">
+                  {tCatalog("detail.previewHint")}
+                </p>
+              </div>
+
+              <dl className="divide-y divide-grey/15 overflow-hidden rounded-xl border border-grey/20">
+                <SpecRow
+                  title={tCatalog("detail.materials")}
+                  content={tSub(`${subcategory}.materials`)}
+                />
+                <SpecRow
+                  title={tCatalog("detail.standards")}
+                  content={tSub(`${subcategory}.standards`)}
+                />
+                <SpecRow
+                  title={tCatalog("detail.options")}
+                  content={tSub(`${subcategory}.options`)}
+                />
+              </dl>
+
               <ButtonLink href={NAV_PATHS.contact} variant="primary">
                 {tCatalog("detail.requestQuote")}
               </ButtonLink>
             </div>
+          </div>
+        </Container>
+      </section>
 
-            <aside className="space-y-4">
-              <SpecCard
-                title={tCatalog("detail.materials")}
-                content={tSub(`${subcategory}.materials`)}
-              />
-              <SpecCard
-                title={tCatalog("detail.standards")}
-                content={tSub(`${subcategory}.standards`)}
-              />
-              <SpecCard
-                title={tCatalog("detail.options")}
-                content={tSub(`${subcategory}.options`)}
-              />
-            </aside>
+      <section className="py-16 lg:py-24">
+        <Container>
+          <div className="grid gap-8 md:grid-cols-2 md:gap-12">
+            <ProductInfoBlock
+              title={tCatalog("detail.applications")}
+              items={PRODUCT_LIST_ITEM_KEYS.map((key) =>
+                tSub(`${subcategory}.applications.${key}`),
+              )}
+            />
+            <ProductInfoBlock
+              title={tCatalog("detail.benefits")}
+              items={PRODUCT_LIST_ITEM_KEYS.map((key) =>
+                tSub(`${subcategory}.benefits.${key}`),
+              )}
+            />
           </div>
 
           <ProductGallery
-            images={galleryImages}
+            images={worksGallery}
             title={tCatalog("detail.projectGallery")}
           />
 
@@ -157,7 +197,7 @@ function ProductInfoBlock({
             className="flex items-start gap-3 rounded-lg border border-grey/30 bg-slate-50 p-4"
           >
             <span
-              className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-cornflower text-xs font-bold text-white"
+              className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-cornflower-ink text-xs font-bold text-white"
               aria-hidden="true"
             >
               ✓
@@ -170,13 +210,13 @@ function ProductInfoBlock({
   );
 }
 
-function SpecCard({ title, content }: { title: string; content: string }) {
+function SpecRow({ title, content }: { title: string; content: string }) {
   return (
-    <div className="rounded-lg border border-grey/30 bg-white p-5">
-      <h3 className="text-sm font-semibold uppercase tracking-wider text-grey">
+    <div className="bg-white px-4 py-3.5 sm:px-5">
+      <dt className="text-xs font-semibold uppercase tracking-wider text-grey">
         {title}
-      </h3>
-      <p className="mt-2 text-sm leading-relaxed text-grey-dark">{content}</p>
+      </dt>
+      <dd className="mt-1 text-sm leading-relaxed text-grey-dark">{content}</dd>
     </div>
   );
 }

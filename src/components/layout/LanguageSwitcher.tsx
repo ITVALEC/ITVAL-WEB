@@ -40,7 +40,7 @@ export function LanguageSwitcher({ transparent = false }: LanguageSwitcherProps)
             locale === lang
               ? transparent
                 ? "bg-white/15 text-white drop-shadow-sm"
-                : "bg-cornflower text-white"
+                : "bg-cornflower-ink text-white"
               : transparent
                 ? "text-white/75 drop-shadow-sm hover:text-white"
                 : "text-white/70 hover:text-white"

@@ -19,7 +19,11 @@
     "db:setup": "node scripts/apply-schema.mjs && node scripts/migrate-json-to-postgres.mjs",
     "build": "next build",
     "start": "next start",
+    "start:cpanel": "node server.js",
     "lint": "next lint"
+  },
+  "engines": {
+    "node": ">=18.18.0"
   },
   "dependencies": {
     "next": "^15.1.0",

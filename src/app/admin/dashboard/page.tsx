@@ -85,7 +85,7 @@ function ActionCard({
         </span>
       </div>
       <p className="mt-2 flex-1 text-sm text-grey-dark">{desc}</p>
-      <span className="mt-3 text-sm font-semibold text-cornflower">Abrir →</span>
+      <span className="mt-3 text-sm font-semibold text-cornflower-ink">Abrir →</span>
     </Link>
   );
 }

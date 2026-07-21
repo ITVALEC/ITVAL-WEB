@@ -223,7 +223,7 @@ export default function AdminProjectsPage() {
         <AdminInfoBanner>
           Edita nombre, categoría y portada. Para subir o reemplazar fotos usa la galería al
           editar un proyecto, o la sección{" "}
-          <Link href="/admin/imagenes" className="font-semibold text-cornflower underline">
+          <Link href="/admin/imagenes" className="font-semibold text-cornflower-ink underline">
             Imágenes
           </Link>
           .
@@ -432,7 +432,7 @@ export default function AdminProjectsPage() {
                       </button>
                     ) : null}
                     {form.coverIndex === index ? (
-                      <span className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 bg-cornflower/90 py-0.5 text-center text-[10px] font-semibold text-white">
+                      <span className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 bg-cornflower-ink/90 py-0.5 text-center text-[10px] font-semibold text-white">
                         Portada
                       </span>
                     ) : null}

@@ -17,7 +17,7 @@ export function FeaturedProjects() {
           <SectionHeading id="featured-heading" title={t("title")} subtitle={t("subtitle")} />
           <Link
             href={NAV_PATHS.projects}
-            className="shrink-0 rounded-sm text-sm font-semibold text-cornflower transition-colors hover:text-action focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower"
+            className="shrink-0 rounded-sm text-sm font-semibold text-cornflower-ink transition-colors hover:text-action focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower"
           >
             {tc("viewAllProjects")} →
           </Link>
