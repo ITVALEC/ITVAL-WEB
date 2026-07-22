@@ -20,7 +20,7 @@
     "db:mongo:migrate": "node --env-file=.env.local scripts/migrate-json-to-mongo.mjs",
     "build": "next build",
     "start": "next start",
-    "start:cpanel": "node server.js",
+    "start:cpanel": "node app.js",
     "lint": "next lint"
   },
   "engines": {
