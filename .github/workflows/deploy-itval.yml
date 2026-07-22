@@ -1,0 +1,328 @@
+name: Deploy ITVAL
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: itval-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy ITVAL to VPS
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Crear identificador de versión
+        id: release
+        shell: bash
+        run: |
+          echo "name=$(date -u +%Y%m%d%H%M%S)-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - name: Configurar conexión SSH
+        shell: bash
+        env:
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+
+          install -m 700 -d "$HOME/.ssh"
+
+          printf '%s\n' "$VPS_SSH_KEY" \
+            > "$HOME/.ssh/id_ed25519"
+
+          printf '%s\n' "$VPS_KNOWN_HOSTS" \
+            > "$HOME/.ssh/known_hosts"
+
+          chmod 600 "$HOME/.ssh/id_ed25519"
+          chmod 600 "$HOME/.ssh/known_hosts"
+
+      - name: Verificar usuario y preparar versión
+        shell: bash
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          RELEASE: ${{ steps.release.outputs.name }}
+        run: |
+          ssh \
+            -p "$VPS_PORT" \
+            -i "$HOME/.ssh/id_ed25519" \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            -o ConnectTimeout=15 \
+            "$VPS_USER@$VPS_HOST" \
+            "RELEASE='$RELEASE' bash -se" <<'REMOTE'
+          set -Eeuo pipefail
+
+          ROOT="/var/www/itval"
+          RELEASE_DIR="$ROOT/releases/$RELEASE"
+
+          echo "===== VALIDACIÓN INICIAL ====="
+
+          test "$(id -un)" = "itval"
+          test "$ROOT" = "/var/www/itval"
+          test -w "$ROOT"
+          test ! -w /var/www/eudora
+
+          mkdir -p "$RELEASE_DIR"
+
+          echo "Usuario remoto: $(id -un)"
+          echo "Destino: $RELEASE_DIR"
+          echo "Eudora permanece protegida."
+          REMOTE
+
+      - name: Subir código de ITVAL
+        shell: bash
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          RELEASE: ${{ steps.release.outputs.name }}
+        run: |
+          set -euo pipefail
+
+          rsync \
+            -az \
+            --delete \
+            --exclude=".git/" \
+            --exclude=".github/" \
+            --exclude="node_modules/" \
+            --exclude=".next/" \
+            --exclude="out/" \
+            --exclude=".env" \
+            --exclude=".env.*" \
+            --exclude="*.log" \
+            -e "ssh -p $VPS_PORT -i $HOME/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=15" \
+            ./ \
+            "$VPS_USER@$VPS_HOST:/var/www/itval/releases/$RELEASE/"
+
+      - name: Instalar, compilar y activar ITVAL
+        shell: bash
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          RELEASE: ${{ steps.release.outputs.name }}
+        run: |
+          ssh \
+            -p "$VPS_PORT" \
+            -i "$HOME/.ssh/id_ed25519" \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            -o ConnectTimeout=15 \
+            "$VPS_USER@$VPS_HOST" \
+            "RELEASE='$RELEASE' bash -se" <<'REMOTE'
+          set -Eeuo pipefail
+          umask 027
+
+          ROOT="/var/www/itval"
+          RELEASE_DIR="$ROOT/releases/$RELEASE"
+          ENV_FILE="$ROOT/shared/.env.production.local"
+          ECOSYSTEM_FILE="$ROOT/ecosystem.config.cjs"
+
+          export HOME="/home/itval"
+          export PM2_HOME="/home/itval/.pm2"
+          export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
+
+          echo "===== VALIDACIÓN DE SEGURIDAD ====="
+
+          test "$(id -un)" = "itval"
+          test "$ROOT" = "/var/www/itval"
+          test -d "$RELEASE_DIR"
+          test -s "$ENV_FILE"
+          test -f "$ECOSYSTEM_FILE"
+          test ! -w /var/www/eudora
+
+          test "$(stat -c '%U' "$ENV_FILE")" = "itval"
+          test "$(stat -c '%a' "$ENV_FILE")" = "600"
+
+          for VARIABLE in DATABASE_URL ADMIN_PASSWORD ADMIN_SECRET; do
+            if ! grep -qE "^${VARIABLE}=.+" "$ENV_FILE"; then
+              echo "ERROR: falta la variable $VARIABLE."
+              exit 1
+            fi
+          done
+
+          echo "Usuario: $(id -un)"
+          echo "Destino: $RELEASE_DIR"
+          echo "Variables privadas: verificadas"
+          echo "Eudora: sin permisos de escritura"
+
+          echo "===== VINCULANDO VARIABLES ====="
+
+          ln -sfn \
+            "$ENV_FILE" \
+            "$RELEASE_DIR/.env.local"
+
+          ln -sfn \
+            "$ENV_FILE" \
+            "$RELEASE_DIR/.env.production.local"
+
+          cd "$RELEASE_DIR"
+
+          echo "===== INSTALANDO DEPENDENCIAS ====="
+
+          npm ci --include=dev
+
+          echo "===== VERIFICANDO BASE DE DATOS ====="
+
+          DATABASE_URL_VALUE="$(
+            sed -n 's/^DATABASE_URL=//p' "$ENV_FILE" |
+            tail -n 1
+          )"
+
+          if [ -z "$DATABASE_URL_VALUE" ]; then
+            echo "ERROR: DATABASE_URL está vacía."
+            exit 1
+          fi
+
+          DB_IDENTITY="$(
+            psql \
+              "$DATABASE_URL_VALUE" \
+              -Atqc \
+              "SELECT current_database() || '|' || current_user;"
+          )"
+
+          if [ "$DB_IDENTITY" != "itval_db|itval_app" ]; then
+            echo "ERROR: la conexión no apunta a itval_db con itval_app."
+            echo "Identidad recibida: $DB_IDENTITY"
+            exit 1
+          fi
+
+          unset DATABASE_URL_VALUE
+
+          echo "Base confirmada: itval_db"
+          echo "Usuario confirmado: itval_app"
+
+          echo "===== APLICANDO ESQUEMA DE ITVAL ====="
+
+          npm run db:schema
+
+          echo "===== COMPILANDO NEXT.JS ====="
+
+          npm run build
+
+          if [ ! -d ".next" ]; then
+            echo "ERROR: npm run build no generó la carpeta .next."
+            exit 1
+          fi
+
+          PREVIOUS_RELEASE="$(
+            readlink -f "$ROOT/current" 2>/dev/null || true
+          )"
+
+          echo "===== ACTIVANDO NUEVA VERSIÓN ====="
+
+          ln -sfn \
+            "$RELEASE_DIR" \
+            "$ROOT/current.next"
+
+          mv -Tf \
+            "$ROOT/current.next" \
+            "$ROOT/current"
+
+          echo "Versión activa: $(readlink -f "$ROOT/current")"
+
+          echo "===== INICIANDO PM2 DE ITVAL ====="
+
+          pm2 startOrReload \
+            "$ECOSYSTEM_FILE" \
+            --only itval-web \
+            --update-env
+
+          echo "===== COMPROBANDO PUERTO 3001 ====="
+
+          HEALTH_OK=0
+
+          for ATTEMPT in $(seq 1 20); do
+            if curl \
+              --fail \
+              --silent \
+              --show-error \
+              --location \
+              --max-time 10 \
+              "http://127.0.0.1:3001/" \
+              > /dev/null; then
+
+              HEALTH_OK=1
+              break
+            fi
+
+            echo "Intento $ATTEMPT: esperando a ITVAL..."
+            sleep 2
+          done
+
+          if [ "$HEALTH_OK" -ne 1 ]; then
+            echo "ERROR: ITVAL no respondió correctamente en el puerto 3001."
+
+            pm2 logs \
+              itval-web \
+              --lines 50 \
+              --nostream \
+              || true
+
+            if [ -n "$PREVIOUS_RELEASE" ] &&
+               [ -d "$PREVIOUS_RELEASE" ]; then
+
+              echo "Restaurando versión anterior: $PREVIOUS_RELEASE"
+
+              ln -sfn \
+                "$PREVIOUS_RELEASE" \
+                "$ROOT/current.rollback"
+
+              mv -Tf \
+                "$ROOT/current.rollback" \
+                "$ROOT/current"
+
+              pm2 startOrReload \
+                "$ECOSYSTEM_FILE" \
+                --only itval-web \
+                --update-env
+
+              pm2 save
+            else
+              echo "No existe una versión anterior para restaurar."
+
+              pm2 delete itval-web || true
+              rm -f "$ROOT/current"
+            fi
+
+            exit 1
+          fi
+
+          echo "===== GUARDANDO CONFIGURACIÓN PM2 ====="
+
+          pm2 save
+
+          echo "===== LIMPIANDO VERSIONES ANTIGUAS ====="
+
+          cd "$ROOT/releases"
+
+          ls -1dt -- */ 2>/dev/null \
+            | tail -n +4 \
+            | xargs -r rm -rf --
+
+          echo "===== RESULTADO ====="
+
+          echo "ITVAL se desplegó correctamente."
+          echo "Usuario Linux: $(id -un)"
+          echo "Carpeta activa: $(readlink -f "$ROOT/current")"
+          echo "Aplicación interna: http://127.0.0.1:3001"
+          echo "Base de datos: itval_db"
+          echo "Usuario PostgreSQL: itval_app"
+
+          pm2 status
+          REMOTE
