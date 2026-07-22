@@ -1,9 +1,11 @@
 import "server-only";
 
-import fs from "node:fs";
-import path from "node:path";
 import { isDatabaseEnabled, query } from "@/lib/db/pool";
-import { MANIFEST_PATHS, readJsonFile, writeJsonFile } from "./manifests";
+import {
+  catalogContentKey,
+  getDocument,
+  setDocument,
+} from "@/lib/db/documents";
 import {
   APPLICATION_KEYS,
   MATERIAL_KEYS,
@@ -12,17 +14,9 @@ import {
   SYSTEM_KEYS,
 } from "@/lib/catalog/filter-keys";
 
-const root = process.cwd();
-const CATALOG_ES = path.join(root, "messages/products-catalog/es.json");
-const CATALOG_EN = path.join(root, "messages/products-catalog/en.json");
 const PLACEHOLDER_IMAGE = "/images/pages/products.svg";
 
 type Taxonomy = Record<string, string[]>;
-
-type CatalogFile = {
-  categories: Record<string, { title: string; description: string }>;
-  subcategories: Record<string, Record<string, Record<string, unknown>>>;
-};
 
 type SubcategoryContent = {
   title: string;
@@ -57,16 +51,16 @@ const DEFAULT_FILTERS: CatalogFilterSelection = {
   applications: ["facade"],
 };
 
-function readFilterConfig(): FilterConfigFile {
-  const data = readJsonFile<Partial<FilterConfigFile>>(MANIFEST_PATHS.filters);
+async function readFilterConfig(): Promise<FilterConfigFile> {
+  const data = await getDocument<Partial<FilterConfigFile>>("filterConfig");
   return {
     categories: data.categories ?? {},
     subcategories: data.subcategories ?? {},
   };
 }
 
-function writeFilterConfig(data: FilterConfigFile): void {
-  writeJsonFile(MANIFEST_PATHS.filters, data);
+async function writeFilterConfig(data: FilterConfigFile): Promise<void> {
+  await setDocument("filterConfig", data);
 }
 
 function keepKnown(values: string[] | undefined, known: readonly string[]): string[] | undefined {
@@ -114,11 +108,9 @@ export type CatalogFilterOptions = {
 };
 
 /** Opciones de filtros con etiquetas en español, leídas del mismo i18n que ve el sitio. */
-export function listCatalogFilterOptions(): CatalogFilterOptions {
-  const explorer = (readFullCatalog("es").explorer ?? {}) as Record<
-    string,
-    Record<string, string>
-  >;
+export async function listCatalogFilterOptions(): Promise<CatalogFilterOptions> {
+  const full = await readFullCatalog("es");
+  const explorer = (full.explorer ?? {}) as Record<string, Record<string, string>>;
 
   const withLabels = (
     keys: readonly string[],
@@ -144,7 +136,7 @@ export async function updateCatalogFilters(patch: {
   subcategoryKey?: string;
   filters: Partial<CatalogFilterSelection>;
 }): Promise<void> {
-  const config = readFilterConfig();
+  const config = await readFilterConfig();
   const clean: FilterConfigEntry = {};
 
   const primaryCandidates = PRIMARY_GROUPS.filter((g) => g !== "all") as readonly string[];
@@ -174,15 +166,58 @@ export async function updateCatalogFilters(patch: {
     };
   }
 
-  writeFilterConfig(config);
+  await writeFilterConfig(config);
 }
 
-function readTaxonomy(): Taxonomy {
-  return readJsonFile<Taxonomy>(MANIFEST_PATHS.taxonomy);
+async function readTaxonomy(): Promise<Taxonomy> {
+  return getDocument<Taxonomy>("taxonomy");
 }
 
-function writeTaxonomy(data: Taxonomy): void {
-  writeJsonFile(MANIFEST_PATHS.taxonomy, data);
+async function writeTaxonomy(data: Taxonomy): Promise<void> {
+  await setDocument("taxonomy", data);
+}
+
+async function readFullCatalog(locale: "es" | "en"): Promise<Record<string, unknown>> {
+  return getDocument<Record<string, unknown>>(catalogContentKey(locale));
+}
+
+async function writeFullCatalog(
+  locale: "es" | "en",
+  data: Record<string, unknown>,
+): Promise<void> {
+  await setDocument(catalogContentKey(locale), data);
+}
+
+type ProductImagesFile = {
+  categories?: Record<string, string>;
+  subcategories?: Record<string, Record<string, string>>;
+  galleries?: Record<string, Record<string, unknown[]>>;
+};
+
+async function updateProductImages(
+  categoryKey: string,
+  subcategoryKey?: string,
+): Promise<void> {
+  const products = await getDocument<ProductImagesFile>("productImages");
+
+  products.categories ??= {};
+  products.subcategories ??= {};
+  products.galleries ??= {};
+
+  if (!products.categories[categoryKey]) {
+    products.categories[categoryKey] = PLACEHOLDER_IMAGE;
+  }
+
+  if (subcategoryKey) {
+    products.subcategories[categoryKey] ??= {};
+    products.galleries[categoryKey] ??= {};
+    if (!products.subcategories[categoryKey][subcategoryKey]) {
+      products.subcategories[categoryKey][subcategoryKey] = PLACEHOLDER_IMAGE;
+    }
+    products.galleries[categoryKey][subcategoryKey] ??= [];
+  }
+
+  await setDocument("productImages", products);
 }
 
 export function suggestCatalogKey(label: string): string {
@@ -263,46 +298,6 @@ function buildSubcategoryContent(
   };
 }
 
-function readFullCatalog(locale: "es" | "en"): Record<string, unknown> {
-  const filePath = locale === "es" ? CATALOG_ES : CATALOG_EN;
-  return readJsonFile<Record<string, unknown>>(filePath);
-}
-
-function writeFullCatalog(locale: "es" | "en", data: Record<string, unknown>): void {
-  const filePath = locale === "es" ? CATALOG_ES : CATALOG_EN;
-  fs.writeFileSync(filePath, `${JSON.stringify(data, null, 2)}\n`, "utf8");
-}
-
-function updateProductImages(
-  categoryKey: string,
-  subcategoryKey?: string,
-): void {
-  const products = readJsonFile<{
-    categories?: Record<string, string>;
-    subcategories?: Record<string, Record<string, string>>;
-    galleries?: Record<string, Record<string, unknown[]>>;
-  }>(MANIFEST_PATHS.products);
-
-  products.categories ??= {};
-  products.subcategories ??= {};
-  products.galleries ??= {};
-
-  if (!products.categories[categoryKey]) {
-    products.categories[categoryKey] = PLACEHOLDER_IMAGE;
-  }
-
-  if (subcategoryKey) {
-    products.subcategories[categoryKey] ??= {};
-    products.galleries[categoryKey] ??= {};
-    if (!products.subcategories[categoryKey][subcategoryKey]) {
-      products.subcategories[categoryKey][subcategoryKey] = PLACEHOLDER_IMAGE;
-    }
-    products.galleries[categoryKey][subcategoryKey] ??= [];
-  }
-
-  writeJsonFile(MANIFEST_PATHS.products, products);
-}
-
 export type CatalogSubcategoryItem = {
   key: string;
   categoryKey: string;
@@ -327,11 +322,11 @@ export type CatalogCategoryItem = {
   subcategories: CatalogSubcategoryItem[];
 };
 
-function readCatalog(locale: "es" | "en"): {
+async function readCatalog(locale: "es" | "en"): Promise<{
   categories: Record<string, { title: string; description: string }>;
   subcategories: Record<string, Record<string, { title: string; description: string }>>;
-} {
-  const full = readFullCatalog(locale);
+}> {
+  const full = await readFullCatalog(locale);
   return {
     categories: (full.categories ?? {}) as Record<string, { title: string; description: string }>,
     subcategories: (full.subcategories ?? {}) as Record<
@@ -341,12 +336,15 @@ function readCatalog(locale: "es" | "en"): {
   };
 }
 
-function writeCatalog(locale: "es" | "en", data: {
-  categories: Record<string, { title: string; description: string }>;
-  subcategories: Record<string, Record<string, { title: string; description: string }>>;
-}): void {
-  const existing = readFullCatalog(locale);
-  writeFullCatalog(locale, {
+async function writeCatalog(
+  locale: "es" | "en",
+  data: {
+    categories: Record<string, { title: string; description: string }>;
+    subcategories: Record<string, Record<string, { title: string; description: string }>>;
+  },
+): Promise<void> {
+  const existing = await readFullCatalog(locale);
+  await writeFullCatalog(locale, {
     ...existing,
     categories: data.categories,
     subcategories: {
@@ -370,9 +368,7 @@ async function loadImageCounts(): Promise<Map<string, number>> {
     return counts;
   }
 
-  const products = readJsonFile<{
-    galleries?: Record<string, Record<string, unknown[]>>;
-  }>(MANIFEST_PATHS.products);
+  const products = await getDocument<ProductImagesFile>("productImages");
 
   for (const [category, subs] of Object.entries(products.galleries ?? {})) {
     for (const [subcategory, images] of Object.entries(subs)) {
@@ -382,14 +378,11 @@ async function loadImageCounts(): Promise<Map<string, number>> {
   return counts;
 }
 
-function loadHeroImages(): {
+async function loadHeroImages(): Promise<{
   categories: Record<string, string>;
   subcategories: Record<string, Record<string, string>>;
-} {
-  const products = readJsonFile<{
-    categories?: Record<string, string>;
-    subcategories?: Record<string, Record<string, string>>;
-  }>(MANIFEST_PATHS.products);
+}> {
+  const products = await getDocument<ProductImagesFile>("productImages");
   return {
     categories: products.categories ?? {},
     subcategories: products.subcategories ?? {},
@@ -397,13 +390,14 @@ function loadHeroImages(): {
 }
 
 export async function listCatalogTree(): Promise<CatalogCategoryItem[]> {
-  const es = readCatalog("es");
-  const en = readCatalog("en");
-  const imageCounts = await loadImageCounts();
-  const heroes = loadHeroImages();
-
-  const tax = readTaxonomy();
-  const filterConfig = readFilterConfig();
+  const [es, en, imageCounts, heroes, tax, filterConfig] = await Promise.all([
+    readCatalog("es"),
+    readCatalog("en"),
+    loadImageCounts(),
+    loadHeroImages(),
+    readTaxonomy(),
+    readFilterConfig(),
+  ]);
 
   return Object.entries(tax).map(([categoryKey, subs]) => {
     const subcategoryKeys = subs as string[];
@@ -448,8 +442,8 @@ export async function updateCatalogEntry(patch: {
   descriptionEs?: string;
   descriptionEn?: string;
 }): Promise<void> {
-  const es = readCatalog("es");
-  const en = readCatalog("en");
+  const es = await readCatalog("es");
+  const en = await readCatalog("en");
 
   if (patch.type === "category") {
     es.categories[patch.categoryKey] ??= { title: "", description: "" };
@@ -478,13 +472,13 @@ export async function updateCatalogEntry(patch: {
     if (patch.descriptionEn != null) enSub.description = patch.descriptionEn.trim();
   }
 
-  writeCatalog("es", es);
-  writeCatalog("en", en);
+  await writeCatalog("es", es);
+  await writeCatalog("en", en);
 }
 
-export function listProjectCategoryOptions(): { value: string; label: string }[] {
-  const es = readCatalog("es");
-  return Object.keys(readTaxonomy()).map((key) => ({
+export async function listProjectCategoryOptions(): Promise<{ value: string; label: string }[]> {
+  const [es, tax] = await Promise.all([readCatalog("es"), readTaxonomy()]);
+  return Object.keys(tax).map((key) => ({
     value: key,
     label: es.categories[key]?.title ?? key,
   }));
@@ -506,17 +500,17 @@ export async function addCategory(input: {
   const key = input.key.trim();
   validateKey(key);
 
-  const tax = readTaxonomy();
+  const tax = await readTaxonomy();
   if (tax[key]) throw new Error("Ya existe una categoría con ese código.");
 
   const subKey = input.subcategoryKey.trim();
   validateKey(subKey);
 
   tax[key] = [subKey];
-  writeTaxonomy(tax);
+  await writeTaxonomy(tax);
 
   for (const locale of ["es", "en"] as const) {
-    const full = readFullCatalog(locale);
+    const full = await readFullCatalog(locale);
     const categories = (full.categories ?? {}) as Record<string, { title: string; description: string }>;
     const subcategories = (full.subcategories ?? {}) as Record<string, Record<string, unknown>>;
 
@@ -533,10 +527,10 @@ export async function addCategory(input: {
       locale,
     );
 
-    writeFullCatalog(locale, { ...full, categories, subcategories });
+    await writeFullCatalog(locale, { ...full, categories, subcategories });
   }
 
-  const filterConfig = readFilterConfig();
+  const filterConfig = await readFilterConfig();
   const primaryCandidates = PRIMARY_GROUPS.filter((g) => g !== "all") as readonly string[];
   filterConfig.categories[key] = {
     ...DEFAULT_FILTERS,
@@ -545,9 +539,9 @@ export async function addCategory(input: {
         ? input.primaryGroup
         : DEFAULT_FILTERS.primaryGroup,
   };
-  writeFilterConfig(filterConfig);
+  await writeFilterConfig(filterConfig);
 
-  updateProductImages(key, subKey);
+  await updateProductImages(key, subKey);
 }
 
 export async function addSubcategory(input: {
@@ -562,15 +556,15 @@ export async function addSubcategory(input: {
   const subKey = input.key.trim();
   validateKey(subKey);
 
-  const tax = readTaxonomy();
+  const tax = await readTaxonomy();
   if (!tax[categoryKey]) throw new Error("Categoría no encontrada.");
   if (tax[categoryKey].includes(subKey)) throw new Error("Ya existe esa subcategoría.");
 
   tax[categoryKey] = [...tax[categoryKey], subKey];
-  writeTaxonomy(tax);
+  await writeTaxonomy(tax);
 
   for (const locale of ["es", "en"] as const) {
-    const full = readFullCatalog(locale);
+    const full = await readFullCatalog(locale);
     const subcategories = (full.subcategories ?? {}) as Record<string, Record<string, unknown>>;
     subcategories[categoryKey] ??= {};
     subcategories[categoryKey][subKey] = buildSubcategoryContent(
@@ -578,8 +572,8 @@ export async function addSubcategory(input: {
       locale === "es" ? (input.descriptionEs ?? "") : (input.descriptionEn ?? ""),
       locale,
     );
-    writeFullCatalog(locale, { ...full, subcategories });
+    await writeFullCatalog(locale, { ...full, subcategories });
   }
 
-  updateProductImages(categoryKey, subKey);
+  await updateProductImages(categoryKey, subKey);
 }

@@ -25,11 +25,14 @@ export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url);
   if (searchParams.get("meta") === "project-categories") {
-    return NextResponse.json({ categories: listProjectCategoryOptions() });
+    return NextResponse.json({ categories: await listProjectCategoryOptions() });
   }
 
   const categories = await listCatalogTree();
-  return NextResponse.json({ categories, filterOptions: listCatalogFilterOptions() });
+  return NextResponse.json({
+    categories,
+    filterOptions: await listCatalogFilterOptions(),
+  });
 }
 
 export async function PATCH(request: Request) {
