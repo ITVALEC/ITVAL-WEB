@@ -29,7 +29,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          echo "name=$(date -u +%Y%m%d%H%M%S)-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+          echo "name=$(date -u +%Y%m%d%H%M%S)-${GITHUB_SHA::7}" \
+            >> "$GITHUB_OUTPUT"
 
       - name: Configurar conexión SSH
         shell: bash
@@ -219,8 +221,8 @@ jobs:
           echo "===== VERIFICANDO BASE DE DATOS ====="
 
           DATABASE_URL_VALUE="$(
-            sed -n 's/^DATABASE_URL=//p' "$ENV_FILE" |
-            tail -n 1
+            sed -n 's/^DATABASE_URL=//p' "$ENV_FILE" \
+              | tail -n 1
           )"
 
           if [ -z "$DATABASE_URL_VALUE" ]; then
@@ -282,7 +284,7 @@ jobs:
             --only itval-web \
             --update-env
 
-          echo "===== COMPROBANDO PUERTO 3001 ====="
+          echo "===== COMPROBANDO ITVAL ====="
 
           HEALTH_OK=0
 
@@ -291,9 +293,8 @@ jobs:
               --fail \
               --silent \
               --show-error \
-              --location \
-              --max-time 10 \
-              "http://127.0.0.1:3001/" \
+              --max-time 15 \
+              "http://localhost:3001/es" \
               > /dev/null; then
 
               HEALTH_OK=1
@@ -305,7 +306,7 @@ jobs:
           done
 
           if [ "$HEALTH_OK" -ne 1 ]; then
-            echo "ERROR: ITVAL no respondió correctamente en el puerto 3001."
+            echo "ERROR: ITVAL no respondió correctamente en localhost:3001/es."
 
             pm2 logs \
               itval-web \
@@ -359,7 +360,7 @@ jobs:
           echo "ITVAL se desplegó correctamente."
           echo "Usuario Linux: $(id -un)"
           echo "Carpeta activa: $(readlink -f "$ROOT/current")"
-          echo "Aplicación interna: http://127.0.0.1:3001"
+          echo "Aplicación interna: http://localhost:3001/es"
           echo "Base de datos: itval_db"
           echo "Usuario PostgreSQL: itval_app"
 
