@@ -55,6 +55,13 @@ CREATE TABLE IF NOT EXISTS blocked_images (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- Documentos JSON del catálogo (taxonomía, filtros, i18n, portfolio, etc.)
+CREATE TABLE IF NOT EXISTS app_documents (
+  key TEXT PRIMARY KEY,
+  data JSONB NOT NULL DEFAULT '{}'::jsonb,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
 CREATE OR REPLACE FUNCTION set_updated_at()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -71,4 +78,9 @@ CREATE TRIGGER projects_updated_at
 DROP TRIGGER IF EXISTS site_settings_updated_at ON site_settings;
 CREATE TRIGGER site_settings_updated_at
   BEFORE UPDATE ON site_settings
+  FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+
+DROP TRIGGER IF EXISTS app_documents_updated_at ON app_documents;
+CREATE TRIGGER app_documents_updated_at
+  BEFORE UPDATE ON app_documents
   FOR EACH ROW EXECUTE FUNCTION set_updated_at();
