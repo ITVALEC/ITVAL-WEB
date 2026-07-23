@@ -2,10 +2,29 @@ import { NextResponse } from "next/server";
 import { ADMIN_COOKIE, createAdminToken, verifyAdminPassword } from "@/lib/admin/auth";
 
 export async function POST(request: Request) {
-  const body = (await request.json()) as { password?: string };
+  let body: { password?: string };
 
-  if (!body.password || !verifyAdminPassword(body.password)) {
-    return NextResponse.json({ error: "Contraseña incorrecta" }, { status: 401 });
+  try {
+    body = (await request.json()) as { password?: string };
+  } catch {
+    return NextResponse.json(
+      { error: "Solicitud inválida. Intenta de nuevo." },
+      { status: 400 },
+    );
+  }
+
+  if (!body.password?.trim()) {
+    return NextResponse.json(
+      { error: "Ingresa la contraseña." },
+      { status: 400 },
+    );
+  }
+
+  if (!verifyAdminPassword(body.password)) {
+    return NextResponse.json(
+      { error: "Contraseña incorrecta. Verifica e intenta nuevamente." },
+      { status: 401 },
+    );
   }
 
   const response = NextResponse.json({ ok: true });

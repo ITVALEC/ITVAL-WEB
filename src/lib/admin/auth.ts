@@ -3,16 +3,55 @@ import { cookies } from "next/headers";
 
 export const ADMIN_COOKIE = "itval_admin_session";
 
-function getAdminSecret(): string {
-  return process.env.ADMIN_SECRET ?? process.env.ADMIN_PASSWORD ?? "itval-dev-secret";
+const DEV_PASSWORD = "itval2026";
+const DEV_SECRET = "itval-dev-secret";
+
+function isProduction(): boolean {
+  return process.env.NODE_ENV === "production";
 }
 
+function getAdminSecret(): string {
+  const secret =
+    process.env.ADMIN_SECRET?.trim() ||
+    process.env.ADMIN_PASSWORD?.trim() ||
+    "";
+
+  if (secret) return secret;
+
+  if (isProduction()) {
+    console.error(
+      "[admin] ADMIN_SECRET / ADMIN_PASSWORD no están configurados en producción.",
+    );
+    return "";
+  }
+
+  return DEV_SECRET;
+}
+
+/** Contraseña del panel. En producción debe venir de ADMIN_PASSWORD. */
 export function getAdminPassword(): string {
-  return process.env.ADMIN_PASSWORD ?? "itval2026";
+  const password = process.env.ADMIN_PASSWORD?.trim() || "";
+
+  if (password) return password;
+
+  if (isProduction()) {
+    console.error(
+      "[admin] ADMIN_PASSWORD no está configurada. Define la variable en el hosting antes del deploy.",
+    );
+    return "";
+  }
+
+  return DEV_PASSWORD;
 }
 
 export function createAdminToken(): string {
-  return createHmac("sha256", getAdminSecret())
+  const secret = getAdminSecret();
+  if (!secret) {
+    // Token imposible de validar si faltan secretos en producción.
+    return "";
+  }
+
+  return createHmac("sha256", secret)
     .update("itval-admin-session-v1")
     .digest("hex");
 }
@@ -20,6 +59,8 @@ export function createAdminToken(): string {
 export function verifyAdminToken(token: string | undefined): boolean {
   if (!token) return false;
   const expected = createAdminToken();
+  if (!expected) return false;
+
   try {
     const a = Buffer.from(token);
     const b = Buffer.from(expected);
@@ -36,6 +77,8 @@ export async function isAdminAuthenticated(): Promise<boolean> {
 
 export function verifyAdminPassword(password: string): boolean {
   const expected = getAdminPassword();
+  if (!expected) return false;
+
   try {
     const a = Buffer.from(password);
     const b = Buffer.from(expected);

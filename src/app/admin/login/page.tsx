@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { adminInputClass } from "@/components/admin/AdminShell";
 import { AdminStatusMessage } from "@/components/admin/AdminUi";
 
+const LOGIN_TIMEOUT_MS = 15_000;
+const isDev = process.env.NODE_ENV === "development";
+
 export default function AdminLoginPage() {
-  const router = useRouter();
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -16,21 +17,40 @@ export default function AdminLoginPage() {
     setLoading(true);
     setError("");
 
-    const res = await fetch("/api/admin/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password }),
-    });
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), LOGIN_TIMEOUT_MS);
 
-    setLoading(false);
+    try {
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+        signal: controller.signal,
+      });
 
-    if (!res.ok) {
-      setError("Contraseña incorrecta. Verifica e intenta nuevamente.");
+      if (!res.ok) {
+        const data = (await res.json().catch(() => null)) as { error?: string } | null;
+        setError(data?.error ?? "Contraseña incorrecta. Verifica e intenta nuevamente.");
+        return;
+      }
+
+      // Navegación completa para que la cookie de sesión se aplique de inmediato.
+      window.location.assign("/admin/dashboard");
       return;
+    } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") {
+        setError(
+          "El servidor no respondió a tiempo. Espera unos segundos e inténtalo de nuevo.",
+        );
+      } else {
+        setError(
+          "No se pudo conectar con el servidor. Revisa la conexión e inténtalo de nuevo.",
+        );
+      }
+    } finally {
+      window.clearTimeout(timeoutId);
+      setLoading(false);
     }
-
-    router.push("/admin/dashboard");
-    router.refresh();
   }
 
   return (
@@ -61,13 +81,26 @@ export default function AdminLoginPage() {
             aria-describedby={error ? "login-error" : "login-hint"}
             aria-invalid={Boolean(error)}
             required
+            disabled={loading}
           />
           <p id="login-hint" className="mt-2 text-xs text-grey">
-            Acceso restringido al equipo autorizado de ITVAL.
+            {isDev ? (
+              <>
+                Acceso restringido. En local la contraseña se define en{" "}
+                <code className="rounded bg-slate-100 px-1 py-0.5 text-[11px]">.env.local</code>{" "}
+                con{" "}
+                <code className="rounded bg-slate-100 px-1 py-0.5 text-[11px]">
+                  ADMIN_PASSWORD
+                </code>
+                .
+              </>
+            ) : (
+              "Acceso restringido al equipo autorizado de ITVAL."
+            )}
           </p>
 
           {error ? (
-            <div className="mt-3">
+            <div id="login-error" className="mt-3" role="alert">
               <AdminStatusMessage type="error" message={error} />
             </div>
           ) : null}

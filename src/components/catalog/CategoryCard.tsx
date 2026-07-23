@@ -17,7 +17,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
   return (
     <AppLink
       href={getProductCategoryPath(category)}
-      className="group block overflow-hidden rounded-lg border border-grey/30 bg-white transition-shadow hover:shadow-lg motion-reduce:transition-none"
+      className="group block overflow-hidden rounded-2xl border border-grey/30 bg-white transition-shadow hover:shadow-lg motion-reduce:transition-none"
     >
       {imageSrc ? (
         <div className="relative aspect-[16/10] overflow-hidden">
