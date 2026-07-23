@@ -32,8 +32,9 @@ export async function syncDatabaseToJson(): Promise<void> {
     src: string;
     caption: string;
     sort_order: number;
+    source: string | null;
   }>(
-    `SELECT category, subcategory, src, caption, sort_order
+    `SELECT category, subcategory, src, caption, sort_order, source
      FROM product_gallery_images ORDER BY category, subcategory, sort_order`,
   );
 
@@ -41,15 +42,24 @@ export async function syncDatabaseToJson(): Promise<void> {
     fs.readFileSync(MANIFEST_PATHS.products, "utf8"),
   ) as Record<string, unknown>;
 
-  const galleries: Record<string, Record<string, { src: string; caption: string }[]>> =
-    {};
+  const galleries: Record<
+    string,
+    Record<string, { src: string; caption: string; source?: string }[]>
+  > = {};
 
   for (const row of productRows) {
     galleries[row.category] ??= {};
     galleries[row.category][row.subcategory] ??= [];
+    const source =
+      row.source === "project" || row.source === "product"
+        ? row.source
+        : row.src.includes("/projects/") || row.src.includes("/project/")
+          ? "project"
+          : "product";
     galleries[row.category][row.subcategory].push({
       src: row.src,
       caption: row.caption ?? "",
+      source,
     });
   }
 

@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS product_gallery_images (
   src TEXT NOT NULL,
   caption TEXT NOT NULL DEFAULT '',
   sort_order INT NOT NULL DEFAULT 0,
+  source TEXT NOT NULL DEFAULT 'product',
   UNIQUE (category, subcategory, sort_order)
 );
 
@@ -118,3 +119,14 @@ DROP TRIGGER IF EXISTS app_documents_updated_at ON app_documents;
 CREATE TRIGGER app_documents_updated_at
   BEFORE UPDATE ON app_documents
   FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+
+ALTER TABLE product_gallery_images
+  ADD COLUMN IF NOT EXISTS source TEXT NOT NULL DEFAULT 'product';
+
+UPDATE product_gallery_images
+SET source = 'project'
+WHERE source = 'product'
+  AND (
+    src ILIKE '%/gallery/%/projects/%'
+    OR src ILIKE '%/gallery/%/project/%'
+  );

@@ -26,6 +26,11 @@ export {
   getProductCategoryImage,
   getProductSubcategoryImage,
   getProductGallery,
+  getProductOnlyGallery,
+  getProjectReferenceGallery,
   hasProductImage,
+  isProjectReferenceSrc,
+  resolveGalleryImageSource,
   type ProductGalleryImage,
+  type GalleryImageSource,
 } from "./catalog/product-images";

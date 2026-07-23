@@ -163,7 +163,7 @@ export default function AdminImagenesPage() {
       <AdminPanel>
         <AdminCrudToolbar
           title="Todas las fotos"
-          description="Haz clic en una imagen para reemplazarla, editar el texto o eliminarla."
+          description="Productos = fotos del producto (vista previa). Obras = fotos de proyectos. Las referencias históricas de obras no aparecen en Productos."
         />
 
         {(filterCategory || filterSubcategory) && (
@@ -189,7 +189,7 @@ export default function AdminImagenesPage() {
             href="/admin/catalogo"
             className="rounded-lg border border-grey/25 bg-slate-50 px-3 py-2 font-medium text-navy hover:bg-white"
           >
-            Subir foto a un producto →
+            Subir foto de producto (no obras) →
           </Link>
         </div>
 

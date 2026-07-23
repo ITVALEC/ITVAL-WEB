@@ -317,7 +317,7 @@ export default function AdminCatalogoPage() {
       <AdminPanel>
         <AdminCrudToolbar
           title="Líneas de producto"
-          description="Edita nombres o agrega categorías y productos nuevos."
+          description="Edita nombres o agrega categorías y productos nuevos. Las fotos de aquí son del producto; las obras se gestionan en Proyectos."
           action={
             <AdminButton onClick={() => {
               setFeedback(null);
@@ -725,7 +725,9 @@ export default function AdminCatalogoPage() {
         {uploadSub ? (
           <div className="space-y-3">
             <p className="text-sm text-grey-dark">
-              La foto se agregará a la galería de <strong>{uploadSub.titleEs}</strong>.
+              La foto se agregará a la <strong>galería del producto</strong>{" "}
+              (vista previa). No uses aquí fotos de obras; esas van en{" "}
+              <strong>Proyectos</strong>.
             </p>
             <AdminImageUpload
               action="add-product"

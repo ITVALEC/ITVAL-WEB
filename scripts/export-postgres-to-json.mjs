@@ -81,7 +81,7 @@ async function main() {
   });
 
   const { rows: productRows } = await client.query(
-    `SELECT category, subcategory, src, caption, sort_order
+    `SELECT category, subcategory, src, caption, sort_order, source
      FROM product_gallery_images
      ORDER BY category, subcategory, sort_order`,
   );
@@ -97,6 +97,12 @@ async function main() {
     galleries[row.category][row.subcategory].push({
       src: row.src,
       caption: row.caption ?? "",
+      source:
+        row.source === "project" || row.source === "product"
+          ? row.source
+          : String(row.src).includes("/projects/") || String(row.src).includes("/project/")
+            ? "project"
+            : "product",
     });
   }
 

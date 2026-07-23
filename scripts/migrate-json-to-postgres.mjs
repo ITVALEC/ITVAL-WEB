@@ -93,9 +93,20 @@ async function main() {
       for (let index = 0; index < images.length; index += 1) {
         const image = images[index];
         await client.query(
-          `INSERT INTO product_gallery_images (category, subcategory, src, caption, sort_order)
-           VALUES ($1, $2, $3, $4, $5)`,
-          [category, subcategory, image.src, image.caption ?? "", index],
+          `INSERT INTO product_gallery_images (category, subcategory, src, caption, sort_order, source)
+           VALUES ($1, $2, $3, $4, $5, $6)`,
+          [
+            category,
+            subcategory,
+            image.src,
+            image.caption ?? "",
+            index,
+            image.source === "project" ||
+            String(image.src).includes("/projects/") ||
+            String(image.src).includes("/project/")
+              ? "project"
+              : "product",
+          ],
         );
         productCount += 1;
       }

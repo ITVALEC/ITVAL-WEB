@@ -7,7 +7,7 @@ import { ProjectCard } from "@/components/ui/ProjectCard";
 import { ButtonLink } from "@/components/ui/Button";
 import { PRODUCT_LIST_ITEM_KEYS } from "@/lib/content-keys";
 import { getProjectsForProductSubcategory } from "@/lib/catalog";
-import { getProductImage, getProductGallery } from "@/lib/assets";
+import { getProductImage, getProductOnlyGallery, getProjectReferenceGallery } from "@/lib/assets";
 import { ProductGallery } from "@/components/catalog/ProductGallery";
 import { ProductPreviewCarousel } from "@/components/catalog/ProductPreviewCarousel";
 import { breadcrumbTrail, productCategoryPath } from "@/lib/breadcrumbs";
@@ -42,18 +42,18 @@ export async function ProductDetailView({
 
   const relatedProjects = getProjectsForProductSubcategory(subcategory);
   const heroImage = getProductImage(category, subcategory);
-  const galleryImages = getProductGallery(category, subcategory);
+  const productGalleryImages = getProductOnlyGallery(category, subcategory);
+  const worksGallery = getProjectReferenceGallery(category, subcategory);
 
   const subtitle = tSub(`${subcategory}.title`);
-  const worksGallery = galleryImages.filter(
-    (image) => image.src !== heroImage,
-  );
   const previewImages = [
     ...(heroImage ? [{ src: heroImage, alt: subtitle }] : []),
-    ...worksGallery.map((image) => ({
-      src: image.src,
-      alt: image.caption || subtitle,
-    })),
+    ...productGalleryImages
+      .filter((image) => image.src !== heroImage)
+      .map((image) => ({
+        src: image.src,
+        alt: image.caption || subtitle,
+      })),
   ].slice(0, PREVIEW_IMAGE_LIMIT);
 
   return (

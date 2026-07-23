@@ -2,10 +2,12 @@ import type { ProductKey } from "./types";
 import manifest from "./product-images.json";
 import { isBlockedImageSrc } from "./blocked-images";
 
+export type GalleryImageSource = "product" | "project";
+
 export type ProductGalleryImage = {
   src: string;
   caption: string;
-  source?: "product" | "project";
+  source?: GalleryImageSource;
 };
 
 type ProductImageManifest = {
@@ -17,6 +19,31 @@ type ProductImageManifest = {
 };
 
 const data = manifest as ProductImageManifest;
+
+/** Fotos de obras/referencias importadas históricamente bajo .../gallery/.../projects/ */
+export function isProjectReferenceSrc(src: string): boolean {
+  const normalized = src.replace(/\\/g, "/").toLowerCase();
+  return (
+    normalized.includes("/gallery/") &&
+    (normalized.includes("/projects/") || normalized.includes("/project/"))
+  );
+}
+
+export function resolveGalleryImageSource(
+  image: Pick<ProductGalleryImage, "src" | "source">,
+): GalleryImageSource {
+  if (image.source === "product" || image.source === "project") {
+    return image.source;
+  }
+  return isProjectReferenceSrc(image.src) ? "project" : "product";
+}
+
+function normalizeGalleryImage(image: ProductGalleryImage): ProductGalleryImage {
+  return {
+    ...image,
+    source: resolveGalleryImageSource(image),
+  };
+}
 
 export function getProductCategoryImage(
   category: ProductKey,
@@ -52,20 +79,54 @@ export function hasProductImage(
   return Boolean(getProductImage(category, subcategory));
 }
 
+export type GetProductGalleryOptions = {
+  /** Si se omite, devuelve todas las fotos (producto + referencias). */
+  source?: GalleryImageSource;
+};
+
+/**
+ * Galería asociada a una subcategoría.
+ * - source: "product" → solo fotos del producto (carrusel / vista previa)
+ * - source: "project" → solo obras y referencias
+ */
 export function getProductGallery(
   category: ProductKey,
   subcategory: string,
+  options: GetProductGalleryOptions = {},
 ): ProductGalleryImage[] {
-  const items = (data.galleries?.[category]?.[subcategory] ?? []).filter(
-    (item) => !isBlockedImageSrc(item.src),
-  );
-  const primary = getProductSubcategoryImage(category, subcategory);
+  const items = (data.galleries?.[category]?.[subcategory] ?? [])
+    .filter((item) => !isBlockedImageSrc(item.src))
+    .map(normalizeGalleryImage);
 
-  if (items.length > 0) return items;
+  const filtered = options.source
+    ? items.filter((item) => item.source === options.source)
+    : items;
 
-  if (primary) {
-    return [{ src: primary, caption: "", source: "product" }];
+  if (filtered.length > 0) return filtered;
+
+  // Fallback de portada solo para la galería de producto.
+  if (!options.source || options.source === "product") {
+    const primary = getProductSubcategoryImage(category, subcategory);
+    if (primary) {
+      return [{ src: primary, caption: "", source: "product" }];
+    }
   }
 
   return [];
+}
+
+/** Fotos del producto para el carrusel / vista previa. */
+export function getProductOnlyGallery(
+  category: ProductKey,
+  subcategory: string,
+): ProductGalleryImage[] {
+  return getProductGallery(category, subcategory, { source: "product" });
+}
+
+/** Fotos de obras y referencias vinculadas al producto. */
+export function getProjectReferenceGallery(
+  category: ProductKey,
+  subcategory: string,
+): ProductGalleryImage[] {
+  return getProductGallery(category, subcategory, { source: "project" });
 }

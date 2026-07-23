@@ -8,6 +8,10 @@ import { isDatabaseEnabled, query } from "@/lib/db/pool";
 import { syncDatabaseToJson } from "@/lib/db/sync-json";
 import { MANIFEST_PATHS, readJsonFile, writeJsonFile } from "./manifests";
 import { getProductCategoryLabel, getSubcategoryLabel } from "./product-labels";
+import {
+  resolveGalleryImageSource,
+  type GalleryImageSource,
+} from "@/lib/catalog/product-images";
 
 const root = process.cwd();
 const PUBLIC_IMAGES = path.join(root, "public", "images");
@@ -29,10 +33,12 @@ export type AdminMediaItem = {
   subcategory?: string;
   productIndex?: number;
   heroType?: "category" | "subcategory";
+  /** Solo para entradas de galería de producto: producto vs obra/referencia. */
+  gallerySource?: GalleryImageSource;
 };
 
 type ProjectManifest = { projects: PortfolioProject[]; [key: string]: unknown };
-type GalleryImage = { src: string; caption: string; source?: string };
+type GalleryImage = { src: string; caption: string; source?: GalleryImageSource };
 type ProductManifest = {
   categories?: Record<string, string>;
   subcategories?: Record<string, Record<string, string>>;
@@ -166,6 +172,10 @@ async function listFromJson(): Promise<AdminMediaItem[]> {
   for (const [category, subs] of Object.entries(products.galleries ?? {})) {
     for (const [subcategory, images] of Object.entries(subs)) {
       images.forEach((image, index) => {
+        const gallerySource = resolveGalleryImageSource(image);
+        // Las referencias de obra no se gestionan como "foto de producto".
+        if (gallerySource === "project") return;
+
         items.push({
           id: `product:${category}:${subcategory}:${index}`,
           kind: "product",
@@ -176,6 +186,7 @@ async function listFromJson(): Promise<AdminMediaItem[]> {
           category,
           subcategory,
           productIndex: index,
+          gallerySource,
         });
       });
     }
@@ -260,6 +271,10 @@ async function listFromDb(): Promise<AdminMediaItem[]> {
   );
 
   for (const row of productRows) {
+    const gallerySource = resolveGalleryImageSource({ src: row.src });
+    // Las referencias de obra no se listan como fotos de producto en el admin.
+    if (gallerySource === "project") continue;
+
     items.push({
       id: `product:${row.category}:${row.subcategory}:${row.sort_order}`,
       kind: "product",
@@ -270,6 +285,7 @@ async function listFromDb(): Promise<AdminMediaItem[]> {
       category: row.category,
       subcategory: row.subcategory,
       productIndex: row.sort_order,
+      gallerySource,
     });
   }
 
@@ -533,8 +549,8 @@ export async function addProductImage(
     );
     const sortOrder = (rows[0]?.max ?? -1) + 1;
     await query(
-      `INSERT INTO product_gallery_images (category, subcategory, src, caption, sort_order)
-       VALUES ($1, $2, $3, $4, $5)`,
+      `INSERT INTO product_gallery_images (category, subcategory, src, caption, sort_order, source)
+       VALUES ($1, $2, $3, $4, $5, 'product')`,
       [category, subcategory, publicSrc, caption.trim(), sortOrder],
     );
     await afterMutation();
@@ -556,7 +572,11 @@ export async function addProductImage(
   data.galleries[category] ??= {};
   data.galleries[category][subcategory] ??= [];
   const index = data.galleries[category][subcategory].length;
-  data.galleries[category][subcategory].push({ src: publicSrc, caption: caption.trim() });
+  data.galleries[category][subcategory].push({
+    src: publicSrc,
+    caption: caption.trim(),
+    source: "product",
+  });
   writeJsonFile(MANIFEST_PATHS.products, data);
 
   return {
@@ -569,6 +589,7 @@ export async function addProductImage(
     category,
     subcategory,
     productIndex: index,
+    gallerySource: "product",
   };
 }
 
