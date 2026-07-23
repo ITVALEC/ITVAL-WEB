@@ -47,6 +47,7 @@ export async function syncDatabaseToJson(): Promise<void> {
     Record<string, { src: string; caption: string; source?: string }[]>
   > = {};
 
+  let productSourceCount = 0;
   for (const row of productRows) {
     galleries[row.category] ??= {};
     galleries[row.category][row.subcategory] ??= [];
@@ -56,6 +57,7 @@ export async function syncDatabaseToJson(): Promise<void> {
         : row.src.includes("/projects/") || row.src.includes("/project/")
           ? "project"
           : "product";
+    if (source === "product") productSourceCount += 1;
     galleries[row.category][row.subcategory].push({
       src: row.src,
       caption: row.caption ?? "",
@@ -63,7 +65,13 @@ export async function syncDatabaseToJson(): Promise<void> {
     });
   }
 
-  writeJson(MANIFEST_PATHS.products, { ...existing, galleries });
+  // Si la DB no tiene fotos de producto (solo refs de obra), no pisar el manifiesto JSON.
+  const galleriesToWrite =
+    productSourceCount > 0
+      ? galleries
+      : ((existing.galleries as typeof galleries | undefined) ?? galleries);
+
+  writeJson(MANIFEST_PATHS.products, { ...existing, galleries: galleriesToWrite });
 
   const { rows: settingsRows } = await query<{ contact: unknown; footer: unknown }>(
     `SELECT contact, footer FROM site_settings WHERE id = 1`,

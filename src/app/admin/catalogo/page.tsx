@@ -343,7 +343,7 @@ export default function AdminCatalogoPage() {
       setCategories(data.categories);
       setFeedback({
         type: "success",
-        message: "Subcategoría creada. Reinicia el servidor para ver la nueva página.",
+        message: "Producto creado. Reinicia el servidor para ver la nueva página.",
       });
       setCreateSubOpen(false);
       setNewSubOnlyKey("");
@@ -358,8 +358,8 @@ export default function AdminCatalogoPage() {
     <AdminShell title="Catálogo de productos">
       <AdminPanel>
         <AdminCrudToolbar
-          title="Líneas de producto"
-          description="Edita nombres o agrega categorías y productos nuevos. Las fotos de aquí son del producto; las obras se gestionan en Proyectos."
+          title="Categorías y productos"
+          description="Cada producto pertenece a una categoría. Aquí editas nombre, descripción y fotos del producto. Las obras (proyectos) se gestionan en Obras."
           action={
             <AdminButton onClick={() => {
               setFeedback(null);
@@ -543,7 +543,14 @@ export default function AdminCatalogoPage() {
 
                 <div className="space-y-3">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <h4 className="text-sm font-semibold text-navy">Subcategorías (productos específicos)</h4>
+                    <div>
+                      <h4 className="text-sm font-semibold text-navy">
+                        Productos de {activeCategory.titleEs}
+                      </h4>
+                      <p className="text-xs text-grey">
+                        Cada producto es una solución concreta dentro de esta categoría.
+                      </p>
+                    </div>
                     <AdminButton
                       variant="secondary"
                       onClick={() => {
@@ -556,7 +563,7 @@ export default function AdminCatalogoPage() {
                         setNewSubOnlyKey("");
                       }}
                     >
-                      + Nueva subcategoría
+                      + Nuevo producto
                     </AdminButton>
                   </div>
                   {activeCategory.subcategories.map((sub) => (
@@ -578,10 +585,13 @@ export default function AdminCatalogoPage() {
                         </div>
                       )}
                       <div className="min-w-0 flex-1">
-                        <p className="font-semibold text-navy">{sub.titleEs}</p>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <AdminBadge>{activeCategory.titleEs}</AdminBadge>
+                          <p className="font-semibold text-navy">{sub.titleEs}</p>
+                        </div>
                         <p className="mt-0.5 line-clamp-2 text-sm text-grey-dark">{sub.descriptionEs}</p>
                         <p className="mt-1 text-xs text-grey">
-                          {sub.imageCount} fotos · {sub.key}
+                          {sub.imageCount} fotos · código: {sub.key}
                         </p>
                         {sub.filters ? (
                           <p className="mt-1 text-xs text-grey">
@@ -597,16 +607,16 @@ export default function AdminCatalogoPage() {
                       </div>
                       <div className="flex flex-wrap gap-2 sm:flex-col sm:items-stretch">
                         <AdminButton variant="secondary" onClick={() => openEdit({ type: "subcategory", item: sub })}>
-                          Editar nombre
+                          Editar producto
                         </AdminButton>
                         <AdminButton variant="ghost" onClick={() => setUploadSub(sub)}>
                           Subir foto
                         </AdminButton>
                         <Link
-                          href={`/admin/imagenes?kind=product&category=${sub.categoryKey}&subcategory=${sub.key}`}
+                          href={`/admin/imagenes?kind=product&category=${encodeURIComponent(sub.categoryKey)}&subcategory=${encodeURIComponent(sub.key)}`}
                           className="inline-flex min-h-11 items-center justify-center rounded-lg px-3 text-sm font-semibold text-cornflower-ink hover:bg-cornflower/10"
                         >
-                          Ver {sub.imageCount} fotos
+                          Ver fotos
                         </Link>
                       </div>
                     </div>
@@ -620,8 +630,15 @@ export default function AdminCatalogoPage() {
 
       <AdminModal
         open={Boolean(editing)}
-        title={editing?.type === "category" ? "Editar categoría" : "Editar subcategoría"}
-        description="Los cambios se ven en el sitio público (español e inglés)."
+        title={editing?.type === "category" ? "Editar categoría" : "Editar producto"}
+        description={
+          editing?.type === "subcategory"
+            ? `Pertenece a: ${
+                categories.find((c) => c.key === editing.item.categoryKey)?.titleEs ??
+                editing.item.categoryKey
+              }`
+            : "Los cambios se ven en el sitio público (español e inglés)."
+        }
         onClose={closeEdit}
         footer={
           <>
@@ -636,6 +653,13 @@ export default function AdminCatalogoPage() {
       >
         {editing ? (
           <form id="catalog-edit-form" onSubmit={saveEdit} className="space-y-4">
+            {editing.type === "subcategory" ? (
+              <p className="rounded-lg border border-grey/20 bg-slate-50 px-3 py-2 text-sm text-navy">
+                <span className="font-semibold">Categoría: </span>
+                {categories.find((c) => c.key === editing.item.categoryKey)?.titleEs ??
+                  editing.item.categoryKey}
+              </p>
+            ) : null}
             <AdminTabList
               label="Idioma a editar"
               value={localeTab}
@@ -727,7 +751,7 @@ export default function AdminCatalogoPage() {
       <AdminModal
         open={createCategoryOpen}
         title="Nueva categoría"
-        description="Crea una línea de producto con su primera subcategoría."
+        description="Crea una línea del catálogo con su primer producto."
         onClose={() => setCreateCategoryOpen(false)}
         footer={
           <>
@@ -762,7 +786,7 @@ export default function AdminCatalogoPage() {
           <AdminField label="Código interno (categoría)" htmlFor="new-cat-key" hint="Solo letras/números, empieza en minúscula. Ej: carpinteriaAluminio">
             <input id="new-cat-key" type="text" value={newCatKey} onChange={(e) => setNewCatKey(e.target.value)} className={adminInputClass} required pattern="[a-z][a-zA-Z0-9]*" />
           </AdminField>
-          <AdminField label="Código primera subcategoría" htmlFor="new-sub-key">
+          <AdminField label="Código del primer producto" htmlFor="new-sub-key" hint="Producto inicial dentro de esta categoría.">
             <input id="new-sub-key" type="text" value={newSubKey} onChange={(e) => setNewSubKey(e.target.value)} className={adminInputClass} required pattern="[a-z][a-zA-Z0-9]*" />
           </AdminField>
           {filterOptions ? (
@@ -793,7 +817,12 @@ export default function AdminCatalogoPage() {
 
       <AdminModal
         open={createSubOpen}
-        title={activeCategory ? `Nueva subcategoría — ${activeCategory.titleEs}` : "Nueva subcategoría"}
+        title={activeCategory ? `Nuevo producto — ${activeCategory.titleEs}` : "Nuevo producto"}
+        description={
+          activeCategory
+            ? `Se creará dentro de la categoría «${activeCategory.titleEs}».`
+            : undefined
+        }
         onClose={() => setCreateSubOpen(false)}
         footer={
           <>
@@ -801,7 +830,7 @@ export default function AdminCatalogoPage() {
               Cancelar
             </AdminButton>
             <AdminButton type="submit" form="new-sub-form" disabled={saving}>
-              {saving ? "Creando…" : "Crear"}
+              {saving ? "Creando…" : "Crear producto"}
             </AdminButton>
           </>
         }
@@ -842,8 +871,8 @@ export default function AdminCatalogoPage() {
           <div className="space-y-3">
             <p className="text-sm text-grey-dark">
               La foto se agregará a la <strong>galería del producto</strong>{" "}
-              (vista previa). No uses aquí fotos de obras; esas van en{" "}
-              <strong>Proyectos</strong>.
+              (vista previa). Pertenece a la categoría del producto. Las obras van en{" "}
+              <strong>Obras</strong>.
             </p>
             <AdminImageUpload
               action="add-product"

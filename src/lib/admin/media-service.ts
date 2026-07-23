@@ -120,26 +120,37 @@ export function replaceImageAtSrc(src: string, buffer: Buffer): string {
   return src;
 }
 
-async function listFromJson(): Promise<AdminMediaItem[]> {
+async function listProductGalleryFromManifest(
+  products: ProductManifest,
+): Promise<AdminMediaItem[]> {
   const items: AdminMediaItem[] = [];
-  const projects = readJsonFile<ProjectManifest>(MANIFEST_PATHS.projects);
-  const products = readJsonFile<ProductManifest>(MANIFEST_PATHS.products);
 
-  for (const project of projects.projects) {
-    project.gallery.forEach((src, index) => {
-      items.push({
-        id: `project:${project.id}:${index}`,
-        kind: "project",
-        src,
-        title: project.name,
-        subtitle: `${project.city}${project.year ? ` · ${project.year}` : ""}`,
-        caption: project.name,
-        projectId: project.id,
-        galleryIndex: index,
+  for (const [category, subs] of Object.entries(products.galleries ?? {})) {
+    for (const [subcategory, images] of Object.entries(subs)) {
+      images.forEach((image, index) => {
+        const gallerySource = resolveGalleryImageSource(image);
+        if (gallerySource === "project") return;
+
+        items.push({
+          id: `product:${category}:${subcategory}:${index}`,
+          kind: "product",
+          src: image.src,
+          title: image.caption || getSubcategoryLabel(category, subcategory),
+          subtitle: `${getProductCategoryLabel(category)} · ${getSubcategoryLabel(category, subcategory)}`,
+          caption: image.caption ?? "",
+          category,
+          subcategory,
+          productIndex: index,
+          gallerySource,
+        });
       });
-    });
+    }
   }
 
+  return items;
+}
+
+function pushHeroItems(items: AdminMediaItem[], products: ProductManifest): void {
   for (const [category, src] of Object.entries(products.categories ?? {})) {
     items.push({
       id: `hero:category:${category}`,
@@ -160,7 +171,7 @@ async function listFromJson(): Promise<AdminMediaItem[]> {
         kind: "hero",
         src,
         title: getSubcategoryLabel(category, subcategory),
-        subtitle: getProductCategoryLabel(category),
+        subtitle: `${getProductCategoryLabel(category)} · ${getSubcategoryLabel(category, subcategory)}`,
         caption: "",
         category,
         subcategory,
@@ -168,29 +179,30 @@ async function listFromJson(): Promise<AdminMediaItem[]> {
       });
     }
   }
+}
 
-  for (const [category, subs] of Object.entries(products.galleries ?? {})) {
-    for (const [subcategory, images] of Object.entries(subs)) {
-      images.forEach((image, index) => {
-        const gallerySource = resolveGalleryImageSource(image);
-        // Las referencias de obra no se gestionan como "foto de producto".
-        if (gallerySource === "project") return;
+async function listFromJson(): Promise<AdminMediaItem[]> {
+  const items: AdminMediaItem[] = [];
+  const projects = readJsonFile<ProjectManifest>(MANIFEST_PATHS.projects);
+  const products = readJsonFile<ProductManifest>(MANIFEST_PATHS.products);
 
-        items.push({
-          id: `product:${category}:${subcategory}:${index}`,
-          kind: "product",
-          src: image.src,
-          title: image.caption || getSubcategoryLabel(category, subcategory),
-          subtitle: `${getProductCategoryLabel(category)} · ${getSubcategoryLabel(category, subcategory)}`,
-          caption: image.caption ?? "",
-          category,
-          subcategory,
-          productIndex: index,
-          gallerySource,
-        });
+  for (const project of projects.projects) {
+    project.gallery.forEach((src, index) => {
+      items.push({
+        id: `project:${project.id}:${index}`,
+        kind: "project",
+        src,
+        title: project.name,
+        subtitle: `${project.city}${project.year ? ` · ${project.year}` : ""}`,
+        caption: project.name,
+        projectId: project.id,
+        galleryIndex: index,
       });
-    }
+    });
   }
+
+  pushHeroItems(items, products);
+  items.push(...(await listProductGalleryFromManifest(products)));
 
   return items;
 }
@@ -231,33 +243,7 @@ async function listFromDb(): Promise<AdminMediaItem[]> {
   }
 
   const products = readJsonFile<ProductManifest>(MANIFEST_PATHS.products);
-  for (const [category, src] of Object.entries(products.categories ?? {})) {
-    items.push({
-      id: `hero:category:${category}`,
-      kind: "hero",
-      src,
-      title: getProductCategoryLabel(category),
-      subtitle: "Imagen principal de categoría",
-      caption: "",
-      category,
-      heroType: "category",
-    });
-  }
-  for (const [category, subs] of Object.entries(products.subcategories ?? {})) {
-    for (const [subcategory, src] of Object.entries(subs)) {
-      items.push({
-        id: `hero:subcategory:${category}:${subcategory}`,
-        kind: "hero",
-        src,
-        title: getSubcategoryLabel(category, subcategory),
-        subtitle: getProductCategoryLabel(category),
-        caption: "",
-        category,
-        subcategory,
-        heroType: "subcategory",
-      });
-    }
-  }
+  pushHeroItems(items, products);
 
   const { rows: productRows } = await query<{
     category: string;
@@ -265,17 +251,24 @@ async function listFromDb(): Promise<AdminMediaItem[]> {
     src: string;
     caption: string;
     sort_order: number;
+    source: string | null;
   }>(
-    `SELECT category, subcategory, src, caption, sort_order
+    `SELECT category, subcategory, src, caption, sort_order, source
      FROM product_gallery_images ORDER BY category, subcategory, sort_order`,
   );
 
+  const fromDb: AdminMediaItem[] = [];
   for (const row of productRows) {
-    const gallerySource = resolveGalleryImageSource({ src: row.src });
-    // Las referencias de obra no se listan como fotos de producto en el admin.
+    const gallerySource = resolveGalleryImageSource({
+      src: row.src,
+      source:
+        row.source === "product" || row.source === "project"
+          ? row.source
+          : undefined,
+    });
     if (gallerySource === "project") continue;
 
-    items.push({
+    fromDb.push({
       id: `product:${row.category}:${row.subcategory}:${row.sort_order}`,
       kind: "product",
       src: row.src,
@@ -289,6 +282,14 @@ async function listFromDb(): Promise<AdminMediaItem[]> {
     });
   }
 
+  // Si la DB no tiene fotos de producto (vacía o solo referencias de obra),
+  // usar el manifiesto JSON para no dejar el tab Productos vacío.
+  if (fromDb.length > 0) {
+    items.push(...fromDb);
+  } else {
+    items.push(...(await listProductGalleryFromManifest(products)));
+  }
+
   return items;
 }
 
@@ -300,7 +301,14 @@ export async function listAllMedia(
 ): Promise<AdminMediaItem[]> {
   let items = isDatabaseEnabled() ? await listFromDb() : await listFromJson();
 
-  if (kind) {
+  if (kind === "product") {
+    // Productos = galería del producto + portadas de subcategoría (pertenecen a una categoría).
+    items = items.filter(
+      (item) =>
+        item.kind === "product" ||
+        (item.kind === "hero" && item.heroType === "subcategory"),
+    );
+  } else if (kind) {
     items = items.filter((item) => item.kind === kind);
   }
 
@@ -322,6 +330,8 @@ export async function listAllMedia(
         item.subtitle.toLowerCase().includes(q) ||
         item.caption.toLowerCase().includes(q) ||
         item.src.toLowerCase().includes(q) ||
+        (item.category?.toLowerCase().includes(q) ?? false) ||
+        (item.subcategory?.toLowerCase().includes(q) ?? false) ||
         (item.projectId?.toLowerCase().includes(q) ?? false),
     );
   }
@@ -357,13 +367,16 @@ export async function updateMediaCaption(item: AdminMediaItem, caption: string):
 
   if (item.kind === "product" && item.category && item.subcategory && item.productIndex != null) {
     if (isDatabaseEnabled()) {
-      await query(
+      const result = await query(
         `UPDATE product_gallery_images SET caption = $4
          WHERE category = $1 AND subcategory = $2 AND sort_order = $3`,
         [item.category, item.subcategory, item.productIndex, caption.trim()],
       );
-      await afterMutation();
-      return;
+      if ((result.rowCount ?? 0) > 0) {
+        await afterMutation();
+        return;
+      }
+      // Sin fila en DB: el ítem vino del manifiesto JSON (fallback).
     }
 
     const data = readJsonFile<ProductManifest>(MANIFEST_PATHS.products);
