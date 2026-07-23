@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import {
   AdminField,
@@ -17,6 +16,7 @@ import {
   AdminModal,
 } from "@/components/admin/AdminCrud";
 import { AdminImageUpload } from "@/components/admin/AdminImageUpload";
+import { AdminMediaImage } from "@/components/admin/AdminMediaImage";
 import {
   AdminEmptyState,
   AdminLoadingState,
@@ -125,6 +125,7 @@ export default function AdminCatalogoPage() {
   const [descriptionEn, setDescriptionEn] = useState("");
   const [saving, setSaving] = useState(false);
   const [uploadSub, setUploadSub] = useState<CatalogSubcategoryItem | null>(null);
+  const [previewVersion, setPreviewVersion] = useState(0);
   const [createCategoryOpen, setCreateCategoryOpen] = useState(false);
   const [createSubOpen, setCreateSubOpen] = useState(false);
   const [newCatKey, setNewCatKey] = useState("");
@@ -404,7 +405,11 @@ export default function AdminCatalogoPage() {
                     <div className="flex flex-wrap gap-2">
                       {activeCategory.heroSrc ? (
                         <div className="relative h-16 w-24 overflow-hidden rounded-lg bg-slate-100">
-                          <Image src={activeCategory.heroSrc} alt="" fill className="object-cover" sizes="96px" unoptimized />
+                          <AdminMediaImage
+                            src={activeCategory.heroSrc}
+                            version={previewVersion}
+                            sizes="96px"
+                          />
                         </div>
                       ) : null}
                       <AdminButton variant="secondary" onClick={() => openEdit({ type: "category", item: activeCategory })}>
@@ -445,7 +450,11 @@ export default function AdminCatalogoPage() {
                     >
                       {sub.heroSrc ? (
                         <div className="relative h-20 w-28 shrink-0 overflow-hidden rounded-lg bg-slate-100">
-                          <Image src={sub.heroSrc} alt="" fill className="object-cover" sizes="112px" unoptimized />
+                          <AdminMediaImage
+                            src={sub.heroSrc}
+                            version={previewVersion}
+                            sizes="112px"
+                          />
                         </div>
                       ) : (
                         <div className="flex h-20 w-28 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-xs text-grey">
@@ -725,6 +734,7 @@ export default function AdminCatalogoPage() {
               label="Elegir archivo desde tu computadora"
               variant="primary"
               onSuccess={() => {
+                setPreviewVersion((v) => v + 1);
                 setFeedback({ type: "success", message: "Foto agregada al catálogo." });
                 setUploadSub(null);
                 load();

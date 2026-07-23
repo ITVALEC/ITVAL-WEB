@@ -1,9 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { AdminImageUpload } from "@/components/admin/AdminImageUpload";
+import { AdminMediaImage } from "@/components/admin/AdminMediaImage";
 import {
   AdminField,
   AdminPanel,
@@ -266,7 +266,12 @@ export default function AdminProjectsPage() {
                   className: "w-20",
                   cell: (row) => (
                     <div className="relative h-12 w-16 overflow-hidden rounded-md bg-slate-100">
-                      <Image src={row.cover} alt="" fill className="object-cover" sizes="64px" unoptimized />
+                      <AdminMediaImage
+                        src={row.cover}
+                        version={previewVersion}
+                        sizes="64px"
+                        fallbackSrc="/images/pages/projects.svg"
+                      />
                     </div>
                   ),
                 },
@@ -333,7 +338,12 @@ export default function AdminProjectsPage() {
               mobileCard={(row) => (
                 <div className="flex gap-3">
                   <div className="relative h-16 w-20 shrink-0 overflow-hidden rounded-lg bg-slate-100">
-                    <Image src={row.cover} alt="" fill className="object-cover" sizes="80px" unoptimized />
+                    <AdminMediaImage
+                      src={row.cover}
+                      version={previewVersion}
+                      sizes="80px"
+                      fallbackSrc="/images/pages/projects.svg"
+                    />
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="font-medium text-navy">{row.name}</p>
@@ -411,13 +421,11 @@ export default function AdminProjectsPage() {
                       className="absolute inset-0 z-0"
                       title={`Imagen ${index + 1} — elegir como portada`}
                     >
-                      <Image
-                        src={previewVersion ? `${src}?v=${previewVersion}` : src}
-                        alt=""
-                        fill
-                        className="object-cover"
+                      <AdminMediaImage
+                        src={src}
+                        version={previewVersion}
                         sizes="96px"
-                        unoptimized
+                        fallbackSrc="/images/pages/projects.svg"
                       />
                     </button>
                     {editingProject.gallery.length > 1 ? (

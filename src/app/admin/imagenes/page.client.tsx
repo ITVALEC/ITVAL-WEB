@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import {
   AdminField,
@@ -18,6 +17,7 @@ import {
   AdminModal,
 } from "@/components/admin/AdminCrud";
 import { AdminImageUpload } from "@/components/admin/AdminImageUpload";
+import { AdminMediaImage } from "@/components/admin/AdminMediaImage";
 import {
   AdminEmptyState,
   AdminLoadingState,
@@ -50,10 +50,6 @@ const KIND_LABELS: Record<MediaKind, string> = {
   hero: "Portada",
   other: "Otro",
 };
-
-function cacheBust(src: string, version: number) {
-  return version ? `${src}?v=${version}` : src;
-}
 
 export default function AdminImagenesPage() {
   const searchParams = useSearchParams();
@@ -242,13 +238,11 @@ export default function AdminImagenesPage() {
                     className="block w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower"
                   >
                     <div className="relative aspect-[4/3] bg-slate-100">
-                      <Image
-                        src={cacheBust(item.src, previewVersion)}
-                        alt=""
-                        fill
+                      <AdminMediaImage
+                        src={item.src}
+                        version={previewVersion}
                         className="object-cover"
                         sizes="25vw"
-                        unoptimized
                       />
                     </div>
                     <div className="p-2.5">
@@ -311,13 +305,11 @@ export default function AdminImagenesPage() {
         {editing ? (
           <div className="space-y-4">
             <div className="relative mx-auto h-52 w-full max-w-md overflow-hidden rounded-lg bg-slate-100">
-              <Image
-                src={cacheBust(editing.src, previewVersion)}
-                alt=""
-                fill
+              <AdminMediaImage
+                src={editing.src}
+                version={previewVersion}
                 className="object-contain"
                 sizes="448px"
-                unoptimized
               />
             </div>
 

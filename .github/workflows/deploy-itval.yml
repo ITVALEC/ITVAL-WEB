@@ -172,6 +172,7 @@ jobs:
           ROOT="/var/www/itval"
           RELEASE_DIR="$ROOT/releases/$RELEASE"
           ENV_FILE="$ROOT/shared/.env.production.local"
+          SHARED_IMAGES="$ROOT/shared/images"
           ECOSYSTEM_FILE="$ROOT/ecosystem.config.cjs"
 
           export HOME="/home/itval"
@@ -201,6 +202,45 @@ jobs:
           echo "Destino: $RELEASE_DIR"
           echo "Variables privadas: verificadas"
           echo "Eudora: sin permisos de escritura"
+
+          PREVIOUS_RELEASE="$(
+            readlink -f "$ROOT/current" 2>/dev/null || true
+          )"
+
+          echo "===== PERSISTIENDO IMÁGENES ENTRE DEPLOYS ====="
+
+          mkdir -p "$SHARED_IMAGES"
+
+          # Recupera fotos de la versión anterior (subidas por admin) antes de
+          # sobrescribir public/images con el symlink compartido.
+          if [ -n "$PREVIOUS_RELEASE" ] &&
+             [ -d "$PREVIOUS_RELEASE/public/images" ] &&
+             [ ! -L "$PREVIOUS_RELEASE/public/images" ]; then
+            echo "Migrando imágenes de la release anterior..."
+            rsync -a "$PREVIOUS_RELEASE/public/images/" "$SHARED_IMAGES/"
+          elif [ -n "$PREVIOUS_RELEASE" ] &&
+               [ -L "$PREVIOUS_RELEASE/public/images" ]; then
+            echo "La release anterior ya usaba imágenes compartidas."
+          fi
+
+          # Incorpora assets del repo (placeholders / nuevos archivos) sin borrar
+          # las fotos ya subidas en shared/images.
+          if [ -d "$RELEASE_DIR/public/images" ] &&
+             [ ! -L "$RELEASE_DIR/public/images" ]; then
+            rsync -a "$RELEASE_DIR/public/images/" "$SHARED_IMAGES/"
+            rm -rf "$RELEASE_DIR/public/images"
+          fi
+
+          mkdir -p "$RELEASE_DIR/public"
+          ln -sfn "$SHARED_IMAGES" "$RELEASE_DIR/public/images"
+
+          if [ ! -e "$RELEASE_DIR/public/images" ]; then
+            echo "ERROR: no se pudo vincular public/images -> $SHARED_IMAGES"
+            exit 1
+          fi
+
+          echo "Imágenes compartidas: $SHARED_IMAGES"
+          echo "Symlink activo: $(readlink -f "$RELEASE_DIR/public/images")"
 
           echo "===== VINCULANDO VARIABLES ====="
 
@@ -260,10 +300,6 @@ jobs:
             echo "ERROR: npm run build no generó la carpeta .next."
             exit 1
           fi
-
-          PREVIOUS_RELEASE="$(
-            readlink -f "$ROOT/current" 2>/dev/null || true
-          )"
 
           echo "===== ACTIVANDO NUEVA VERSIÓN ====="
 
@@ -360,6 +396,7 @@ jobs:
           echo "ITVAL se desplegó correctamente."
           echo "Usuario Linux: $(id -un)"
           echo "Carpeta activa: $(readlink -f "$ROOT/current")"
+          echo "Imágenes persistentes: $(readlink -f "$ROOT/current/public/images")"
           echo "Aplicación interna: http://localhost:3001/es"
           echo "Base de datos: itval_db"
           echo "Usuario PostgreSQL: itval_app"

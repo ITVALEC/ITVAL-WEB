@@ -47,7 +47,9 @@ function publicPathFromSrc(src: string): string {
   }
   const full = path.join(root, "public", normalized);
   const resolved = path.resolve(full);
-  if (!resolved.startsWith(path.resolve(PUBLIC_IMAGES))) {
+  const imagesRoot = path.resolve(PUBLIC_IMAGES);
+  const relative = path.relative(imagesRoot, resolved);
+  if (relative.startsWith("..") || path.isAbsolute(relative)) {
     throw new Error("Ruta fuera del directorio de imágenes.");
   }
   return resolved;
@@ -365,9 +367,15 @@ export async function replaceMediaImage(
   let targetSrc = item.src;
 
   if (path.extname(item.src).toLowerCase() !== ext) {
+    const previousSrc = item.src;
     const base = item.src.replace(/\.[^.]+$/, "");
     targetSrc = `${base}${ext}`;
     await updateMediaSrc(item, targetSrc);
+    try {
+      fs.unlinkSync(publicPathFromSrc(previousSrc));
+    } catch {
+      /* archivo anterior ausente */
+    }
   }
 
   replaceImageAtSrc(targetSrc, buffer);
@@ -446,7 +454,7 @@ export async function addProjectImage(
 ): Promise<AdminMediaItem> {
   const ext = extFromName(originalName);
   const base = sanitizeBaseName(path.basename(originalName, ext));
-  const fileName = `${base}${ext}`;
+  const fileName = `${base}-${Date.now()}${ext}`;
   const publicSrc = `/images/projects/${projectId}/${fileName}`;
 
   writeImageFile(buffer, publicSrc);
@@ -512,7 +520,7 @@ export async function addProductImage(
 ): Promise<AdminMediaItem> {
   const ext = extFromName(originalName);
   const base = sanitizeBaseName(path.basename(originalName, ext));
-  const fileName = `${base}${ext}`;
+  const fileName = `${base}-${Date.now()}${ext}`;
   const publicSrc = `/images/products/gallery/${category}/${subcategory}/${fileName}`;
 
   writeImageFile(buffer, publicSrc);
