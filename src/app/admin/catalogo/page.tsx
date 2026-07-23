@@ -29,6 +29,7 @@ import type {
   CatalogSubcategoryItem,
   CatalogFilterOptions,
   CatalogFilterSelection,
+  CatalogHubTexts,
 } from "@/app/api/admin/catalog/route";
 
 type EditTarget =
@@ -110,6 +111,12 @@ function suggestKey(label: string): string {
 
 export default function AdminCatalogoPage() {
   const [categories, setCategories] = useState<CatalogCategoryItem[]>([]);
+  const [hub, setHub] = useState<CatalogHubTexts | null>(null);
+  const [hubLocale, setHubLocale] = useState<"es" | "en">("es");
+  const [hubTitleEs, setHubTitleEs] = useState("");
+  const [hubTitleEn, setHubTitleEn] = useState("");
+  const [hubSubtitleEs, setHubSubtitleEs] = useState("");
+  const [hubSubtitleEn, setHubSubtitleEn] = useState("");
   const [filterOptions, setFilterOptions] = useState<CatalogFilterOptions | null>(null);
   const [editFilters, setEditFilters] = useState<CatalogFilterSelection>(EMPTY_FILTERS);
   const [newCatGroup, setNewCatGroup] = useState("other");
@@ -139,6 +146,13 @@ export default function AdminCatalogoPage() {
       const data = await res.json();
       setCategories(data.categories);
       setFilterOptions(data.filterOptions ?? null);
+      if (data.hub) {
+        setHub(data.hub);
+        setHubTitleEs(data.hub.titleEs ?? "");
+        setHubTitleEn(data.hub.titleEn ?? "");
+        setHubSubtitleEs(data.hub.subtitleEs ?? "");
+        setHubSubtitleEn(data.hub.subtitleEn ?? "");
+      }
       setSelectedCategory((current) => current ?? data.categories[0]?.key ?? null);
     } else {
       setFeedback({ type: "error", message: "No se pudo cargar el catálogo." });
@@ -185,6 +199,34 @@ export default function AdminCatalogoPage() {
 
   function closeEdit() {
     setEditing(null);
+  }
+
+  async function saveHub(event: React.FormEvent) {
+    event.preventDefault();
+    setSaving(true);
+    const res = await fetch("/api/admin/catalog", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: "hub",
+        titleEs: hubTitleEs,
+        titleEn: hubTitleEn,
+        subtitleEs: hubSubtitleEs,
+        subtitleEn: hubSubtitleEn,
+      }),
+    });
+    setSaving(false);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.hub) setHub(data.hub);
+      setFeedback({
+        type: "success",
+        message: "Textos de la página Productos actualizados.",
+      });
+    } else {
+      const data = await res.json();
+      setFeedback({ type: "error", message: data.error ?? "No se pudo guardar." });
+    }
   }
 
   async function saveEdit(event: React.FormEvent) {
@@ -336,6 +378,80 @@ export default function AdminCatalogoPage() {
         />
 
         {feedback ? <AdminStatusMessage type={feedback.type} message={feedback.message} /> : null}
+
+        {hub ? (
+          <form
+            onSubmit={saveHub}
+            className="mb-6 space-y-4 rounded-xl border border-grey/20 bg-white p-4"
+          >
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <h3 className="text-base font-semibold text-navy">Página Productos (hero)</h3>
+                <p className="mt-1 text-sm text-grey-dark">
+                  Título y descripción del encabezado. Los botones de fachadas, ventanas, puertas, etc.
+                  se generan solos desde las líneas del catálogo.
+                </p>
+              </div>
+              <AdminButton type="submit" disabled={saving}>
+                {saving ? "Guardando…" : "Guardar textos"}
+              </AdminButton>
+            </div>
+            <AdminTabList
+              label="Idioma del hero"
+              value={hubLocale}
+              onChange={setHubLocale}
+              options={[
+                { value: "es", label: "Español" },
+                { value: "en", label: "Inglés" },
+              ]}
+            />
+            {hubLocale === "es" ? (
+              <>
+                <AdminField label="Título (ES)" htmlFor="hub-title-es">
+                  <input
+                    id="hub-title-es"
+                    type="text"
+                    value={hubTitleEs}
+                    onChange={(e) => setHubTitleEs(e.target.value)}
+                    className={adminInputClass}
+                    required
+                  />
+                </AdminField>
+                <AdminField label="Descripción (ES)" htmlFor="hub-sub-es">
+                  <textarea
+                    id="hub-sub-es"
+                    value={hubSubtitleEs}
+                    onChange={(e) => setHubSubtitleEs(e.target.value)}
+                    className={adminTextareaClass}
+                    rows={3}
+                  />
+                </AdminField>
+              </>
+            ) : (
+              <>
+                <AdminField label="Título (EN)" htmlFor="hub-title-en">
+                  <input
+                    id="hub-title-en"
+                    type="text"
+                    value={hubTitleEn}
+                    onChange={(e) => setHubTitleEn(e.target.value)}
+                    className={adminInputClass}
+                    required
+                  />
+                </AdminField>
+                <AdminField label="Descripción (EN)" htmlFor="hub-sub-en">
+                  <textarea
+                    id="hub-sub-en"
+                    value={hubSubtitleEn}
+                    onChange={(e) => setHubSubtitleEn(e.target.value)}
+                    className={adminTextareaClass}
+                    rows={3}
+                  />
+                </AdminField>
+              </>
+            )}
+          </form>
+        ) : null}
 
         <div className="mb-4">
           <AdminSearchField

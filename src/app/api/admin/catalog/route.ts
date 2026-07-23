@@ -4,11 +4,14 @@ import {
   listCatalogTree,
   listProjectCategoryOptions,
   listCatalogFilterOptions,
+  getCatalogHub,
+  updateCatalogHub,
   updateCatalogEntry,
   updateCatalogFilters,
   addCategory,
   addSubcategory,
   type CatalogFilterSelection,
+  type CatalogHubTexts,
 } from "@/lib/admin/catalog-service";
 
 export type {
@@ -16,6 +19,7 @@ export type {
   CatalogSubcategoryItem,
   CatalogFilterSelection,
   CatalogFilterOptions,
+  CatalogHubTexts,
 } from "@/lib/admin/catalog-service";
 
 export async function GET(request: Request) {
@@ -29,8 +33,10 @@ export async function GET(request: Request) {
   }
 
   const categories = await listCatalogTree();
+  const hub = await getCatalogHub();
   return NextResponse.json({
     categories,
+    hub,
     filterOptions: await listCatalogFilterOptions(),
   });
 }
@@ -41,22 +47,46 @@ export async function PATCH(request: Request) {
   }
 
   const body = (await request.json()) as {
-    type: "category" | "subcategory";
-    categoryKey: string;
+    type: "category" | "subcategory" | "hub";
+    categoryKey?: string;
     subcategoryKey?: string;
     titleEs?: string;
     titleEn?: string;
     descriptionEs?: string;
     descriptionEn?: string;
+    subtitleEs?: string;
+    subtitleEn?: string;
     filters?: Partial<CatalogFilterSelection>;
   };
 
-  if (!body.categoryKey || !body.type) {
+  if (!body.type) {
     return NextResponse.json({ error: "Datos incompletos" }, { status: 400 });
   }
 
   try {
-    await updateCatalogEntry(body);
+    if (body.type === "hub") {
+      await updateCatalogHub({
+        titleEs: body.titleEs,
+        titleEn: body.titleEn,
+        subtitleEs: body.subtitleEs,
+        subtitleEn: body.subtitleEn,
+      });
+      return NextResponse.json({ ok: true, hub: await getCatalogHub() });
+    }
+
+    if (!body.categoryKey) {
+      return NextResponse.json({ error: "Datos incompletos" }, { status: 400 });
+    }
+
+    await updateCatalogEntry({
+      type: body.type,
+      categoryKey: body.categoryKey,
+      subcategoryKey: body.subcategoryKey,
+      titleEs: body.titleEs,
+      titleEn: body.titleEn,
+      descriptionEs: body.descriptionEs,
+      descriptionEn: body.descriptionEn,
+    });
 
     if (body.filters) {
       await updateCatalogFilters({

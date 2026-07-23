@@ -64,13 +64,18 @@ export async function ProductDetailView({
             src={heroImage}
             alt={tSub(`${subcategory}.title`)}
             fill
-            className="object-cover object-center opacity-40"
+            className="object-cover object-center saturate-[0.55]"
             sizes="(max-width: 1280px) 100vw, 1280px"
             loading="eager"
           />
         )}
+        <div className="absolute inset-0 bg-navy/70" aria-hidden="true" />
         <div
-          className={`absolute inset-0 ${heroImage ? "bg-navy/80" : ""}`}
+          className={`absolute inset-0 ${heroImage ? "bg-gradient-to-r from-navy/95 via-navy/85 to-navy/65" : ""}`}
+          aria-hidden="true"
+        />
+        <div
+          className="absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/20 to-navy/45"
           aria-hidden="true"
         />
         <Container className="relative z-10">

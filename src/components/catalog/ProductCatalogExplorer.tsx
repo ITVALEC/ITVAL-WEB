@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, useId } from "react";
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/layout/Container";
 import { ProductSolutionCard } from "@/components/catalog/ProductSolutionCard";
@@ -35,12 +36,30 @@ function pillClass(active: boolean): string {
 const selectClass =
   "mt-1 block w-full rounded-md border border-grey/40 bg-white px-3 py-2.5 text-sm text-navy focus:border-cornflower focus:outline-none focus:ring-2 focus:ring-cornflower/30";
 
-export function ProductCatalogExplorer() {
+function isPrimaryGroup(value: string | null | undefined): value is PrimaryGroup {
+  return Boolean(value && (PRIMARY_GROUPS as readonly string[]).includes(value));
+}
+
+type ProductCatalogExplorerProps = {
+  initialPrimary?: string;
+};
+
+export function ProductCatalogExplorer({
+  initialPrimary,
+}: ProductCatalogExplorerProps) {
   const t = useTranslations(`${CATALOG_NS}.explorer`);
   const products = useProductCatalogData();
+  const searchParams = useSearchParams();
+
+  const primaryFromUrl = searchParams.get("primary");
+  const resolvedInitial: PrimaryGroup = isPrimaryGroup(primaryFromUrl)
+    ? primaryFromUrl
+    : isPrimaryGroup(initialPrimary)
+      ? initialPrimary
+      : "all";
 
   const [query, setQuery] = useState("");
-  const [primary, setPrimary] = useState<PrimaryGroup>("all");
+  const [primary, setPrimary] = useState<PrimaryGroup>(resolvedInitial);
   const [sector, setSector] = useState<SecondaryFilter>("all");
   const [material, setMaterial] = useState<SecondaryFilter>("all");
   const [system, setSystem] = useState<SecondaryFilter>("all");
@@ -50,6 +69,13 @@ export function ProductCatalogExplorer() {
   const searchId = useId();
   const resultsId = useId();
   const resultsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isPrimaryGroup(primaryFromUrl) && primaryFromUrl !== primary) {
+      setPrimary(primaryFromUrl);
+      setPage(1);
+    }
+  }, [primaryFromUrl, primary]);
 
   const trimmedQuery = query.trim();
 
@@ -226,7 +252,11 @@ export function ProductCatalogExplorer() {
   );
 
   return (
-    <section className="py-12 lg:py-16" aria-labelledby="catalog-explorer-heading">
+    <section
+      id="catalog-explorer"
+      className="scroll-mt-24 py-12 lg:py-16"
+      aria-labelledby="catalog-explorer-heading"
+    >
       <Container>
         <h2 id="catalog-explorer-heading" className="sr-only">
           {t("sectionTitle")}

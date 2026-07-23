@@ -1,7 +1,9 @@
+import { Suspense } from "react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { createPageMetadata, type LocalePageProps } from "@/lib/metadata";
 import { PageHero } from "@/components/sections/PageHero";
 import { ProductCatalogExplorer } from "@/components/catalog/ProductCatalogExplorer";
+import { CatalogQuickLinks } from "@/components/catalog/CatalogQuickLinks";
 import { IMAGES } from "@/lib/assets";
 import { breadcrumbTrail } from "@/lib/breadcrumbs";
 import { CATALOG_NS } from "@/lib/i18n/namespaces";
@@ -11,8 +13,16 @@ export async function generateMetadata({ params }: LocalePageProps) {
   return createPageMetadata(locale, "metadata.products");
 }
 
-export default async function ProductsHubPage({ params }: LocalePageProps) {
+type ProductsHubPageProps = LocalePageProps & {
+  searchParams: Promise<{ primary?: string }>;
+};
+
+export default async function ProductsHubPage({
+  params,
+  searchParams,
+}: ProductsHubPageProps) {
   const { locale } = await params;
+  const { primary } = await searchParams;
   setRequestLocale(locale);
 
   const t = await getTranslations({ locale, namespace: `${CATALOG_NS}.hub` });
@@ -30,8 +40,11 @@ export default async function ProductsHubPage({ params }: LocalePageProps) {
         breadcrumbs={breadcrumbTrail(tNav("home"), [
           { label: tNav("products") },
         ])}
+        actions={<CatalogQuickLinks active={primary} />}
       />
-      <ProductCatalogExplorer />
+      <Suspense fallback={null}>
+        <ProductCatalogExplorer initialPrimary={primary} />
+      </Suspense>
     </>
   );
 }

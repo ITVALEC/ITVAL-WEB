@@ -218,8 +218,8 @@ function buildLocale(locale) {
     hub: {
       title: isEs ? "Productos" : "Products",
       subtitle: isEs
-        ? "Explore soluciones por categoría: fachadas, cancelería, seguridad, exteriores y más."
-        : "Explore solutions by category: facades, fenestration, security, exteriors and more.",
+        ? "Elija una línea para previsualizar soluciones: fachadas, ventanas, puertas y más."
+        : "Choose a line to preview solutions: facades, windows, doors and more.",
       viewCategory: isEs ? "Ver categoría" : "View category",
       viewDetail: isEs ? "Ver ficha" : "View details",
     },

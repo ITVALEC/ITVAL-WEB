@@ -476,6 +476,43 @@ export async function updateCatalogEntry(patch: {
   await writeCatalog("en", en);
 }
 
+export type CatalogHubTexts = {
+  titleEs: string;
+  titleEn: string;
+  subtitleEs: string;
+  subtitleEn: string;
+};
+
+export async function getCatalogHub(): Promise<CatalogHubTexts> {
+  const es = await readFullCatalog("es");
+  const en = await readFullCatalog("en");
+  const hubEs = (es.hub ?? {}) as { title?: string; subtitle?: string };
+  const hubEn = (en.hub ?? {}) as { title?: string; subtitle?: string };
+  return {
+    titleEs: hubEs.title ?? "Productos",
+    titleEn: hubEn.title ?? "Products",
+    subtitleEs: hubEs.subtitle ?? "",
+    subtitleEn: hubEn.subtitle ?? "",
+  };
+}
+
+export async function updateCatalogHub(patch: Partial<CatalogHubTexts>): Promise<void> {
+  for (const locale of ["es", "en"] as const) {
+    const full = await readFullCatalog(locale);
+    const hub = {
+      ...((full.hub ?? {}) as Record<string, unknown>),
+    };
+    if (locale === "es") {
+      if (patch.titleEs != null) hub.title = patch.titleEs.trim();
+      if (patch.subtitleEs != null) hub.subtitle = patch.subtitleEs.trim();
+    } else {
+      if (patch.titleEn != null) hub.title = patch.titleEn.trim();
+      if (patch.subtitleEn != null) hub.subtitle = patch.subtitleEn.trim();
+    }
+    await writeFullCatalog(locale, { ...full, hub });
+  }
+}
+
 export async function listProjectCategoryOptions(): Promise<{ value: string; label: string }[]> {
   const [es, tax] = await Promise.all([readCatalog("es"), readTaxonomy()]);
   return Object.keys(tax).map((key) => ({
