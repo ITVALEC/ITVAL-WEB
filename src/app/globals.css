@@ -55,11 +55,31 @@
     animation-delay: 0.36s;
   }
 
+  @keyframes hero-scroll-cue {
+    0%,
+    100% {
+      transform: translateY(0);
+      opacity: 0.85;
+    }
+    50% {
+      transform: translateY(6px);
+      opacity: 1;
+    }
+  }
+
+  .hero-scroll-cue {
+    animation: hero-scroll-cue 2.4s ease-in-out infinite;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .hero-reveal {
       animation: none;
       opacity: 1;
       transform: none;
+    }
+
+    .hero-scroll-cue {
+      animation: none;
     }
   }
 

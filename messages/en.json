@@ -25,6 +25,7 @@
     "skipToContent": "Skip to content",
     "quoteNow": "Get a quote",
     "learnMore": "Learn more",
+    "viewProducts": "View products",
     "viewAllProjects": "View all projects",
     "loading": "Sending…",
     "openMenu": "Open menu",
@@ -47,6 +48,8 @@
   "hero": {
     "title": "Landmark and complex projects: engineering at scale",
     "subtitle": "We design, manufacture and install aluminum and glass solutions for large-scale structures: unitized facades, curtain walls and high-performance architectural fenestration.",
+    "seeMore": "See more",
+    "seeMoreAria": "Scroll to the next section",
     "technicalBox1Title": "Unitized facade",
     "technicalBox1Desc": "Prefabricated modular systems for fast on-site installation with millimeter dimensional control.",
     "technicalBox2Title": "Structural curtain wall",

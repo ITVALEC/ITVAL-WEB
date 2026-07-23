@@ -3,6 +3,7 @@ import { Container } from "@/components/layout/Container";
 import { ButtonLink } from "@/components/ui/Button";
 import { HeroCarousel } from "@/components/sections/HeroCarousel";
 import { HeroTaglines } from "@/components/sections/HeroTaglines";
+import { HeroScrollCue } from "@/components/sections/HeroScrollCue";
 import { NAV_PATHS } from "@/lib/constants";
 import { HERO_TAGLINE_KEYS } from "@/lib/content-keys";
 import { getHeroBackgroundSources } from "@/lib/hero-images";
@@ -13,6 +14,7 @@ const heroTextShadow =
 export function Hero() {
   const t = useTranslations("hero");
   const tc = useTranslations("common");
+  const tNav = useTranslations("nav");
 
   const backgroundImages = getHeroBackgroundSources().map((src) => ({
     src,
@@ -46,7 +48,7 @@ export function Hero() {
         aria-hidden="true"
       />
 
-      <Container className="relative z-10 flex min-h-screen flex-col justify-center pb-16 pt-24 lg:pb-24 lg:pt-28">
+      <Container className="relative z-10 flex min-h-screen flex-col justify-center pb-24 pt-24 lg:pb-28 lg:pt-28">
         <div className="max-w-3xl">
           <h1
             className="hero-reveal text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl"
@@ -68,11 +70,13 @@ export function Hero() {
               {tc("quoteNow")}
             </ButtonLink>
             <ButtonLink href={NAV_PATHS.products} variant="secondary">
-              {tc("learnMore")}
+              {tNav("products")}
             </ButtonLink>
           </div>
         </div>
       </Container>
+
+      <HeroScrollCue />
     </section>
   );
 }
