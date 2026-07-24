@@ -8,11 +8,12 @@ import { type ProductKey } from "@/lib/catalog";
 
 type CategoryCardProps = {
   category: ProductKey;
+  imageSrc?: string;
 };
 
-export function CategoryCard({ category }: CategoryCardProps) {
+export function CategoryCard({ category, imageSrc: imageSrcProp }: CategoryCardProps) {
   const t = useTranslations(CATALOG_NS);
-  const imageSrc = getProductImage(category);
+  const imageSrc = imageSrcProp ?? getProductImage(category);
 
   return (
     <AppLink

@@ -13,6 +13,13 @@ import {
   type CatalogFilterSelection,
   type CatalogHubTexts,
 } from "@/lib/admin/catalog-service";
+import { revalidatePublicCatalog } from "@/lib/catalog/revalidate-public";
+import { syncDatabaseToJson } from "@/lib/db/sync-json";
+
+async function afterCatalogMutation() {
+  await syncDatabaseToJson();
+  revalidatePublicCatalog();
+}
 
 export type {
   CatalogCategoryItem,
@@ -71,6 +78,7 @@ export async function PATCH(request: Request) {
         subtitleEs: body.subtitleEs,
         subtitleEn: body.subtitleEn,
       });
+      await afterCatalogMutation();
       return NextResponse.json({ ok: true, hub: await getCatalogHub() });
     }
 
@@ -104,6 +112,7 @@ export async function PATCH(request: Request) {
             .find((c) => c.key === body.categoryKey)
             ?.subcategories.find((s) => s.key === body.subcategoryKey);
 
+    await afterCatalogMutation();
     return NextResponse.json({ ok: true, item: updated });
   } catch (error) {
     return NextResponse.json(
@@ -169,6 +178,7 @@ export async function POST(request: Request) {
     }
 
     const categories = await listCatalogTree();
+    await afterCatalogMutation();
     return NextResponse.json({ ok: true, categories });
   } catch (error) {
     return NextResponse.json(

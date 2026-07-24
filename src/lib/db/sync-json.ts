@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import path from "node:path";
 import { isDatabaseEnabled, query } from "@/lib/db/pool";
 import { listProjectsFromDb } from "@/lib/db/repositories/projects";
 import { MANIFEST_PATHS } from "@/lib/admin/manifests";
@@ -7,6 +8,16 @@ const root = process.cwd();
 
 function writeJson(filePath: string, data: unknown) {
   fs.writeFileSync(filePath, `${JSON.stringify(data, null, 2)}\n`, "utf8");
+}
+
+async function exportAppDocument(key: string, filePath: string): Promise<void> {
+  const { rows } = await query<{ data: unknown }>(
+    `SELECT data FROM app_documents WHERE key = $1 LIMIT 1`,
+    [key],
+  );
+  if (rows[0]?.data != null) {
+    writeJson(filePath, rows[0].data);
+  }
 }
 
 /** Sincroniza PostgreSQL → archivos JSON que usa el sitio estático. */
@@ -26,6 +37,18 @@ export async function syncDatabaseToJson(): Promise<void> {
     projects,
   });
 
+  // Textos y config del catálogo (lo que edita el admin).
+  await exportAppDocument(
+    "catalogContentEs",
+    path.join(root, "messages/products-catalog/es.json"),
+  );
+  await exportAppDocument(
+    "catalogContentEn",
+    path.join(root, "messages/products-catalog/en.json"),
+  );
+  await exportAppDocument("taxonomy", MANIFEST_PATHS.taxonomy);
+  await exportAppDocument("filterConfig", MANIFEST_PATHS.filters);
+
   const { rows: productRows } = await query<{
     category: string;
     subcategory: string;
@@ -38,9 +61,23 @@ export async function syncDatabaseToJson(): Promise<void> {
      FROM product_gallery_images ORDER BY category, subcategory, sort_order`,
   );
 
-  const existing = JSON.parse(
-    fs.readFileSync(MANIFEST_PATHS.products, "utf8"),
-  ) as Record<string, unknown>;
+  let existing: Record<string, unknown> = {};
+  try {
+    existing = JSON.parse(fs.readFileSync(MANIFEST_PATHS.products, "utf8")) as Record<
+      string,
+      unknown
+    >;
+  } catch {
+    existing = {};
+  }
+
+  // Preferir documento productImages de app_documents (portadas + estructura).
+  const { rows: productDocRows } = await query<{ data: Record<string, unknown> }>(
+    `SELECT data FROM app_documents WHERE key = 'productImages' LIMIT 1`,
+  );
+  if (productDocRows[0]?.data) {
+    existing = { ...existing, ...productDocRows[0].data };
+  }
 
   const galleries: Record<
     string,

@@ -7,6 +7,8 @@ import { CatalogQuickLinks } from "@/components/catalog/CatalogQuickLinks";
 import { IMAGES } from "@/lib/assets";
 import { breadcrumbTrail } from "@/lib/breadcrumbs";
 import { CATALOG_NS } from "@/lib/i18n/namespaces";
+import { loadFilterConfig } from "@/lib/catalog/filter-config.server";
+import { loadProductImagesManifest } from "@/lib/catalog/product-images.server";
 
 export async function generateMetadata({ params }: LocalePageProps) {
   const { locale } = await params;
@@ -29,6 +31,11 @@ export default async function ProductsHubPage({
   const tNav = await getTranslations({ locale, namespace: "nav" });
   const tCommon = await getTranslations({ locale, namespace: "common" });
 
+  const [filterConfig, imageManifest] = await Promise.all([
+    loadFilterConfig(),
+    loadProductImagesManifest(),
+  ]);
+
   return (
     <>
       <PageHero
@@ -43,7 +50,14 @@ export default async function ProductsHubPage({
         actions={<CatalogQuickLinks active={primary} />}
       />
       <Suspense fallback={null}>
-        <ProductCatalogExplorer initialPrimary={primary} />
+        <ProductCatalogExplorer
+          initialPrimary={primary}
+          filterConfig={filterConfig}
+          imageManifest={{
+            categories: imageManifest.categories,
+            subcategories: imageManifest.subcategories,
+          }}
+        />
       </Suspense>
     </>
   );

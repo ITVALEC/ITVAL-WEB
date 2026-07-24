@@ -343,6 +343,8 @@ async function afterMutation() {
   if (isDatabaseEnabled()) {
     await syncDatabaseToJson();
   }
+  const { revalidatePublicCatalog } = await import("@/lib/catalog/revalidate-public");
+  revalidatePublicCatalog();
 }
 
 export async function updateMediaCaption(item: AdminMediaItem, caption: string): Promise<void> {
@@ -384,6 +386,8 @@ export async function updateMediaCaption(item: AdminMediaItem, caption: string):
     if (!gallery?.[item.productIndex]) throw new Error("Imagen no encontrada.");
     gallery[item.productIndex].caption = caption.trim();
     writeJsonFile(MANIFEST_PATHS.products, data);
+    const { revalidatePublicCatalog } = await import("@/lib/catalog/revalidate-public");
+    revalidatePublicCatalog();
   }
 }
 

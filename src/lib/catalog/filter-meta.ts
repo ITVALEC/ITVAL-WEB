@@ -35,7 +35,7 @@ type SubcategoryFilterConfig = CategoryFilterConfig & {
   tags?: readonly string[];
 };
 
-type FilterConfigFile = {
+export type FilterConfigFile = {
   categories: Record<string, CategoryFilterConfig>;
   subcategories: Record<string, Record<string, SubcategoryFilterConfig>>;
 };
@@ -79,9 +79,10 @@ function sanitizePrimaryGroup(
 export function getProductFilterMeta(
   category: ProductKey,
   subcategory: string,
+  config: FilterConfigFile = CONFIG,
 ): ProductFilterMeta {
-  const base = CONFIG.categories[category] ?? {};
-  const override = CONFIG.subcategories[category]?.[subcategory] ?? {};
+  const base = config.categories[category] ?? {};
+  const override = config.subcategories[category]?.[subcategory] ?? {};
 
   return {
     primaryGroup:
@@ -110,9 +111,10 @@ export function getProductFilterMeta(
 
 export function getPrimaryGroupForCategory(
   category: ProductKey,
+  config: FilterConfigFile = CONFIG,
 ): Exclude<PrimaryGroup, "all"> {
   return (
-    sanitizePrimaryGroup(CONFIG.categories[category]?.primaryGroup) ??
+    sanitizePrimaryGroup(config.categories[category]?.primaryGroup) ??
     DEFAULT_META.primaryGroup
   );
 }

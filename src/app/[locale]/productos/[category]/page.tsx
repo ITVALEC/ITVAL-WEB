@@ -9,7 +9,7 @@ import {
   isProductCategory,
 } from "@/lib/catalog";
 import { NAV_PATHS } from "@/lib/routes";
-import { getProductImage } from "@/lib/assets";
+import { getProductImageLive } from "@/lib/catalog/product-images.server";
 import { breadcrumbTrail } from "@/lib/breadcrumbs";
 import { CATALOG_NS } from "@/lib/i18n/namespaces";
 import { type ProductKey } from "@/lib/catalog";
@@ -52,13 +52,14 @@ export default async function ProductCategoryPage({ params }: PageProps) {
   const tCommon = await getTranslations({ locale, namespace: "common" });
 
   const subcategories = getPublishedProductSubcategories(category);
+  const categoryImage = await getProductImageLive(category);
 
   return (
     <>
       <PageHero
         title={tCat(`${category}.title`)}
         subtitle={tCat(`${category}.description`)}
-        image={getProductImage(category) ?? undefined}
+        image={categoryImage ?? undefined}
         imageAlt={tCat(`${category}.title`)}
         breadcrumbAriaLabel={tCommon("breadcrumbNav")}
         breadcrumbs={breadcrumbTrail(tNav("home"), [

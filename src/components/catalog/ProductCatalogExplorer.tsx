@@ -22,6 +22,8 @@ import {
   type SectorKey,
   type SystemKey,
 } from "@/lib/catalog/filter-keys";
+import type { FilterConfigFile } from "@/lib/catalog/filter-meta";
+import type { ProductKey } from "@/lib/catalog/types";
 
 type SecondaryFilter = "all" | string;
 
@@ -40,15 +42,24 @@ function isPrimaryGroup(value: string | null | undefined): value is PrimaryGroup
   return Boolean(value && (PRIMARY_GROUPS as readonly string[]).includes(value));
 }
 
+export type CatalogImageManifest = {
+  categories?: Partial<Record<ProductKey, string>>;
+  subcategories?: Partial<Record<ProductKey, Partial<Record<string, string>>>>;
+};
+
 type ProductCatalogExplorerProps = {
   initialPrimary?: string;
+  filterConfig?: FilterConfigFile;
+  imageManifest?: CatalogImageManifest;
 };
 
 export function ProductCatalogExplorer({
   initialPrimary,
+  filterConfig,
+  imageManifest,
 }: ProductCatalogExplorerProps) {
   const t = useTranslations(`${CATALOG_NS}.explorer`);
-  const products = useProductCatalogData();
+  const products = useProductCatalogData(filterConfig);
   const searchParams = useSearchParams();
 
   const primaryFromUrl = searchParams.get("primary");
@@ -396,6 +407,11 @@ export function ProductCatalogExplorer({
                     <ProductSolutionCard
                       category={item.category}
                       subcategory={item.subcategory}
+                      imageSrc={
+                        imageManifest?.subcategories?.[item.category]?.[
+                          item.subcategory
+                        ]
+                      }
                     />
                   </li>
                 ))}

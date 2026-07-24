@@ -7,7 +7,11 @@ import { ProjectCard } from "@/components/ui/ProjectCard";
 import { ButtonLink } from "@/components/ui/Button";
 import { PRODUCT_LIST_ITEM_KEYS } from "@/lib/content-keys";
 import { getProjectsForProductSubcategory } from "@/lib/catalog";
-import { getProductImage, getProductOnlyGallery, getProjectReferenceGallery } from "@/lib/assets";
+import {
+  getProductImageLive,
+  getProductOnlyGalleryLive,
+  getProjectReferenceGalleryLive,
+} from "@/lib/catalog/product-images.server";
 import { ProductGallery } from "@/components/catalog/ProductGallery";
 import { ProductPreviewCarousel } from "@/components/catalog/ProductPreviewCarousel";
 import { breadcrumbTrail, productCategoryPath } from "@/lib/breadcrumbs";
@@ -41,9 +45,9 @@ export async function ProductDetailView({
   const tCommon = await getTranslations({ locale, namespace: "common" });
 
   const relatedProjects = getProjectsForProductSubcategory(subcategory);
-  const heroImage = getProductImage(category, subcategory);
-  const productGalleryImages = getProductOnlyGallery(category, subcategory);
-  const worksGallery = getProjectReferenceGallery(category, subcategory);
+  const heroImage = await getProductImageLive(category, subcategory);
+  const productGalleryImages = await getProductOnlyGalleryLive(category, subcategory);
+  const worksGallery = await getProjectReferenceGalleryLive(category, subcategory);
 
   const subtitle = tSub(`${subcategory}.title`);
   const previewImages = [

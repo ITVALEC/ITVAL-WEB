@@ -9,11 +9,14 @@ import { type ProductKey } from "@/lib/catalog/types";
 type ProductSolutionCardProps = {
   category: ProductKey;
   subcategory: string;
+  /** URL viva desde el servidor; si falta, se usa el manifiesto del build. */
+  imageSrc?: string;
 };
 
 export function ProductSolutionCard({
   category,
   subcategory,
+  imageSrc: imageSrcProp,
 }: ProductSolutionCardProps) {
   const t = useTranslations(CATALOG_NS);
   const title = t(`subcategories.${category}.${subcategory}.title`);
@@ -21,7 +24,7 @@ export function ProductSolutionCard({
     `subcategories.${category}.${subcategory}.description`,
   );
   const categoryLabel = t(`categories.${category}.title`);
-  const imageSrc = getProductImage(category, subcategory);
+  const imageSrc = imageSrcProp ?? getProductImage(category, subcategory);
 
   return (
     <AppLink

@@ -4,6 +4,7 @@ import { PRODUCT_LIST_ITEM_KEYS } from "@/lib/content-keys";
 import { CATALOG_NS } from "@/lib/i18n/namespaces";
 import {
   getProductFilterMeta,
+  type FilterConfigFile,
   type ProductFilterMeta,
 } from "@/lib/catalog/filter-meta";
 import { listPublishedProductEntries } from "@/lib/catalog/queries";
@@ -17,12 +18,14 @@ export type ProductIndexItem = {
   searchText: string;
 };
 
-export function useProductCatalogData(): ProductIndexItem[] {
+export function useProductCatalogData(
+  filterConfig?: FilterConfigFile,
+): ProductIndexItem[] {
   const t = useTranslations(CATALOG_NS);
 
   return useMemo(() => {
     return listPublishedProductEntries().map(({ category, subcategory }) => {
-      const meta = getProductFilterMeta(category, subcategory);
+      const meta = getProductFilterMeta(category, subcategory, filterConfig);
 
       const title = t(`subcategories.${category}.${subcategory}.title`);
       const description = t(
@@ -62,7 +65,7 @@ export function useProductCatalogData(): ProductIndexItem[] {
 
       return { category, subcategory, meta, searchText };
     });
-  }, [t]);
+  }, [t, filterConfig]);
 }
 
 export function productEntryId(item: Pick<ProductIndexItem, "category" | "subcategory">): string {
