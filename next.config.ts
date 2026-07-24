@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
   },
+  serverExternalPackages: ["pg", "mongodb"],
 };
 
 export default withNextIntl(nextConfig);

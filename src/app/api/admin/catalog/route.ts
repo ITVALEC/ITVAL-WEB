@@ -11,7 +11,6 @@ import {
   addCategory,
   addSubcategory,
   type CatalogFilterSelection,
-  type CatalogHubTexts,
 } from "@/lib/admin/catalog-service";
 import { revalidatePublicCatalog } from "@/lib/catalog/revalidate-public";
 import { syncDatabaseToJson } from "@/lib/db/sync-json";
