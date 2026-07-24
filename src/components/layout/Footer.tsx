@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { Link } from "@/i18n/routing";
+import { Link } from "@/i18n/navigation";
 import { Container } from "./Container";
 import { ButtonLink } from "@/components/ui/Button";
 import { buildNavItems } from "@/lib/nav";

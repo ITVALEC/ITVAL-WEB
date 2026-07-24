@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Link, usePathname } from "@/i18n/routing";
+import { Link, usePathname } from "@/i18n/navigation";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ButtonLink } from "@/components/ui/Button";
 import { buildNavItems } from "@/lib/nav";

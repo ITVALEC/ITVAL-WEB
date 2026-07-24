@@ -1,5 +1,6 @@
 import { type ComponentProps, type ComponentPropsWithoutRef } from "react";
-import { Link, type Pathnames } from "@/i18n/routing";
+import { Link } from "@/i18n/navigation";
+import { type Pathnames } from "@/i18n/routing";
 
 export type ButtonVariant = "primary" | "secondary" | "ghost";
 

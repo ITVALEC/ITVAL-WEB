@@ -1,4 +1,4 @@
-import { Link } from "@/i18n/routing";
+import { Link } from "@/i18n/navigation";
 import { type ComponentProps } from "react";
 
 type AppLinkProps = Omit<ComponentProps<typeof Link>, "href"> & {

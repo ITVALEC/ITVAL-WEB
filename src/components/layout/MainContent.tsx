@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "@/i18n/routing";
+import { usePathname } from "@/i18n/navigation";
 import { NAV_PATHS } from "@/lib/constants";
 import { type ReactNode } from "react";
 

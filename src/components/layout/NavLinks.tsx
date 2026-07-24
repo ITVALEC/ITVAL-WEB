@@ -1,4 +1,5 @@
-import { Link, type Pathnames } from "@/i18n/routing";
+import { Link } from "@/i18n/navigation";
+import { type Pathnames } from "@/i18n/routing";
 
 type NavLinksProps = {
   items: ReadonlyArray<{ href: Pathnames; label: string }>;

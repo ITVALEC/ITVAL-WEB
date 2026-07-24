@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/routing";
+import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/layout/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ProjectCard } from "@/components/ui/ProjectCard";

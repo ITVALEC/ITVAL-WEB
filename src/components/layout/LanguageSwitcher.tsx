@@ -1,7 +1,8 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { usePathname, useRouter, routing, type Locale } from "@/i18n/routing";
+import { usePathname, useRouter } from "@/i18n/navigation";
+import { routing, type Locale } from "@/i18n/routing";
 import { isLocale } from "@/lib/locale";
 
 type LanguageSwitcherProps = {
