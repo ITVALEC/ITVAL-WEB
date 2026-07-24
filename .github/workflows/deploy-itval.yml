@@ -292,6 +292,10 @@ jobs:
 
           npm run db:schema
 
+          echo "===== SINCRONIZANDO POSTGRES → JSON ====="
+
+          npm run db:export
+
           echo "===== COMPILANDO NEXT.JS ====="
 
           npm run build

@@ -131,8 +131,25 @@ async function main() {
     patterns: ["^DSC0060[0-9]\\.(jpe?g|png)$"],
   });
 
+  for (const { key, file } of [
+    { key: "catalogContentEs", file: "messages/products-catalog/es.json" },
+    { key: "catalogContentEn", file: "messages/products-catalog/en.json" },
+    { key: "taxonomy", file: "src/lib/catalog/taxonomy.json" },
+    { key: "filterConfig", file: "src/lib/catalog/filter-config.json" },
+  ]) {
+    const { rows: docRows } = await client.query(
+      `SELECT data FROM app_documents WHERE key = $1 LIMIT 1`,
+      [key],
+    );
+    if (docRows[0]?.data != null) {
+      writeJson(file, docRows[0].data);
+    }
+  }
+
   await client.end();
-  console.log(`Exportado: ${portfolioProjects.length} proyectos, ${productRows.length} imágenes de producto.`);
+  console.log(
+    `Exportado: ${portfolioProjects.length} proyectos, ${productRows.length} imágenes de producto, catálogo i18n.`,
+  );
 }
 
 main().catch((error) => {
