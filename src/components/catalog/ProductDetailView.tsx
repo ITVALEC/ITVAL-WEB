@@ -54,9 +54,10 @@ export async function ProductDetailView({
     ...(heroImage ? [{ src: heroImage, alt: subtitle }] : []),
     ...productGalleryImages
       .filter((image) => image.src !== heroImage)
-      .map((image) => ({
+      .map((image, index) => ({
         src: image.src,
-        alt: image.caption || subtitle,
+        // Ángulos anónimos: alt = producto, nunca caption de obra.
+        alt: `${subtitle} — ${index + 1}`,
       })),
   ].slice(0, PREVIEW_IMAGE_LIMIT);
 

@@ -42,36 +42,9 @@ export function ProductPreviewCarousel({
   const hasMultiple = total > 1;
 
   return (
-    <div className="flex min-w-0 flex-col gap-3 sm:h-[380px] sm:flex-row sm:gap-4 lg:h-[440px]">
-      {hasMultiple && (
-        <div className="order-2 flex min-w-0 gap-2 overflow-x-auto pb-1 sm:order-1 sm:w-[76px] sm:min-w-[76px] sm:shrink-0 sm:flex-col sm:overflow-x-hidden sm:overflow-y-auto sm:pb-0 sm:pr-1">
-          {images.map((image, index) => (
-            <button
-              key={image.src}
-              type="button"
-              onClick={() => goTo(index)}
-              aria-label={t("previewGoToImage", { index: index + 1 })}
-              aria-current={index === active || undefined}
-              className={`relative h-16 w-20 shrink-0 overflow-hidden rounded-lg border transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2 sm:h-[58px] sm:w-full ${
-                index === active
-                  ? "border-cornflower ring-2 ring-cornflower/40"
-                  : "border-grey/30 opacity-70 hover:opacity-100"
-              }`}
-            >
-              <SafeImage
-                src={image.src}
-                alt=""
-                fill
-                className="object-cover"
-                sizes="80px"
-              />
-            </button>
-          ))}
-        </div>
-      )}
-
+    <div className="flex min-w-0 flex-col gap-3">
       <div
-        className="group relative order-1 aspect-[4/3] w-full min-w-0 overflow-hidden rounded-2xl border border-grey/20 bg-white shadow-sm sm:order-2 sm:aspect-auto sm:h-full sm:w-auto sm:flex-1"
+        className="group relative aspect-[4/3] w-full min-w-0 overflow-hidden rounded-2xl border border-grey/20 bg-white shadow-sm lg:aspect-auto lg:h-[440px]"
         role="group"
         aria-roledescription="carousel"
         onKeyDown={(event) => {
@@ -129,6 +102,33 @@ export function ProductPreviewCarousel({
           </>
         )}
       </div>
+
+      {hasMultiple && (
+        <div className="flex min-w-0 gap-2 overflow-x-auto pb-1">
+          {images.map((image, index) => (
+            <button
+              key={image.src}
+              type="button"
+              onClick={() => goTo(index)}
+              aria-label={t("previewGoToImage", { index: index + 1 })}
+              aria-current={index === active || undefined}
+              className={`relative h-16 w-20 shrink-0 overflow-hidden rounded-lg border transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2 sm:h-[72px] sm:w-[88px] ${
+                index === active
+                  ? "border-cornflower ring-2 ring-cornflower/40"
+                  : "border-grey/30 opacity-70 hover:opacity-100"
+              }`}
+            >
+              <SafeImage
+                src={image.src}
+                alt=""
+                fill
+                className="object-cover"
+                sizes="88px"
+              />
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -63,10 +63,13 @@ const CATEGORY_OPTIONS = Object.keys(taxonomy).map((key) => ({
 
 function mediaBadgeLabel(item: AdminMediaItem): string {
   if (item.kind === "hero" && item.heroType === "subcategory") {
-    return "Portada producto";
+    return "Portada";
   }
   if (item.kind === "hero" && item.heroType === "category") {
     return "Portada categoría";
+  }
+  if (item.kind === "product") {
+    return "Galería";
   }
   return KIND_LABELS[item.kind];
 }
@@ -77,17 +80,30 @@ function suggestPhotoName(item: AdminMediaItem): string {
     return item.title.trim() || "Obra";
   }
 
-  let productLabel = item.title;
-  if (item.category && item.subcategory) {
-    productLabel = getSubcategoryLabel(item.category, item.subcategory);
-  } else if (item.subtitle.includes(" · ")) {
-    productLabel = item.subtitle.split(" · ").pop()?.trim() || item.title;
+  // Galería de producto: sin nombre de obra; solo número de foto.
+  if (item.kind === "product" && item.productIndex != null) {
+    const match = /^Foto\s+(\d+)$/i.exec(item.title.trim());
+    if (match) return `Foto ${match[1]}`;
+    return `Foto ${item.productIndex + 1}`;
   }
 
-  if (item.kind === "product" && item.productIndex != null) {
-    return `${productLabel} ${item.productIndex + 1}`;
+  if (item.category && item.subcategory) {
+    return getSubcategoryLabel(item.category, item.subcategory);
   }
-  return productLabel;
+  if (item.subtitle.includes(" · ")) {
+    return item.subtitle.split(" · ").pop()?.trim() || item.title;
+  }
+  return item.title;
+}
+
+function cardTitle(item: AdminMediaItem): string {
+  if (item.kind === "product") {
+    return item.title.startsWith("Foto ") ? item.title : suggestPhotoName(item);
+  }
+  if (item.kind === "hero") {
+    return item.title;
+  }
+  return item.caption?.trim() || item.title;
 }
 
 function associationLabel(item: AdminMediaItem): string | null {
@@ -300,7 +316,7 @@ export default function AdminImagenesPage() {
               debouncedQuery || categoryFilter
                 ? "No hay coincidencias con la búsqueda o categoría."
                 : kind === "product"
-                  ? "Aún no hay fotos de producto. Sube desde Catálogo (elige la categoría y el producto)."
+                  ? "Aún no hay fotos de galería del producto. Sube desde Catálogo (elige la categoría y el producto)."
                   : "No hay fotos en esta sección."
             }
           />
@@ -329,7 +345,7 @@ export default function AdminImagenesPage() {
                     <div className="p-2.5">
                       <AdminBadge>{mediaBadgeLabel(item)}</AdminBadge>
                       <p className="mt-1 line-clamp-1 text-sm font-medium text-navy">
-                        {item.caption?.trim() || item.title}
+                        {cardTitle(item)}
                       </p>
                       <p className="line-clamp-1 text-xs text-grey">
                         {associationLabel(item) ?? item.subtitle}
@@ -379,7 +395,7 @@ export default function AdminImagenesPage() {
             <AdminButton variant="secondary" onClick={closeEdit} disabled={saving}>
               Cerrar
             </AdminButton>
-            {editing?.kind !== "hero" ? (
+            {editing?.kind !== "hero" && editing?.kind !== "product" ? (
               <AdminButton type="submit" form="media-edit-form" disabled={saving}>
                 {saving ? "Guardando…" : "Guardar nombre"}
               </AdminButton>
@@ -432,10 +448,10 @@ export default function AdminImagenesPage() {
               onError={(msg) => setFeedback({ type: "error", message: msg })}
             />
 
-            {editing.kind !== "hero" ? (
+            {editing.kind === "project" ? (
               <form id="media-edit-form" onSubmit={saveCaption} className="space-y-2">
                 <AdminField
-                  label={editing.kind === "project" ? "Nombre de la foto (obra)" : "Nombre de la foto"}
+                  label="Nombre de la foto (obra)"
                   htmlFor="edit-caption"
                   hint="Texto visible en el sitio. No cambia el archivo en disco."
                 >
@@ -445,7 +461,7 @@ export default function AdminImagenesPage() {
                     value={caption}
                     onChange={(e) => setCaption(e.target.value)}
                     className={adminInputClass}
-                    placeholder="Ej: Muro cortina Stick 1"
+                    placeholder="Ej: Edificio Aranjuez — Quito"
                   />
                 </AdminField>
                 <AdminButton
@@ -456,6 +472,11 @@ export default function AdminImagenesPage() {
                   Sugerir nombre
                 </AdminButton>
               </form>
+            ) : editing.kind === "product" ? (
+              <p className="text-sm text-grey-dark">
+                Galería del producto: ángulos anónimos sin nombre de obra. Solo puedes
+                reemplazar o eliminar el archivo. El subtítulo indica el producto.
+              </p>
             ) : (
               <p className="text-sm text-grey-dark">
                 Portada de catálogo: solo puedes reemplazar el archivo. El nombre visible es el del producto o categoría.

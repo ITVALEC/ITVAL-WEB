@@ -870,9 +870,9 @@ export default function AdminCatalogoPage() {
         {uploadSub ? (
           <div className="space-y-3">
             <p className="text-sm text-grey-dark">
-              La foto se agregará a la <strong>galería del producto</strong>{" "}
-              (vista previa). Pertenece a la categoría del producto. Las obras van en{" "}
-              <strong>Obras</strong>.
+              Se agregará a la <strong>galería del producto</strong> (ángulos / detalles,
+              sin nombre de obra). La portada se gestiona aparte. Las obras van en{" "}
+              <strong>Obras</strong> o en la galería de referencias.
             </p>
             <AdminImageUpload
               action="add-product"

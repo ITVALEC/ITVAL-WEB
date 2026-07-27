@@ -3,6 +3,11 @@ import path from "node:path";
 import { isDatabaseEnabled, query } from "@/lib/db/pool";
 import { listProjectsFromDb } from "@/lib/db/repositories/projects";
 import { MANIFEST_PATHS } from "@/lib/admin/manifests";
+import {
+  normalizeProductGalleryList,
+  type GalleryImageSource,
+  type ProductGalleryImage,
+} from "@/lib/catalog/product-images";
 
 const root = process.cwd();
 
@@ -83,23 +88,29 @@ export async function syncDatabaseToJson(): Promise<void> {
 
   const galleriesFromDb: Record<
     string,
-    Record<string, { src: string; caption: string; source?: string }[]>
+    Record<string, ProductGalleryImage[]>
   > = {};
 
   for (const row of productRows) {
     galleriesFromDb[row.category] ??= {};
     galleriesFromDb[row.category][row.subcategory] ??= [];
-    const source =
+    const source: GalleryImageSource | undefined =
       row.source === "project" || row.source === "product"
         ? row.source
-        : row.src.includes("/projects/") || row.src.includes("/project/")
-          ? "project"
-          : "product";
+        : undefined;
     galleriesFromDb[row.category][row.subcategory].push({
       src: row.src,
       caption: row.caption ?? "",
       source,
     });
+  }
+
+  for (const category of Object.keys(galleriesFromDb)) {
+    for (const subcategory of Object.keys(galleriesFromDb[category])) {
+      galleriesFromDb[category][subcategory] = normalizeProductGalleryList(
+        galleriesFromDb[category][subcategory],
+      );
+    }
   }
 
   // Merge: no borrar galerías del JSON que aún no están en Postgres.

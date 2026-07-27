@@ -7,7 +7,7 @@ import { isBlockedImageSrc } from "./blocked-images";
 import bundled from "./product-images.json";
 import type { ProductKey } from "./types";
 import {
-  resolveGalleryImageSource,
+  normalizeProductGalleryList,
   type GalleryImageSource,
   type ProductGalleryImage,
 } from "./product-images";
@@ -19,13 +19,6 @@ export type ProductImageManifest = {
     Record<ProductKey, Partial<Record<string, ProductGalleryImage[]>>>
   >;
 };
-
-function normalizeGalleryImage(image: ProductGalleryImage): ProductGalleryImage {
-  return {
-    ...image,
-    source: resolveGalleryImageSource(image),
-  };
-}
 
 /** Manifiesto vivo (DB / disco), no el snapshot del build. */
 export async function loadProductImagesManifest(): Promise<ProductImageManifest> {
@@ -84,13 +77,19 @@ async function mergeGalleryRowsFromDb(
         row.source === "product" || row.source === "project"
           ? row.source
           : undefined;
-      galleries[category]![row.subcategory]!.push(
-        normalizeGalleryImage({
-          src: row.src,
-          caption: row.caption ?? "",
-          source,
-        }),
-      );
+      galleries[category]![row.subcategory]!.push({
+        src: row.src,
+        caption: row.caption ?? "",
+        source,
+      });
+    }
+
+    for (const category of Object.keys(galleries) as ProductKey[]) {
+      const subs = galleries[category];
+      if (!subs) continue;
+      for (const subcategory of Object.keys(subs)) {
+        subs[subcategory] = normalizeProductGalleryList(subs[subcategory] ?? []);
+      }
     }
 
     return { ...base, galleries };
@@ -120,9 +119,11 @@ export async function getProductGalleryLive(
   options: { source?: GalleryImageSource } = {},
 ): Promise<ProductGalleryImage[]> {
   const data = await loadProductImagesManifest();
-  const items = (data.galleries?.[category]?.[subcategory] ?? [])
-    .filter((item) => !isBlockedImageSrc(item.src))
-    .map(normalizeGalleryImage);
+  const items = normalizeProductGalleryList(
+    (data.galleries?.[category]?.[subcategory] ?? []).filter(
+      (item) => !isBlockedImageSrc(item.src),
+    ),
+  );
 
   const filtered = options.source
     ? items.filter((item) => item.source === options.source)

@@ -32,17 +32,95 @@ export function isProjectReferenceSrc(src: string): boolean {
 export function resolveGalleryImageSource(
   image: Pick<ProductGalleryImage, "src" | "source">,
 ): GalleryImageSource {
+  // Path de obra gana siempre (evita filas DB mal etiquetadas como product).
+  if (isProjectReferenceSrc(image.src)) return "project";
   if (image.source === "product" || image.source === "project") {
     return image.source;
   }
-  return isProjectReferenceSrc(image.src) ? "project" : "product";
+  return "product";
 }
 
-function normalizeGalleryImage(image: ProductGalleryImage): ProductGalleryImage {
-  return {
+/** Tokens genéricos que no sirven para emparejar obras sueltas con referencias. */
+const PROJECT_MATCH_STOPWORDS = new Set([
+  "acero",
+  "aluminio",
+  "curtain",
+  "cortina",
+  "fachada",
+  "image",
+  "jpeg",
+  "jpg",
+  "muro",
+  "panel",
+  "png",
+  "producto",
+  "qph",
+  "vidrio",
+  "wall",
+  "walls",
+  "webp",
+  "whatsapp",
+]);
+
+function significantCaptionTokens(caption: string): string[] {
+  return caption
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "")
+    .split(/[^a-z0-9]+/)
+    .filter((token) => token.length >= 4 && !PROJECT_MATCH_STOPWORDS.has(token));
+}
+
+/**
+ * Normaliza una galería completa:
+ * - Paths /projects/ → source=project
+ * - Fotos sueltas cuyo caption coincide con obras de la misma galería → project
+ * - Si la galería es casi toda obras (/projects/) y quedan pocas sueltas → también project
+ * - Galería de producto → caption vacío (ángulos anónimos, estilo Amazon)
+ */
+export function normalizeProductGalleryList(
+  images: ProductGalleryImage[],
+): ProductGalleryImage[] {
+  const base = images.map((image) => ({
     ...image,
     source: resolveGalleryImageSource(image),
-  };
+  }));
+
+  const projectCount = base.filter((image) => image.source === "project").length;
+  const looseCount = base.length - projectCount;
+
+  // Import histórico: thumbs de obra fuera de /projects/ junto a un bloque grande de referencias.
+  const treatAllLooseAsProject =
+    projectCount >= 10 && looseCount > 0 && looseCount <= 12;
+
+  const projectCaptionBlob = base
+    .filter((image) => image.source === "project")
+    .map((image) => (image.caption || "").toLowerCase())
+    .join(" | ");
+
+  return base.map((image) => {
+    if (image.source === "project") {
+      return image;
+    }
+
+    if (treatAllLooseAsProject) {
+      return { ...image, source: "project" as const };
+    }
+
+    const caption = (image.caption || "").trim();
+    if (caption && projectCaptionBlob) {
+      const tokens = significantCaptionTokens(caption);
+      const looksLikeLooseProject =
+        tokens.length > 0 &&
+        tokens.some((token) => projectCaptionBlob.includes(token));
+      if (looksLikeLooseProject) {
+        return { ...image, source: "project" as const };
+      }
+    }
+
+    // Galería Amazon: sin nombre de obra sobre el ángulo del producto.
+    return { ...image, source: "product" as const, caption: "" };
+  });
 }
 
 export function getProductCategoryImage(
@@ -94,9 +172,11 @@ export function getProductGallery(
   subcategory: string,
   options: GetProductGalleryOptions = {},
 ): ProductGalleryImage[] {
-  const items = (data.galleries?.[category]?.[subcategory] ?? [])
-    .filter((item) => !isBlockedImageSrc(item.src))
-    .map(normalizeGalleryImage);
+  const items = normalizeProductGalleryList(
+    (data.galleries?.[category]?.[subcategory] ?? []).filter(
+      (item) => !isBlockedImageSrc(item.src),
+    ),
+  );
 
   const filtered = options.source
     ? items.filter((item) => item.source === options.source)

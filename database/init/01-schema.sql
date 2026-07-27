@@ -130,3 +130,12 @@ WHERE source = 'product'
     src ILIKE '%/gallery/%/projects/%'
     OR src ILIKE '%/gallery/%/project/%'
   );
+
+-- Thumbs de obra históricas fuera de /projects/ (ej. STICK / Fachadas).
+UPDATE product_gallery_images
+SET source = 'project'
+WHERE source = 'product'
+  AND category = 'facades'
+  AND subcategory = 'curtainWallStick'
+  AND src NOT ILIKE '%/projects/%'
+  AND src NOT ILIKE '%/project/%';

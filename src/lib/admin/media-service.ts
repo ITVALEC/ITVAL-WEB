@@ -14,6 +14,7 @@ import {
 import { MANIFEST_PATHS, readJsonFile, writeJsonFile } from "./manifests";
 import { getProductCategoryLabel, getSubcategoryLabel } from "./product-labels";
 import {
+  normalizeProductGalleryList,
   resolveGalleryImageSource,
   type GalleryImageSource,
 } from "@/lib/catalog/product-images";
@@ -210,21 +211,24 @@ async function listProductGalleryFromManifest(
 
   for (const [category, subs] of Object.entries(products.galleries ?? {})) {
     for (const [subcategory, images] of Object.entries(subs)) {
-      images.forEach((image, index) => {
-        const gallerySource = resolveGalleryImageSource(image);
-        if (gallerySource === "project") return;
+      const normalized = normalizeProductGalleryList(images);
+      let productPhotoNumber = 0;
 
+      normalized.forEach((image, index) => {
+        if (image.source === "project") return;
+
+        productPhotoNumber += 1;
         items.push({
           id: `product:${category}:${subcategory}:${index}`,
           kind: "product",
           src: image.src,
-          title: image.caption || getSubcategoryLabel(category, subcategory),
+          title: `Foto ${productPhotoNumber}`,
           subtitle: `${getProductCategoryLabel(category)} · ${getSubcategoryLabel(category, subcategory)}`,
-          caption: image.caption ?? "",
+          caption: "",
           category,
           subcategory,
           productIndex: index,
-          gallerySource,
+          gallerySource: "product",
         });
       });
     }
@@ -340,28 +344,60 @@ async function listFromDb(): Promise<AdminMediaItem[]> {
      FROM product_gallery_images ORDER BY category, subcategory, sort_order`,
   );
 
-  const fromDb: AdminMediaItem[] = [];
+  const fromDbRaw: GalleryImage[] = [];
+  const fromDbMeta: {
+    category: string;
+    subcategory: string;
+    sort_order: number;
+  }[] = [];
+
   for (const row of productRows) {
-    const gallerySource = resolveGalleryImageSource({
+    fromDbRaw.push({
       src: row.src,
+      caption: row.caption ?? "",
       source:
         row.source === "product" || row.source === "project"
           ? row.source
           : undefined,
     });
-    if (gallerySource === "project") continue;
-
-    fromDb.push({
-      id: `product:${row.category}:${row.subcategory}:${row.sort_order}`,
-      kind: "product",
-      src: row.src,
-      title: row.caption || getSubcategoryLabel(row.category, row.subcategory),
-      subtitle: `${getProductCategoryLabel(row.category)} · ${getSubcategoryLabel(row.category, row.subcategory)}`,
-      caption: row.caption ?? "",
+    fromDbMeta.push({
       category: row.category,
       subcategory: row.subcategory,
-      productIndex: row.sort_order,
-      gallerySource,
+      sort_order: row.sort_order,
+    });
+  }
+
+  // Normalizar por subcategoría para reclasificar obras sueltas.
+  const bySub = new Map<string, { images: GalleryImage[]; meta: typeof fromDbMeta }>();
+  for (let i = 0; i < fromDbRaw.length; i += 1) {
+    const meta = fromDbMeta[i];
+    const key = `${meta.category}::${meta.subcategory}`;
+    const bucket = bySub.get(key) ?? { images: [], meta: [] };
+    bucket.images.push(fromDbRaw[i]);
+    bucket.meta.push(meta);
+    bySub.set(key, bucket);
+  }
+
+  const fromDb: AdminMediaItem[] = [];
+  for (const bucket of bySub.values()) {
+    const normalized = normalizeProductGalleryList(bucket.images);
+    let productPhotoNumber = 0;
+    normalized.forEach((image, index) => {
+      if (image.source === "project") return;
+      const meta = bucket.meta[index];
+      productPhotoNumber += 1;
+      fromDb.push({
+        id: `product:${meta.category}:${meta.subcategory}:${meta.sort_order}`,
+        kind: "product",
+        src: image.src,
+        title: `Foto ${productPhotoNumber}`,
+        subtitle: `${getProductCategoryLabel(meta.category)} · ${getSubcategoryLabel(meta.category, meta.subcategory)}`,
+        caption: "",
+        category: meta.category,
+        subcategory: meta.subcategory,
+        productIndex: meta.sort_order,
+        gallerySource: "product",
+      });
     });
   }
 
@@ -755,9 +791,9 @@ export async function addProductImage(
       id: `product:${category}:${subcategory}:${sortOrder}`,
       kind: "product",
       src: publicSrc,
-      title: caption || getSubcategoryLabel(category, subcategory),
+      title: "Foto nueva",
       subtitle: `${getProductCategoryLabel(category)} · ${getSubcategoryLabel(category, subcategory)}`,
-      caption: caption.trim(),
+      caption: "",
       category,
       subcategory,
       productIndex: sortOrder,
@@ -781,9 +817,9 @@ export async function addProductImage(
     id: `product:${category}:${subcategory}:${index}`,
     kind: "product",
     src: publicSrc,
-    title: caption || getSubcategoryLabel(category, subcategory),
+    title: `Foto ${index + 1}`,
     subtitle: `${getProductCategoryLabel(category)} · ${getSubcategoryLabel(category, subcategory)}`,
-    caption: caption.trim(),
+    caption: "",
     category,
     subcategory,
     productIndex: index,

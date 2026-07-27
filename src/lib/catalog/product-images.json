@@ -1708,23 +1708,28 @@
       "curtainWallStick": [
         {
           "src": "/images/products/gallery/facades/curtainWallStick/aranjuez-curtainwall-jpg.jpg",
-          "caption": "Aranjuez CURTAINWALL"
+          "caption": "Aranjuez CURTAINWALL",
+          "source": "project"
         },
         {
           "src": "/images/products/gallery/facades/curtainWallStick/curtain-wall-jpeg.jpeg",
-          "caption": "curtain wall"
+          "caption": "curtain wall",
+          "source": "project"
         },
         {
           "src": "/images/products/gallery/facades/curtainWallStick/espe-jpeg.jpeg",
-          "caption": "ESPE"
+          "caption": "ESPE",
+          "source": "project"
         },
         {
           "src": "/images/products/gallery/facades/curtainWallStick/ministerio-turismo-jpg.jpg",
-          "caption": "MINISTERIO TURISMO"
+          "caption": "MINISTERIO TURISMO",
+          "source": "project"
         },
         {
           "src": "/images/products/gallery/facades/curtainWallStick/qph-curtain-wall-acero-jpg.jpg",
-          "caption": "QPH Curtain Wall ACERO"
+          "caption": "QPH Curtain Wall ACERO",
+          "source": "project"
         },
         {
           "src": "/images/products/gallery/facades/curtainWallStick/projects/2011-edificio-administracion-zonal-m-d-m-quito-quito-whatsapp-image-2026-03-06-a.jpeg",
