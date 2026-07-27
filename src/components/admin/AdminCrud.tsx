@@ -181,11 +181,15 @@ export function AdminModal({
   const titleId = useId();
   const descId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
 
   useEffect(() => {
     if (!open) return;
 
     const previous = document.activeElement as HTMLElement | null;
+    // Solo enfocar el panel al ABRIR el modal; no en cada re-render
+    // (si onClose cambia de identidad, no debe robar el foco del input).
     panelRef.current?.focus();
 
     const getFocusable = (): HTMLElement[] => {
@@ -200,7 +204,7 @@ export function AdminModal({
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
-        onClose();
+        onCloseRef.current();
         return;
       }
       // Atrapa el foco dentro del diálogo (patrón WAI-ARIA modal).
@@ -234,7 +238,7 @@ export function AdminModal({
       document.body.style.overflow = "";
       previous?.focus();
     };
-  }, [open, onClose]);
+  }, [open]);
 
   if (!open) return null;
 
