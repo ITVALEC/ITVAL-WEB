@@ -35,6 +35,13 @@ export async function GET(request: Request) {
     projects = queryText
       ? await searchProjectsFromDb(queryText)
       : await listProjectsFromDb();
+
+    // Si Postgres aún no tiene obras, usar el manifiesto del repo
+    // (instalaciones reales por ciudad / galería).
+    if (projects.length === 0 && !queryText) {
+      const data = readJsonFile<ProjectManifest>(MANIFEST_PATHS.projects);
+      projects = data.projects ?? [];
+    }
   } else {
     const data = readJsonFile<ProjectManifest>(MANIFEST_PATHS.projects);
     projects = data.projects;

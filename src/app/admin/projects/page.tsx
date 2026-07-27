@@ -216,15 +216,16 @@ export default function AdminProjectsPage() {
     <AdminShell title="Obras realizadas">
       <AdminPanel>
         <AdminCrudToolbar
-          title="Portafolio de proyectos"
-          description="Obras publicadas en el sitio. Edita datos, fotos y cuál se muestra en la portada."
+          title="Obras por ciudad"
+          description="Cada obra es una instalación real: se muestra su galería (no el catálogo de productos). Filtra por ciudad o nombre."
         />
 
         <AdminInfoBanner>
-          Edita nombre, categoría y portada. Para subir o reemplazar fotos usa la galería al
-          editar un proyecto, o la sección{" "}
-          <Link href="/admin/imagenes" className="font-semibold text-cornflower-ink underline">
-            Imágenes
+          Aquí gestionas las galerías de obras realizadas (Quito, Guayaquil, etc.). El catálogo de
+          productos es otra sección. Edita nombre, categoría de solución y portada; sube fotos desde
+          la galería al editar, o desde{" "}
+          <Link href="/admin/imagenes?kind=project" className="font-semibold text-cornflower-ink underline">
+            Fotos → Obras
           </Link>
           .
         </AdminInfoBanner>
@@ -233,31 +234,31 @@ export default function AdminProjectsPage() {
           <AdminSearchField
             id="admin-projects-search"
             label="Buscar"
-            hint="Nombre, ciudad o ID del proyecto."
+            hint="Por nombre de obra, ciudad o código."
             value={query}
             onChange={setQuery}
-            placeholder="Ej: Quito, fachada, 2024…"
+            placeholder="Ej: Quito, Guayaquil, Kia…"
             resultsCount={data?.total}
-            resultsLabel={data?.total === 1 ? "registro" : "registros"}
+            resultsLabel={data?.total === 1 ? "obra" : "obras"}
           />
           {feedback ? <AdminStatusMessage type={feedback.type} message={feedback.message} /> : null}
         </div>
 
         {loading ? (
-          <AdminLoadingState label="Cargando proyectos…" />
+          <AdminLoadingState label="Cargando obras…" />
         ) : !data || data.projects.length === 0 ? (
           <AdminEmptyState
-            title="Sin resultados"
+            title="Sin obras"
             description={
               debouncedQuery
                 ? "Prueba otro término o borra el filtro de búsqueda."
-                : "No hay proyectos en el portafolio."
+                : "No hay obras en el portafolio. Tras el próximo deploy se importarán desde el repositorio si la base estaba vacía."
             }
           />
         ) : (
           <>
             <AdminDataTable
-              caption="Listado de proyectos"
+              caption="Listado de obras (galerías por ciudad)"
               rows={data.projects}
               columns={[
                 {

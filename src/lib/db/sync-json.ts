@@ -28,14 +28,16 @@ export async function syncDatabaseToJson(): Promise<void> {
   const cities = [...new Set(projects.map((p) => p.city))].sort();
   const categories = [...new Set(projects.map((p) => p.productCategory))].sort();
 
-  writeJson(MANIFEST_PATHS.projects, {
-    generatedAt: new Date().toISOString(),
-    source: "postgresql",
-    missionImage: "/images/about/mission.jpg",
-    cities,
-    categories,
-    projects,
-  });
+  if (projects.length > 0) {
+    writeJson(MANIFEST_PATHS.projects, {
+      generatedAt: new Date().toISOString(),
+      source: "postgresql",
+      missionImage: "/images/about/mission.jpg",
+      cities,
+      categories,
+      projects,
+    });
+  }
 
   // Textos y config del catálogo (lo que edita el admin).
   await exportAppDocument(

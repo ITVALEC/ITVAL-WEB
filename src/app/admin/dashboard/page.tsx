@@ -26,7 +26,7 @@ export default async function AdminDashboardPage() {
           <ActionCard
             href="/admin/projects"
             title="Gestionar obras"
-            desc={`${projects.projects.length} proyectos en el portafolio. Edita nombre, categoría, fotos y portada.`}
+            desc={`${projects.projects.length} obras reales (galerías por ciudad). Edita nombre, fotos y portada.`}
             stat={String(projects.projects.length)}
           />
           <ActionCard

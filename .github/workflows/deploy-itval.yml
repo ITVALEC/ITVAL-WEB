@@ -292,6 +292,24 @@ jobs:
 
           npm run db:schema
 
+          echo "===== SEMBRANDO DATOS SI LA BASE ESTÁ VACÍA ====="
+
+          # Si no hay obras en Postgres, importar el portafolio del repo
+          # (galerías reales por ciudad). Evita “0 obras” tras db:export.
+          PROJECT_COUNT="$(
+            psql \
+              "$(sed -n 's/^DATABASE_URL=//p' "$ENV_FILE" | tail -n 1)" \
+              -Atqc \
+              "SELECT COUNT(*)::text FROM projects;"
+          )"
+
+          echo "Obras en Postgres: $PROJECT_COUNT"
+
+          if [ "${PROJECT_COUNT:-0}" = "0" ]; then
+            echo "Importando obras del portafolio JSON → Postgres (sin tocar catálogo)…"
+            npm run db:seed-projects
+          fi
+
           echo "===== SINCRONIZANDO POSTGRES → JSON ====="
 
           npm run db:export

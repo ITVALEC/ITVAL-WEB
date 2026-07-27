@@ -71,14 +71,21 @@ async function main() {
     ...new Set(portfolioProjects.map((p) => p.productCategory)),
   ].sort();
 
-  writeJson("src/lib/catalog/project-portfolio.json", {
-    generatedAt: new Date().toISOString(),
-    source: "postgresql:itval_db",
-    missionImage: "/images/about/mission.jpg",
-    cities,
-    categories,
-    projects: portfolioProjects,
-  });
+  // Si la DB no tiene obras, NO pisar el manifiesto del repo (evita “0 obras” en el sitio).
+  if (portfolioProjects.length === 0) {
+    console.warn(
+      "AVISO: projects en Postgres está vacío. Se conserva project-portfolio.json del release.",
+    );
+  } else {
+    writeJson("src/lib/catalog/project-portfolio.json", {
+      generatedAt: new Date().toISOString(),
+      source: "postgresql:itval_db",
+      missionImage: "/images/about/mission.jpg",
+      cities,
+      categories,
+      projects: portfolioProjects,
+    });
+  }
 
   const { rows: productRows } = await client.query(
     `SELECT category, subcategory, src, caption, sort_order, source
@@ -106,10 +113,17 @@ async function main() {
     });
   }
 
-  writeJson("src/lib/catalog/product-images.json", {
-    ...existingProducts,
-    galleries,
-  });
+  // Si product_gallery_images está vacío, no borrar galleries del manifiesto.
+  if (productRows.length > 0) {
+    writeJson("src/lib/catalog/product-images.json", {
+      ...existingProducts,
+      galleries,
+    });
+  } else {
+    console.warn(
+      "AVISO: product_gallery_images vacío. Se conserva product-images.json del release.",
+    );
+  }
 
   const { rows: settingsRows } = await client.query(
     `SELECT contact, footer FROM site_settings WHERE id = 1`,
@@ -148,7 +162,9 @@ async function main() {
 
   await client.end();
   console.log(
-    `Exportado: ${portfolioProjects.length} proyectos, ${productRows.length} imágenes de producto, catálogo i18n.`,
+    `Exportado: ${portfolioProjects.length} proyectos` +
+      (portfolioProjects.length === 0 ? " (manifiesto conservado)" : "") +
+      `, ${productRows.length} imágenes de producto, catálogo i18n.`,
   );
 }
 
