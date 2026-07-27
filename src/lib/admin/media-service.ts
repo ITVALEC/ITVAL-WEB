@@ -5,7 +5,12 @@ import path from "node:path";
 import { resolveProjectCover } from "@/lib/catalog/project-cover";
 import type { PortfolioProject } from "@/lib/catalog/project-portfolio";
 import { isDatabaseEnabled, query } from "@/lib/db/pool";
+import { getDocument, setDocument } from "@/lib/db/documents";
 import { syncDatabaseToJson } from "@/lib/db/sync-json";
+import {
+  isSharedPlaceholderSrc,
+  normalizePublicSrc,
+} from "@/lib/admin/media-placeholder";
 import { MANIFEST_PATHS, readJsonFile, writeJsonFile } from "./manifests";
 import { getProductCategoryLabel, getSubcategoryLabel } from "./product-labels";
 import {
@@ -35,6 +40,8 @@ export type AdminMediaItem = {
   heroType?: "category" | "subcategory";
   /** Solo para entradas de galería de producto: producto vs obra/referencia. */
   gallerySource?: GalleryImageSource;
+  /** True si el src es un placeholder compartido o el archivo no está en disco. */
+  fileMissing?: boolean;
 };
 
 type ProjectManifest = { projects: PortfolioProject[]; [key: string]: unknown };
@@ -160,6 +167,42 @@ export function replaceImageAtSrc(src: string, buffer: Buffer): string {
   return src;
 }
 
+function mediaFileExists(src: string): boolean {
+  try {
+    return fs.existsSync(publicPathFromSrc(normalizePublicSrc(src)));
+  } catch {
+    return false;
+  }
+}
+
+function withFilePresence(item: AdminMediaItem): AdminMediaItem {
+  const src = normalizePublicSrc(item.src);
+  const placeholder = isSharedPlaceholderSrc(src);
+  return {
+    ...item,
+    src,
+    fileMissing: placeholder || !mediaFileExists(src),
+  };
+}
+
+/** Ruta estable y propia para portadas de catálogo (categoría o subcategoría). */
+function dedicatedHeroSrc(item: AdminMediaItem, ext: string): string {
+  if (!item.category) {
+    throw new Error("Portada sin categoría.");
+  }
+  if (item.heroType === "category") {
+    return `/images/products/${item.category}${ext}`;
+  }
+  if (!item.subcategory) {
+    throw new Error("Portada de producto sin subcategoría.");
+  }
+  return `/images/products/${item.category}/${item.subcategory}${ext}`;
+}
+
+async function loadProductManifest(): Promise<ProductManifest> {
+  return getDocument<ProductManifest>("productImages");
+}
+
 async function listProductGalleryFromManifest(
   products: ProductManifest,
 ): Promise<AdminMediaItem[]> {
@@ -224,7 +267,7 @@ function pushHeroItems(items: AdminMediaItem[], products: ProductManifest): void
 async function listFromJson(): Promise<AdminMediaItem[]> {
   const items: AdminMediaItem[] = [];
   const projects = readJsonFile<ProjectManifest>(MANIFEST_PATHS.projects);
-  const products = readJsonFile<ProductManifest>(MANIFEST_PATHS.products);
+  const products = await loadProductManifest();
 
   for (const project of projects.projects) {
     project.gallery.forEach((src, index) => {
@@ -244,7 +287,7 @@ async function listFromJson(): Promise<AdminMediaItem[]> {
   pushHeroItems(items, products);
   items.push(...(await listProductGalleryFromManifest(products)));
 
-  return items;
+  return items.map(withFilePresence);
 }
 
 async function listFromDb(): Promise<AdminMediaItem[]> {
@@ -282,7 +325,7 @@ async function listFromDb(): Promise<AdminMediaItem[]> {
     });
   }
 
-  const products = readJsonFile<ProductManifest>(MANIFEST_PATHS.products);
+  const products = await loadProductManifest();
   pushHeroItems(items, products);
 
   const { rows: productRows } = await query<{
@@ -330,7 +373,7 @@ async function listFromDb(): Promise<AdminMediaItem[]> {
     items.push(...(await listProductGalleryFromManifest(products)));
   }
 
-  return items;
+  return items.map(withFilePresence);
 }
 
 export async function listAllMedia(
@@ -437,21 +480,40 @@ export async function replaceMediaImage(
   originalName: string,
 ): Promise<string> {
   const ext = extFromName(originalName);
-  let targetSrc = item.src;
+  const previousSrc = normalizePublicSrc(item.src);
+  let targetSrc = previousSrc;
 
-  if (path.extname(item.src).toLowerCase() !== ext) {
-    const previousSrc = item.src;
-    const base = item.src.replace(/\.[^.]+$/, "");
+  if (item.kind === "hero") {
+    // Portadas: siempre ruta propia (nunca pages/products.svg ni otros marcadores).
+    targetSrc = dedicatedHeroSrc(item, ext);
+  } else if (isSharedPlaceholderSrc(previousSrc)) {
+    // Galería apuntando a un marcador compartido: crear archivo dedicado.
+    if (item.kind === "product" && item.category && item.subcategory) {
+      const base = sanitizeBaseName(path.basename(originalName, ext));
+      targetSrc = `/images/products/gallery/${item.category}/${item.subcategory}/${base}-${Date.now()}${ext}`;
+    } else if (item.kind === "project" && item.projectId) {
+      const base = sanitizeBaseName(path.basename(originalName, ext));
+      targetSrc = `/images/projects/${item.projectId}/${base}-${Date.now()}${ext}`;
+    } else {
+      throw new Error("No se puede reemplazar un marcador compartido sin destino propio.");
+    }
+  } else if (path.extname(previousSrc).toLowerCase() !== ext) {
+    const base = previousSrc.replace(/\.[^.]+$/, "");
     targetSrc = `${base}${ext}`;
+  }
+
+  if (targetSrc !== previousSrc) {
     await updateMediaSrc(item, targetSrc);
-    try {
-      fs.unlinkSync(publicPathFromSrc(previousSrc));
-    } catch {
-      /* archivo anterior ausente */
+    if (!isSharedPlaceholderSrc(previousSrc)) {
+      try {
+        fs.unlinkSync(publicPathFromSrc(previousSrc));
+      } catch {
+        /* archivo anterior ausente */
+      }
     }
   }
 
-  replaceImageAtSrc(targetSrc, buffer);
+  writeImageFile(buffer, targetSrc);
   await afterMutation();
   return targetSrc;
 }
@@ -507,7 +569,9 @@ async function updateMediaSrc(item: AdminMediaItem, newSrc: string): Promise<voi
   }
 
   if (item.kind === "hero" && item.category) {
-    const data = readJsonFile<ProductManifest>(MANIFEST_PATHS.products);
+    // Persist via documents layer so Postgres app_documents keeps the cover path.
+    // Writing only the JSON file is reverted by syncDatabaseToJson from the old DB doc.
+    const data = await loadProductManifest();
     if (item.heroType === "category") {
       data.categories ??= {};
       data.categories[item.category] = newSrc;
@@ -515,8 +579,10 @@ async function updateMediaSrc(item: AdminMediaItem, newSrc: string): Promise<voi
       data.subcategories ??= {};
       data.subcategories[item.category] ??= {};
       data.subcategories[item.category][item.subcategory] = newSrc;
+    } else {
+      throw new Error("Portada de producto incompleta.");
     }
-    writeJsonFile(MANIFEST_PATHS.products, data);
+    await setDocument("productImages", data);
   }
 }
 

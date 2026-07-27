@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { SafeImage } from "@/components/ui/SafeImage";
+import { isSharedPlaceholderSrc } from "@/lib/admin/media-placeholder";
 
 type AdminMediaImageProps = {
   src: string | null | undefined;
@@ -9,7 +11,11 @@ type AdminMediaImageProps = {
   version?: number;
   className?: string;
   sizes?: string;
+  /** @deprecated Ya no se usa; el estado vacío es un mensaje, no un SVG marcador. */
   fallbackSrc?: string;
+  /** Si el archivo no está en disco o es un marcador compartido. */
+  fileMissing?: boolean;
+  emptyLabel?: string;
 };
 
 function withCacheBust(src: string, version?: number): string {
@@ -18,9 +24,18 @@ function withCacheBust(src: string, version?: number): string {
   return `${src}${separator}v=${version}`;
 }
 
+function MissingPreview({ label }: { label: string }) {
+  return (
+    <div className="flex h-full w-full flex-col items-center justify-center gap-1 bg-slate-200 px-3 text-center">
+      <span className="text-sm font-semibold text-navy">Sin foto</span>
+      <span className="text-xs text-grey-dark">{label}</span>
+    </div>
+  );
+}
+
 /**
- * Miniatura del panel admin: usa SafeImage (fallback si el archivo falta)
- * y cache-bust opcional para ver cambios al instante tras subir/reemplazar.
+ * Miniatura del panel admin: muestra la imagen real o un estado vacío claro
+ * (sin el SVG "pages/products"). Cache-bust opcional tras subir/reemplazar.
  */
 export function AdminMediaImage({
   src,
@@ -28,21 +43,22 @@ export function AdminMediaImage({
   version,
   className = "object-cover",
   sizes = "96px",
-  fallbackSrc = "/images/pages/products.svg",
+  fallbackSrc: _fallbackSrc,
+  fileMissing,
+  emptyLabel = "Sube o reemplaza una imagen propia",
 }: AdminMediaImageProps) {
   const resolved = src?.trim();
-  if (!resolved) {
-    return (
-      <SafeImage
-        src={fallbackSrc}
-        alt={alt}
-        fill
-        className={className}
-        sizes={sizes}
-        unoptimized
-        fallbackSrc={fallbackSrc}
-      />
-    );
+  const [loadFailed, setLoadFailed] = useState(false);
+
+  useEffect(() => {
+    setLoadFailed(false);
+  }, [resolved, version]);
+
+  const treatAsMissing =
+    fileMissing || !resolved || isSharedPlaceholderSrc(resolved) || loadFailed;
+
+  if (treatAsMissing) {
+    return <MissingPreview label={emptyLabel} />;
   }
 
   return (
@@ -53,7 +69,9 @@ export function AdminMediaImage({
       className={className}
       sizes={sizes}
       unoptimized
-      fallbackSrc={fallbackSrc}
+      // Evita caer en otro SVG marcador; el onError muestra "Sin foto".
+      fallbackSrc={withCacheBust(resolved, version)}
+      onError={() => setLoadFailed(true)}
     />
   );
 }

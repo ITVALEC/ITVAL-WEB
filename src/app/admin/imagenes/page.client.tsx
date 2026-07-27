@@ -321,6 +321,7 @@ export default function AdminImagenesPage() {
                       <AdminMediaImage
                         src={item.src}
                         version={previewVersion}
+                        fileMissing={item.fileMissing}
                         className="object-cover"
                         sizes="25vw"
                       />
@@ -392,8 +393,14 @@ export default function AdminImagenesPage() {
               <AdminMediaImage
                 src={editing.src}
                 version={previewVersion}
+                fileMissing={editing.fileMissing}
                 className="object-contain"
                 sizes="448px"
+                emptyLabel={
+                  editing.kind === "hero"
+                    ? "Esta portada aún no tiene archivo. Usa «Reemplazar con otra foto»."
+                    : "Sube o reemplaza una imagen propia"
+                }
               />
             </div>
 
@@ -409,8 +416,16 @@ export default function AdminImagenesPage() {
               mediaId={editing.id}
               label="Reemplazar con otra foto"
               variant="primary"
-              onSuccess={() => {
+              onSuccess={(result) => {
+                const nextSrc = typeof result.src === "string" ? result.src : undefined;
                 setPreviewVersion((v) => v + 1);
+                if (nextSrc) {
+                  setEditing((current) =>
+                    current
+                      ? { ...current, src: nextSrc, fileMissing: false }
+                      : current,
+                  );
+                }
                 setFeedback({ type: "success", message: "Foto reemplazada." });
                 load();
               }}
