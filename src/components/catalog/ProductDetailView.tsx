@@ -12,7 +12,11 @@ import {
   getProductOnlyGalleryLive,
   getProjectReferenceGalleryLive,
 } from "@/lib/catalog/product-images.server";
-import { MAX_PRODUCT_GALLERY_IMAGES } from "@/lib/catalog/product-images";
+import {
+  isCatalogPlaceholderSrc,
+  isRealProductImageSrc,
+  MAX_PRODUCT_GALLERY_IMAGES,
+} from "@/lib/catalog/product-images";
 import { ProductGallery } from "@/components/catalog/ProductGallery";
 import { ProductPreviewCarousel } from "@/components/catalog/ProductPreviewCarousel";
 import { breadcrumbTrail, productCategoryPath } from "@/lib/breadcrumbs";
@@ -49,24 +53,31 @@ export async function ProductDetailView({
   const worksGallery = await getProjectReferenceGalleryLive(category, subcategory);
 
   const subtitle = tSub(`${subcategory}.title`);
-  // Galería Amazon: solo ángulos del producto (máx. 6). Sin obras ni captions.
-  // Si aún no hay galería, se usa la portada como único preview.
+  // Galería Amazon: solo ángulos reales del producto (máx. 6). Sin obras, captions ni SVG marcadores.
+  // Si no hay fotos de producto en disco, usar portada real; si tampoco, carrusel vacío.
+  const realProductGallery = productGalleryImages.filter((image) =>
+    isRealProductImageSrc(image.src),
+  );
   const galleryForPreview =
-    productGalleryImages.length > 0
-      ? productGalleryImages.slice(0, MAX_PRODUCT_GALLERY_IMAGES)
-      : heroImage
+    realProductGallery.length > 0
+      ? realProductGallery.slice(0, MAX_PRODUCT_GALLERY_IMAGES)
+      : heroImage && isRealProductImageSrc(heroImage)
         ? [{ src: heroImage, caption: "", source: "product" as const }]
         : [];
 
-  const previewImages = galleryForPreview.map((image, index) => ({
-    src: image.src,
-    alt: `${subtitle} — ${index + 1}`,
-  }));
+  const previewImages = galleryForPreview
+    .filter((image) => !isCatalogPlaceholderSrc(image.src))
+    .map((image, index) => ({
+      src: image.src,
+      alt: `${subtitle} — ${index + 1}`,
+    }));
+
+  const heroIsReal = Boolean(heroImage && isRealProductImageSrc(heroImage));
 
   return (
     <>
       <section className="relative overflow-hidden bg-navy py-16 lg:py-20">
-        {heroImage && (
+        {heroIsReal && heroImage ? (
           <Image
             src={heroImage}
             alt={tSub(`${subcategory}.title`)}
@@ -75,10 +86,10 @@ export async function ProductDetailView({
             sizes="(max-width: 1280px) 100vw, 1280px"
             loading="eager"
           />
-        )}
+        ) : null}
         <div className="absolute inset-0 bg-navy/70" aria-hidden="true" />
         <div
-          className={`absolute inset-0 ${heroImage ? "bg-gradient-to-r from-navy/95 via-navy/85 to-navy/65" : ""}`}
+          className={`absolute inset-0 ${heroIsReal ? "bg-gradient-to-r from-navy/95 via-navy/85 to-navy/65" : ""}`}
           aria-hidden="true"
         />
         <div

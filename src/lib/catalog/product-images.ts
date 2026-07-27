@@ -1,6 +1,7 @@
 import type { ProductKey } from "./types";
 import manifest from "./product-images.json";
 import { isBlockedImageSrc } from "./blocked-images";
+import { isCatalogPlaceholderSrc } from "@/lib/media/placeholder-src";
 
 export type GalleryImageSource = "product" | "project";
 
@@ -12,6 +13,23 @@ export type ProductGalleryImage = {
   caption: string;
   source?: GalleryImageSource;
 };
+
+export { isCatalogPlaceholderSrc };
+
+/** True si la imagen puede mostrarse como foto real de producto/portada. */
+export function isRealProductImageSrc(src: string): boolean {
+  const value = src?.trim();
+  if (!value) return false;
+  if (isBlockedImageSrc(value)) return false;
+  if (isCatalogPlaceholderSrc(value)) return false;
+  return true;
+}
+
+function keepRealGalleryImages(
+  images: ProductGalleryImage[],
+): ProductGalleryImage[] {
+  return images.filter((image) => isRealProductImageSrc(image.src));
+}
 
 type ProductImageManifest = {
   categories: Partial<Record<ProductKey, string>>;
@@ -151,7 +169,7 @@ export function getProductCategoryImage(
   category: ProductKey,
 ): string | undefined {
   const image = data.categories[category];
-  if (!image || isBlockedImageSrc(image)) return undefined;
+  if (!image || !isRealProductImageSrc(image)) return undefined;
   return image;
 }
 
@@ -160,7 +178,7 @@ export function getProductSubcategoryImage(
   subcategory: string,
 ): string | undefined {
   const image = data.subcategories[category]?.[subcategory];
-  if (!image || isBlockedImageSrc(image)) return undefined;
+  if (!image || !isRealProductImageSrc(image)) return undefined;
   return image;
 }
 
@@ -197,14 +215,18 @@ export function getProductGallery(
   options: GetProductGalleryOptions = {},
 ): ProductGalleryImage[] {
   const items = normalizeProductGalleryList(
-    (data.galleries?.[category]?.[subcategory] ?? []).filter(
-      (item) => !isBlockedImageSrc(item.src),
+    keepRealGalleryImages(
+      (data.galleries?.[category]?.[subcategory] ?? []).filter(
+        (item) => !isBlockedImageSrc(item.src),
+      ),
     ),
   );
 
-  const filtered = options.source
-    ? items.filter((item) => item.source === options.source)
-    : items;
+  const filtered = keepRealGalleryImages(
+    options.source
+      ? items.filter((item) => item.source === options.source)
+      : items,
+  );
 
   if (filtered.length > 0) {
     if (options.source === "product") {
@@ -213,7 +235,7 @@ export function getProductGallery(
     return filtered;
   }
 
-  // Fallback de portada solo para la galería de producto.
+  // Fallback de portada solo para la galería de producto (nunca marcadores SVG).
   if (!options.source || options.source === "product") {
     const primary = getProductSubcategoryImage(category, subcategory);
     if (primary) {

@@ -387,7 +387,7 @@ async function loadImageCounts(): Promise<Map<string, number>> {
     );
 
     if (allRows.length > 0) {
-      const { normalizeProductGalleryList } = await import("@/lib/catalog/product-images");
+      const { normalizeProductGalleryList, isCatalogPlaceholderSrc } = await import("@/lib/catalog/product-images");
       const bySub = new Map<
         string,
         { src: string; caption: string; source?: "product" | "project" }[]
@@ -407,7 +407,8 @@ async function loadImageCounts(): Promise<Map<string, number>> {
       }
       for (const [key, images] of bySub) {
         const productOnly = normalizeProductGalleryList(images).filter(
-          (image) => image.source === "product",
+          (image) =>
+            image.source === "product" && !isCatalogPlaceholderSrc(image.src),
         );
         counts.set(key, productOnly.length);
       }
@@ -418,7 +419,7 @@ async function loadImageCounts(): Promise<Map<string, number>> {
   }
 
   const products = await getDocument<ProductImagesFile>("productImages");
-  const { normalizeProductGalleryList } = await import("@/lib/catalog/product-images");
+  const { normalizeProductGalleryList, isCatalogPlaceholderSrc } = await import("@/lib/catalog/product-images");
 
   for (const [category, subs] of Object.entries(products.galleries ?? {})) {
     for (const [subcategory, images] of Object.entries(subs)) {
@@ -441,7 +442,8 @@ async function loadImageCounts(): Promise<Map<string, number>> {
         });
       }
       const productOnly = normalizeProductGalleryList(mapped).filter(
-        (image) => image.source === "product",
+        (image) =>
+          image.source === "product" && !isCatalogPlaceholderSrc(image.src),
       );
       counts.set(`${category}/${subcategory}`, productOnly.length);
     }

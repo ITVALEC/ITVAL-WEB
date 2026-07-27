@@ -15,6 +15,7 @@ import { MANIFEST_PATHS, readJsonFile, writeJsonFile } from "./manifests";
 import { getProductCategoryLabel, getSubcategoryLabel } from "./product-labels";
 import {
   MAX_PRODUCT_GALLERY_IMAGES,
+  isCatalogPlaceholderSrc,
   normalizeProductGalleryList,
   type GalleryImageSource,
 } from "@/lib/catalog/product-images";
@@ -218,6 +219,7 @@ async function listProductGalleryFromManifest(
 
       normalized.forEach((image, index) => {
         if (image.source === "project") return;
+        if (isCatalogPlaceholderSrc(image.src)) return;
 
         productPhotoNumber += 1;
         items.push({
@@ -389,6 +391,7 @@ async function listFromDb(): Promise<AdminMediaItem[]> {
     let productPhotoNumber = 0;
     normalized.forEach((image, index) => {
       if (image.source === "project") return;
+      if (isCatalogPlaceholderSrc(image.src)) return;
       const meta = bucket.meta[index];
       productPhotoNumber += 1;
       fromDb.push({
@@ -883,7 +886,10 @@ export async function countProductGalleryImages(
                 : undefined,
           })),
         );
-        return normalized.filter((image) => image.source === "product").length;
+        return normalized.filter(
+          (image) =>
+            image.source === "product" && !isCatalogPlaceholderSrc(image.src),
+        ).length;
       }
     } catch {
       /* fallback JSON */
@@ -894,7 +900,10 @@ export async function countProductGalleryImages(
   const images = normalizeProductGalleryList(
     data.galleries?.[category]?.[subcategory] ?? [],
   );
-  return images.filter((image) => image.source === "product").length;
+  return images.filter(
+    (image) =>
+      image.source === "product" && !isCatalogPlaceholderSrc(image.src),
+  ).length;
 }
 
 /**

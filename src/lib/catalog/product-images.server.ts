@@ -1,5 +1,7 @@
 import "server-only";
 
+import fs from "node:fs";
+import path from "node:path";
 import { unstable_noStore as noStore } from "next/cache";
 import { getDocument } from "@/lib/db/documents";
 import { isDatabaseEnabled, query } from "@/lib/db/pool";
@@ -8,10 +10,12 @@ import bundled from "./product-images.json";
 import type { ProductKey } from "./types";
 import {
   MAX_PRODUCT_GALLERY_IMAGES,
+  isRealProductImageSrc,
   normalizeProductGalleryList,
   type GalleryImageSource,
   type ProductGalleryImage,
 } from "./product-images";
+import { isCatalogPlaceholderSrc } from "@/lib/media/placeholder-src";
 
 export type ProductImageManifest = {
   categories?: Partial<Record<ProductKey, string>>;
@@ -20,6 +24,26 @@ export type ProductImageManifest = {
     Record<ProductKey, Partial<Record<string, ProductGalleryImage[]>>>
   >;
 };
+
+/** True si el archivo existe bajo public/ (o symlink de deploy shared/images). */
+function publicImageFileExists(src: string): boolean {
+  if (!src?.trim() || isCatalogPlaceholderSrc(src)) return false;
+  try {
+    const relative = src.replace(/\\/g, "/").replace(/^\//, "").split("?")[0];
+    return fs.existsSync(path.join(process.cwd(), "public", relative));
+  } catch {
+    return false;
+  }
+}
+
+function keepRenderableProductImages(
+  images: ProductGalleryImage[],
+): ProductGalleryImage[] {
+  return images.filter(
+    (image) =>
+      isRealProductImageSrc(image.src) && publicImageFileExists(image.src),
+  );
+}
 
 /** Manifiesto vivo (DB / disco), no el snapshot del build. */
 export async function loadProductImagesManifest(): Promise<ProductImageManifest> {
@@ -106,11 +130,15 @@ export async function getProductImageLive(
   const data = await loadProductImagesManifest();
   if (subcategory) {
     const image = data.subcategories?.[category]?.[subcategory];
-    if (!image || isBlockedImageSrc(image)) return undefined;
+    if (!image || !isRealProductImageSrc(image) || !publicImageFileExists(image)) {
+      return undefined;
+    }
     return image;
   }
   const image = data.categories?.[category];
-  if (!image || isBlockedImageSrc(image)) return undefined;
+  if (!image || !isRealProductImageSrc(image) || !publicImageFileExists(image)) {
+    return undefined;
+  }
   return image;
 }
 
@@ -121,14 +149,18 @@ export async function getProductGalleryLive(
 ): Promise<ProductGalleryImage[]> {
   const data = await loadProductImagesManifest();
   const items = normalizeProductGalleryList(
-    (data.galleries?.[category]?.[subcategory] ?? []).filter(
-      (item) => !isBlockedImageSrc(item.src),
+    keepRenderableProductImages(
+      (data.galleries?.[category]?.[subcategory] ?? []).filter(
+        (item) => !isBlockedImageSrc(item.src),
+      ),
     ),
   );
 
-  const filtered = options.source
-    ? items.filter((item) => item.source === options.source)
-    : items;
+  const filtered = keepRenderableProductImages(
+    options.source
+      ? items.filter((item) => item.source === options.source)
+      : items,
+  );
 
   if (filtered.length > 0) {
     if (options.source === "product") {
@@ -139,7 +171,11 @@ export async function getProductGalleryLive(
 
   if (!options.source || options.source === "product") {
     const primary = data.subcategories?.[category]?.[subcategory];
-    if (primary && !isBlockedImageSrc(primary)) {
+    if (
+      primary &&
+      isRealProductImageSrc(primary) &&
+      publicImageFileExists(primary)
+    ) {
       return [{ src: primary, caption: "", source: "product" }];
     }
   }

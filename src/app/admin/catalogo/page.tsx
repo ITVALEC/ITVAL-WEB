@@ -1063,8 +1063,8 @@ export default function AdminCatalogoPage() {
                               sizes="200px"
                             />
                           ) : (
-                            <div className="flex h-full items-center justify-center text-xs text-grey">
-                              Vacío
+                            <div className="flex h-full items-center justify-center px-2 text-center text-xs text-grey">
+                              Agregar foto
                             </div>
                           )}
                         </div>

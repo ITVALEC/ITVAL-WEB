@@ -1,9 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { SafeImage } from "@/components/ui/SafeImage";
-import { MAX_PRODUCT_GALLERY_IMAGES } from "@/lib/catalog/product-images";
+import {
+  isCatalogPlaceholderSrc,
+  MAX_PRODUCT_GALLERY_IMAGES,
+} from "@/lib/catalog/product-images";
 import { CATALOG_NS } from "@/lib/i18n/namespaces";
 
 export type PreviewImage = {
@@ -19,12 +22,34 @@ export function ProductPreviewCarousel({
   images: rawImages,
 }: ProductPreviewCarouselProps) {
   const t = useTranslations(`${CATALOG_NS}.detail`);
-  const images = rawImages.slice(0, MAX_PRODUCT_GALLERY_IMAGES);
+  const [failedSrcs, setFailedSrcs] = useState<Set<string>>(() => new Set());
   const [active, setActive] = useState(0);
   const [zoomed, setZoomed] = useState(false);
   const touchStartX = useRef<number | null>(null);
 
+  const images = useMemo(
+    () =>
+      rawImages
+        .filter(
+          (image) =>
+            image.src?.trim() &&
+            !isCatalogPlaceholderSrc(image.src) &&
+            !failedSrcs.has(image.src),
+        )
+        .slice(0, MAX_PRODUCT_GALLERY_IMAGES),
+    [rawImages, failedSrcs],
+  );
+
   const total = images.length;
+
+  const markFailed = useCallback((src: string) => {
+    setFailedSrcs((prev) => {
+      if (prev.has(src)) return prev;
+      const next = new Set(prev);
+      next.add(src);
+      return next;
+    });
+  }, []);
 
   const goTo = useCallback(
     (index: number) => {
@@ -58,6 +83,7 @@ export function ProductPreviewCarousel({
     return () => window.removeEventListener("keydown", onKey);
   }, [zoomed, goPrev, goNext]);
 
+  // Sin fotos reales: no inventar placeholders SVG.
   if (total === 0) return null;
 
   const hasMultiple = total > 1;
@@ -80,7 +106,7 @@ export function ProductPreviewCarousel({
   return (
     <div className="flex min-w-0 flex-col gap-3">
       <div
-        className="group relative aspect-[4/3] w-full min-w-0 overflow-hidden rounded-2xl border border-grey/20 bg-white shadow-sm lg:aspect-auto lg:h-[440px]"
+        className="group relative aspect-[4/3] w-full min-w-0 overflow-hidden rounded-2xl border border-grey/20 bg-slate-100 shadow-sm lg:aspect-auto lg:h-[440px]"
         role="group"
         aria-roledescription="carousel"
         onKeyDown={(event) => {
@@ -105,6 +131,8 @@ export function ProductPreviewCarousel({
             fill
             priority={index === 0}
             aria-hidden={index !== active}
+            fallbackSrc={false}
+            onError={() => markFailed(image.src)}
             className="object-cover transition-opacity duration-500 ease-in-out motion-reduce:transition-none"
             style={{ opacity: index === active ? 1 : 0 }}
             sizes="(max-width: 1024px) 100vw, 40vw"
@@ -167,7 +195,7 @@ export function ProductPreviewCarousel({
               onClick={() => goTo(index)}
               aria-label={t("previewGoToImage", { index: index + 1 })}
               aria-current={index === active || undefined}
-              className={`relative h-16 w-20 shrink-0 overflow-hidden rounded-lg border transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2 sm:h-[72px] sm:w-[88px] ${
+              className={`relative h-16 w-20 shrink-0 overflow-hidden rounded-lg border bg-slate-100 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2 sm:h-[72px] sm:w-[88px] ${
                 index === active
                   ? "border-cornflower ring-2 ring-cornflower/40"
                   : "border-grey/30 opacity-70 hover:opacity-100"
@@ -177,6 +205,8 @@ export function ProductPreviewCarousel({
                 src={image.src}
                 alt=""
                 fill
+                fallbackSrc={false}
+                onError={() => markFailed(image.src)}
                 className="object-cover"
                 sizes="88px"
               />
@@ -241,11 +271,13 @@ export function ProductPreviewCarousel({
             onTouchStart={onTouchStart}
             onTouchEnd={onTouchEnd}
           >
-            <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg">
+            <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg bg-navy/40">
               <SafeImage
                 src={current.src}
                 alt={current.alt}
                 fill
+                fallbackSrc={false}
+                onError={() => markFailed(current.src)}
                 className="object-contain"
                 sizes="100vw"
               />
