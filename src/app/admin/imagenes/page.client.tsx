@@ -233,7 +233,7 @@ export default function AdminImagenesPage() {
       <AdminPanel>
         <AdminCrudToolbar
           title="Todas las fotos"
-          description="Productos incluye fotos de producto y portadas de cada solución (por categoría). Obras = proyectos. Usa el filtro de categoría para acotar."
+          description="Productos = portadas de solución + hasta 6 fotos de galería (ángulos). Obras = proyectos con nombres. Usa el filtro de categoría para acotar."
         />
 
         {(filterCategory || filterSubcategory) && (
@@ -474,8 +474,9 @@ export default function AdminImagenesPage() {
               </form>
             ) : editing.kind === "product" ? (
               <p className="text-sm text-grey-dark">
-                Galería del producto: ángulos anónimos sin nombre de obra. Solo puedes
-                reemplazar o eliminar el archivo. El subtítulo indica el producto.
+                Galería del producto: máximo 6 ángulos anónimos (sin nombre de obra). Solo puedes
+                reemplazar o eliminar el archivo. Gestiona los slots desde Catálogo → Portada y
+                galería.
               </p>
             ) : (
               <p className="text-sm text-grey-dark">

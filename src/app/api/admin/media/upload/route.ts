@@ -71,9 +71,8 @@ export async function POST(request: Request) {
     const src = await replaceMediaImage(item, buffer, file.name);
     return NextResponse.json({ ok: true, src, mediaId });
   } catch (error) {
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : "No se pudo subir la imagen" },
-      { status: 500 },
-    );
+    const message = error instanceof Error ? error.message : "No se pudo subir la imagen";
+    const status = message.includes("Máximo") ? 400 : 500;
+    return NextResponse.json({ error: message }, { status });
   }
 }

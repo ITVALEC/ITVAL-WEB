@@ -14,6 +14,7 @@ import {
 import { MANIFEST_PATHS, readJsonFile, writeJsonFile } from "./manifests";
 import { getProductCategoryLabel, getSubcategoryLabel } from "./product-labels";
 import {
+  MAX_PRODUCT_GALLERY_IMAGES,
   normalizeProductGalleryList,
   resolveGalleryImageSource,
   type GalleryImageSource,
@@ -23,6 +24,8 @@ const root = process.cwd();
 const PUBLIC_IMAGES = path.join(root, "public", "images");
 const ALLOWED_EXT = new Set([".jpg", ".jpeg", ".png", ".webp", ".avif", ".gif"]);
 const MAX_BYTES = 20 * 1024 * 1024;
+
+export { MAX_PRODUCT_GALLERY_IMAGES };
 
 export type MediaKind = "project" | "product" | "hero" | "other";
 
@@ -763,6 +766,13 @@ export async function addProductImage(
   originalName: string,
   caption = "",
 ): Promise<AdminMediaItem> {
+  const productCount = await countProductGalleryImages(category, subcategory);
+  if (productCount >= MAX_PRODUCT_GALLERY_IMAGES) {
+    throw new Error(
+      `Máximo ${MAX_PRODUCT_GALLERY_IMAGES} fotos del producto (ángulos). Elimina una antes de subir otra.`,
+    );
+  }
+
   const ext = extFromName(originalName);
   const base = sanitizeBaseName(path.basename(originalName, ext));
   const fileName = `${base}-${Date.now()}${ext}`;
@@ -772,6 +782,19 @@ export async function addProductImage(
 
   if (isDatabaseEnabled()) {
     await seedProductGalleryFromJsonIfEmpty(category, subcategory);
+
+    // Recontar tras seed por si el JSON ya tenía 6+ fotos de producto.
+    const afterSeed = await countProductGalleryImages(category, subcategory);
+    if (afterSeed >= MAX_PRODUCT_GALLERY_IMAGES) {
+      try {
+        fs.unlinkSync(publicPathFromSrc(publicSrc));
+      } catch {
+        /* ok */
+      }
+      throw new Error(
+        `Máximo ${MAX_PRODUCT_GALLERY_IMAGES} fotos del producto (ángulos). Elimina una antes de subir otra.`,
+      );
+    }
 
     const { rows } = await query<{ max: number | null }>(
       `SELECT MAX(sort_order) AS max FROM product_gallery_images
@@ -787,11 +810,12 @@ export async function addProductImage(
 
     appendProductImageToJson(category, subcategory, publicSrc, caption.trim());
     await afterMutation();
+    const photoNumber = afterSeed + 1;
     return {
       id: `product:${category}:${subcategory}:${sortOrder}`,
       kind: "product",
       src: publicSrc,
-      title: "Foto nueva",
+      title: `Foto ${photoNumber}`,
       subtitle: `${getProductCategoryLabel(category)} · ${getSubcategoryLabel(category, subcategory)}`,
       caption: "",
       category,
@@ -817,7 +841,7 @@ export async function addProductImage(
     id: `product:${category}:${subcategory}:${index}`,
     kind: "product",
     src: publicSrc,
-    title: `Foto ${index + 1}`,
+    title: `Foto ${productCount + 1}`,
     subtitle: `${getProductCategoryLabel(category)} · ${getSubcategoryLabel(category, subcategory)}`,
     caption: "",
     category,
@@ -825,6 +849,35 @@ export async function addProductImage(
     productIndex: index,
     gallerySource: "product",
   };
+}
+
+/** Cuenta solo fotos source=product (no obras/referencias). */
+export async function countProductGalleryImages(
+  category: string,
+  subcategory: string,
+): Promise<number> {
+  if (isDatabaseEnabled()) {
+    try {
+      const { rows } = await query<{ count: string }>(
+        `SELECT COUNT(*)::text AS count FROM product_gallery_images
+         WHERE category = $1 AND subcategory = $2
+           AND COALESCE(source, 'product') = 'product'
+           AND src NOT ILIKE '%/projects/%'
+           AND src NOT ILIKE '%/project/%'`,
+        [category, subcategory],
+      );
+      const dbCount = Number.parseInt(rows[0]?.count ?? "0", 10);
+      if (dbCount > 0) return dbCount;
+    } catch {
+      /* fallback JSON */
+    }
+  }
+
+  const data = readJsonFile<ProductManifest>(MANIFEST_PATHS.products);
+  const images = normalizeProductGalleryList(
+    data.galleries?.[category]?.[subcategory] ?? [],
+  );
+  return images.filter((image) => image.source === "product").length;
 }
 
 /**

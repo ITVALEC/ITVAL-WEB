@@ -18,6 +18,8 @@
     "previewNext": "View next image",
     "previewCounter": "{current} of {total}",
     "previewGoToImage": "View image {index}",
+    "previewZoom": "Enlarge image",
+    "previewZoomHint": "Click to enlarge",
     "projectGallery": "Project gallery & references",
     "closeGallery": "Close image",
     "galleryPaginationNav": "Gallery pagination",

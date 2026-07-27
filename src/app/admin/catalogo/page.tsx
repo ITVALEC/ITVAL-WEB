@@ -12,6 +12,7 @@ import {
 import {
   AdminBadge,
   AdminButton,
+  AdminConfirmDialog,
   AdminCrudToolbar,
   AdminModal,
 } from "@/components/admin/AdminCrud";
@@ -31,10 +32,18 @@ import type {
   CatalogFilterSelection,
   CatalogHubTexts,
 } from "@/app/api/admin/catalog/route";
+import type { AdminMediaItem } from "@/app/api/admin/media/route";
+import { MAX_PRODUCT_GALLERY_IMAGES } from "@/lib/catalog/product-images";
 
 type EditTarget =
   | { type: "category"; item: CatalogCategoryItem }
   | { type: "subcategory"; item: CatalogSubcategoryItem };
+
+type ProductMediaState = {
+  cover: AdminMediaItem | null;
+  gallery: AdminMediaItem[];
+  loading: boolean;
+};
 
 const EMPTY_FILTERS: CatalogFilterSelection = {
   primaryGroup: "other",
@@ -132,6 +141,12 @@ export default function AdminCatalogoPage() {
   const [descriptionEn, setDescriptionEn] = useState("");
   const [saving, setSaving] = useState(false);
   const [uploadSub, setUploadSub] = useState<CatalogSubcategoryItem | null>(null);
+  const [productMedia, setProductMedia] = useState<ProductMediaState>({
+    cover: null,
+    gallery: [],
+    loading: false,
+  });
+  const [deleteMediaTarget, setDeleteMediaTarget] = useState<AdminMediaItem | null>(null);
   const [previewVersion, setPreviewVersion] = useState(0);
   const [createCategoryOpen, setCreateCategoryOpen] = useState(false);
   const [createSubOpen, setCreateSubOpen] = useState(false);
@@ -163,6 +178,55 @@ export default function AdminCatalogoPage() {
   useEffect(() => {
     load();
   }, [load]);
+
+  const loadProductMedia = useCallback(async (sub: CatalogSubcategoryItem) => {
+    setProductMedia({ cover: null, gallery: [], loading: true });
+    const params = new URLSearchParams({
+      kind: "product",
+      category: sub.categoryKey,
+      subcategory: sub.key,
+      pageSize: "50",
+    });
+    const res = await fetch(`/api/admin/media?${params.toString()}`);
+    if (!res.ok) {
+      setProductMedia({ cover: null, gallery: [], loading: false });
+      setFeedback({ type: "error", message: "No se pudieron cargar las fotos del producto." });
+      return;
+    }
+    const data = (await res.json()) as { items: AdminMediaItem[] };
+    const cover =
+      data.items.find(
+        (item) => item.kind === "hero" && item.heroType === "subcategory",
+      ) ?? null;
+    const gallery = data.items.filter((item) => item.kind === "product");
+    setProductMedia({ cover, gallery, loading: false });
+  }, []);
+
+  useEffect(() => {
+    if (!uploadSub) return;
+    loadProductMedia(uploadSub);
+  }, [uploadSub, loadProductMedia]);
+
+  async function confirmDeleteMedia() {
+    if (!deleteMediaTarget || !uploadSub) return;
+    setSaving(true);
+    const res = await fetch(
+      `/api/admin/media?id=${encodeURIComponent(deleteMediaTarget.id)}`,
+      { method: "DELETE" },
+    );
+    setSaving(false);
+    if (res.ok) {
+      setDeleteMediaTarget(null);
+      setFeedback({ type: "success", message: "Foto eliminada de la galería." });
+      setPreviewVersion((v) => v + 1);
+      loadProductMedia(uploadSub);
+      load();
+    } else {
+      const body = await res.json();
+      setFeedback({ type: "error", message: body.error ?? "No se pudo eliminar." });
+      setDeleteMediaTarget(null);
+    }
+  }
 
   const filtered = categories.filter((cat) => {
     const q = query.toLowerCase().trim();
@@ -359,7 +423,7 @@ export default function AdminCatalogoPage() {
       <AdminPanel>
         <AdminCrudToolbar
           title="Categorías y productos"
-          description="Cada producto pertenece a una categoría. Aquí editas nombre, descripción y fotos del producto. Las obras (proyectos) se gestionan en Obras."
+          description="Cada producto pertenece a una categoría. Edita datos (nombre/descripción) o gestiona portada + hasta 6 fotos de galería. Las obras se gestionan en Obras."
           action={
             <AdminButton onClick={() => {
               setFeedback(null);
@@ -591,7 +655,8 @@ export default function AdminCatalogoPage() {
                         </div>
                         <p className="mt-0.5 line-clamp-2 text-sm text-grey-dark">{sub.descriptionEs}</p>
                         <p className="mt-1 text-xs text-grey">
-                          {sub.imageCount} fotos · código: {sub.key}
+                          Galería: {Math.min(sub.imageCount, MAX_PRODUCT_GALLERY_IMAGES)}/
+                          {MAX_PRODUCT_GALLERY_IMAGES} fotos · código: {sub.key}
                         </p>
                         {sub.filters ? (
                           <p className="mt-1 text-xs text-grey">
@@ -607,16 +672,16 @@ export default function AdminCatalogoPage() {
                       </div>
                       <div className="flex flex-wrap gap-2 sm:flex-col sm:items-stretch">
                         <AdminButton variant="secondary" onClick={() => openEdit({ type: "subcategory", item: sub })}>
-                          Editar producto
+                          Editar datos
                         </AdminButton>
                         <AdminButton variant="ghost" onClick={() => setUploadSub(sub)}>
-                          Subir foto
+                          Portada y galería
                         </AdminButton>
                         <Link
                           href={`/admin/imagenes?kind=product&category=${encodeURIComponent(sub.categoryKey)}&subcategory=${encodeURIComponent(sub.key)}`}
                           className="inline-flex min-h-11 items-center justify-center rounded-lg px-3 text-sm font-semibold text-cornflower-ink hover:bg-cornflower/10"
                         >
-                          Ver fotos
+                          Ver en Fotos
                         </Link>
                       </div>
                     </div>
@@ -863,34 +928,224 @@ export default function AdminCatalogoPage() {
 
       <AdminModal
         open={Boolean(uploadSub)}
-        title={uploadSub ? `Subir foto — ${uploadSub.titleEs}` : "Subir foto"}
-        onClose={() => setUploadSub(null)}
-        footer={<AdminButton variant="secondary" onClick={() => setUploadSub(null)}>Cerrar</AdminButton>}
+        title={uploadSub ? `Fotos — ${uploadSub.titleEs}` : "Fotos del producto"}
+        description="Portada del catálogo (1) y galería del producto (hasta 6 ángulos, sin nombres de obra)."
+        onClose={() => {
+          setUploadSub(null);
+          setDeleteMediaTarget(null);
+        }}
+        footer={
+          <AdminButton
+            variant="secondary"
+            onClick={() => {
+              setUploadSub(null);
+              setDeleteMediaTarget(null);
+            }}
+          >
+            Cerrar
+          </AdminButton>
+        }
       >
         {uploadSub ? (
-          <div className="space-y-3">
-            <p className="text-sm text-grey-dark">
-              Se agregará a la <strong>galería del producto</strong> (ángulos / detalles,
-              sin nombre de obra). La portada se gestiona aparte. Las obras van en{" "}
-              <strong>Obras</strong> o en la galería de referencias.
+          <div className="space-y-6">
+            <p className="rounded-lg border border-cornflower/25 bg-cornflower/5 px-3 py-2 text-sm text-navy">
+              <strong>Máximo {MAX_PRODUCT_GALLERY_IMAGES} fotos del producto (ángulos).</strong>{" "}
+              Las obras y referencias se gestionan en <strong>Obras</strong>, no aquí.
             </p>
-            <AdminImageUpload
-              action="add-product"
-              category={uploadSub.categoryKey}
-              subcategory={uploadSub.key}
-              label="Elegir archivo desde tu computadora"
-              variant="primary"
-              onSuccess={() => {
-                setPreviewVersion((v) => v + 1);
-                setFeedback({ type: "success", message: "Foto agregada al catálogo." });
-                setUploadSub(null);
-                load();
-              }}
-              onError={(msg) => setFeedback({ type: "error", message: msg })}
-            />
+
+            <section className="space-y-3">
+              <div>
+                <h3 className="text-sm font-semibold text-navy">1. Portada del producto</h3>
+                <p className="text-xs text-grey">
+                  Una sola imagen hero del catálogo y del encabezado de la ficha.
+                </p>
+              </div>
+              {productMedia.loading ? (
+                <p className="text-sm text-grey">Cargando…</p>
+              ) : productMedia.cover ? (
+                <div className="flex flex-wrap items-start gap-3 rounded-xl border border-grey/20 bg-slate-50 p-3">
+                  <div className="relative h-24 w-32 overflow-hidden rounded-lg bg-white">
+                    <AdminMediaImage
+                      src={productMedia.cover.src}
+                      version={previewVersion}
+                      fileMissing={productMedia.cover.fileMissing}
+                      sizes="128px"
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1 space-y-2">
+                    <p className="text-sm font-medium text-navy">Portada actual</p>
+                    <AdminImageUpload
+                      action="replace"
+                      mediaId={productMedia.cover.id}
+                      label="Reemplazar portada"
+                      variant="secondary"
+                      onSuccess={() => {
+                        setPreviewVersion((v) => v + 1);
+                        setFeedback({ type: "success", message: "Portada actualizada." });
+                        loadProductMedia(uploadSub);
+                        load();
+                      }}
+                      onError={(msg) => setFeedback({ type: "error", message: msg })}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <p className="text-sm text-grey-dark">
+                  Sin portada registrada. Usa{" "}
+                  <Link
+                    href={`/admin/imagenes?kind=hero&category=${encodeURIComponent(uploadSub.categoryKey)}&subcategory=${encodeURIComponent(uploadSub.key)}`}
+                    className="font-semibold text-cornflower-ink underline"
+                  >
+                    Fotos → Portadas
+                  </Link>{" "}
+                  o el listado de imágenes del producto.
+                </p>
+              )}
+            </section>
+
+            <section className="space-y-3">
+              <div className="flex flex-wrap items-end justify-between gap-2">
+                <div>
+                  <h3 className="text-sm font-semibold text-navy">
+                    2. Galería del producto ({productMedia.gallery.length}/
+                    {MAX_PRODUCT_GALLERY_IMAGES})
+                  </h3>
+                  <p className="text-xs text-grey">
+                    Foto 1…Foto {MAX_PRODUCT_GALLERY_IMAGES}: ángulos y detalles. Sin nombres de obra.
+                  </p>
+                </div>
+                <AdminImageUpload
+                  action="add-product"
+                  category={uploadSub.categoryKey}
+                  subcategory={uploadSub.key}
+                  label={
+                    productMedia.gallery.length >= MAX_PRODUCT_GALLERY_IMAGES
+                      ? "Límite alcanzado (6)"
+                      : "Agregar foto"
+                  }
+                  variant="primary"
+                  disabled={productMedia.gallery.length >= MAX_PRODUCT_GALLERY_IMAGES}
+                  hint={
+                    productMedia.gallery.length >= MAX_PRODUCT_GALLERY_IMAGES
+                      ? "Elimina una foto para liberar un slot."
+                      : `Quedan ${MAX_PRODUCT_GALLERY_IMAGES - productMedia.gallery.length} slots.`
+                  }
+                  onSuccess={() => {
+                    setPreviewVersion((v) => v + 1);
+                    setFeedback({ type: "success", message: "Foto agregada a la galería." });
+                    loadProductMedia(uploadSub);
+                    load();
+                  }}
+                  onError={(msg) => setFeedback({ type: "error", message: msg })}
+                />
+              </div>
+
+              {productMedia.loading ? (
+                <p className="text-sm text-grey">Cargando galería…</p>
+              ) : (
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                  {Array.from({ length: MAX_PRODUCT_GALLERY_IMAGES }, (_, slot) => {
+                    const item = productMedia.gallery[slot];
+                    return (
+                      <div
+                        key={`slot-${slot}`}
+                        className="overflow-hidden rounded-xl border border-grey/20 bg-white"
+                      >
+                        <div className="relative aspect-[4/3] bg-slate-100">
+                          {item ? (
+                            <AdminMediaImage
+                              src={item.src}
+                              version={previewVersion}
+                              fileMissing={item.fileMissing}
+                              sizes="200px"
+                            />
+                          ) : (
+                            <div className="flex h-full items-center justify-center text-xs text-grey">
+                              Vacío
+                            </div>
+                          )}
+                        </div>
+                        <div className="space-y-2 p-2.5">
+                          <p className="text-xs font-semibold text-navy">Foto {slot + 1}</p>
+                          {item ? (
+                            <div className="flex flex-wrap gap-1.5">
+                              <AdminImageUpload
+                                action="replace"
+                                mediaId={item.id}
+                                label="Reemplazar"
+                                variant="secondary"
+                                onSuccess={() => {
+                                  setPreviewVersion((v) => v + 1);
+                                  setFeedback({ type: "success", message: "Foto reemplazada." });
+                                  loadProductMedia(uploadSub);
+                                }}
+                                onError={(msg) => setFeedback({ type: "error", message: msg })}
+                              />
+                              <AdminButton
+                                variant="danger"
+                                onClick={() => setDeleteMediaTarget(item)}
+                                disabled={saving}
+                              >
+                                Eliminar
+                              </AdminButton>
+                            </div>
+                          ) : (
+                            <p className="text-xs text-grey">Usa «Agregar foto» arriba.</p>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {productMedia.gallery.length > MAX_PRODUCT_GALLERY_IMAGES ? (
+                <div className="space-y-2 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2">
+                  <p className="text-sm text-amber-950">
+                    Hay {productMedia.gallery.length} fotos históricas. En el sitio solo se
+                    muestran las primeras {MAX_PRODUCT_GALLERY_IMAGES}. Elimina las sobrantes:
+                  </p>
+                  <ul className="space-y-1.5">
+                    {productMedia.gallery.slice(MAX_PRODUCT_GALLERY_IMAGES).map((item, index) => (
+                      <li
+                        key={item.id}
+                        className="flex items-center justify-between gap-2 rounded-md bg-white/70 px-2 py-1.5 text-sm"
+                      >
+                        <span className="text-navy">
+                          Extra {MAX_PRODUCT_GALLERY_IMAGES + index + 1}
+                        </span>
+                        <AdminButton
+                          variant="danger"
+                          onClick={() => setDeleteMediaTarget(item)}
+                          disabled={saving}
+                        >
+                          Eliminar
+                        </AdminButton>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+            </section>
+
+            <p className="text-xs text-grey">
+              Para editar nombre, descripción o filtros usa <strong>Editar datos</strong> en la
+              lista del producto.
+            </p>
           </div>
         ) : null}
       </AdminModal>
+
+      <AdminConfirmDialog
+        open={Boolean(deleteMediaTarget)}
+        title="Eliminar foto de galería"
+        message="¿Quitar esta foto del producto? Se borrará del catálogo y del servidor."
+        confirmLabel="Eliminar"
+        danger
+        loading={saving}
+        onConfirm={confirmDeleteMedia}
+        onCancel={() => setDeleteMediaTarget(null)}
+      />
     </AdminShell>
   );
 }

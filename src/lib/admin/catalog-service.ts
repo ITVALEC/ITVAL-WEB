@@ -360,19 +360,46 @@ async function loadImageCounts(): Promise<Map<string, number>> {
   if (isDatabaseEnabled()) {
     const { rows } = await query<{ category: string; subcategory: string; count: string }>(
       `SELECT category, subcategory, COUNT(*)::text AS count
-       FROM product_gallery_images GROUP BY category, subcategory`,
+       FROM product_gallery_images
+       WHERE COALESCE(source, 'product') = 'product'
+         AND src NOT ILIKE '%/projects/%'
+         AND src NOT ILIKE '%/project/%'
+       GROUP BY category, subcategory`,
     );
     for (const row of rows) {
       counts.set(`${row.category}/${row.subcategory}`, Number.parseInt(row.count, 10));
     }
-    return counts;
+    // Si DB no tiene filas product, no inventar conteos desde obras.
+    if (counts.size > 0) return counts;
   }
 
   const products = await getDocument<ProductImagesFile>("productImages");
+  const { normalizeProductGalleryList } = await import("@/lib/catalog/product-images");
 
   for (const [category, subs] of Object.entries(products.galleries ?? {})) {
     for (const [subcategory, images] of Object.entries(subs)) {
-      counts.set(`${category}/${subcategory}`, images.length);
+      const list = Array.isArray(images) ? images : [];
+      const mapped: {
+        src: string;
+        caption: string;
+        source?: "product" | "project";
+      }[] = [];
+      for (const image of list) {
+        const row = image as { src?: string; caption?: string; source?: string };
+        if (typeof row.src !== "string" || !row.src) continue;
+        mapped.push({
+          src: row.src,
+          caption: typeof row.caption === "string" ? row.caption : "",
+          source:
+            row.source === "product" || row.source === "project"
+              ? row.source
+              : undefined,
+        });
+      }
+      const productOnly = normalizeProductGalleryList(mapped).filter(
+        (image) => image.source === "product",
+      );
+      counts.set(`${category}/${subcategory}`, productOnly.length);
     }
   }
   return counts;

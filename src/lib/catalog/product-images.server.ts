@@ -7,6 +7,7 @@ import { isBlockedImageSrc } from "./blocked-images";
 import bundled from "./product-images.json";
 import type { ProductKey } from "./types";
 import {
+  MAX_PRODUCT_GALLERY_IMAGES,
   normalizeProductGalleryList,
   type GalleryImageSource,
   type ProductGalleryImage,
@@ -129,7 +130,12 @@ export async function getProductGalleryLive(
     ? items.filter((item) => item.source === options.source)
     : items;
 
-  if (filtered.length > 0) return filtered;
+  if (filtered.length > 0) {
+    if (options.source === "product") {
+      return filtered.slice(0, MAX_PRODUCT_GALLERY_IMAGES);
+    }
+    return filtered;
+  }
 
   if (!options.source || options.source === "product") {
     const primary = data.subcategories?.[category]?.[subcategory];

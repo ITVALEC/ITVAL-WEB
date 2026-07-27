@@ -12,14 +12,13 @@ import {
   getProductOnlyGalleryLive,
   getProjectReferenceGalleryLive,
 } from "@/lib/catalog/product-images.server";
+import { MAX_PRODUCT_GALLERY_IMAGES } from "@/lib/catalog/product-images";
 import { ProductGallery } from "@/components/catalog/ProductGallery";
 import { ProductPreviewCarousel } from "@/components/catalog/ProductPreviewCarousel";
 import { breadcrumbTrail, productCategoryPath } from "@/lib/breadcrumbs";
 import { CATALOG_NS, subcategoryNamespace } from "@/lib/i18n/namespaces";
 import { NAV_PATHS } from "@/lib/routes";
 import { type ProductKey } from "@/lib/catalog";
-
-const PREVIEW_IMAGE_LIMIT = 6;
 
 type ProductDetailViewProps = {
   locale: string;
@@ -50,16 +49,19 @@ export async function ProductDetailView({
   const worksGallery = await getProjectReferenceGalleryLive(category, subcategory);
 
   const subtitle = tSub(`${subcategory}.title`);
-  const previewImages = [
-    ...(heroImage ? [{ src: heroImage, alt: subtitle }] : []),
-    ...productGalleryImages
-      .filter((image) => image.src !== heroImage)
-      .map((image, index) => ({
-        src: image.src,
-        // Ángulos anónimos: alt = producto, nunca caption de obra.
-        alt: `${subtitle} — ${index + 1}`,
-      })),
-  ].slice(0, PREVIEW_IMAGE_LIMIT);
+  // Galería Amazon: solo ángulos del producto (máx. 6). Sin obras ni captions.
+  // Si aún no hay galería, se usa la portada como único preview.
+  const galleryForPreview =
+    productGalleryImages.length > 0
+      ? productGalleryImages.slice(0, MAX_PRODUCT_GALLERY_IMAGES)
+      : heroImage
+        ? [{ src: heroImage, caption: "", source: "product" as const }]
+        : [];
+
+  const previewImages = galleryForPreview.map((image, index) => ({
+    src: image.src,
+    alt: `${subtitle} — ${index + 1}`,
+  }));
 
   return (
     <>

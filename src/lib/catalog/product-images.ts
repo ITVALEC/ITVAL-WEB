@@ -4,6 +4,9 @@ import { isBlockedImageSrc } from "./blocked-images";
 
 export type GalleryImageSource = "product" | "project";
 
+/** Máximo de fotos de producto (ángulos) en ficha pública y uploads. */
+export const MAX_PRODUCT_GALLERY_IMAGES = 6;
+
 export type ProductGalleryImage = {
   src: string;
   caption: string;
@@ -182,7 +185,12 @@ export function getProductGallery(
     ? items.filter((item) => item.source === options.source)
     : items;
 
-  if (filtered.length > 0) return filtered;
+  if (filtered.length > 0) {
+    if (options.source === "product") {
+      return filtered.slice(0, MAX_PRODUCT_GALLERY_IMAGES);
+    }
+    return filtered;
+  }
 
   // Fallback de portada solo para la galería de producto.
   if (!options.source || options.source === "product") {
@@ -195,7 +203,7 @@ export function getProductGallery(
   return [];
 }
 
-/** Fotos del producto para el carrusel / vista previa. */
+/** Fotos del producto para el carrusel / vista previa (máx. 6). */
 export function getProductOnlyGallery(
   category: ProductKey,
   subcategory: string,
