@@ -32,14 +32,25 @@ export function isProjectReferenceSrc(src: string): boolean {
   );
 }
 
+/**
+ * Upload admin reciente: `addProductImage` guarda `{base}-{Date.now()}{ext}`.
+ * Esas sí son ángulos de producto; el resto del dump histórico son obras.
+ */
+export function isAdminProductUploadSrc(src: string): boolean {
+  const normalized = src.replace(/\\/g, "/");
+  return /\/gallery\/[^/]+\/[^/]+\/[^/]+-\d{13}\.[a-z0-9]+$/i.test(normalized);
+}
+
 export function resolveGalleryImageSource(
   image: Pick<ProductGalleryImage, "src" | "source">,
 ): GalleryImageSource {
   // Path de obra gana siempre (evita filas DB mal etiquetadas como product).
   if (isProjectReferenceSrc(image.src)) return "project";
-  if (image.source === "product" || image.source === "project") {
-    return image.source;
-  }
+  // Uploads del admin (timestamp) son producto aunque el dump vecino diga otra cosa.
+  if (isAdminProductUploadSrc(image.src)) return "product";
+  if (image.source === "project") return "project";
+  if (image.source === "product") return "product";
+  // Sin etiqueta: no asumir producto (el DEFAULT de Postgres envenenaba el límite de 6).
   return "product";
 }
 
@@ -77,36 +88,46 @@ function significantCaptionTokens(caption: string): string[] {
 /**
  * Normaliza una galería completa:
  * - Paths /projects/ → source=project
- * - Fotos sueltas cuyo caption coincide con obras de la misma galería → project
- * - Si la galería es casi toda obras (/projects/) y quedan pocas sueltas → también project
+ * - Uploads admin (`-Date.now()`) → source=product
+ * - Dump histórico (>6 fotos sin timestamp) → source=project (no cuentan al límite Amazon)
+ * - Captions que coinciden con obras → project
  * - Galería de producto → caption vacío (ángulos anónimos, estilo Amazon)
  */
 export function normalizeProductGalleryList(
   images: ProductGalleryImage[],
 ): ProductGalleryImage[] {
-  const base = images.map((image) => ({
-    ...image,
-    source: resolveGalleryImageSource(image),
-  }));
+  const pathProjectCount = images.filter(
+    (image) => isProjectReferenceSrc(image.src) || image.source === "project",
+  ).length;
+  const adminProductCount = images.filter((image) =>
+    isAdminProductUploadSrc(image.src),
+  ).length;
+  const nonAdminCount = images.length - adminProductCount;
 
-  const projectCount = base.filter((image) => image.source === "project").length;
-  const looseCount = base.length - projectCount;
+  // Dump histórico: obras bajo gallery/{cat}/{sub}/ sin subcarpeta /projects/.
+  // ≥6 no-admin ⇒ no son ángulos Amazon (libera el límite y el carrusel).
+  const legacyDumpAsProject =
+    nonAdminCount >= MAX_PRODUCT_GALLERY_IMAGES ||
+    (pathProjectCount >= 10 && nonAdminCount > 0);
 
-  // Import histórico: thumbs de obra fuera de /projects/ junto a un bloque grande de referencias.
-  const treatAllLooseAsProject =
-    projectCount >= 10 && looseCount > 0 && looseCount <= 12;
-
-  const projectCaptionBlob = base
-    .filter((image) => image.source === "project")
+  const projectCaptionBlob = images
+    .filter(
+      (image) =>
+        isProjectReferenceSrc(image.src) || image.source === "project",
+    )
     .map((image) => (image.caption || "").toLowerCase())
     .join(" | ");
 
-  return base.map((image) => {
-    if (image.source === "project") {
-      return image;
+  return images.map((image) => {
+    if (isProjectReferenceSrc(image.src) || image.source === "project") {
+      return { ...image, source: "project" as const };
     }
 
-    if (treatAllLooseAsProject) {
+    if (isAdminProductUploadSrc(image.src)) {
+      return { ...image, source: "product" as const, caption: "" };
+    }
+
+    if (legacyDumpAsProject) {
       return { ...image, source: "project" as const };
     }
 
@@ -121,7 +142,7 @@ export function normalizeProductGalleryList(
       }
     }
 
-    // Galería Amazon: sin nombre de obra sobre el ángulo del producto.
+    // Galería Amazon pequeña (≤6): ángulos anónimos.
     return { ...image, source: "product" as const, caption: "" };
   });
 }

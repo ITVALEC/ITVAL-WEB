@@ -90,6 +90,7 @@ CREATE TRIGGER app_documents_updated_at
 ALTER TABLE product_gallery_images
   ADD COLUMN IF NOT EXISTS source TEXT NOT NULL DEFAULT 'product';
 
+-- Paths explícitos de obras.
 UPDATE product_gallery_images
 SET source = 'project'
 WHERE source = 'product'
@@ -98,11 +99,16 @@ WHERE source = 'product'
     OR src ILIKE '%/gallery/%/project/%'
   );
 
--- Thumbs de obra históricas fuera de /projects/ (ej. STICK / Fachadas).
-UPDATE product_gallery_images
+-- Dump histórico fuera de /projects/: no son ángulos Amazon (máx. 6).
+-- Solo se conservan como product los uploads admin con timestamp Date.now() (13 dígitos).
+UPDATE product_gallery_images AS p
 SET source = 'project'
 WHERE source = 'product'
-  AND category = 'facades'
-  AND subcategory = 'curtainWallStick'
   AND src NOT ILIKE '%/projects/%'
-  AND src NOT ILIKE '%/project/%';
+  AND src NOT ILIKE '%/project/%'
+  AND src !~ '/gallery/[^/]+/[^/]+/[^/]+-[0-9]{13}\.[a-zA-Z0-9]+$'
+  AND (
+    SELECT COUNT(*) FROM product_gallery_images x
+    WHERE x.category = p.category AND x.subcategory = p.subcategory
+      AND x.src !~ '/gallery/[^/]+/[^/]+/[^/]+-[0-9]{13}\.[a-zA-Z0-9]+$'
+  ) >= 6;

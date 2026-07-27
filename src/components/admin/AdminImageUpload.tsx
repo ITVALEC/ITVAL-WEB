@@ -43,11 +43,13 @@ export function AdminImageUpload({
   const inputId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
+  const [localError, setLocalError] = useState<string | null>(null);
 
   async function handleFile(file: File | null) {
     if (!file) return;
 
     setBusy(true);
+    setLocalError(null);
 
     const form = new FormData();
     form.set("file", file);
@@ -67,12 +69,16 @@ export function AdminImageUpload({
         data = { error: `Error del servidor (${res.status}).` };
       }
       if (!res.ok) {
-        onError?.(data.error ?? `No se pudo subir la imagen (${res.status}).`);
+        const message = data.error ?? `No se pudo subir la imagen (${res.status}).`;
+        setLocalError(message);
+        onError?.(message);
         return;
       }
       onSuccess?.(data);
     } catch {
-      onError?.("Error de red al subir la imagen. Revisa la conexión e inténtalo de nuevo.");
+      const message = "Error de red al subir la imagen. Revisa la conexión e inténtalo de nuevo.";
+      setLocalError(message);
+      onError?.(message);
     } finally {
       setBusy(false);
       if (inputRef.current) inputRef.current.value = "";
@@ -108,6 +114,11 @@ export function AdminImageUpload({
           {hint ? <p className="mt-1 text-xs text-grey">{hint}</p> : null}
         </div>
       )}
+      {localError ? (
+        <p className="mt-2 text-sm font-medium text-red-700" role="alert">
+          {localError}
+        </p>
+      ) : null}
     </div>
   );
 }

@@ -361,16 +361,60 @@ async function loadImageCounts(): Promise<Map<string, number>> {
     const { rows } = await query<{ category: string; subcategory: string; count: string }>(
       `SELECT category, subcategory, COUNT(*)::text AS count
        FROM product_gallery_images
-       WHERE COALESCE(source, 'product') = 'product'
+       WHERE source = 'product'
          AND src NOT ILIKE '%/projects/%'
          AND src NOT ILIKE '%/project/%'
+         AND src ~ '/gallery/[^/]+/[^/]+/[^/]+-[0-9]{13}\\.[a-zA-Z0-9]+$'
        GROUP BY category, subcategory`,
     );
+    // Conteos por SQL estricto (solo uploads admin). Si hay filas product legacy
+    // sin timestamp, caemos al normalize del manifiesto / filas completas abajo.
+    const strict = new Map<string, number>();
     for (const row of rows) {
-      counts.set(`${row.category}/${row.subcategory}`, Number.parseInt(row.count, 10));
+      strict.set(`${row.category}/${row.subcategory}`, Number.parseInt(row.count, 10));
     }
-    // Si DB no tiene filas product, no inventar conteos desde obras.
-    if (counts.size > 0) return counts;
+
+    const { rows: allRows } = await query<{
+      category: string;
+      subcategory: string;
+      src: string;
+      caption: string;
+      source: string | null;
+    }>(
+      `SELECT category, subcategory, src, caption, source
+       FROM product_gallery_images
+       ORDER BY category, subcategory, sort_order`,
+    );
+
+    if (allRows.length > 0) {
+      const { normalizeProductGalleryList } = await import("@/lib/catalog/product-images");
+      const bySub = new Map<
+        string,
+        { src: string; caption: string; source?: "product" | "project" }[]
+      >();
+      for (const row of allRows) {
+        const key = `${row.category}/${row.subcategory}`;
+        const bucket = bySub.get(key) ?? [];
+        bucket.push({
+          src: row.src,
+          caption: row.caption ?? "",
+          source:
+            row.source === "product" || row.source === "project"
+              ? row.source
+              : undefined,
+        });
+        bySub.set(key, bucket);
+      }
+      for (const [key, images] of bySub) {
+        const productOnly = normalizeProductGalleryList(images).filter(
+          (image) => image.source === "product",
+        );
+        counts.set(key, productOnly.length);
+      }
+      return counts;
+    }
+
+    if (strict.size > 0) return strict;
   }
 
   const products = await getDocument<ProductImagesFile>("productImages");

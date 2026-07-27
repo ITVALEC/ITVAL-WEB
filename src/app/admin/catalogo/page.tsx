@@ -948,6 +948,9 @@ export default function AdminCatalogoPage() {
       >
         {uploadSub ? (
           <div className="space-y-6">
+            {feedback ? (
+              <AdminStatusMessage type={feedback.type} message={feedback.message} />
+            ) : null}
             <p className="rounded-lg border border-cornflower/25 bg-cornflower/5 px-3 py-2 text-sm text-navy">
               <strong>Máximo {MAX_PRODUCT_GALLERY_IMAGES} fotos del producto (ángulos).</strong>{" "}
               Las obras y referencias se gestionan en <strong>Obras</strong>, no aquí.

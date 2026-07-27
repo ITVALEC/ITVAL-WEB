@@ -16,7 +16,6 @@ import { getProductCategoryLabel, getSubcategoryLabel } from "./product-labels";
 import {
   MAX_PRODUCT_GALLERY_IMAGES,
   normalizeProductGalleryList,
-  resolveGalleryImageSource,
   type GalleryImageSource,
 } from "@/lib/catalog/product-images";
 
@@ -299,6 +298,9 @@ async function listFromJson(): Promise<AdminMediaItem[]> {
 
 async function listFromDb(): Promise<AdminMediaItem[]> {
   const items: AdminMediaItem[] = [];
+
+  // Una vez por proceso: corrige source=product en dumps históricos (DEFAULT Postgres).
+  await ensureProductGallerySourcesReclassified();
 
   const { rows: projectRows } = await query<{
     id: string;
@@ -782,8 +784,10 @@ export async function addProductImage(
 
   if (isDatabaseEnabled()) {
     await seedProductGalleryFromJsonIfEmpty(category, subcategory);
+    // Reclasificar dumps históricos mal etiquetados como product (DEFAULT de Postgres).
+    await reclassifyProductGallerySources(category, subcategory);
 
-    // Recontar tras seed por si el JSON ya tenía 6+ fotos de producto.
+    // Recontar tras seed/reclasificación por si el JSON ya tenía 6+ ángulos reales.
     const afterSeed = await countProductGalleryImages(category, subcategory);
     if (afterSeed >= MAX_PRODUCT_GALLERY_IMAGES) {
       try {
@@ -851,23 +855,36 @@ export async function addProductImage(
   };
 }
 
-/** Cuenta solo fotos source=product (no obras/referencias). */
+/** Cuenta solo fotos source=product reales (no obras/referencias ni dumps históricos). */
 export async function countProductGalleryImages(
   category: string,
   subcategory: string,
 ): Promise<number> {
   if (isDatabaseEnabled()) {
     try {
-      const { rows } = await query<{ count: string }>(
-        `SELECT COUNT(*)::text AS count FROM product_gallery_images
+      const { rows } = await query<{
+        src: string;
+        caption: string;
+        source: string | null;
+      }>(
+        `SELECT src, caption, source FROM product_gallery_images
          WHERE category = $1 AND subcategory = $2
-           AND COALESCE(source, 'product') = 'product'
-           AND src NOT ILIKE '%/projects/%'
-           AND src NOT ILIKE '%/project/%'`,
+         ORDER BY sort_order`,
         [category, subcategory],
       );
-      const dbCount = Number.parseInt(rows[0]?.count ?? "0", 10);
-      if (dbCount > 0) return dbCount;
+      if (rows.length > 0) {
+        const normalized = normalizeProductGalleryList(
+          rows.map((row) => ({
+            src: row.src,
+            caption: row.caption ?? "",
+            source:
+              row.source === "product" || row.source === "project"
+                ? row.source
+                : undefined,
+          })),
+        );
+        return normalized.filter((image) => image.source === "product").length;
+      }
     } catch {
       /* fallback JSON */
     }
@@ -878,6 +895,92 @@ export async function countProductGalleryImages(
     data.galleries?.[category]?.[subcategory] ?? [],
   );
   return images.filter((image) => image.source === "product").length;
+}
+
+/**
+ * Reescribe `source` en Postgres según normalizeProductGalleryList.
+ * Evita que el DEFAULT 'product' bloquee uploads y filtre mal el front.
+ */
+export async function reclassifyProductGallerySources(
+  category?: string,
+  subcategory?: string,
+): Promise<number> {
+  if (!isDatabaseEnabled()) return 0;
+
+  const params: string[] = [];
+  let where = "";
+  if (category && subcategory) {
+    where = "WHERE category = $1 AND subcategory = $2";
+    params.push(category, subcategory);
+  }
+
+  const { rows } = await query<{
+    id: number;
+    category: string;
+    subcategory: string;
+    src: string;
+    caption: string;
+    source: string | null;
+    sort_order: number;
+  }>(
+    `SELECT id, category, subcategory, src, caption, source, sort_order
+     FROM product_gallery_images ${where}
+     ORDER BY category, subcategory, sort_order`,
+    params,
+  );
+
+  if (rows.length === 0) return 0;
+
+  const bySub = new Map<string, typeof rows>();
+  for (const row of rows) {
+    const key = `${row.category}::${row.subcategory}`;
+    const bucket = bySub.get(key) ?? [];
+    bucket.push(row);
+    bySub.set(key, bucket);
+  }
+
+  let updated = 0;
+  for (const bucket of bySub.values()) {
+    const normalized = normalizeProductGalleryList(
+      bucket.map((row) => ({
+        src: row.src,
+        caption: row.caption ?? "",
+        source:
+          row.source === "product" || row.source === "project"
+            ? row.source
+            : undefined,
+      })),
+    );
+
+    for (let i = 0; i < bucket.length; i += 1) {
+      const next = normalized[i]?.source ?? "project";
+      const current =
+        bucket[i].source === "product" || bucket[i].source === "project"
+          ? bucket[i].source
+          : "product";
+      if (next !== current) {
+        await query(`UPDATE product_gallery_images SET source = $2 WHERE id = $1`, [
+          bucket[i].id,
+          next,
+        ]);
+        updated += 1;
+      }
+    }
+  }
+
+  return updated;
+}
+
+let productGalleryReclassified = false;
+
+async function ensureProductGallerySourcesReclassified(): Promise<void> {
+  if (productGalleryReclassified || !isDatabaseEnabled()) return;
+  try {
+    await reclassifyProductGallerySources();
+    productGalleryReclassified = true;
+  } catch {
+    /* listar/contar igual con normalize en memoria */
+  }
 }
 
 /**
@@ -896,15 +999,23 @@ async function seedProductGalleryFromJsonIfEmpty(
   if (Number.parseInt(rows[0]?.count ?? "0", 10) > 0) return;
 
   const data = readJsonFile<ProductManifest>(MANIFEST_PATHS.products);
-  const images = data.galleries?.[category]?.[subcategory] ?? [];
+  const images = normalizeProductGalleryList(
+    data.galleries?.[category]?.[subcategory] ?? [],
+  );
   for (let index = 0; index < images.length; index += 1) {
     const image = images[index];
-    const source = resolveGalleryImageSource(image);
     await query(
       `INSERT INTO product_gallery_images (category, subcategory, src, caption, sort_order, source)
        VALUES ($1, $2, $3, $4, $5, $6)
        ON CONFLICT (category, subcategory, sort_order) DO NOTHING`,
-      [category, subcategory, image.src, image.caption ?? "", index, source],
+      [
+        category,
+        subcategory,
+        image.src,
+        image.source === "product" ? "" : (image.caption ?? ""),
+        index,
+        image.source ?? "project",
+      ],
     );
   }
 }
