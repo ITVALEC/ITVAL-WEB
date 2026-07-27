@@ -81,36 +81,46 @@ export async function syncDatabaseToJson(): Promise<void> {
     existing = { ...existing, ...productDocRows[0].data };
   }
 
-  const galleries: Record<
+  const galleriesFromDb: Record<
     string,
     Record<string, { src: string; caption: string; source?: string }[]>
   > = {};
 
-  let productSourceCount = 0;
   for (const row of productRows) {
-    galleries[row.category] ??= {};
-    galleries[row.category][row.subcategory] ??= [];
+    galleriesFromDb[row.category] ??= {};
+    galleriesFromDb[row.category][row.subcategory] ??= [];
     const source =
       row.source === "project" || row.source === "product"
         ? row.source
         : row.src.includes("/projects/") || row.src.includes("/project/")
           ? "project"
           : "product";
-    if (source === "product") productSourceCount += 1;
-    galleries[row.category][row.subcategory].push({
+    galleriesFromDb[row.category][row.subcategory].push({
       src: row.src,
       caption: row.caption ?? "",
       source,
     });
   }
 
-  // Si la DB no tiene fotos de producto (solo refs de obra), no pisar el manifiesto JSON.
-  const galleriesToWrite =
-    productSourceCount > 0
-      ? galleries
-      : ((existing.galleries as typeof galleries | undefined) ?? galleries);
+  // Merge: no borrar galerías del JSON que aún no están en Postgres.
+  // Solo sobrescribe cat/sub presentes en DB; el resto del manifiesto se conserva.
+  const existingGalleries =
+    (existing.galleries as
+      | Record<string, Record<string, { src: string; caption: string; source?: string }[]>>
+      | undefined) ?? {};
+  const galleriesToWrite: typeof existingGalleries = { ...existingGalleries };
+  for (const [category, subs] of Object.entries(galleriesFromDb)) {
+    galleriesToWrite[category] = {
+      ...(galleriesToWrite[category] ?? {}),
+      ...subs,
+    };
+  }
 
-  writeJson(MANIFEST_PATHS.products, { ...existing, galleries: galleriesToWrite });
+  // Si Postgres no tiene filas de galería, no reescribir el manifiesto solo por eso
+  // (igual que export-postgres-to-json.mjs); sí escribir si hay documento productImages.
+  if (productRows.length > 0 || productDocRows[0]?.data) {
+    writeJson(MANIFEST_PATHS.products, { ...existing, galleries: galleriesToWrite });
+  }
 
   const { rows: settingsRows } = await query<{ contact: unknown; footer: unknown }>(
     `SELECT contact, footer FROM site_settings WHERE id = 1`,

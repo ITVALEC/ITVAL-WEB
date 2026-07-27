@@ -63,6 +63,9 @@ function publicPathFromSrc(src: string): string {
 
 function extFromName(name: string): string {
   const ext = path.extname(name).toLowerCase();
+  if (ext === ".heic" || ext === ".heif") {
+    throw new Error("Formato HEIC/HEIF no soportado. Guarda o convierte la foto a JPG o PNG.");
+  }
   if (!ALLOWED_EXT.has(ext)) {
     throw new Error("Formato no permitido. Usa JPG, PNG, WebP o AVIF.");
   }
@@ -92,11 +95,37 @@ function sanitizeBaseName(name: string): string {
 }
 
 export function validateUpload(file: { size: number; type: string; name: string }): void {
+  if (!file.size || file.size <= 0) {
+    throw new Error("El archivo está vacío o no se pudo leer.");
+  }
   if (file.size > MAX_BYTES) {
     throw new Error("La imagen supera el límite de 20 MB.");
   }
-  extFromName(file.name);
-  extFromMime(file.type);
+
+  const ext = extFromName(file.name);
+  const mime = (file.type ?? "").trim().toLowerCase();
+
+  // Algunos navegadores/Windows envían type vacío o octet-stream; confiar en la extensión.
+  if (!mime || mime === "application/octet-stream") {
+    return;
+  }
+
+  if (mime === "image/heic" || mime === "image/heif") {
+    throw new Error("Formato HEIC/HEIF no soportado. Guarda o convierte la foto a JPG o PNG.");
+  }
+
+  try {
+    const mimeExt = extFromMime(mime);
+    // Permitir .jpg vs .jpeg mismatch; si MIME y extensión discrepan, confiar en la extensión.
+    if (
+      mimeExt === ext ||
+      ((mimeExt === ".jpg" || mimeExt === ".jpeg") && (ext === ".jpg" || ext === ".jpeg"))
+    ) {
+      return;
+    }
+  } catch {
+    // MIME desconocido: la extensión ya se validó arriba.
+  }
 }
 
 function ensureDir(dir: string) {
@@ -107,10 +136,21 @@ export function writeImageFile(
   buffer: Buffer,
   destPublicSrc: string,
 ): string {
-  const diskPath = publicPathFromSrc(destPublicSrc);
-  ensureDir(path.dirname(diskPath));
-  fs.writeFileSync(diskPath, buffer);
-  return destPublicSrc;
+  try {
+    const diskPath = publicPathFromSrc(destPublicSrc);
+    ensureDir(path.dirname(diskPath));
+    fs.writeFileSync(diskPath, buffer);
+    return destPublicSrc;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Error al guardar";
+    if (message.includes("EACCES") || message.includes("EPERM")) {
+      throw new Error("Sin permiso para guardar la imagen en el servidor.");
+    }
+    if (message.includes("ENOSPC")) {
+      throw new Error("No hay espacio en disco para guardar la imagen.");
+    }
+    throw new Error(`No se pudo guardar la imagen: ${message}`);
+  }
 }
 
 export function replaceImageAtSrc(src: string, buffer: Buffer): string {
@@ -493,13 +533,15 @@ export async function addProjectImage(
   writeImageFile(buffer, publicSrc);
 
   if (isDatabaseEnabled()) {
+    await ensureProjectExistsInDb(projectId);
+
     const { rows } = await query<{ max: number | null }>(
       `SELECT MAX(sort_order) AS max FROM project_images WHERE project_id = $1`,
       [projectId],
     );
     const sortOrder = (rows[0]?.max ?? -1) + 1;
-    const { rows: projectRows } = await query<{ name: string }>(
-      `SELECT name FROM projects WHERE id = $1`,
+    const { rows: projectRows } = await query<{ name: string; city: string }>(
+      `SELECT name, city FROM projects WHERE id = $1`,
       [projectId],
     );
     if (!projectRows[0]) throw new Error("Proyecto no encontrado.");
@@ -508,13 +550,16 @@ export async function addProjectImage(
        VALUES ($1, $2, $3, $4)`,
       [projectId, publicSrc, sortOrder, projectRows[0].name],
     );
+
+    // Mantener también el manifiesto JSON alineado.
+    appendProjectImageToJson(projectId, publicSrc);
     await afterMutation();
     return {
       id: `project:${projectId}:${sortOrder}`,
       kind: "project",
       src: publicSrc,
       title: projectRows[0].name,
-      subtitle: "Proyecto",
+      subtitle: projectRows[0].city || "Obra",
       caption: projectRows[0].name,
       projectId,
       galleryIndex: sortOrder,
@@ -544,6 +589,71 @@ export async function addProjectImage(
   };
 }
 
+/** Si la obra solo está en JSON, crearla en Postgres antes de subir fotos. */
+async function ensureProjectExistsInDb(projectId: string): Promise<void> {
+  const { rows } = await query<{ id: string }>(
+    `SELECT id FROM projects WHERE id = $1`,
+    [projectId],
+  );
+  if (rows[0]) return;
+
+  const data = readJsonFile<ProjectManifest>(MANIFEST_PATHS.projects);
+  const project = data.projects.find((p) => p.id === projectId);
+  if (!project) {
+    throw new Error(
+      "Esta obra no está en la base de datos. Espera el próximo deploy o avisa a soporte.",
+    );
+  }
+
+  await query(
+    `INSERT INTO projects (
+      id, name, city, location, year, folder,
+      product_category, product_subcategory, cover_path, cover_index, featured
+    ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+    ON CONFLICT (id) DO NOTHING`,
+    [
+      project.id,
+      project.name,
+      project.city,
+      project.location ?? `${project.city}, Ecuador`,
+      project.year,
+      project.folder ?? null,
+      project.productCategory,
+      project.productSubcategory ?? null,
+      project.cover,
+      project.coverIndex ?? 0,
+      Boolean(project.featured),
+    ],
+  );
+
+  const gallery = project.gallery ?? [];
+  for (let index = 0; index < gallery.length; index += 1) {
+    await query(
+      `INSERT INTO project_images (project_id, src, sort_order, alt_text)
+       VALUES ($1, $2, $3, $4)
+       ON CONFLICT (project_id, sort_order) DO NOTHING`,
+      [project.id, gallery[index], index, project.name],
+    );
+  }
+}
+
+function appendProjectImageToJson(projectId: string, publicSrc: string): void {
+  try {
+    const data = readJsonFile<ProjectManifest>(MANIFEST_PATHS.projects);
+    const project = data.projects.find((p) => p.id === projectId);
+    if (!project) return;
+    if (!project.gallery.includes(publicSrc)) {
+      project.gallery.push(publicSrc);
+      project.imageCount = project.gallery.length;
+      if (!project.cover) project.cover = publicSrc;
+      data.generatedAt = new Date().toISOString();
+      writeJsonFile(MANIFEST_PATHS.projects, data);
+    }
+  } catch {
+    /* manifiesto ausente: sync posterior */
+  }
+}
+
 export async function addProductImage(
   category: string,
   subcategory: string,
@@ -559,6 +669,8 @@ export async function addProductImage(
   writeImageFile(buffer, publicSrc);
 
   if (isDatabaseEnabled()) {
+    await seedProductGalleryFromJsonIfEmpty(category, subcategory);
+
     const { rows } = await query<{ max: number | null }>(
       `SELECT MAX(sort_order) AS max FROM product_gallery_images
        WHERE category = $1 AND subcategory = $2`,
@@ -570,6 +682,8 @@ export async function addProductImage(
        VALUES ($1, $2, $3, $4, $5, 'product')`,
       [category, subcategory, publicSrc, caption.trim(), sortOrder],
     );
+
+    appendProductImageToJson(category, subcategory, publicSrc, caption.trim());
     await afterMutation();
     return {
       id: `product:${category}:${subcategory}:${sortOrder}`,
@@ -581,6 +695,7 @@ export async function addProductImage(
       category,
       subcategory,
       productIndex: sortOrder,
+      gallerySource: "product",
     };
   }
 
@@ -608,6 +723,59 @@ export async function addProductImage(
     productIndex: index,
     gallerySource: "product",
   };
+}
+
+/**
+ * Si Postgres no tiene aún la galería de este producto, copiarla desde el JSON
+ * para no pisar decenas de fotos al sincronizar tras el primer upload.
+ */
+async function seedProductGalleryFromJsonIfEmpty(
+  category: string,
+  subcategory: string,
+): Promise<void> {
+  const { rows } = await query<{ count: string }>(
+    `SELECT COUNT(*)::text AS count FROM product_gallery_images
+     WHERE category = $1 AND subcategory = $2`,
+    [category, subcategory],
+  );
+  if (Number.parseInt(rows[0]?.count ?? "0", 10) > 0) return;
+
+  const data = readJsonFile<ProductManifest>(MANIFEST_PATHS.products);
+  const images = data.galleries?.[category]?.[subcategory] ?? [];
+  for (let index = 0; index < images.length; index += 1) {
+    const image = images[index];
+    const source = resolveGalleryImageSource(image);
+    await query(
+      `INSERT INTO product_gallery_images (category, subcategory, src, caption, sort_order, source)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       ON CONFLICT (category, subcategory, sort_order) DO NOTHING`,
+      [category, subcategory, image.src, image.caption ?? "", index, source],
+    );
+  }
+}
+
+function appendProductImageToJson(
+  category: string,
+  subcategory: string,
+  publicSrc: string,
+  caption: string,
+): void {
+  try {
+    const data = readJsonFile<ProductManifest>(MANIFEST_PATHS.products);
+    data.galleries ??= {};
+    data.galleries[category] ??= {};
+    data.galleries[category][subcategory] ??= [];
+    if (!data.galleries[category][subcategory].some((img) => img.src === publicSrc)) {
+      data.galleries[category][subcategory].push({
+        src: publicSrc,
+        caption,
+        source: "product",
+      });
+      writeJsonFile(MANIFEST_PATHS.products, data);
+    }
+  } catch {
+    /* sync posterior */
+  }
 }
 
 async function reindexProjectGallery(projectId: string): Promise<void> {

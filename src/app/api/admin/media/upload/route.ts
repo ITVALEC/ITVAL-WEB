@@ -32,6 +32,9 @@ export async function POST(request: Request) {
   }
 
   const buffer = Buffer.from(await file.arrayBuffer());
+  if (buffer.length === 0) {
+    return NextResponse.json({ error: "El archivo llegó vacío al servidor." }, { status: 400 });
+  }
 
   try {
     if (action === "add-project") {

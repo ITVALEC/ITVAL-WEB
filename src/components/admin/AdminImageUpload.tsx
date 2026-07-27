@@ -48,7 +48,6 @@ export function AdminImageUpload({
     if (!file) return;
 
     setBusy(true);
-    onError?.("");
 
     const form = new FormData();
     form.set("file", file);
@@ -61,14 +60,19 @@ export function AdminImageUpload({
 
     try {
       const res = await fetch("/api/admin/media/upload", { method: "POST", body: form });
-      const data = await res.json();
+      let data: { error?: string; src?: string; item?: unknown; ok?: boolean } = {};
+      try {
+        data = await res.json();
+      } catch {
+        data = { error: `Error del servidor (${res.status}).` };
+      }
       if (!res.ok) {
-        onError?.(data.error ?? "No se pudo subir la imagen.");
+        onError?.(data.error ?? `No se pudo subir la imagen (${res.status}).`);
         return;
       }
       onSuccess?.(data);
     } catch {
-      onError?.("Error de red al subir la imagen.");
+      onError?.("Error de red al subir la imagen. Revisa la conexión e inténtalo de nuevo.");
     } finally {
       setBusy(false);
       if (inputRef.current) inputRef.current.value = "";

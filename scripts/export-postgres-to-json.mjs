@@ -97,11 +97,11 @@ async function main() {
     fs.readFileSync(path.join(root, "src/lib/catalog/product-images.json"), "utf8"),
   );
 
-  const galleries = {};
+  const galleriesFromDb = {};
   for (const row of productRows) {
-    galleries[row.category] ??= {};
-    galleries[row.category][row.subcategory] ??= [];
-    galleries[row.category][row.subcategory].push({
+    galleriesFromDb[row.category] ??= {};
+    galleriesFromDb[row.category][row.subcategory] ??= [];
+    galleriesFromDb[row.category][row.subcategory].push({
       src: row.src,
       caption: row.caption ?? "",
       source:
@@ -113,11 +113,20 @@ async function main() {
     });
   }
 
-  // Si product_gallery_images está vacío, no borrar galleries del manifiesto.
+  // Merge por categoría/producto: no borrar galerías que solo existen en el JSON.
+  const existingGalleries = existingProducts.galleries ?? {};
+  const galleriesMerged = { ...existingGalleries };
+  for (const [category, subs] of Object.entries(galleriesFromDb)) {
+    galleriesMerged[category] = {
+      ...(galleriesMerged[category] ?? {}),
+      ...subs,
+    };
+  }
+
   if (productRows.length > 0) {
     writeJson("src/lib/catalog/product-images.json", {
       ...existingProducts,
-      galleries,
+      galleries: galleriesMerged,
     });
   } else {
     console.warn(
