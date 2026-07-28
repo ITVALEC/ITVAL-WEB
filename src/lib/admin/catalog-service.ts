@@ -298,6 +298,16 @@ function buildSubcategoryContent(
   };
 }
 
+type CatalogSubcategoryRecord = {
+  title: string;
+  description: string;
+  applications?: { i1: string; i2: string; i3: string };
+  benefits?: { i1: string; i2: string; i3: string };
+  materials?: string;
+  standards?: string;
+  options?: string;
+};
+
 export type CatalogSubcategoryItem = {
   key: string;
   categoryKey: string;
@@ -305,6 +315,12 @@ export type CatalogSubcategoryItem = {
   titleEn: string;
   descriptionEs: string;
   descriptionEn: string;
+  materialsEs: string;
+  materialsEn: string;
+  standardsEs: string;
+  standardsEn: string;
+  optionsEs: string;
+  optionsEn: string;
   imageCount: number;
   heroSrc: string | null;
   filters: CatalogFilterSelection;
@@ -324,14 +340,14 @@ export type CatalogCategoryItem = {
 
 async function readCatalog(locale: "es" | "en"): Promise<{
   categories: Record<string, { title: string; description: string }>;
-  subcategories: Record<string, Record<string, { title: string; description: string }>>;
+  subcategories: Record<string, Record<string, CatalogSubcategoryRecord>>;
 }> {
   const full = await readFullCatalog(locale);
   return {
     categories: (full.categories ?? {}) as Record<string, { title: string; description: string }>,
     subcategories: (full.subcategories ?? {}) as Record<
       string,
-      Record<string, { title: string; description: string }>
+      Record<string, CatalogSubcategoryRecord>
     >,
   };
 }
@@ -340,7 +356,7 @@ async function writeCatalog(
   locale: "es" | "en",
   data: {
     categories: Record<string, { title: string; description: string }>;
-    subcategories: Record<string, Record<string, { title: string; description: string }>>;
+    subcategories: Record<string, Record<string, CatalogSubcategoryRecord>>;
   },
 ): Promise<void> {
   const existing = await readFullCatalog(locale);
@@ -475,20 +491,30 @@ export async function listCatalogTree(): Promise<CatalogCategoryItem[]> {
   return Object.entries(tax).map(([categoryKey, subs]) => {
     const subcategoryKeys = subs as string[];
     const categoryFilters = filterConfig.categories[categoryKey];
-    const subcategories: CatalogSubcategoryItem[] = subcategoryKeys.map((subKey) => ({
-      key: subKey,
-      categoryKey,
-      titleEs: es.subcategories[categoryKey]?.[subKey]?.title ?? subKey,
-      titleEn: en.subcategories[categoryKey]?.[subKey]?.title ?? subKey,
-      descriptionEs: es.subcategories[categoryKey]?.[subKey]?.description ?? "",
-      descriptionEn: en.subcategories[categoryKey]?.[subKey]?.description ?? "",
-      imageCount: imageCounts.get(`${categoryKey}/${subKey}`) ?? 0,
-      heroSrc: heroes.subcategories[categoryKey]?.[subKey] ?? null,
-      filters: resolveFilters(
-        categoryFilters,
-        filterConfig.subcategories[categoryKey]?.[subKey],
-      ),
-    }));
+    const subcategories: CatalogSubcategoryItem[] = subcategoryKeys.map((subKey) => {
+      const esSub = es.subcategories[categoryKey]?.[subKey];
+      const enSub = en.subcategories[categoryKey]?.[subKey];
+      return {
+        key: subKey,
+        categoryKey,
+        titleEs: esSub?.title ?? subKey,
+        titleEn: enSub?.title ?? subKey,
+        descriptionEs: esSub?.description ?? "",
+        descriptionEn: enSub?.description ?? "",
+        materialsEs: esSub?.materials ?? "",
+        materialsEn: enSub?.materials ?? "",
+        standardsEs: esSub?.standards ?? "",
+        standardsEn: enSub?.standards ?? "",
+        optionsEs: esSub?.options ?? "",
+        optionsEn: enSub?.options ?? "",
+        imageCount: imageCounts.get(`${categoryKey}/${subKey}`) ?? 0,
+        heroSrc: heroes.subcategories[categoryKey]?.[subKey] ?? null,
+        filters: resolveFilters(
+          categoryFilters,
+          filterConfig.subcategories[categoryKey]?.[subKey],
+        ),
+      };
+    });
 
     const categoryImageCount = subcategories.reduce((sum, sub) => sum + sub.imageCount, 0);
 
@@ -506,6 +532,23 @@ export async function listCatalogTree(): Promise<CatalogCategoryItem[]> {
   });
 }
 
+function applySubcategoryTextFields(
+  sub: CatalogSubcategoryRecord,
+  patch: {
+    title?: string;
+    description?: string;
+    materials?: string;
+    standards?: string;
+    options?: string;
+  },
+): void {
+  if (patch.title != null) sub.title = patch.title.trim();
+  if (patch.description != null) sub.description = patch.description.trim();
+  if (patch.materials != null) sub.materials = patch.materials.trim();
+  if (patch.standards != null) sub.standards = patch.standards.trim();
+  if (patch.options != null) sub.options = patch.options.trim();
+}
+
 export async function updateCatalogEntry(patch: {
   type: "category" | "subcategory";
   categoryKey: string;
@@ -514,6 +557,12 @@ export async function updateCatalogEntry(patch: {
   titleEn?: string;
   descriptionEs?: string;
   descriptionEn?: string;
+  materialsEs?: string;
+  materialsEn?: string;
+  standardsEs?: string;
+  standardsEn?: string;
+  optionsEs?: string;
+  optionsEn?: string;
 }): Promise<void> {
   const es = await readCatalog("es");
   const en = await readCatalog("en");
@@ -533,16 +582,29 @@ export async function updateCatalogEntry(patch: {
     if (!patch.subcategoryKey) throw new Error("Subcategoría requerida.");
     es.subcategories[patch.categoryKey] ??= {};
     en.subcategories[patch.categoryKey] ??= {};
-    es.subcategories[patch.categoryKey][patch.subcategoryKey] ??= { title: "", description: "" };
-    en.subcategories[patch.categoryKey][patch.subcategoryKey] ??= { title: "", description: "" };
+    es.subcategories[patch.categoryKey][patch.subcategoryKey] ??= {
+      title: "",
+      description: "",
+    };
+    en.subcategories[patch.categoryKey][patch.subcategoryKey] ??= {
+      title: "",
+      description: "",
+    };
 
-    const esSub = es.subcategories[patch.categoryKey][patch.subcategoryKey];
-    const enSub = en.subcategories[patch.categoryKey][patch.subcategoryKey];
-
-    if (patch.titleEs != null) esSub.title = patch.titleEs.trim();
-    if (patch.titleEn != null) enSub.title = patch.titleEn.trim();
-    if (patch.descriptionEs != null) esSub.description = patch.descriptionEs.trim();
-    if (patch.descriptionEn != null) enSub.description = patch.descriptionEn.trim();
+    applySubcategoryTextFields(es.subcategories[patch.categoryKey][patch.subcategoryKey], {
+      title: patch.titleEs,
+      description: patch.descriptionEs,
+      materials: patch.materialsEs,
+      standards: patch.standardsEs,
+      options: patch.optionsEs,
+    });
+    applySubcategoryTextFields(en.subcategories[patch.categoryKey][patch.subcategoryKey], {
+      title: patch.titleEn,
+      description: patch.descriptionEn,
+      materials: patch.materialsEn,
+      standards: patch.standardsEn,
+      options: patch.optionsEn,
+    });
   }
 
   await writeCatalog("es", es);

@@ -136,24 +136,39 @@ export async function ProductDetailView({
                   {tSub(`${subcategory}.title`)}
                 </h2>
                 <p className="mt-3 text-base leading-relaxed text-grey-dark">
-                  {tCatalog("detail.previewHint")}
+                  {tSub(`${subcategory}.description`).trim() ||
+                    tCatalog("detail.previewHint")}
                 </p>
               </div>
 
-              <dl className="divide-y divide-grey/15 overflow-hidden rounded-xl border border-grey/20">
-                <SpecRow
-                  title={tCatalog("detail.materials")}
-                  content={tSub(`${subcategory}.materials`)}
-                />
-                <SpecRow
-                  title={tCatalog("detail.standards")}
-                  content={tSub(`${subcategory}.standards`)}
-                />
-                <SpecRow
-                  title={tCatalog("detail.options")}
-                  content={tSub(`${subcategory}.options`)}
-                />
-              </dl>
+              {(() => {
+                const materials = tSub(`${subcategory}.materials`).trim();
+                const standards = tSub(`${subcategory}.standards`).trim();
+                const options = tSub(`${subcategory}.options`).trim();
+                if (!materials && !standards && !options) return null;
+                return (
+                  <dl className="divide-y divide-grey/15 overflow-hidden rounded-xl border border-grey/20">
+                    {materials ? (
+                      <SpecRow
+                        title={tCatalog("detail.materials")}
+                        content={materials}
+                      />
+                    ) : null}
+                    {standards ? (
+                      <SpecRow
+                        title={tCatalog("detail.standards")}
+                        content={standards}
+                      />
+                    ) : null}
+                    {options ? (
+                      <SpecRow
+                        title={tCatalog("detail.options")}
+                        content={options}
+                      />
+                    ) : null}
+                  </dl>
+                );
+              })()}
 
               <ButtonLink href={NAV_PATHS.contact} variant="primary">
                 {tCatalog("detail.requestQuote")}

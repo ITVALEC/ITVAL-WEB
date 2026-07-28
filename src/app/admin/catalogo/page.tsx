@@ -139,6 +139,12 @@ export default function AdminCatalogoPage() {
   const [titleEn, setTitleEn] = useState("");
   const [descriptionEs, setDescriptionEs] = useState("");
   const [descriptionEn, setDescriptionEn] = useState("");
+  const [materialsEs, setMaterialsEs] = useState("");
+  const [materialsEn, setMaterialsEn] = useState("");
+  const [standardsEs, setStandardsEs] = useState("");
+  const [standardsEn, setStandardsEn] = useState("");
+  const [optionsEs, setOptionsEs] = useState("");
+  const [optionsEn, setOptionsEn] = useState("");
   const [saving, setSaving] = useState(false);
   const [uploadSub, setUploadSub] = useState<CatalogSubcategoryItem | null>(null);
   const [productMedia, setProductMedia] = useState<ProductMediaState>({
@@ -252,6 +258,21 @@ export default function AdminCatalogoPage() {
     setTitleEn(target.item.titleEn);
     setDescriptionEs(target.item.descriptionEs);
     setDescriptionEn(target.item.descriptionEn);
+    if (target.type === "subcategory") {
+      setMaterialsEs(target.item.materialsEs);
+      setMaterialsEn(target.item.materialsEn);
+      setStandardsEs(target.item.standardsEs);
+      setStandardsEn(target.item.standardsEn);
+      setOptionsEs(target.item.optionsEs);
+      setOptionsEn(target.item.optionsEn);
+    } else {
+      setMaterialsEs("");
+      setMaterialsEn("");
+      setStandardsEs("");
+      setStandardsEn("");
+      setOptionsEs("");
+      setOptionsEn("");
+    }
     setEditFilters({
       primaryGroup: target.item.filters?.primaryGroup ?? "other",
       sectors: [...(target.item.filters?.sectors ?? [])],
@@ -324,6 +345,12 @@ export default function AdminCatalogoPage() {
             titleEn,
             descriptionEs,
             descriptionEn,
+            materialsEs,
+            materialsEn,
+            standardsEs,
+            standardsEn,
+            optionsEs,
+            optionsEn,
             filters: subcategoryFilters,
           };
 
@@ -337,7 +364,10 @@ export default function AdminCatalogoPage() {
     if (res.ok) {
       setFeedback({
         type: "success",
-        message: "Cambios guardados. Nombres y filtros actualizados en el sitio.",
+        message:
+          editing.type === "subcategory"
+            ? "Ficha del producto actualizada (descripción, materiales, normas y opciones)."
+            : "Cambios guardados. Nombres y filtros actualizados en el sitio.",
       });
       closeEdit();
       load();
@@ -701,7 +731,7 @@ export default function AdminCatalogoPage() {
             ? `Pertenece a: ${
                 categories.find((c) => c.key === editing.item.categoryKey)?.titleEs ??
                 editing.item.categoryKey
-              }`
+              }. Edita la intro de la ficha, materiales, normas y opciones (ES/EN).`
             : "Los cambios se ven en el sitio público (español e inglés)."
         }
         onClose={closeEdit}
@@ -739,18 +769,94 @@ export default function AdminCatalogoPage() {
                 <AdminField label="Nombre en español" htmlFor="title-es">
                   <input id="title-es" type="text" value={titleEs} onChange={(e) => setTitleEs(e.target.value)} className={adminInputClass} required />
                 </AdminField>
-                <AdminField label="Descripción en español" htmlFor="desc-es">
+                <AdminField
+                  label={
+                    editing.type === "subcategory"
+                      ? "Descripción / intro de la ficha (español)"
+                      : "Descripción en español"
+                  }
+                  htmlFor="desc-es"
+                >
                   <textarea id="desc-es" value={descriptionEs} onChange={(e) => setDescriptionEs(e.target.value)} className={adminTextareaClass} rows={4} />
                 </AdminField>
+                {editing.type === "subcategory" ? (
+                  <>
+                    <AdminField label="Materiales (español)" htmlFor="materials-es">
+                      <textarea
+                        id="materials-es"
+                        value={materialsEs}
+                        onChange={(e) => setMaterialsEs(e.target.value)}
+                        className={adminTextareaClass}
+                        rows={3}
+                      />
+                    </AdminField>
+                    <AdminField label="Normas técnicas (español)" htmlFor="standards-es">
+                      <textarea
+                        id="standards-es"
+                        value={standardsEs}
+                        onChange={(e) => setStandardsEs(e.target.value)}
+                        className={adminTextareaClass}
+                        rows={3}
+                      />
+                    </AdminField>
+                    <AdminField label="Opciones y variantes (español)" htmlFor="options-es">
+                      <textarea
+                        id="options-es"
+                        value={optionsEs}
+                        onChange={(e) => setOptionsEs(e.target.value)}
+                        className={adminTextareaClass}
+                        rows={3}
+                      />
+                    </AdminField>
+                  </>
+                ) : null}
               </>
             ) : (
               <>
                 <AdminField label="Nombre en inglés" htmlFor="title-en">
                   <input id="title-en" type="text" value={titleEn} onChange={(e) => setTitleEn(e.target.value)} className={adminInputClass} required />
                 </AdminField>
-                <AdminField label="Descripción en inglés" htmlFor="desc-en">
+                <AdminField
+                  label={
+                    editing.type === "subcategory"
+                      ? "Descripción / intro de la ficha (inglés)"
+                      : "Descripción en inglés"
+                  }
+                  htmlFor="desc-en"
+                >
                   <textarea id="desc-en" value={descriptionEn} onChange={(e) => setDescriptionEn(e.target.value)} className={adminTextareaClass} rows={4} />
                 </AdminField>
+                {editing.type === "subcategory" ? (
+                  <>
+                    <AdminField label="Materiales (inglés)" htmlFor="materials-en">
+                      <textarea
+                        id="materials-en"
+                        value={materialsEn}
+                        onChange={(e) => setMaterialsEn(e.target.value)}
+                        className={adminTextareaClass}
+                        rows={3}
+                      />
+                    </AdminField>
+                    <AdminField label="Normas técnicas (inglés)" htmlFor="standards-en">
+                      <textarea
+                        id="standards-en"
+                        value={standardsEn}
+                        onChange={(e) => setStandardsEn(e.target.value)}
+                        className={adminTextareaClass}
+                        rows={3}
+                      />
+                    </AdminField>
+                    <AdminField label="Opciones y variantes (inglés)" htmlFor="options-en">
+                      <textarea
+                        id="options-en"
+                        value={optionsEn}
+                        onChange={(e) => setOptionsEn(e.target.value)}
+                        className={adminTextareaClass}
+                        rows={3}
+                      />
+                    </AdminField>
+                  </>
+                ) : null}
               </>
             )}
 

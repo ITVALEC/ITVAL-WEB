@@ -60,6 +60,12 @@ export async function PATCH(request: Request) {
     titleEn?: string;
     descriptionEs?: string;
     descriptionEn?: string;
+    materialsEs?: string;
+    materialsEn?: string;
+    standardsEs?: string;
+    standardsEn?: string;
+    optionsEs?: string;
+    optionsEn?: string;
     subtitleEs?: string;
     subtitleEn?: string;
     filters?: Partial<CatalogFilterSelection>;
@@ -93,6 +99,12 @@ export async function PATCH(request: Request) {
       titleEn: body.titleEn,
       descriptionEs: body.descriptionEs,
       descriptionEn: body.descriptionEn,
+      materialsEs: body.materialsEs,
+      materialsEn: body.materialsEn,
+      standardsEs: body.standardsEs,
+      standardsEn: body.standardsEn,
+      optionsEs: body.optionsEs,
+      optionsEn: body.optionsEn,
     });
 
     if (body.filters) {
