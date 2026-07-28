@@ -22,7 +22,7 @@ export function HeroScrollCue() {
       <button
         type="button"
         onClick={handleClick}
-        className="hero-scroll-cue pointer-events-auto inline-flex min-h-11 flex-col items-center justify-center gap-1 rounded-full px-4 py-2 text-white transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
+        className="hero-scroll-cue pointer-events-auto inline-flex min-h-11 flex-col items-center justify-center gap-1 rounded-sm px-4 py-2 text-gold transition hover:text-gold-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
         aria-label={t("seeMoreAria")}
       >
         <span

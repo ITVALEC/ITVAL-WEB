@@ -19,19 +19,19 @@ export async function Footer({ locale }: FooterProps) {
   const navItems = buildNavItems((key) => t(key));
 
   return (
-    <footer className="border-t border-white/10 bg-navy text-white">
-      <Container className="py-12 lg:py-16">
+    <footer className="border-t border-gold/25 bg-navy text-white">
+      <Container className="py-14 lg:py-16">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-4">
             <Logo alt={t("common.logoAlt")} className="h-10 w-auto" />
-            <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/75">
+            <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/75">
               {footerCopy.tagline}
             </p>
-            <p className="mt-4 text-sm text-white/60">{footerCopy.experience}</p>
+            <p className="mt-4 text-sm text-gold/90">{footerCopy.experience}</p>
           </div>
 
           <nav className="lg:col-span-2" aria-label={t("footer.nav")}>
-            <p className="mb-4 text-xs font-semibold uppercase tracking-wider text-white/50">
+            <p className="mb-4 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-gold/80">
               {t("footer.nav")}
             </p>
             <ul className="space-y-2.5">
@@ -39,7 +39,7 @@ export async function Footer({ locale }: FooterProps) {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="text-sm text-white/80 transition-colors hover:text-white"
+                    className="text-sm text-white/80 transition-colors hover:text-gold"
                   >
                     {item.label}
                   </Link>
@@ -49,7 +49,7 @@ export async function Footer({ locale }: FooterProps) {
           </nav>
 
           <div className="lg:col-span-3">
-            <p className="mb-4 text-xs font-semibold uppercase tracking-wider text-white/50">
+            <p className="mb-4 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-gold/80">
               {t("footer.contact")}
             </p>
             <ul className="space-y-3 text-sm text-white/80">
@@ -57,7 +57,7 @@ export async function Footer({ locale }: FooterProps) {
                 <span className="block text-xs text-white/50">
                   {t("contactPage.info.email")}
                 </span>
-                <a href={`mailto:${contact.email}`} className="hover:text-cornflower">
+                <a href={`mailto:${contact.email}`} className="hover:text-gold">
                   {contact.email}
                 </a>
               </li>
@@ -67,7 +67,7 @@ export async function Footer({ locale }: FooterProps) {
                 </span>
                 <a
                   href={`tel:${contact.phone.replace(/\s/g, "")}`}
-                  className="hover:text-cornflower"
+                  className="hover:text-gold"
                 >
                   {contact.phone}
                 </a>
@@ -88,7 +88,7 @@ export async function Footer({ locale }: FooterProps) {
           </div>
 
           <div className="lg:col-span-3">
-            <p className="mb-4 text-xs font-semibold uppercase tracking-wider text-white/50">
+            <p className="mb-4 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-gold/80">
               {footerCopy.ctaTitle}
             </p>
             <p className="text-sm leading-relaxed text-white/75">{footerCopy.ctaText}</p>
@@ -102,7 +102,7 @@ export async function Footer({ locale }: FooterProps) {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-center text-xs text-white/50 sm:flex-row sm:text-left">
+        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-gold/15 pt-6 text-center text-xs text-white/50 sm:flex-row sm:text-left">
           <p>
             © {year} {SITE.name}. {t("footer.rights")}
           </p>

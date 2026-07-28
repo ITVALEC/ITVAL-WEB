@@ -37,27 +37,32 @@ export function Hero() {
         )}
       />
 
-      {/* Overlay navy denso + baja saturación visual para contraste WCAG */}
-      <div className="absolute inset-0 bg-navy/65" aria-hidden="true" />
+      {/* Overlay navy denso para contraste WCAG sobre la foto */}
+      <div className="absolute inset-0 bg-navy/70" aria-hidden="true" />
       <div
-        className="absolute inset-0 bg-gradient-to-r from-navy/95 from-0% via-navy/85 via-45% to-navy/60 to-100%"
+        className="absolute inset-0 bg-gradient-to-r from-navy/95 from-0% via-navy/80 via-45% to-navy/45 to-100%"
         aria-hidden="true"
       />
       <div
-        className="absolute inset-0 bg-gradient-to-t from-navy/85 via-navy/25 to-navy/50"
+        className="absolute inset-0 bg-gradient-to-t from-navy via-navy/30 to-navy/55"
+        aria-hidden="true"
+      />
+      {/* Acento oro sutil en el borde inferior del hero */}
+      <div
+        className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent"
         aria-hidden="true"
       />
 
       <Container className="relative z-10 flex min-h-screen flex-col justify-center pb-24 pt-24 lg:pb-28 lg:pt-28">
         <div className="max-w-3xl">
           <h1
-            className="hero-reveal text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl"
+            className="hero-reveal font-display text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl xl:text-7xl"
             style={{ textShadow: heroTextShadow }}
           >
             {t("title")}
           </h1>
           <p
-            className="hero-reveal hero-reveal-delay-1 mt-6 max-w-2xl text-lg leading-relaxed text-white sm:text-xl"
+            className="hero-reveal hero-reveal-delay-1 mt-6 max-w-2xl text-lg leading-relaxed text-white/95 sm:text-xl"
             style={{ textShadow: heroTextShadow }}
           >
             {t("subtitle")}
@@ -65,7 +70,7 @@ export function Hero() {
 
           <HeroTaglines items={taglines} navLabel={t("taglines.navLabel")} />
 
-          <div className="hero-reveal hero-reveal-delay-3 mt-8 flex flex-wrap gap-3">
+          <div className="hero-reveal hero-reveal-delay-3 mt-10 flex flex-wrap gap-3">
             <ButtonLink href={NAV_PATHS.contact} variant="primary">
               {tc("quoteNow")}
             </ButtonLink>

@@ -14,7 +14,7 @@
   }
 
   body {
-    @apply bg-white font-sans text-navy antialiased;
+    @apply bg-surface font-sans text-navy antialiased;
   }
 
   :focus:not(:focus-visible) {
@@ -22,7 +22,7 @@
   }
 
   :focus-visible {
-    @apply outline-none ring-2 ring-cornflower ring-offset-2;
+    @apply outline-none ring-2 ring-gold ring-offset-2;
   }
 }
 
@@ -71,14 +71,57 @@
     animation: hero-scroll-cue 2.4s ease-in-out infinite;
   }
 
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .fade-up {
+    animation: fade-up 0.7s ease-out both;
+  }
+
+  @keyframes gold-underline {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  .gold-rule {
+    @apply relative;
+  }
+
+  .gold-rule::after {
+    content: "";
+    @apply absolute -bottom-3 left-0 h-0.5 w-16 origin-left bg-gold;
+    animation: gold-underline 0.8s ease-out 0.2s both;
+  }
+
+  .gold-rule-center::after {
+    @apply left-1/2 -translate-x-1/2;
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .hero-reveal {
+    .hero-reveal,
+    .fade-up {
       animation: none;
       opacity: 1;
       transform: none;
     }
 
     .hero-scroll-cue {
+      animation: none;
+    }
+
+    .gold-rule::after {
       animation: none;
     }
   }

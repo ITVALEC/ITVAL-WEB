@@ -65,13 +65,13 @@ export function HeroTaglines({ items, navLabel }: HeroTaglinesProps) {
   if (reducedMotion) {
     return (
       <div
-        className="hero-reveal hero-reveal-delay-2 mt-8 max-w-2xl rounded-xl border border-white/25 bg-navy/90 p-5 shadow-[0_8px_32px_rgba(0,0,0,0.45)] backdrop-blur-md sm:p-6"
+        className="hero-reveal hero-reveal-delay-2 mt-8 max-w-2xl rounded-sm border border-gold/25 bg-navy/90 p-5 shadow-[0_8px_32px_rgba(0,0,0,0.45)] backdrop-blur-md sm:p-6"
         aria-label={navLabel}
       >
         <ul className="space-y-4">
           {items.map((item) => (
             <li key={item.key} className="text-base leading-relaxed sm:text-lg">
-              <span className="font-semibold text-cornflower">{item.lead}</span>{" "}
+              <span className="font-semibold text-gold">{item.lead}</span>{" "}
               <span className="text-white">{item.body}</span>
             </li>
           ))}
@@ -91,7 +91,7 @@ export function HeroTaglines({ items, navLabel }: HeroTaglinesProps) {
       onBlurCapture={() => setPaused(false)}
     >
       <div
-        className="rounded-xl border border-white/25 bg-navy/90 p-5 shadow-[0_8px_32px_rgba(0,0,0,0.45)] backdrop-blur-md sm:p-6"
+        className="rounded-sm border border-gold/25 bg-navy/90 p-5 shadow-[0_8px_32px_rgba(0,0,0,0.45)] backdrop-blur-md sm:p-6"
         aria-live="polite"
         aria-atomic="true"
       >
@@ -103,7 +103,7 @@ export function HeroTaglines({ items, navLabel }: HeroTaglinesProps) {
             transition: `opacity ${FADE_MS}ms ease-in-out, transform ${FADE_MS}ms ease-in-out`,
           }}
         >
-          <span className="font-semibold text-cornflower">{current.lead}</span>{" "}
+          <span className="font-semibold text-gold">{current.lead}</span>{" "}
           <span className="text-white">{current.body}</span>
         </p>
       </div>
@@ -124,7 +124,7 @@ export function HeroTaglines({ items, navLabel }: HeroTaglinesProps) {
               onClick={() => goTo(index)}
               className={`h-1.5 rounded-full transition-[width,background-color] duration-500 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy motion-reduce:transition-none ${
                 index === active
-                  ? "w-8 bg-cornflower"
+                  ? "w-8 bg-gold"
                   : "w-3 bg-white/40 hover:bg-white/65"
               }`}
             />

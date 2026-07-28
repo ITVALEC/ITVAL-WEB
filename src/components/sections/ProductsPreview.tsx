@@ -12,8 +12,7 @@ export function ProductsPreview() {
 
   return (
     <section
-      id="home-content"
-      className="scroll-mt-20 bg-white py-16 lg:py-24"
+      className="bg-surface py-16 lg:py-24"
       aria-labelledby="products-heading"
     >
       <Container>
@@ -25,7 +24,7 @@ export function ProductsPreview() {
           />
           <AppLink
             href={NAV_PATHS.products}
-            className="shrink-0 rounded-sm text-sm font-semibold text-cornflower-ink transition-colors hover:text-action focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower"
+            className="shrink-0 rounded-sm text-sm font-semibold text-gold-deep transition-colors hover:text-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
           >
             {tc("viewProducts")} →
           </AppLink>

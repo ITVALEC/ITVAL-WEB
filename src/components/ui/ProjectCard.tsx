@@ -29,7 +29,7 @@ export function ProjectCard({
 
   const card = (
     <article
-      className={`overflow-hidden rounded-lg border border-grey/30 bg-white transition-shadow hover:shadow-lg motion-reduce:transition-none ${
+      className={`overflow-hidden rounded-sm border border-grey/25 bg-white transition-shadow hover:shadow-lg motion-reduce:transition-none ${
         interactive || linkToDetail ? "group" : ""
       }`}
     >
@@ -52,14 +52,14 @@ export function ProjectCard({
       </div>
       <div className="p-4 sm:p-5">
         {solutionLabel ? (
-          <p className="text-xs font-semibold uppercase tracking-wider text-cornflower-ink">
+          <p className="text-xs font-semibold uppercase tracking-wider text-gold-deep">
             {solutionLabel}
           </p>
         ) : null}
         <Heading
-          className={`text-base font-semibold text-navy sm:text-lg ${
+          className={`font-display text-lg font-semibold text-navy sm:text-xl ${
             solutionLabel ? "mt-1" : ""
-          } group-hover:text-cornflower-ink`}
+          } group-hover:text-gold-deep`}
         >
           {project.name}
         </Heading>

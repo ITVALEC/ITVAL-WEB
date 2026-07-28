@@ -25,8 +25,8 @@ export function LanguageSwitcher({ transparent = false }: LanguageSwitcherProps)
     <div
       className={`flex items-center gap-1 p-0.5 ${
         transparent
-          ? "rounded-md"
-          : "rounded-md border border-white/20"
+          ? "rounded-sm"
+          : "rounded-sm border border-gold/30"
       }`}
       role="group"
       aria-label={t("languageSwitcher")}
@@ -37,14 +37,14 @@ export function LanguageSwitcher({ transparent = false }: LanguageSwitcherProps)
           type="button"
           onClick={() => switchLocale(lang)}
           aria-pressed={locale === lang}
-          className={`rounded px-2.5 py-1 text-xs font-semibold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2 motion-reduce:transition-none ${
+          className={`rounded-sm px-2.5 py-1 text-xs font-semibold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 motion-reduce:transition-none ${
             locale === lang
               ? transparent
-                ? "bg-white/15 text-white drop-shadow-sm"
-                : "bg-cornflower-ink text-white"
+                ? "bg-white/15 text-gold drop-shadow-sm"
+                : "bg-gold text-navy"
               : transparent
-                ? "text-white/75 drop-shadow-sm hover:text-white"
-                : "text-white/70 hover:text-white"
+                ? "text-white/75 drop-shadow-sm hover:text-gold"
+                : "text-white/70 hover:text-gold"
           } ${transparent ? "focus-visible:ring-offset-transparent" : "focus-visible:ring-offset-navy"}`}
         >
           {t(`locales.${lang}`)}

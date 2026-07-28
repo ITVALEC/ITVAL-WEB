@@ -55,16 +55,16 @@ export function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full transition-[background-color,box-shadow,border-color] duration-300 motion-reduce:transition-none ${
+      className={`sticky top-0 z-50 w-full transition-[background-color,box-shadow,border-color,backdrop-filter] duration-300 motion-reduce:transition-none ${
         isOverlay
           ? "border-b border-transparent bg-transparent shadow-none"
-          : "border-b border-white/10 bg-navy shadow-lg"
+          : "border-b border-gold/20 bg-navy/95 shadow-lg backdrop-blur-md"
       }`}
     >
-      <div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
+      <div className="mx-auto flex min-h-[4.25rem] max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
         <Link
           href={NAV_PATHS.home}
-          className={`group flex shrink-0 items-center rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2 ${
+          className={`group flex shrink-0 items-center rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 ${
             isOverlay ? "focus-visible:ring-offset-transparent" : "focus-visible:ring-offset-navy"
           }`}
           aria-label={t("common.logoAlt")}
@@ -79,14 +79,14 @@ export function Header() {
         </Link>
 
         <nav
-          className="hidden items-center gap-8 md:flex"
+          className="hidden items-center gap-8 lg:gap-10 md:flex"
           aria-label={t("footer.nav")}
         >
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className={`rounded-sm text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:text-cornflower focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2 ${
+              className={`rounded-sm text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-white transition-colors hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 ${
                 isOverlay
                   ? "text-white/90 drop-shadow-sm focus-visible:ring-offset-transparent"
                   : "text-white/95 focus-visible:ring-offset-navy"
@@ -107,7 +107,7 @@ export function Header() {
         <button
           ref={menuButtonRef}
           type="button"
-          className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-md p-2 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower md:hidden ${
+          className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-md p-2 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold md:hidden ${
             isOverlay ? "drop-shadow-sm" : ""
           }`}
           aria-expanded={menuOpen}
@@ -145,7 +145,7 @@ export function Header() {
       {menuOpen && (
         <nav
           id="mobile-menu"
-          className="border-t border-white/15 bg-navy px-4 pb-4 pt-2 md:hidden"
+          className="border-t border-gold/20 bg-navy px-4 pb-4 pt-2 md:hidden"
           aria-label={t("footer.nav")}
         >
           <ul className="flex flex-col gap-1">
@@ -153,7 +153,7 @@ export function Header() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="block rounded-md px-3 py-2.5 text-base font-medium text-white/90 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower"
+                  className="block rounded-md px-3 py-2.5 text-base font-medium text-white/90 hover:bg-white/10 hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
                   onClick={() => setMenuOpen(false)}
                 >
                   {item.label}

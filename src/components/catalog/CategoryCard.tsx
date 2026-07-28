@@ -18,7 +18,7 @@ export function CategoryCard({ category, imageSrc: imageSrcProp }: CategoryCardP
   return (
     <AppLink
       href={getProductCategoryPath(category)}
-      className="group block overflow-hidden rounded-2xl border border-grey/30 bg-white transition-shadow hover:shadow-lg motion-reduce:transition-none"
+      className="group block overflow-hidden rounded-sm border border-grey/25 bg-white transition-shadow hover:shadow-lg motion-reduce:transition-none"
     >
       {imageSrc ? (
         <div className="relative aspect-[16/10] overflow-hidden">
@@ -50,7 +50,7 @@ export function CategoryCard({ category, imageSrc: imageSrcProp }: CategoryCardP
         <p className="text-sm leading-relaxed text-grey-dark">
           {t(`categories.${category}.description`)}
         </p>
-        <span className="mt-3 inline-block text-sm font-semibold text-cornflower-ink group-hover:text-action">
+        <span className="mt-3 inline-block text-sm font-semibold text-gold-deep transition-colors group-hover:text-navy">
           {t("hub.viewCategory")} →
         </span>
       </div>
