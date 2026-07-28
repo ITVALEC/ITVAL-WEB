@@ -4,6 +4,7 @@ import { unstable_noStore as noStore } from "next/cache";
 import { catalogContentKey, getDocument } from "@/lib/db/documents";
 import { applyCatalogLabelMigrations } from "@/lib/catalog/migrate-catalog-labels";
 import { mergeCatalogMessages } from "@/lib/catalog/merge-messages";
+import { scrubUntranslatedEnglishLeaves } from "@/lib/catalog/scrub-untranslated-en";
 
 export { mergeCatalogMessages } from "@/lib/catalog/merge-messages";
 
@@ -27,7 +28,26 @@ export async function loadProductsCatalogMessages(
       catalogContentKey(locale),
     );
     applyCatalogLabelMigrations(locale, data);
-    return mergeCatalogMessages(bundled, data);
+    const merged = mergeCatalogMessages(bundled, data);
+
+    // /en: si la BD guardó español por un fallback fallido, no pisar el EN del repo.
+    if (locale === "en") {
+      try {
+        const esData = await getDocument<Record<string, unknown>>(
+          catalogContentKey("es"),
+        );
+        const bundledEs = await loadBundledCatalog("es");
+        const esMerged = mergeCatalogMessages(bundledEs, esData);
+        return scrubUntranslatedEnglishLeaves(merged, esMerged, bundled) as Record<
+          string,
+          unknown
+        >;
+      } catch {
+        return merged;
+      }
+    }
+
+    return merged;
   } catch {
     return bundled;
   }

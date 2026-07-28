@@ -38,6 +38,29 @@ function normalizeText(value: string | undefined | null): string {
   return (value ?? "").trim();
 }
 
+/**
+ * True si el inglés previo no sirve: vacío, idéntico al ES, o claramente en español.
+ * Evita que un fallback ES→EN fallido quede congelado para siempre.
+ */
+export function englishNeedsRetranslation(es: string, en: string | undefined | null): boolean {
+  const esNorm = normalizeText(es);
+  const enNorm = normalizeText(en);
+  if (!esNorm) return false;
+  if (!enNorm) return true;
+  if (enNorm === esNorm) return true;
+  if (enNorm.toLowerCase() === esNorm.toLowerCase()) return true;
+  // Acentos o palabras típicas de ES en el campo "EN" → copia sin traducir
+  if (/[áéíóúñü¿¡]/i.test(enNorm)) return true;
+  if (
+    /\b(soluciones|arquitect[oó]nicos|fachadas|edificios|experiencia|tambi[eé]n|integrales|estructuras|met[aá]licas|vidrio|aluminio|cortina|sistemas|corporativos|comerciales|institucionales)\b/i.test(
+      enNorm,
+    )
+  ) {
+    return true;
+  }
+  return false;
+}
+
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -255,7 +278,12 @@ export async function fillEnglishFromSpanish(
       continue;
     }
 
-    if (previousEs === es && previousEn) {
+    // Reutilizar EN solo si el ES no cambió y el EN no es una copia en español.
+    if (
+      previousEs === es &&
+      previousEn &&
+      !englishNeedsRetranslation(es, previousEn)
+    ) {
       values[key] = previousEn;
       skippedCount += 1;
       continue;
@@ -278,7 +306,10 @@ export async function fillEnglishFromSpanish(
   if (!provider) {
     for (const item of toTranslate) {
       const previousEn = normalizeText(fields[item.key]?.previousEn);
-      values[item.key] = previousEn || item.es;
+      values[item.key] =
+        previousEn && !englishNeedsRetranslation(item.es, previousEn)
+          ? previousEn
+          : item.es;
     }
     warnings.push(
       "No hay API de traducción configurada. Se mantuvo el inglés previo (o el español como respaldo). Añade DEEPL_AUTH_KEY, OPENAI_API_KEY o GOOGLE_TRANSLATE_API_KEY en /var/www/itval/shared/.env.production.local",
@@ -308,7 +339,12 @@ export async function fillEnglishFromSpanish(
 
     toTranslate.forEach((item, index) => {
       const out = normalizeText(translated[index]);
-      values[item.key] = out || normalizeText(fields[item.key]?.previousEn) || item.es;
+      const previousEn = normalizeText(fields[item.key]?.previousEn);
+      values[item.key] =
+        out ||
+        (previousEn && !englishNeedsRetranslation(item.es, previousEn)
+          ? previousEn
+          : item.es);
     });
 
     return {
@@ -322,7 +358,10 @@ export async function fillEnglishFromSpanish(
     const message = error instanceof Error ? error.message : "Error desconocido";
     for (const item of toTranslate) {
       const previousEn = normalizeText(fields[item.key]?.previousEn);
-      values[item.key] = previousEn || item.es;
+      values[item.key] =
+        previousEn && !englishNeedsRetranslation(item.es, previousEn)
+          ? previousEn
+          : item.es;
     }
     warnings.push(
       `No se pudo traducir al inglés (${provider.id}: ${message}). Se guardó el español y se conservó el inglés previo cuando existía.`,
