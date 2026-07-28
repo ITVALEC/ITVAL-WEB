@@ -115,7 +115,7 @@ export function AdminImageUpload({
         </div>
       )}
       {localError ? (
-        <p className="mt-2 text-sm font-medium text-red-700" role="alert">
+        <p className="mt-2 text-sm font-medium text-error" role="alert">
           {localError}
         </p>
       ) : null}

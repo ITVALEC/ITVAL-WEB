@@ -54,16 +54,16 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4 py-8">
+    <div className="flex min-h-screen items-center justify-center bg-surface px-4 py-8">
       <main
         id="admin-login-main"
-        className="w-full max-w-md rounded-2xl border border-grey/20 bg-white p-6 shadow-lg sm:p-8"
+        className="w-full max-w-md rounded-card border border-navy/10 bg-white p-6 shadow-card sm:p-8"
       >
-        <p className="text-xs font-semibold uppercase tracking-wider text-cornflower-ink">
+        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-gold-deep">
           ITVAL
         </p>
         <h1 className="mt-2 text-2xl font-bold text-navy">Panel de administración</h1>
-        <p className="mt-2 text-sm text-grey-dark">
+        <p className="mt-2 text-sm text-ink/80">
           Gestiona proyectos, textos de imágenes, footer y contenido del sitio.
         </p>
 
@@ -87,9 +87,9 @@ export default function AdminLoginPage() {
             {isDev ? (
               <>
                 Acceso restringido. En local la contraseña se define en{" "}
-                <code className="rounded bg-slate-100 px-1 py-0.5 text-[11px]">.env.local</code>{" "}
+                <code className="rounded bg-surface-muted px-1 py-0.5 text-[11px]">.env.local</code>{" "}
                 con{" "}
-                <code className="rounded bg-slate-100 px-1 py-0.5 text-[11px]">
+                <code className="rounded bg-surface-muted px-1 py-0.5 text-[11px]">
                   ADMIN_PASSWORD
                 </code>
                 .
@@ -109,7 +109,7 @@ export default function AdminLoginPage() {
             type="submit"
             disabled={loading}
             aria-busy={loading}
-            className="mt-6 min-h-11 w-full rounded-lg bg-navy px-4 py-3 text-sm font-semibold text-white hover:bg-navy/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+            className="mt-6 min-h-12 w-full rounded-pill bg-gold px-4 py-3 text-sm font-semibold text-navy shadow-none hover:bg-gold-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? "Entrando…" : "Ingresar al panel"}
           </button>

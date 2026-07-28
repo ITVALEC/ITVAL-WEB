@@ -1,9 +1,9 @@
-import { Inter } from "next/font/google";
+import { Manrope } from "next/font/google";
 import "../globals.css";
 
-const inter = Inter({
+const manrope = Manrope({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-manrope",
   display: "swap",
 });
 
@@ -18,8 +18,8 @@ export default function AdminRootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" className={inter.variable}>
-      <body className="min-h-screen bg-slate-100 font-sans text-navy antialiased">
+    <html lang="es" className={manrope.variable}>
+      <body className="min-h-screen bg-surface font-sans text-ink antialiased">
         {children}
       </body>
     </html>

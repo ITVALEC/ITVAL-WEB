@@ -26,9 +26,9 @@ function withCacheBust(src: string, version?: number): string {
 
 function MissingPreview({ label }: { label: string }) {
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-1 bg-slate-200 px-3 text-center">
+    <div className="flex h-full w-full flex-col items-center justify-center gap-1 bg-surface-muted px-3 text-center">
       <span className="text-sm font-semibold text-navy">Sin foto</span>
-      <span className="text-xs text-grey-dark">{label}</span>
+      <span className="text-xs text-ink/80">{label}</span>
     </div>
   );
 }

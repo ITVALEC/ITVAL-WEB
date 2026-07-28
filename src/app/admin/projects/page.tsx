@@ -261,7 +261,7 @@ export default function AdminProjectsPage() {
           Aquí gestionas las galerías de obras realizadas (Quito, Guayaquil, etc.). El catálogo de
           productos es otra sección. Edita nombre, categoría de solución y portada; sube fotos desde
           la galería al editar, o desde{" "}
-          <Link href="/admin/imagenes?kind=project" className="font-semibold text-cornflower-ink underline">
+          <Link href="/admin/imagenes?kind=project" className="font-semibold text-gold-deep underline">
             Fotos → Obras
           </Link>
           .
@@ -303,7 +303,7 @@ export default function AdminProjectsPage() {
                   header: "Portada",
                   className: "w-20",
                   cell: (row) => (
-                    <div className="relative h-12 w-16 overflow-hidden rounded-md bg-slate-100">
+                    <div className="relative h-12 w-16 overflow-hidden rounded-md bg-surface-muted">
                       <AdminMediaImage
                         src={row.cover}
                         version={previewVersion}
@@ -365,7 +365,7 @@ export default function AdminProjectsPage() {
                       <Link
                         href={`/es/proyectos/${row.id}`}
                         target="_blank"
-                        className="inline-flex min-h-11 items-center rounded-lg px-3 text-sm font-semibold text-grey-dark hover:bg-slate-100"
+                        className="inline-flex min-h-11 items-center rounded-xl px-3 text-sm font-semibold text-ink hover:bg-surface-muted"
                       >
                         Ver
                       </Link>
@@ -375,7 +375,7 @@ export default function AdminProjectsPage() {
               ]}
               mobileCard={(row) => (
                 <div className="flex gap-3">
-                  <div className="relative h-16 w-20 shrink-0 overflow-hidden rounded-lg bg-slate-100">
+                  <div className="relative h-16 w-20 shrink-0 overflow-hidden rounded-xl bg-surface-muted">
                     <AdminMediaImage
                       src={row.cover}
                       version={previewVersion}
@@ -400,7 +400,7 @@ export default function AdminProjectsPage() {
                       <Link
                         href={`/es/proyectos/${row.id}`}
                         target="_blank"
-                        className="inline-flex min-h-11 items-center rounded-lg border border-grey/30 px-3 text-sm font-medium text-navy"
+                        className="inline-flex min-h-11 items-center rounded-xl border border-navy/20 px-3 text-sm font-medium text-navy"
                       >
                         Ver en sitio
                       </Link>
@@ -451,8 +451,8 @@ export default function AdminProjectsPage() {
                 {editingProject.gallery.map((src, index) => (
                   <div
                     key={`${src}-${index}`}
-                    className={`group relative aspect-square overflow-hidden rounded-lg border-2 bg-slate-100 ${
-                      form.coverIndex === index ? "border-cornflower ring-2 ring-cornflower/30" : "border-transparent"
+                    className={`group relative aspect-square overflow-hidden rounded-xl border-2 bg-surface-muted ${
+                      form.coverIndex === index ? "border-gold ring-2 ring-gold/30" : "border-transparent"
                     }`}
                   >
                     <button
@@ -480,7 +480,7 @@ export default function AdminProjectsPage() {
                       </button>
                     ) : null}
                     {form.coverIndex === index ? (
-                      <span className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 bg-cornflower-ink/90 py-0.5 text-center text-[10px] font-semibold text-white">
+                      <span className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 bg-navy/90 py-0.5 text-center text-[10px] font-semibold text-gold">
                         Portada
                       </span>
                     ) : null}
@@ -513,7 +513,7 @@ export default function AdminProjectsPage() {
               />
             </AdminField>
 
-            <label className="flex min-h-11 items-center gap-3 rounded-lg border border-grey/20 bg-slate-50 px-3 text-sm">
+            <label className="flex min-h-11 items-center gap-3 rounded-xl border border-navy/10 bg-surface px-3 text-sm">
               <input
                 type="checkbox"
                 checked={form.featured}

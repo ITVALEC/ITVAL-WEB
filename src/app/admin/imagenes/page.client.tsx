@@ -75,6 +75,13 @@ function mediaBadgeLabel(item: AdminMediaItem): string {
   return KIND_LABELS[item.kind];
 }
 
+function mediaBadgeTone(item: AdminMediaItem): "cover" | "gallery" | "neutral" | "warning" {
+  if (item.kind === "hero") return "cover";
+  if (item.kind === "product") return "gallery";
+  if (item.kind === "project") return "warning";
+  return "neutral";
+}
+
 /** Nombre amigable sugerido (reemplaza códigos tipo DSC02839). */
 function suggestPhotoName(item: AdminMediaItem): string {
   if (item.kind === "project") {
@@ -283,7 +290,7 @@ export default function AdminImagenesPage() {
         />
 
         {(filterCategory || filterSubcategory) && (
-          <div className="mb-4 flex flex-wrap items-center gap-2 rounded-lg border border-cornflower/30 bg-cornflower/5 px-3 py-2 text-sm text-navy">
+          <div className="mb-4 flex flex-wrap items-center gap-2 rounded-xl border border-gold/30 bg-gold/10 px-3 py-2 text-sm text-navy">
             <span>
               Filtrado:{" "}
               {filterCategory ? getProductCategoryLabel(filterCategory) : "Todas"}
@@ -293,7 +300,7 @@ export default function AdminImagenesPage() {
                   ? ` · ${filterSubcategory}`
                   : ""}
             </span>
-            <Link href="/admin/imagenes" className="font-semibold text-cornflower-ink underline">
+            <Link href="/admin/imagenes" className="font-semibold text-gold-deep underline">
               Ver todas
             </Link>
           </div>
@@ -302,13 +309,13 @@ export default function AdminImagenesPage() {
         <div className="mb-4 flex flex-wrap gap-2 text-sm">
           <Link
             href="/admin/projects"
-            className="rounded-lg border border-grey/25 bg-slate-50 px-3 py-2 font-medium text-navy hover:bg-white"
+            className="rounded-xl border border-navy/15 bg-surface px-3 py-2 font-medium text-navy hover:bg-white"
           >
             Subir foto a una obra →
           </Link>
           <Link
             href="/admin/catalogo"
-            className="rounded-lg border border-grey/25 bg-slate-50 px-3 py-2 font-medium text-navy hover:bg-white"
+            className="rounded-xl border border-navy/15 bg-surface px-3 py-2 font-medium text-navy hover:bg-white"
           >
             Subir foto de producto (por categoría) →
           </Link>
@@ -372,14 +379,14 @@ export default function AdminImagenesPage() {
               {data.items.map((item) => (
                 <div
                   key={item.id}
-                  className="group relative overflow-hidden rounded-xl border border-grey/20 bg-white shadow-sm transition hover:border-cornflower/50 hover:shadow-md"
+                  className="group relative overflow-hidden rounded-card border border-navy/10 bg-white shadow-card transition hover:border-gold/50 hover:shadow-soft"
                 >
                   <button
                     type="button"
                     onClick={() => openEdit(item)}
-                    className="block w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower"
+                    className="block w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
                   >
-                    <div className="relative aspect-[4/3] bg-slate-100">
+                    <div className="relative aspect-[4/3] bg-surface-muted">
                       <AdminMediaImage
                         src={item.src}
                         version={previewVersion}
@@ -389,7 +396,7 @@ export default function AdminImagenesPage() {
                       />
                     </div>
                     <div className="p-2.5">
-                      <AdminBadge>{mediaBadgeLabel(item)}</AdminBadge>
+                      <AdminBadge tone={mediaBadgeTone(item)}>{mediaBadgeLabel(item)}</AdminBadge>
                       <p className="mt-1 line-clamp-1 text-sm font-medium text-navy">
                         {cardTitle(item)}
                       </p>
@@ -453,7 +460,7 @@ export default function AdminImagenesPage() {
         {editing ? (
           <div className="space-y-4">
             {feedback ? <AdminStatusMessage type={feedback.type} message={feedback.message} /> : null}
-            <div className="relative mx-auto h-52 w-full max-w-md overflow-hidden rounded-lg bg-slate-100">
+            <div className="relative mx-auto h-52 w-full max-w-md overflow-hidden rounded-xl bg-surface-muted">
               <AdminMediaImage
                 src={editing.src}
                 version={previewVersion}
@@ -469,7 +476,7 @@ export default function AdminImagenesPage() {
             </div>
 
             {associationLabel(editing) ? (
-              <p className="rounded-lg border border-grey/20 bg-slate-50 px-3 py-2 text-sm text-navy">
+              <p className="rounded-xl border border-navy/10 bg-surface px-3 py-2 text-sm text-navy">
                 <span className="font-semibold">Asociación: </span>
                 {associationLabel(editing)}
               </p>

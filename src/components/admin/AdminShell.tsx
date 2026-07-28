@@ -33,7 +33,7 @@ const NAV = [
 ];
 
 const focusRing =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2";
 
 function NavLinks({
   pathname,
@@ -54,15 +54,15 @@ function NavLinks({
               href={item.href}
               onClick={onNavigate}
               aria-current={active ? "page" : undefined}
-              className={`block min-h-11 rounded-lg px-3 py-2.5 transition-colors ${focusRing} ${
+              className={`block min-h-11 rounded-xl px-3 py-2.5 transition-colors duration-ds ${focusRing} ${
                 active
-                  ? "bg-navy text-white"
-                  : "text-grey-dark hover:bg-slate-50 hover:text-navy"
+                  ? "bg-navy text-white shadow-none"
+                  : "text-ink hover:bg-surface hover:text-navy"
               }`}
             >
               <span className="block text-sm font-semibold">{item.label}</span>
               <span
-                className={`mt-0.5 block text-xs ${active ? "text-white/70" : "text-grey"}`}
+                className={`mt-0.5 block text-xs ${active ? "text-gold-soft" : "text-grey"}`}
               >
                 {item.hint}
               </span>
@@ -132,22 +132,22 @@ export function AdminShell({
   }
 
   return (
-    <div className="min-h-screen bg-slate-50/80 pb-8">
+    <div className="min-h-screen bg-surface pb-8">
       <a
         href="#admin-main"
-        className={`sr-only ${focusRing} focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-navy focus:shadow-lg`}
+        className={`sr-only ${focusRing} focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-xl focus:bg-gold focus:px-4 focus:py-2 focus:text-navy focus:shadow-soft`}
       >
         Saltar al contenido principal
       </a>
 
-      <header className="sticky top-0 z-40 border-b border-grey/20 bg-navy text-white shadow-md">
+      <header className="sticky top-0 z-40 border-b border-gold/20 bg-navy-dark text-white shadow-soft">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4">
           <div className="flex min-w-0 items-center gap-2">
             <button
               ref={menuButtonRef}
               type="button"
               onClick={() => setMenuOpen((open) => !open)}
-              className={`inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-lg border border-white/20 text-white hover:bg-white/10 md:hidden ${focusRing}`}
+              className={`inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-xl border border-gold/30 text-white hover:bg-white/10 md:hidden ${focusRing}`}
               aria-expanded={menuOpen}
               aria-controls="admin-nav-mobile"
               aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
@@ -176,7 +176,7 @@ export function AdminShell({
               </svg>
             </button>
             <div className="min-w-0">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-white/50 sm:text-xs">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-gold sm:text-xs">
                 Administración ITVAL
               </p>
               <h1 className="truncate text-base font-bold sm:text-lg">{title}</h1>
@@ -187,14 +187,14 @@ export function AdminShell({
               href="/es"
               target="_blank"
               rel="noopener noreferrer"
-              className={`hidden min-h-11 items-center rounded-lg border border-white/20 px-3 py-2 text-sm text-white/90 hover:bg-white/10 sm:inline-flex ${focusRing}`}
+              className={`hidden min-h-11 items-center rounded-xl border border-white/25 px-3 py-2 text-sm text-white/90 hover:border-gold hover:text-gold sm:inline-flex ${focusRing}`}
             >
               Ver sitio
             </Link>
             <button
               type="button"
               onClick={logout}
-              className={`min-h-11 rounded-lg bg-white/10 px-3 py-2 text-sm font-medium hover:bg-white/20 ${focusRing}`}
+              className={`min-h-11 rounded-xl border border-gold/35 bg-gold px-3 py-2 text-sm font-semibold text-navy hover:bg-gold-soft ${focusRing}`}
             >
               Salir
             </button>
@@ -204,7 +204,7 @@ export function AdminShell({
         {menuOpen ? (
           <nav
             id="admin-nav-mobile"
-            className="border-t border-white/15 bg-white px-3 py-3 text-navy md:hidden"
+            className="border-t border-gold/20 bg-white px-3 py-3 text-navy md:hidden"
             aria-label="Secciones del panel"
           >
             <NavLinks pathname={pathname} onNavigate={closeMenu} compact />
@@ -213,7 +213,7 @@ export function AdminShell({
               target="_blank"
               rel="noopener noreferrer"
               onClick={closeMenu}
-              className={`mt-2 flex min-h-11 items-center justify-center rounded-lg border border-grey/30 px-3 text-sm font-medium text-navy hover:bg-slate-50 sm:hidden ${focusRing}`}
+              className={`mt-2 flex min-h-11 items-center justify-center rounded-xl border border-navy/20 px-3 text-sm font-medium text-navy hover:bg-surface sm:hidden ${focusRing}`}
             >
               Ver sitio
             </Link>
@@ -224,7 +224,7 @@ export function AdminShell({
       {menuOpen ? (
         <button
           type="button"
-          className="fixed inset-0 z-30 bg-navy/40 md:hidden"
+          className="fixed inset-0 z-30 bg-navy-dark/45 md:hidden"
           aria-label="Cerrar menú"
           onClick={closeMenu}
         />
@@ -237,7 +237,7 @@ export function AdminShell({
             className="hidden md:block md:w-60 md:shrink-0"
             aria-label="Secciones del panel"
           >
-            <div className="rounded-xl border border-grey/20 bg-white p-2 shadow-sm">
+            <div className="rounded-card border border-navy/10 bg-white p-2 shadow-card">
               <NavLinks pathname={pathname} />
             </div>
           </nav>
@@ -262,16 +262,16 @@ export function AdminPanel({
 }) {
   return (
     <section
-      className="rounded-xl border border-grey/20 bg-white p-4 shadow-sm sm:p-6"
+      className="rounded-card border border-navy/10 bg-white p-4 shadow-card sm:p-6"
       aria-labelledby={title ? "admin-panel-title" : undefined}
     >
       {title ? (
-        <header className="mb-4 border-b border-grey/10 pb-4">
+        <header className="mb-4 border-b border-navy/10 pb-4">
           <h2 id="admin-panel-title" className="text-lg font-semibold text-navy">
             {title}
           </h2>
           {description ? (
-            <p className="mt-1 text-sm text-grey-dark">{description}</p>
+            <p className="mt-1 text-sm text-ink/80">{description}</p>
           ) : null}
         </header>
       ) : null}
@@ -303,10 +303,10 @@ export function AdminField({
 }
 
 export const adminInputClass =
-  "min-h-11 w-full rounded-lg border border-grey/40 bg-white px-3 py-2.5 text-sm text-navy focus-visible:border-cornflower focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower/30";
+  "min-h-12 w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-sm text-ink placeholder:text-grey focus-visible:border-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/25";
 
 export const adminTextareaClass =
-  "min-h-[96px] w-full rounded-lg border border-grey/40 bg-white px-3 py-2.5 text-sm text-navy focus-visible:border-cornflower focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower/30";
+  "min-h-[96px] w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-sm text-ink placeholder:text-grey focus-visible:border-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/25";
 
 export function AdminSaveButton({
   saving,
@@ -323,12 +323,12 @@ export function AdminSaveButton({
         type="submit"
         disabled={saving}
         aria-busy={saving}
-        className="min-h-11 rounded-lg bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-navy/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+        className="min-h-12 rounded-pill bg-gold px-6 py-2.5 text-sm font-semibold text-navy shadow-none hover:bg-gold-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {saving ? "Guardando…" : label}
       </button>
       {saved ? (
-        <span className="text-sm font-medium text-green-700" role="status" aria-live="polite">
+        <span className="text-sm font-medium text-success" role="status" aria-live="polite">
           Cambios guardados correctamente
         </span>
       ) : null}

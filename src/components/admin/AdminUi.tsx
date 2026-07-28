@@ -87,7 +87,7 @@ export function AdminSearchField({
         />
       </div>
       {typeof resultsCount === "number" && resultsLabel ? (
-        <p className="text-sm text-grey-dark" aria-live="polite" aria-atomic="true">
+        <p className="text-sm text-ink/80" aria-live="polite" aria-atomic="true">
           {resultsCount} {resultsLabel}
         </p>
       ) : null}
@@ -101,13 +101,13 @@ export function AdminLoadingState({ label = "Cargando contenido…" }: { label?:
       role="status"
       aria-live="polite"
       aria-busy="true"
-      className="rounded-xl border border-grey/15 bg-slate-50 px-4 py-10 text-center"
+      className="rounded-card border border-navy/10 bg-surface px-4 py-10 text-center"
     >
       <div
-        className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-grey/30 border-t-navy"
+        className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-navy/20 border-t-gold"
         aria-hidden="true"
       />
-      <p className="mt-4 text-sm text-grey-dark">{label}</p>
+      <p className="mt-4 text-sm text-ink/80">{label}</p>
     </div>
   );
 }
@@ -122,10 +122,10 @@ export function AdminEmptyState({ title, description, action }: AdminEmptyStateP
   return (
     <div
       role="status"
-      className="rounded-xl border border-dashed border-grey/30 bg-slate-50 px-6 py-10 text-center"
+      className="rounded-card border border-dashed border-navy/20 bg-surface px-6 py-10 text-center"
     >
       <p className="text-base font-semibold text-navy">{title}</p>
-      <p className="mt-2 text-sm text-grey-dark">{description}</p>
+      <p className="mt-2 text-sm text-ink/80">{description}</p>
       {action ? <div className="mt-5">{action}</div> : null}
     </div>
   );
@@ -138,16 +138,16 @@ type AdminStatusMessageProps = {
 
 export function AdminStatusMessage({ type, message }: AdminStatusMessageProps) {
   const styles = {
-    success: "border-green-200 bg-green-50 text-green-800",
-    error: "border-red-200 bg-red-50 text-red-800",
-    info: "border-blue-200 bg-blue-50 text-blue-800",
+    success: "border-success/25 bg-success/10 text-success",
+    error: "border-error/25 bg-error/10 text-error",
+    info: "border-gold/30 bg-gold/10 text-navy",
   } as const;
 
   return (
     <p
       role={type === "error" ? "alert" : "status"}
       aria-live={type === "error" ? "assertive" : "polite"}
-      className={`rounded-lg border px-4 py-3 text-sm ${styles[type]}`}
+      className={`rounded-xl border px-4 py-3 text-sm ${styles[type]}`}
     >
       {message}
     </p>
@@ -185,10 +185,10 @@ export function AdminTabList<T extends string>({
             role="tab"
             aria-selected={selected}
             onClick={() => onChange(option.value)}
-            className={`min-h-11 rounded-full px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2 ${
+            className={`min-h-11 rounded-pill px-4 py-2 text-sm font-semibold transition-colors duration-ds focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 ${
               selected
                 ? "bg-navy text-white"
-                : "bg-slate-100 text-grey-dark hover:bg-slate-200"
+                : "border border-navy/15 bg-white text-ink hover:border-gold hover:text-gold-deep"
             }`}
           >
             {option.label}

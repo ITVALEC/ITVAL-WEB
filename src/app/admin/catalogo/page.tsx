@@ -116,7 +116,7 @@ function FilterCheckboxGroup({
                       : [...selected, opt.value],
                   )
                 }
-                className="h-4 w-4 rounded border-grey/40 text-navy focus:ring-cornflower"
+                className="h-4 w-4 rounded border-navy/30 text-navy focus:ring-gold"
               />
               {opt.label}
             </label>
@@ -611,7 +611,7 @@ export default function AdminCatalogoPage() {
         {hub ? (
           <form
             onSubmit={saveHub}
-            className="mb-6 space-y-4 rounded-xl border border-grey/20 bg-white p-4"
+            className="mb-6 space-y-4 rounded-card border border-navy/10 bg-white p-4"
           >
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
@@ -649,7 +649,7 @@ export default function AdminCatalogoPage() {
         {primaryLabels.length > 0 ? (
           <form
             onSubmit={savePrimaryLabels}
-            className="mb-6 space-y-4 rounded-xl border border-grey/20 bg-white p-4"
+            className="mb-6 space-y-4 rounded-card border border-navy/10 bg-white p-4"
           >
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
@@ -705,7 +705,7 @@ export default function AdminCatalogoPage() {
           <AdminEmptyState title="Sin resultados" description="Prueba otro término de búsqueda." />
         ) : (
           <div className="grid gap-4 lg:grid-cols-[minmax(0,280px)_1fr]">
-            <div className="space-y-1 rounded-xl border border-grey/20 bg-slate-50 p-2">
+            <div className="space-y-1 rounded-card border border-navy/10 bg-surface p-2">
               <p className="px-2 py-1 text-xs font-semibold uppercase tracking-wide text-grey">
                 Categorías
               </p>
@@ -715,7 +715,7 @@ export default function AdminCatalogoPage() {
                   type="button"
                   aria-pressed={activeCategory?.key === cat.key}
                   onClick={() => setSelectedCategory(cat.key)}
-                  className={`flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2.5 text-left text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2 ${
+                  className={`flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2.5 text-left text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 ${
                     activeCategory?.key === cat.key
                       ? "bg-navy text-white"
                       : "text-navy hover:bg-white"
@@ -729,7 +729,7 @@ export default function AdminCatalogoPage() {
 
             {activeCategory ? (
               <div className="space-y-4">
-                <div className="rounded-xl border border-grey/20 bg-white p-4">
+                <div className="rounded-card border border-navy/10 bg-white p-4">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
                       <h3 className="text-lg font-semibold text-navy">{activeCategory.titleEs}</h3>
@@ -744,7 +744,7 @@ export default function AdminCatalogoPage() {
                             {optionLabel(filterOptions?.primaryGroups, activeCategory.filters.primaryGroup)}
                           </AdminBadge>
                           {activeCategory.filters.sectors.map((key) => (
-                            <span key={key} className="rounded-full bg-slate-100 px-2 py-0.5 text-grey-dark">
+                            <span key={key} className="rounded-pill bg-surface-muted px-2 py-0.5 text-ink">
                               {optionLabel(filterOptions?.sectors, key)}
                             </span>
                           ))}
@@ -753,7 +753,7 @@ export default function AdminCatalogoPage() {
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {activeCategory.heroSrc ? (
-                        <div className="relative h-16 w-24 overflow-hidden rounded-lg bg-slate-100">
+                        <div className="relative h-16 w-24 overflow-hidden rounded-lg bg-surface-muted">
                           <AdminMediaImage
                             src={activeCategory.heroSrc}
                             version={previewVersion}
@@ -766,7 +766,7 @@ export default function AdminCatalogoPage() {
                       </AdminButton>
                       <Link
                         href={`/admin/imagenes?kind=hero&category=${activeCategory.key}`}
-                        className="inline-flex min-h-11 items-center rounded-lg border border-grey/30 px-3 text-sm font-semibold text-navy hover:bg-slate-50"
+                        className="inline-flex min-h-11 items-center rounded-xl border border-navy/20 px-3 text-sm font-semibold text-navy hover:bg-surface"
                       >
                         Ver portada
                       </Link>
@@ -800,10 +800,10 @@ export default function AdminCatalogoPage() {
                   {activeCategory.subcategories.map((sub) => (
                     <div
                       key={sub.key}
-                      className="flex flex-col gap-3 rounded-xl border border-grey/20 bg-white p-4 sm:flex-row sm:items-center"
+                      className="flex flex-col gap-3 rounded-card border border-navy/10 bg-white p-4 sm:flex-row sm:items-center"
                     >
                       {sub.heroSrc ? (
-                        <div className="relative h-20 w-28 shrink-0 overflow-hidden rounded-lg bg-slate-100">
+                        <div className="relative h-20 w-28 shrink-0 overflow-hidden rounded-lg bg-surface-muted">
                           <AdminMediaImage
                             src={sub.heroSrc}
                             version={previewVersion}
@@ -811,7 +811,7 @@ export default function AdminCatalogoPage() {
                           />
                         </div>
                       ) : (
-                        <div className="flex h-20 w-28 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-xs text-grey">
+                        <div className="flex h-20 w-28 shrink-0 items-center justify-center rounded-lg bg-surface-muted text-xs text-grey">
                           Sin portada
                         </div>
                       )}
@@ -846,7 +846,7 @@ export default function AdminCatalogoPage() {
                         </AdminButton>
                         <Link
                           href={`/admin/imagenes?kind=product&category=${encodeURIComponent(sub.categoryKey)}&subcategory=${encodeURIComponent(sub.key)}`}
-                          className="inline-flex min-h-11 items-center justify-center rounded-lg px-3 text-sm font-semibold text-cornflower-ink hover:bg-cornflower/10"
+                          className="inline-flex min-h-11 items-center justify-center rounded-pill px-3 text-sm font-semibold text-gold-deep hover:bg-gold/10"
                         >
                           Ver en Fotos
                         </Link>
@@ -888,13 +888,13 @@ export default function AdminCatalogoPage() {
           <form id="catalog-edit-form" onSubmit={saveEdit} className="space-y-4">
             {feedback ? <AdminStatusMessage type={feedback.type} message={feedback.message} /> : null}
             {editing.type === "subcategory" ? (
-              <p className="rounded-lg border border-grey/20 bg-slate-50 px-3 py-2 text-sm text-navy">
+              <p className="rounded-xl border border-navy/10 bg-surface px-3 py-2 text-sm text-navy">
                 <span className="font-semibold">Categoría: </span>
                 {categories.find((c) => c.key === editing.item.categoryKey)?.titleEs ??
                   editing.item.categoryKey}
               </p>
             ) : null}
-            <p className="rounded-lg border border-cornflower/25 bg-cornflower/5 px-3 py-2 text-xs text-navy">
+            <p className="rounded-lg border border-gold/25 bg-gold/10 px-3 py-2 text-xs text-navy">
               Traducción automática ES → EN al guardar. No hace falta rellenar inglés.
             </p>
             <AdminField label="Nombre" htmlFor="title-es">
@@ -943,7 +943,7 @@ export default function AdminCatalogoPage() {
             ) : null}
 
             {filterOptions ? (
-              <div className="space-y-4 rounded-xl border border-grey/20 bg-slate-50 p-4">
+              <div className="space-y-4 rounded-card border border-navy/10 bg-surface p-4">
                 <div>
                   <p className="text-sm font-semibold text-navy">Filtros del explorador</p>
                   <p className="mt-0.5 text-xs text-grey-dark">
@@ -1142,7 +1142,7 @@ export default function AdminCatalogoPage() {
             {feedback ? (
               <AdminStatusMessage type={feedback.type} message={feedback.message} />
             ) : null}
-            <p className="rounded-lg border border-cornflower/25 bg-cornflower/5 px-3 py-2 text-sm text-navy">
+            <p className="rounded-lg border border-gold/25 bg-gold/10 px-3 py-2 text-sm text-navy">
               <strong>Máximo {MAX_PRODUCT_GALLERY_IMAGES} fotos del producto (ángulos).</strong>{" "}
               Las obras y referencias se gestionan en <strong>Obras</strong>, no aquí.
             </p>
@@ -1157,7 +1157,7 @@ export default function AdminCatalogoPage() {
               {productMedia.loading ? (
                 <p className="text-sm text-grey">Cargando…</p>
               ) : productMedia.cover ? (
-                <div className="flex flex-wrap items-start gap-3 rounded-xl border border-grey/20 bg-slate-50 p-3">
+                <div className="flex flex-wrap items-start gap-3 rounded-card border border-navy/10 bg-surface p-3">
                   <div className="relative h-24 w-32 overflow-hidden rounded-lg bg-white">
                     <AdminMediaImage
                       src={productMedia.cover.src}
@@ -1167,7 +1167,10 @@ export default function AdminCatalogoPage() {
                     />
                   </div>
                   <div className="min-w-0 flex-1 space-y-2">
-                    <p className="text-sm font-medium text-navy">Portada actual</p>
+                    <p className="text-sm font-medium text-navy">
+                      <AdminBadge tone="cover">Portada</AdminBadge>
+                      <span className="ml-2">Portada actual</span>
+                    </p>
                     <AdminImageUpload
                       action="replace"
                       mediaId={productMedia.cover.id}
@@ -1188,7 +1191,7 @@ export default function AdminCatalogoPage() {
                   Sin portada registrada. Usa{" "}
                   <Link
                     href={`/admin/imagenes?kind=hero&category=${encodeURIComponent(uploadSub.categoryKey)}&subcategory=${encodeURIComponent(uploadSub.key)}`}
-                    className="font-semibold text-cornflower-ink underline"
+                    className="font-semibold text-gold-deep underline"
                   >
                     Fotos → Portadas
                   </Link>{" "}
@@ -1243,9 +1246,9 @@ export default function AdminCatalogoPage() {
                     return (
                       <div
                         key={`slot-${slot}`}
-                        className="overflow-hidden rounded-xl border border-grey/20 bg-white"
+                        className="overflow-hidden rounded-card border border-navy/10 bg-white"
                       >
-                        <div className="relative aspect-[4/3] bg-slate-100">
+                        <div className="relative aspect-[4/3] bg-surface-muted">
                           {item ? (
                             <AdminMediaImage
                               src={item.src}
@@ -1260,7 +1263,7 @@ export default function AdminCatalogoPage() {
                           )}
                         </div>
                         <div className="space-y-2 p-2.5">
-                          <p className="text-xs font-semibold text-navy">Foto {slot + 1}</p>
+                          <AdminBadge tone="gallery">Foto {slot + 1}</AdminBadge>
                           {item ? (
                             <div className="flex flex-wrap gap-1.5">
                               <AdminImageUpload

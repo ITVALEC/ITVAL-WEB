@@ -4,7 +4,7 @@ import { useEffect, useId, useRef, type ReactNode } from "react";
 import { adminInputClass } from "@/components/admin/AdminShell";
 
 const focusRing =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2";
 
 export function AdminButton({
   children,
@@ -25,12 +25,12 @@ export function AdminButton({
 }) {
   const styles = {
     primary:
-      "bg-navy text-white hover:bg-navy/90 disabled:opacity-60",
+      "bg-gold text-navy shadow-none hover:bg-gold-soft disabled:opacity-60",
     secondary:
-      "border border-grey/40 bg-white text-navy hover:bg-slate-50 disabled:opacity-60",
+      "border border-navy/25 bg-white text-navy shadow-none hover:border-gold hover:text-gold-deep disabled:opacity-60",
     danger:
-      "border border-red-200 bg-white text-red-700 hover:bg-red-50 disabled:opacity-60",
-    ghost: "text-cornflower-ink hover:bg-cornflower/10 disabled:opacity-60",
+      "border border-error/30 bg-white text-error hover:bg-error/5 disabled:opacity-60",
+    ghost: "text-gold-deep hover:bg-gold/10 disabled:opacity-60",
   } as const;
 
   return (
@@ -39,7 +39,7 @@ export function AdminButton({
       form={form}
       disabled={disabled}
       onClick={onClick}
-      className={`inline-flex min-h-11 items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold transition-colors ${focusRing} ${styles[variant]} ${className}`}
+      className={`inline-flex min-h-11 items-center justify-center rounded-pill px-4 py-2 text-sm font-semibold transition-colors duration-ds ${focusRing} ${styles[variant]} ${className}`}
     >
       {children}
     </button>
@@ -51,17 +51,19 @@ export function AdminBadge({
   tone = "neutral",
 }: {
   children: ReactNode;
-  tone?: "success" | "neutral" | "warning";
+  tone?: "success" | "neutral" | "warning" | "cover" | "gallery";
 }) {
   const styles = {
-    success: "bg-green-100 text-green-800",
-    neutral: "bg-slate-100 text-grey-dark",
-    warning: "bg-amber-100 text-amber-900",
+    success: "bg-success/15 text-success",
+    neutral: "bg-surface-muted text-ink",
+    warning: "bg-gold/20 text-navy",
+    cover: "bg-gold/20 text-navy",
+    gallery: "bg-navy/10 text-navy",
   } as const;
 
   return (
     <span
-      className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium ${styles[tone]}`}
+      className={`inline-flex rounded-pill px-2.5 py-0.5 text-xs font-semibold ${styles[tone]}`}
     >
       {children}
     </span>
@@ -78,10 +80,10 @@ export function AdminCrudToolbar({
   action?: ReactNode;
 }) {
   return (
-    <div className="mb-4 flex flex-col gap-3 border-b border-grey/10 pb-4 sm:flex-row sm:items-start sm:justify-between">
+    <div className="mb-4 flex flex-col gap-3 border-b border-navy/10 pb-4 sm:flex-row sm:items-start sm:justify-between">
       <div className="min-w-0">
         <h2 className="text-lg font-semibold text-navy">{title}</h2>
-        {description ? <p className="mt-1 text-sm text-grey-dark">{description}</p> : null}
+        {description ? <p className="mt-1 text-sm text-ink/80">{description}</p> : null}
       </div>
       {action ? <div className="flex w-full shrink-0 flex-wrap gap-2 sm:w-auto">{action}</div> : null}
     </div>
@@ -111,7 +113,7 @@ export function AdminDataTable<T extends { id: string }>({
   mobileCard: (row: T) => ReactNode;
 }) {
   if (rows.length === 0) {
-    return <p className="py-8 text-center text-sm text-grey-dark">{emptyMessage}</p>;
+    return <p className="py-8 text-center text-sm text-ink/80">{emptyMessage}</p>;
   }
 
   return (
@@ -120,12 +122,12 @@ export function AdminDataTable<T extends { id: string }>({
         <table className="w-full min-w-[640px] border-collapse text-left text-sm">
           <caption className="sr-only">{caption}</caption>
           <thead>
-            <tr className="border-b border-grey/20 bg-slate-50">
+            <tr className="border-b border-navy/10 bg-surface">
               {columns.map((col) => (
                 <th
                   key={col.key}
                   scope="col"
-                  className={`px-3 py-3 text-xs font-semibold uppercase tracking-wide text-grey-dark ${col.headerClassName ?? ""}`}
+                  className={`px-3 py-3.5 text-xs font-semibold uppercase tracking-wide text-ink/75 ${col.headerClassName ?? ""}`}
                 >
                   {col.header}
                 </th>
@@ -136,10 +138,10 @@ export function AdminDataTable<T extends { id: string }>({
             {rows.map((row) => (
               <tr
                 key={row.id}
-                className="border-b border-grey/10 transition-colors hover:bg-slate-50/80"
+                className="border-b border-navy/5 transition-colors hover:bg-surface/80"
               >
                 {columns.map((col) => (
-                  <td key={col.key} className={`px-3 py-3 align-middle ${col.className ?? ""}`}>
+                  <td key={col.key} className={`px-3 py-4 align-middle ${col.className ?? ""}`}>
                     {col.cell(row)}
                   </td>
                 ))}
@@ -153,7 +155,7 @@ export function AdminDataTable<T extends { id: string }>({
         {rows.map((row) => (
           <li
             key={row.id}
-            className="rounded-xl border border-grey/15 bg-white p-4 shadow-sm"
+            className="rounded-card border border-navy/10 bg-white p-4 shadow-card"
           >
             {mobileCard(row)}
           </li>
@@ -258,7 +260,7 @@ export function AdminModal({
     >
       <button
         type="button"
-        className="absolute inset-0 bg-navy/50"
+        className="absolute inset-0 bg-navy-dark/55"
         aria-label="Cerrar ventana"
         onClick={onClose}
       />
@@ -269,16 +271,16 @@ export function AdminModal({
         aria-labelledby={titleId}
         aria-describedby={description ? descId : undefined}
         tabIndex={-1}
-        className={`relative z-10 flex max-h-[min(92vh,100dvh)] w-full flex-col overflow-hidden rounded-t-2xl bg-white shadow-xl sm:rounded-2xl ${modalSizeClass[size]}`}
+        className={`relative z-10 flex max-h-[min(92vh,100dvh)] w-full flex-col overflow-hidden rounded-t-card bg-white shadow-card-hover sm:rounded-card ${modalSizeClass[size]}`}
       >
-        <header className="shrink-0 border-b border-grey/10 bg-white px-4 py-3 sm:px-5 sm:py-4">
+        <header className="shrink-0 border-b border-navy/10 bg-white px-4 py-3 sm:px-5 sm:py-4">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
               <h2 id={titleId} className="text-lg font-semibold text-navy">
                 {title}
               </h2>
               {description ? (
-                <p id={descId} className="mt-1 text-sm text-grey-dark">
+                <p id={descId} className="mt-1 text-sm text-ink/80">
                   {description}
                 </p>
               ) : null}
@@ -286,7 +288,7 @@ export function AdminModal({
             <button
               type="button"
               onClick={onClose}
-              className={`min-h-11 min-w-11 shrink-0 rounded-lg text-grey hover:bg-slate-100 ${focusRing}`}
+              className={`min-h-11 min-w-11 shrink-0 rounded-xl text-grey hover:bg-surface ${focusRing}`}
               aria-label="Cerrar"
             >
               ✕
@@ -297,7 +299,7 @@ export function AdminModal({
           {children}
         </div>
         {footer ? (
-          <footer className="shrink-0 flex flex-wrap justify-end gap-2 border-t border-grey/10 bg-slate-50 px-4 py-3 sm:px-5 sm:py-4">
+          <footer className="shrink-0 flex flex-wrap justify-end gap-2 border-t border-navy/10 bg-surface px-4 py-3 sm:px-5 sm:py-4">
             {footer}
           </footer>
         ) : null}
@@ -357,7 +359,7 @@ export function AdminInfoBanner({ children }: { children: ReactNode }) {
   return (
     <div
       role="note"
-      className="mb-4 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-900"
+      className="mb-4 rounded-xl border border-gold/30 bg-gold/10 px-4 py-3 text-sm text-navy"
     >
       {children}
     </div>

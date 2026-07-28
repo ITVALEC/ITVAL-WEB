@@ -50,9 +50,9 @@ export default async function AdminDashboardPage() {
         </div>
       </AdminPanel>
 
-      <div className="mt-4 rounded-xl border border-cornflower/20 bg-cornflower/5 p-4 text-sm text-navy">
+      <div className="mt-4 rounded-card border border-gold/25 bg-gold/10 p-4 text-sm text-navy">
         <p className="font-semibold">Guía rápida</p>
-        <ul className="mt-2 list-disc space-y-1 pl-5 text-grey-dark">
+        <ul className="mt-2 list-disc space-y-1 pl-5 text-ink/80">
           <li><strong>Obras</strong> — proyectos terminados (edificios, ciudades, galería de fotos).</li>
           <li><strong>Catálogo</strong> — tipos de producto ITVAL (fachadas, puertas, ventanas…).</li>
           <li><strong>Fotos</strong> — todas las imágenes del sitio en un solo lugar.</li>
@@ -76,16 +76,16 @@ function ActionCard({
   return (
     <Link
       href={href}
-      className="flex flex-col rounded-xl border border-grey/20 bg-white p-4 shadow-sm transition hover:border-cornflower/40 hover:shadow-md"
+      className="flex flex-col rounded-card border border-navy/10 bg-white p-4 shadow-card transition duration-ds hover:border-gold/40 hover:shadow-soft"
     >
       <div className="flex items-start justify-between gap-2">
         <h3 className="font-semibold text-navy">{title}</h3>
-        <span className="shrink-0 rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-bold text-navy">
+        <span className="shrink-0 rounded-pill bg-surface-muted px-2.5 py-0.5 text-xs font-bold text-navy">
           {stat}
         </span>
       </div>
-      <p className="mt-2 flex-1 text-sm text-grey-dark">{desc}</p>
-      <span className="mt-3 text-sm font-semibold text-cornflower-ink">Abrir →</span>
+      <p className="mt-2 flex-1 text-sm text-ink/80">{desc}</p>
+      <span className="mt-3 text-sm font-semibold text-gold-deep">Abrir →</span>
     </Link>
   );
 }
