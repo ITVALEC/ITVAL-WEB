@@ -28,7 +28,7 @@ export function ProductsPreview() {
           />
           <AppLink
             href={NAV_PATHS.products}
-            className="shrink-0 rounded-pill text-ds-caption font-semibold uppercase tracking-[0.14em] text-gold-deep transition-colors duration-ds hover:text-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            className="inline-flex min-h-11 shrink-0 items-center rounded-pill text-ds-caption font-semibold uppercase tracking-[0.14em] text-gold-deep transition-colors duration-ds hover:text-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
           >
             {tc("viewProducts")} →
           </AppLink>

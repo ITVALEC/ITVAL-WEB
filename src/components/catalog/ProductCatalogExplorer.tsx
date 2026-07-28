@@ -34,7 +34,7 @@ import {
 type SecondaryFilter = "all" | string;
 
 function pillClass(active: boolean): string {
-  return `inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-pill px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] transition-colors duration-ds focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 motion-reduce:transition-none sm:px-4 sm:text-ds-caption ${
+  return `inline-flex min-h-11 shrink-0 items-center gap-2 whitespace-nowrap rounded-pill px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] transition-colors duration-ds focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 motion-reduce:transition-none sm:px-4 sm:text-ds-caption ${
     active
       ? "bg-navy text-white"
       : "border border-navy/15 bg-white text-ink/80 hover:border-gold hover:text-navy"
@@ -311,20 +311,20 @@ export function ProductCatalogExplorer({
           {t("sectionTitle")}
         </h2>
 
-        <div className="grid gap-10 lg:grid-cols-[220px_minmax(0,1fr)] lg:items-start lg:gap-12 xl:grid-cols-[240px_minmax(0,1fr)]">
-          <aside className="relative z-0 isolate lg:sticky lg:top-28 lg:self-start">
+        <div className="grid gap-8 lg:grid-cols-[220px_minmax(0,1fr)] lg:items-start lg:gap-12 xl:grid-cols-[240px_minmax(0,1fr)]">
+          <aside className="relative z-0 isolate min-w-0 lg:sticky lg:top-28 lg:self-start">
             <p className="text-ds-caption font-semibold uppercase tracking-[0.14em] text-grey">
               {tHub("categoriesNav")}
             </p>
             <nav
               aria-label={tHub("categoriesNav")}
-              className="mt-3 space-y-0.5"
+              className="mt-3 -mx-1 overflow-x-auto pb-1 lg:mx-0 lg:overflow-visible lg:pb-0"
             >
-              <ul className="space-y-0.5">
+              <ul className="flex w-max gap-2 lg:w-auto lg:flex-col lg:gap-0.5">
                 <li>
                   <a
                     href="#catalog-explorer"
-                    className="flex items-center rounded-card bg-navy px-3 py-2.5 text-sm font-semibold text-white"
+                    className="flex min-h-11 items-center whitespace-nowrap rounded-card bg-navy px-3 py-2.5 text-sm font-semibold text-white"
                   >
                     {tHub("allProducts")}
                   </a>
@@ -333,7 +333,7 @@ export function ProductCatalogExplorer({
                   <li key={category}>
                     <AppLink
                       href={getProductCategoryPath(category)}
-                      className="flex items-center rounded-card px-3 py-2.5 text-sm font-medium text-ink/85 transition-colors duration-ds hover:bg-white hover:text-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                      className="flex min-h-11 items-center whitespace-nowrap rounded-card px-3 py-2.5 text-sm font-medium text-ink/85 transition-colors duration-ds hover:bg-white hover:text-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
                     >
                       {tCat(`${category}.title`)}
                     </AppLink>
@@ -368,7 +368,7 @@ export function ProductCatalogExplorer({
                 {primaryChips}
 
                 <details className="group rounded-card border border-navy/10 bg-surface lg:hidden">
-                  <summary className="cursor-pointer list-none px-4 py-3 text-sm font-semibold text-navy marker:content-none [&::-webkit-details-marker]:hidden">
+                  <summary className="flex min-h-11 cursor-pointer list-none items-center px-4 py-3 text-sm font-semibold text-navy marker:content-none [&::-webkit-details-marker]:hidden">
                     <span className="flex items-center justify-between gap-2">
                       {t("advancedFilters")}
                       <span

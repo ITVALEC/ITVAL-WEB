@@ -63,29 +63,29 @@ export function Metrics() {
   return (
     <section
       id="home-content"
-      className="relative z-20 -mt-14 scroll-mt-20 px-4 sm:-mt-16 sm:px-6 lg:-mt-20 lg:px-8"
+      className="relative z-20 -mt-10 scroll-mt-20 px-4 sm:-mt-14 sm:px-6 lg:-mt-16 lg:px-8"
       aria-labelledby="metrics-heading"
     >
       <h2 id="metrics-heading" className="sr-only">
         {t("title")}
       </h2>
       <Container className="relative">
-        <div className="rounded-card border border-gold/25 bg-navy-dark px-4 py-8 shadow-card-hover sm:px-8 lg:px-10 lg:py-9">
-          <dl className="relative grid gap-8 sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-gold/20">
+        <div className="rounded-card border border-gold/25 bg-navy-dark px-3 py-6 shadow-card-hover sm:px-8 sm:py-8 lg:px-10 lg:py-9">
+          <dl className="relative grid grid-cols-1 gap-6 min-[420px]:grid-cols-3 min-[420px]:gap-0 min-[420px]:divide-x min-[420px]:divide-gold/20">
             {METRIC_KEYS.map((key) => (
               <div
                 key={key}
-                className="fade-up flex flex-col items-center px-2 text-center sm:px-8"
+                className="fade-up flex flex-col items-center px-1 text-center min-[420px]:px-4 sm:px-6 lg:px-8"
               >
                 <dt className="sr-only">{t(`${key}.label`)}</dt>
                 <dd className="flex flex-col items-center">
-                  <span className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full border border-gold/50 text-gold">
+                  <span className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-full border border-gold/50 text-gold sm:mb-4 sm:h-12 sm:w-12">
                     <MetricIcon name={key} />
                   </span>
-                  <span className="block font-display text-4xl font-bold tracking-tight text-white sm:text-5xl">
+                  <span className="block font-display text-[clamp(1.75rem,1rem+2vw,3rem)] font-bold tracking-tight text-white">
                     {values[key]}
                   </span>
-                  <span className="mt-2 block max-w-[12rem] text-ds-caption font-semibold uppercase tracking-[0.16em] text-white/65">
+                  <span className="mt-2 block max-w-[10rem] text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-white/65 sm:max-w-[12rem] sm:text-ds-caption sm:tracking-[0.16em]">
                     {t(`${key}.label`)}
                   </span>
                 </dd>

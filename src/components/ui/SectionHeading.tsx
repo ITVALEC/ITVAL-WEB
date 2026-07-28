@@ -30,12 +30,16 @@ export function SectionHeading({
   const ruleClass = rule
     ? `gold-rule ${align === "center" ? "gold-rule-center" : ""}`
     : "";
+  const titleSize =
+    Heading === "h1"
+      ? "text-[clamp(1.75rem,1rem+2.8vw,3rem)]"
+      : "text-[clamp(1.5rem,0.95rem+2.2vw,3rem)]";
 
   return (
     <div className={`relative max-w-2xl ${alignClass}`}>
       <Heading
         id={id}
-        className={`font-display text-3xl font-bold tracking-tight sm:text-4xl lg:text-ds-h2 ${titleColor} ${ruleClass}`}
+        className={`break-words font-display font-bold tracking-tight leading-[1.2] ${titleSize} ${titleColor} ${ruleClass}`}
       >
         <AccentText
           text={title}
@@ -44,7 +48,7 @@ export function SectionHeading({
         />
       </Heading>
       {subtitle ? (
-        <p className={`mt-8 break-words text-ds-body leading-[1.5] ${subtitleColor}`}>
+        <p className={`mt-6 break-words text-base leading-[1.5] sm:mt-8 sm:text-ds-body ${subtitleColor}`}>
           {subtitle}
         </p>
       ) : null}

@@ -20,6 +20,7 @@
 
   html {
     scroll-behavior: smooth;
+    overflow-x: clip;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -32,6 +33,8 @@
     @apply bg-surface font-sans text-ink antialiased;
     font-size: 1.125rem;
     line-height: 1.5;
+    overflow-x: clip;
+    max-width: 100vw;
   }
 
   :focus:not(:focus-visible) {
@@ -69,22 +72,6 @@
 
   .hero-reveal-delay-3 {
     animation-delay: 0.36s;
-  }
-
-  @keyframes hero-scroll-cue {
-    0%,
-    100% {
-      transform: translateY(0);
-      opacity: 0.85;
-    }
-    50% {
-      transform: translateY(6px);
-      opacity: 1;
-    }
-  }
-
-  .hero-scroll-cue {
-    animation: hero-scroll-cue 2.4s ease-in-out infinite;
   }
 
   @keyframes fade-up {
@@ -129,10 +116,6 @@
       animation: none;
       opacity: 1;
       transform: none;
-    }
-
-    .hero-scroll-cue {
-      animation: none;
     }
   }
 

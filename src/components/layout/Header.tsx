@@ -145,7 +145,7 @@ export function Header() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="block rounded-card px-3 py-2.5 text-base font-medium text-white/90 hover:bg-white/10 hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                  className="flex min-h-11 items-center rounded-card px-3 py-2.5 text-base font-medium text-white/90 hover:bg-white/10 hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
                   onClick={() => setMenuOpen(false)}
                 >
                   {item.label}

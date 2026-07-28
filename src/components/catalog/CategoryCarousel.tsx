@@ -69,14 +69,14 @@ export function CategoryCarousel({
 
   const itemWidth =
     variant === "service"
-      ? "w-[min(100%,220px)] shrink-0 snap-start sm:w-[min(40%,200px)] lg:w-[min(20%,180px)]"
-      : "w-[min(100%,300px)] shrink-0 snap-start sm:w-[min(48%,320px)] lg:w-[min(25%,280px)]";
+      ? "w-[min(85%,200px)] shrink-0 snap-start sm:w-[min(40%,200px)] lg:w-[min(20%,180px)]"
+      : "w-[min(85%,280px)] shrink-0 snap-start sm:w-[min(48%,320px)] lg:w-[min(25%,280px)]";
 
   return (
-    <div className="relative mt-12">
+    <div className="relative mt-10 sm:mt-12">
       <ul
         ref={scrollerRef}
-        className="flex snap-x snap-mandatory gap-6 overflow-x-auto overscroll-x-contain pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-2 sm:gap-6 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         aria-label={navLabel}
       >
         {categories.map((category) => (
@@ -90,58 +90,21 @@ export function CategoryCarousel({
         ))}
       </ul>
 
-      {categories.length > 1 && (
-        <div
-          className={
-            variant === "service"
-              ? "pointer-events-none absolute -right-1 top-1/2 hidden -translate-y-1/2 lg:block"
-              : "mt-5 flex items-center justify-end gap-2"
-          }
-        >
-          {variant === "service" ? (
-            <div className="pointer-events-auto flex flex-col gap-2">
-              <CarouselButton
-                direction="next"
-                label={nextLabel}
-                disabled={!canScrollRight}
-                onClick={() => scrollByPage("next")}
-                tone="gold"
-              />
-            </div>
-          ) : (
-            <>
-              <CarouselButton
-                direction="prev"
-                label={previousLabel}
-                disabled={!canScrollLeft}
-                onClick={() => scrollByPage("prev")}
-              />
-              <CarouselButton
-                direction="next"
-                label={nextLabel}
-                disabled={!canScrollRight}
-                onClick={() => scrollByPage("next")}
-              />
-            </>
-          )}
-        </div>
-      )}
-
-      {variant === "service" && categories.length > 1 ? (
-        <div className="mt-6 flex items-center justify-end gap-2 lg:hidden">
+      {categories.length > 1 ? (
+        <div className="mt-5 flex items-center justify-end gap-2 sm:mt-6">
           <CarouselButton
             direction="prev"
             label={previousLabel}
             disabled={!canScrollLeft}
             onClick={() => scrollByPage("prev")}
-            tone="gold"
+            tone={variant === "service" ? "gold" : "neutral"}
           />
           <CarouselButton
             direction="next"
             label={nextLabel}
             disabled={!canScrollRight}
             onClick={() => scrollByPage("next")}
-            tone="gold"
+            tone={variant === "service" ? "gold" : "neutral"}
           />
         </div>
       ) : null}
@@ -173,7 +136,7 @@ function CarouselButton({
       onClick={onClick}
       disabled={disabled}
       aria-label={label}
-      className={`inline-flex min-h-10 min-w-10 items-center justify-center rounded-full border text-lg font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40 motion-reduce:transition-none ${toneClass}`}
+      className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border text-lg font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40 motion-reduce:transition-none ${toneClass}`}
     >
       <span aria-hidden="true">{direction === "prev" ? "←" : "→"}</span>
     </button>

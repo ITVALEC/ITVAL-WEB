@@ -79,8 +79,9 @@ const config: Config = {
         ds: "250ms",
       },
       spacing: {
-        section: "6rem",
-        "card-gap": "2rem",
+        /** 56px móvil → 96px desktop (DS). */
+        section: "clamp(3.5rem, 2.5rem + 4vw, 6rem)",
+        "card-gap": "clamp(1.25rem, 1rem + 1vw, 2rem)",
       },
     },
   },
