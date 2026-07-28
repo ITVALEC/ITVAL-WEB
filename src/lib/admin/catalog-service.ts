@@ -14,7 +14,10 @@ import {
   SYSTEM_KEYS,
 } from "@/lib/catalog/filter-keys";
 import { applyCatalogLabelMigrations } from "@/lib/catalog/migrate-catalog-labels";
+import { mergeCatalogMessages } from "@/lib/catalog/merge-messages";
 import { fillEnglishFromSpanish } from "@/lib/i18n/translate-es-to-en";
+import esCatalogDefaults from "../../../messages/products-catalog/es.json";
+import enCatalogDefaults from "../../../messages/products-catalog/en.json";
 
 export type CatalogTranslationMeta = {
   warnings: string[];
@@ -187,10 +190,14 @@ async function writeTaxonomy(data: Taxonomy): Promise<void> {
 
 async function readFullCatalog(locale: "es" | "en"): Promise<Record<string, unknown>> {
   const data = await getDocument<Record<string, unknown>>(catalogContentKey(locale));
-  if (applyCatalogLabelMigrations(locale, data)) {
-    await writeFullCatalog(locale, data);
+  const defaults = (
+    locale === "en" ? enCatalogDefaults : esCatalogDefaults
+  ) as Record<string, unknown>;
+  const merged = mergeCatalogMessages(defaults, data);
+  if (applyCatalogLabelMigrations(locale, merged)) {
+    await writeFullCatalog(locale, merged);
   }
-  return data;
+  return merged;
 }
 
 async function writeFullCatalog(
@@ -707,26 +714,29 @@ export async function updateCatalogHub(
   const esFull = await readFullCatalog("es");
   const enFull = await readFullCatalog("en");
   const hubEs = {
-    ...((esFull.hub ?? {}) as { title?: string; subtitle?: string }),
+    ...((esFull.hub ?? {}) as Record<string, unknown>),
   };
   const hubEn = {
-    ...((enFull.hub ?? {}) as { title?: string; subtitle?: string }),
+    ...((enFull.hub ?? {}) as Record<string, unknown>),
   };
 
-  const nextTitleEs = patch.titleEs != null ? patch.titleEs.trim() : (hubEs.title ?? "");
+  const nextTitleEs =
+    patch.titleEs != null ? patch.titleEs.trim() : String(hubEs.title ?? "");
   const nextSubtitleEs =
-    patch.subtitleEs != null ? patch.subtitleEs.trim() : (hubEs.subtitle ?? "");
+    patch.subtitleEs != null
+      ? patch.subtitleEs.trim()
+      : String(hubEs.subtitle ?? "");
 
   const translated = await fillEnglishFromSpanish({
     title: {
       es: nextTitleEs,
-      previousEs: hubEs.title ?? "",
-      previousEn: hubEn.title ?? "",
+      previousEs: String(hubEs.title ?? ""),
+      previousEn: String(hubEn.title ?? ""),
     },
     subtitle: {
       es: nextSubtitleEs,
-      previousEs: hubEs.subtitle ?? "",
-      previousEn: hubEn.subtitle ?? "",
+      previousEs: String(hubEs.subtitle ?? ""),
+      previousEn: String(hubEn.subtitle ?? ""),
     },
   });
 

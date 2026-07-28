@@ -6,6 +6,7 @@
     "dev": "next dev -p 3000",
     "dev:clean": "node scripts/clean-next.js --force && node scripts/free-port.js 3000 && next dev -p 3000",
     "catalog:i18n": "node scripts/generate-products-catalog.mjs",
+    "catalog:validate-hub": "node scripts/validate-catalog-hub-keys.mjs",
     "catalog:validate-filters": "npx tsx scripts/validate-product-filters.mjs",
     "images:placeholders": "node scripts/create-image-placeholders.mjs",
     "images:import": "node scripts/import-product-photos.mjs",

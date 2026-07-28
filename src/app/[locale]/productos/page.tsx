@@ -49,13 +49,13 @@ export default async function ProductsHubPage({
           { label: tNav("products") },
         ])}
         actions={
-          <ul className="mt-10 flex flex-col gap-6 sm:flex-row sm:flex-wrap sm:gap-x-10 sm:gap-y-4">
+          <ul className="relative z-10 mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3 sm:gap-8">
             {BENEFIT_KEYS.map((key) => (
-              <li key={key} className="max-w-xs">
-                <p className="text-ds-caption font-semibold text-gold">
+              <li key={key} className="min-w-0">
+                <p className="break-words text-ds-caption font-semibold text-gold">
                   {t(`benefits.${key}.title`)}
                 </p>
-                <p className="mt-1 text-ds-caption leading-[1.5] text-white/80">
+                <p className="mt-2 break-words text-ds-caption leading-[1.5] text-white/80">
                   {t(`benefits.${key}.body`)}
                 </p>
               </li>

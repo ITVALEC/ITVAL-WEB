@@ -26,6 +26,37 @@ function writeJson(relativePath, data) {
   fs.writeFileSync(filePath, `${JSON.stringify(data, null, 2)}\n`, "utf8");
 }
 
+/**
+ * Une defaults del archivo del release con el documento de Postgres.
+ * Evita que un hub/detalle atrasado en BD borre claves nuevas del repo
+ * antes del `next build` (si no, el bundle queda sin hub.allProducts, etc.).
+ */
+function mergeCatalogMessages(defaults, override) {
+  const result = { ...defaults };
+  for (const [key, value] of Object.entries(override)) {
+    const base = result[key];
+    if (
+      value &&
+      typeof value === "object" &&
+      !Array.isArray(value) &&
+      base &&
+      typeof base === "object" &&
+      !Array.isArray(base)
+    ) {
+      result[key] = mergeCatalogMessages(base, value);
+    } else {
+      result[key] = value;
+    }
+  }
+  return result;
+}
+
+function readJsonIfExists(relativePath) {
+  const filePath = path.join(root, relativePath);
+  if (!fs.existsSync(filePath)) return null;
+  return JSON.parse(fs.readFileSync(filePath, "utf8"));
+}
+
 async function main() {
   const client = new pg.Client({ connectionString: getDatabaseUrl() });
   await client.connect();
@@ -154,19 +185,59 @@ async function main() {
     patterns: ["^DSC0060[0-9]\\.(jpe?g|png)$"],
   });
 
-  for (const { key, file } of [
-    { key: "catalogContentEs", file: "messages/products-catalog/es.json" },
-    { key: "catalogContentEn", file: "messages/products-catalog/en.json" },
-    { key: "taxonomy", file: "src/lib/catalog/taxonomy.json" },
-    { key: "filterConfig", file: "src/lib/catalog/filter-config.json" },
+  for (const { key, file, mergeWithRepo } of [
+    {
+      key: "catalogContentEs",
+      file: "messages/products-catalog/es.json",
+      mergeWithRepo: true,
+    },
+    {
+      key: "catalogContentEn",
+      file: "messages/products-catalog/en.json",
+      mergeWithRepo: true,
+    },
+    { key: "taxonomy", file: "src/lib/catalog/taxonomy.json", mergeWithRepo: false },
+    {
+      key: "filterConfig",
+      file: "src/lib/catalog/filter-config.json",
+      mergeWithRepo: false,
+    },
   ]) {
     const { rows: docRows } = await client.query(
       `SELECT data FROM app_documents WHERE key = $1 LIMIT 1`,
       [key],
     );
-    if (docRows[0]?.data != null) {
-      writeJson(file, docRows[0].data);
+    if (docRows[0]?.data == null) continue;
+
+    let payload = docRows[0].data;
+    if (mergeWithRepo) {
+      const repoDefaults = readJsonIfExists(file);
+      if (
+        repoDefaults &&
+        typeof repoDefaults === "object" &&
+        !Array.isArray(repoDefaults) &&
+        typeof payload === "object" &&
+        payload &&
+        !Array.isArray(payload)
+      ) {
+        payload = mergeCatalogMessages(repoDefaults, payload);
+        // Persistir merge en Postgres para que la BD deje de estar atrasada.
+        await client.query(
+          `INSERT INTO app_documents (key, data, updated_at)
+           VALUES ($1, $2::jsonb, now())
+           ON CONFLICT (key) DO UPDATE
+             SET data = EXCLUDED.data, updated_at = now()`,
+          [key, JSON.stringify(payload)],
+        );
+        const hub = payload.hub ?? {};
+        console.log(
+          `[catalog] ${key} merge hub keys: ${Object.keys(hub).join(", ")}` +
+            (hub.allProducts ? ` | allProducts="${hub.allProducts}"` : " | FALTA allProducts"),
+        );
+      }
     }
+
+    writeJson(file, payload);
   }
 
   await client.end();

@@ -62,7 +62,7 @@ export function PageHero({
           />
         ) : null}
         <SectionHeading as="h1" title={title} subtitle={subtitle} light />
-        {actions}
+        {actions ? <div className="relative z-10">{actions}</div> : null}
       </Container>
     </section>
   );

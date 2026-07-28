@@ -8,6 +8,7 @@ import {
   type GalleryImageSource,
   type ProductGalleryImage,
 } from "@/lib/catalog/product-images";
+import { mergeCatalogMessages } from "@/lib/catalog/merge-messages";
 
 const root = process.cwd();
 
@@ -15,14 +16,53 @@ function writeJson(filePath: string, data: unknown) {
   fs.writeFileSync(filePath, `${JSON.stringify(data, null, 2)}\n`, "utf8");
 }
 
-async function exportAppDocument(key: string, filePath: string): Promise<void> {
+function readJsonRecord(filePath: string): Record<string, unknown> | null {
+  try {
+    const raw = JSON.parse(fs.readFileSync(filePath, "utf8")) as unknown;
+    if (raw && typeof raw === "object" && !Array.isArray(raw)) {
+      return raw as Record<string, unknown>;
+    }
+  } catch {
+    /* archivo ausente o inválido */
+  }
+  return null;
+}
+
+async function exportAppDocument(
+  key: string,
+  filePath: string,
+  options?: { mergeWithRepo?: boolean },
+): Promise<void> {
   const { rows } = await query<{ data: unknown }>(
     `SELECT data FROM app_documents WHERE key = $1 LIMIT 1`,
     [key],
   );
-  if (rows[0]?.data != null) {
-    writeJson(filePath, rows[0].data);
+  if (rows[0]?.data == null) return;
+
+  let payload = rows[0].data;
+  if (
+    options?.mergeWithRepo &&
+    payload &&
+    typeof payload === "object" &&
+    !Array.isArray(payload)
+  ) {
+    const defaults = readJsonRecord(filePath);
+    if (defaults) {
+      payload = mergeCatalogMessages(
+        defaults,
+        payload as Record<string, unknown>,
+      );
+      await query(
+        `INSERT INTO app_documents (key, data, updated_at)
+         VALUES ($1, $2::jsonb, now())
+         ON CONFLICT (key) DO UPDATE
+           SET data = EXCLUDED.data, updated_at = now()`,
+        [key, JSON.stringify(payload)],
+      );
+    }
   }
+
+  writeJson(filePath, payload);
 }
 
 /** Sincroniza PostgreSQL → archivos JSON que usa el sitio estático. */
@@ -45,13 +85,16 @@ export async function syncDatabaseToJson(): Promise<void> {
   }
 
   // Textos y config del catálogo (lo que edita el admin).
+  // Merge con el JSON del release: la BD no debe borrar claves nuevas del hub.
   await exportAppDocument(
     "catalogContentEs",
     path.join(root, "messages/products-catalog/es.json"),
+    { mergeWithRepo: true },
   );
   await exportAppDocument(
     "catalogContentEn",
     path.join(root, "messages/products-catalog/en.json"),
+    { mergeWithRepo: true },
   );
   await exportAppDocument("taxonomy", MANIFEST_PATHS.taxonomy);
   await exportAppDocument("filterConfig", MANIFEST_PATHS.filters);

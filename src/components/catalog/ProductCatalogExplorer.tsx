@@ -296,8 +296,8 @@ export function ProductCatalogExplorer({
           {t("sectionTitle")}
         </h2>
 
-        <div className="grid gap-10 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-12 xl:grid-cols-[240px_minmax(0,1fr)]">
-          <aside className="lg:sticky lg:top-28 lg:self-start">
+        <div className="grid gap-10 lg:grid-cols-[220px_minmax(0,1fr)] lg:items-start lg:gap-12 xl:grid-cols-[240px_minmax(0,1fr)]">
+          <aside className="relative z-0 isolate lg:sticky lg:top-28 lg:self-start">
             <p className="text-ds-caption font-semibold uppercase tracking-[0.14em] text-grey">
               {tHub("categoriesNav")}
             </p>
@@ -328,9 +328,9 @@ export function ProductCatalogExplorer({
             </nav>
           </aside>
 
-          <div className="min-w-0 space-y-8">
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-              <div className="-mx-1 min-w-0 flex-1 overflow-x-auto pb-1 sm:mx-0 sm:overflow-visible sm:pb-0">
+          <div className="relative z-0 min-w-0 space-y-8">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between lg:gap-6">
+              <div className="min-w-0 flex-1 overflow-x-auto pb-1 sm:overflow-visible sm:pb-0">
                 <div
                   role="group"
                   aria-label={t("primaryLabel")}

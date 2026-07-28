@@ -314,6 +314,10 @@ jobs:
 
           npm run db:export
 
+          echo "===== VALIDANDO KEYS DEL HUB DE PRODUCTOS ====="
+
+          npm run catalog:validate-hub
+
           echo "===== COMPILANDO NEXT.JS ====="
 
           npm run build

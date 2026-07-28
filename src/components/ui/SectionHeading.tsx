@@ -32,7 +32,7 @@ export function SectionHeading({
     : "";
 
   return (
-    <div className={`max-w-2xl ${alignClass}`}>
+    <div className={`relative max-w-2xl ${alignClass}`}>
       <Heading
         id={id}
         className={`font-display text-3xl font-bold tracking-tight sm:text-4xl lg:text-ds-h2 ${titleColor} ${ruleClass}`}
@@ -44,7 +44,7 @@ export function SectionHeading({
         />
       </Heading>
       {subtitle ? (
-        <p className={`mt-6 text-ds-body leading-[1.5] ${subtitleColor}`}>
+        <p className={`mt-8 break-words text-ds-body leading-[1.5] ${subtitleColor}`}>
           {subtitle}
         </p>
       ) : null}
