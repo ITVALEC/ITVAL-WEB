@@ -11,17 +11,54 @@ async function loadBundledCatalog(
     .default as Record<string, unknown>;
 }
 
-/** Catálogo i18n vivo (Postgres → JSON del repo). Evita importar pool en request.ts. */
+/**
+ * Une defaults del repo con el documento vivo.
+ * - Claves nuevas del JSON (p. ej. hub.benefits) aparecen aunque la BD esté atrasada.
+ * - Valores editados en admin/BD ganan sobre el bundled.
+ */
+export function mergeCatalogMessages(
+  defaults: Record<string, unknown>,
+  override: Record<string, unknown>,
+): Record<string, unknown> {
+  const result: Record<string, unknown> = { ...defaults };
+
+  for (const [key, value] of Object.entries(override)) {
+    const base = result[key];
+    if (
+      value &&
+      typeof value === "object" &&
+      !Array.isArray(value) &&
+      base &&
+      typeof base === "object" &&
+      !Array.isArray(base)
+    ) {
+      result[key] = mergeCatalogMessages(
+        base as Record<string, unknown>,
+        value as Record<string, unknown>,
+      );
+    } else {
+      result[key] = value;
+    }
+  }
+
+  return result;
+}
+
+/** Catálogo i18n vivo (Postgres → merge con JSON del repo). */
 export async function loadProductsCatalogMessages(
   locale: "es" | "en",
 ): Promise<Record<string, unknown>> {
   noStore();
 
+  const bundled = await loadBundledCatalog(locale);
+
   try {
-    const data = await getDocument<Record<string, unknown>>(catalogContentKey(locale));
+    const data = await getDocument<Record<string, unknown>>(
+      catalogContentKey(locale),
+    );
     applyCatalogLabelMigrations(locale, data);
-    return data;
+    return mergeCatalogMessages(bundled, data);
   } catch {
-    return loadBundledCatalog(locale);
+    return bundled;
   }
 }

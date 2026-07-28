@@ -3,12 +3,12 @@
     "title": "Productos",
     "subtitle": "Elija una línea para previsualizar soluciones: fachadas, ventanas, puertas y más.",
     "viewCategory": "Ver categoría",
-    "viewDetail": "Ver ficha",
+    "viewDetail": "Ver solución",
     "categoriesNav": "Categorías",
     "allProducts": "Todos los productos",
-    "downloadCatalog": "Descargar catálogo",
-    "catalogCtaTitle": "Catálogo completo de productos",
-    "catalogCtaBody": "Solicite nuestro catálogo y conozca todas las soluciones ITVAL en detalle.",
+    "downloadCatalog": "Solicitar catálogo",
+    "catalogCtaTitle": "¿Quiere el catálogo completo?",
+    "catalogCtaBody": "Escríbanos y le enviamos el catálogo con todas las soluciones ITVAL.",
     "benefits": {
       "quality": {
         "title": "Alta calidad",

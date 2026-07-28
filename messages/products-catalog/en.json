@@ -3,12 +3,12 @@
     "title": "Products",
     "subtitle": "Choose a line to preview solutions: facades, windows, doors and more.",
     "viewCategory": "View category",
-    "viewDetail": "View details",
+    "viewDetail": "View solution",
     "categoriesNav": "Categories",
     "allProducts": "All products",
-    "downloadCatalog": "Download catalog",
-    "catalogCtaTitle": "Complete product catalog",
-    "catalogCtaBody": "Request our catalog and explore every ITVAL solution in detail.",
+    "downloadCatalog": "Request catalog",
+    "catalogCtaTitle": "Want the full catalog?",
+    "catalogCtaBody": "Contact us and we will send you the catalog with every ITVAL solution.",
     "benefits": {
       "quality": {
         "title": "High quality",

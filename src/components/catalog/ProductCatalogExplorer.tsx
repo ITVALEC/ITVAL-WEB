@@ -270,7 +270,7 @@ export function ProductCatalogExplorer({
   );
 
   const catalogCta = (
-    <div className="flex flex-col gap-4 rounded-card bg-navy px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-6">
+    <div className="flex flex-col gap-4 rounded-card bg-navy-dark px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-6">
       <div className="max-w-xl">
         <p className="font-display text-lg font-bold text-white sm:text-xl">
           {tHub("catalogCtaTitle")}
@@ -281,7 +281,6 @@ export function ProductCatalogExplorer({
       </div>
       <ButtonLink href={NAV_PATHS.contact} variant="primary" className="shrink-0">
         {tHub("downloadCatalog")}
-        <span aria-hidden="true">↓</span>
       </ButtonLink>
     </div>
   );
@@ -297,14 +296,14 @@ export function ProductCatalogExplorer({
           {t("sectionTitle")}
         </h2>
 
-        <div className="grid gap-8 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10 xl:grid-cols-[260px_minmax(0,1fr)]">
+        <div className="grid gap-10 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-12 xl:grid-cols-[240px_minmax(0,1fr)]">
           <aside className="lg:sticky lg:top-28 lg:self-start">
             <p className="text-ds-caption font-semibold uppercase tracking-[0.14em] text-grey">
               {tHub("categoriesNav")}
             </p>
             <nav
               aria-label={tHub("categoriesNav")}
-              className="mt-4 rounded-card border border-navy/10 bg-white p-2 shadow-card"
+              className="mt-3 space-y-0.5"
             >
               <ul className="space-y-0.5">
                 <li>
@@ -319,7 +318,7 @@ export function ProductCatalogExplorer({
                   <li key={category}>
                     <AppLink
                       href={getProductCategoryPath(category)}
-                      className="flex items-center rounded-card px-3 py-2.5 text-sm font-medium text-ink/85 transition-colors duration-ds hover:bg-surface hover:text-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                      className="flex items-center rounded-card px-3 py-2.5 text-sm font-medium text-ink/85 transition-colors duration-ds hover:bg-white hover:text-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
                     >
                       {tCat(`${category}.title`)}
                     </AppLink>
@@ -330,8 +329,8 @@ export function ProductCatalogExplorer({
           </aside>
 
           <div className="min-w-0 space-y-8">
-            <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-              <div className="-mx-1 overflow-x-auto pb-1 sm:mx-0 sm:overflow-visible sm:pb-0">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+              <div className="-mx-1 min-w-0 flex-1 overflow-x-auto pb-1 sm:mx-0 sm:overflow-visible sm:pb-0">
                 <div
                   role="group"
                   aria-label={t("primaryLabel")}
@@ -360,11 +359,10 @@ export function ProductCatalogExplorer({
               </div>
               <ButtonLink
                 href={NAV_PATHS.contact}
-                variant="secondary"
-                className="shrink-0 self-start border-navy bg-navy hover:border-gold hover:bg-navy-mid hover:text-gold xl:self-auto"
+                variant="navy"
+                className="shrink-0 self-start"
               >
                 {tHub("downloadCatalog")}
-                <span aria-hidden="true">↓</span>
               </ButtonLink>
             </div>
 

@@ -2,7 +2,7 @@ import { type ComponentProps, type ComponentPropsWithoutRef } from "react";
 import { Link } from "@/i18n/navigation";
 import { type Pathnames } from "@/i18n/routing";
 
-export type ButtonVariant = "primary" | "secondary" | "ghost";
+export type ButtonVariant = "primary" | "secondary" | "ghost" | "navy";
 
 /** DS: pill 999px, min 44px, hover lift 4px + sombra suave (sin glow oro). */
 const BUTTON_BASE_CLASSES =
@@ -15,6 +15,9 @@ export const variantClasses: Record<ButtonVariant, string> = {
     "border border-white/50 bg-transparent text-white shadow-none hover:border-gold hover:text-gold focus-visible:ring-gold focus-visible:ring-offset-navy",
   ghost:
     "border border-navy/25 bg-transparent text-navy shadow-none hover:border-gold hover:text-gold-deep focus-visible:ring-gold focus-visible:ring-offset-white",
+  /** CTA sólido navy sobre fondos claros (surface/white). */
+  navy:
+    "border border-navy bg-navy text-white shadow-none hover:border-gold hover:bg-navy-mid hover:text-gold focus-visible:ring-gold focus-visible:ring-offset-white",
 };
 
 type ButtonProps = ComponentPropsWithoutRef<"button"> & {
