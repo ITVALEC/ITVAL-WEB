@@ -4,7 +4,7 @@ import { Container } from "./Container";
 import { FooterSocialLinks } from "./FooterSocialLinks";
 import { buildNavItems } from "@/lib/nav";
 import { SITE } from "@/lib/constants";
-import { getSiteContact, getSiteFooterCopy } from "@/lib/site-settings";
+import { getSiteContact, getSiteFooterCopy, getSiteSocialLinks } from "@/lib/site-settings";
 import { Logo } from "@/components/ui/Logo";
 
 type FooterProps = {
@@ -15,6 +15,7 @@ export async function Footer({ locale }: FooterProps) {
   const t = await getTranslations({ locale });
   const contact = getSiteContact();
   const footerCopy = getSiteFooterCopy(locale);
+  const socialLinks = getSiteSocialLinks();
   const year = new Date().getFullYear();
   const navItems = buildNavItems((key) => t(key));
 
@@ -89,6 +90,7 @@ export async function Footer({ locale }: FooterProps) {
 
           <FooterSocialLinks
             sectionLabel={t("footer.social")}
+            links={socialLinks}
             labels={{
               facebook: t("footer.socialFacebook"),
               instagram: t("footer.socialInstagram"),

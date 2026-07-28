@@ -8,14 +8,24 @@ import {
 import { isDatabaseEnabled, query } from "@/lib/db/pool";
 import { syncDatabaseToJson } from "@/lib/db/sync-json";
 import { fillEnglishFromSpanish } from "@/lib/i18n/translate-es-to-en";
-import type { SiteFooterCopy, SiteSettings } from "@/lib/site-settings";
+import {
+  normalizeSiteSettings,
+  normalizeSocialLinks,
+  packSiteSettingsForDb,
+  type SiteFooterCopy,
+  type SiteSettings,
+  type SiteSocialLinks,
+} from "@/lib/site-settings";
 
 async function getSettingsFromDb(): Promise<SiteSettings | null> {
-  const { rows } = await query<{ contact: SiteSettings["contact"]; footer: SiteSettings["footer"] }>(
+  const { rows } = await query<{ contact: unknown; footer: unknown }>(
     `SELECT contact, footer FROM site_settings WHERE id = 1`,
   );
   if (!rows[0]) return null;
-  return { contact: rows[0].contact, footer: rows[0].footer };
+  return normalizeSiteSettings({
+    contact: rows[0].contact,
+    footer: rows[0].footer,
+  });
 }
 
 async function translateFooterFromSpanish(
@@ -74,7 +84,9 @@ export async function GET() {
     if (settings) return NextResponse.json(settings);
   }
 
-  const settings = readJsonFile<SiteSettings>(MANIFEST_PATHS.siteSettings);
+  const settings = normalizeSiteSettings(
+    readJsonFile<SiteSettings>(MANIFEST_PATHS.siteSettings),
+  );
   return NextResponse.json(settings);
 }
 
@@ -83,11 +95,13 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
   }
 
-  const body = (await request.json()) as Partial<SiteSettings>;
+  const body = (await request.json()) as Partial<SiteSettings> & {
+    social?: Partial<SiteSocialLinks>;
+  };
 
   const current =
     (isDatabaseEnabled() ? await getSettingsFromDb() : null) ??
-    readJsonFile<SiteSettings>(MANIFEST_PATHS.siteSettings);
+    normalizeSiteSettings(readJsonFile<SiteSettings>(MANIFEST_PATHS.siteSettings));
 
   const nextEs: SiteFooterCopy = {
     ...current.footer.es,
@@ -106,13 +120,17 @@ export async function PATCH(request: Request) {
       es: nextEs,
       en: nextEn,
     },
+    // URLs de redes: no se traducen
+    social: normalizeSocialLinks(body.social ?? current.social),
   };
+
+  const packed = packSiteSettingsForDb(next);
 
   if (isDatabaseEnabled()) {
     await query(
       `INSERT INTO site_settings (id, contact, footer) VALUES (1, $1::jsonb, $2::jsonb)
        ON CONFLICT (id) DO UPDATE SET contact = $1::jsonb, footer = $2::jsonb`,
-      [JSON.stringify(next.contact), JSON.stringify(next.footer)],
+      [JSON.stringify(packed.contact), JSON.stringify(packed.footer)],
     );
     await syncDatabaseToJson();
   } else {

@@ -28,7 +28,7 @@ import {
 } from "@/components/admin/AdminUi";
 import { adminErrorMessage, readAdminJson } from "@/lib/admin/api-client";
 import { paginateItems } from "@/lib/pagination";
-import type { SiteSettings } from "@/lib/site-settings";
+import type { SiteSettings, SiteSocialLinks } from "@/lib/site-settings";
 
 type ConfigTab = "contact" | "blocked";
 const BLOCKED_PAGE_SIZE = 15;
@@ -65,7 +65,17 @@ export default function AdminConfigPage() {
     setSettingsError("");
     const res = await fetch("/api/admin/site-settings");
     if (res.ok) {
-      setSettings(await res.json());
+      const data = (await res.json()) as SiteSettings;
+      setSettings({
+        contact: data.contact,
+        footer: data.footer,
+        social: data.social ?? {
+          facebook: "",
+          instagram: "",
+          whatsapp: "",
+          linkedin: "",
+        },
+      });
     } else {
       setSettingsError("No se pudo cargar la configuración.");
     }
@@ -105,6 +115,7 @@ export default function AdminConfigPage() {
         body: JSON.stringify({
           contact: settings.contact,
           footer: { es: settings.footer.es },
+          social: settings.social,
         }),
       });
 
@@ -113,7 +124,11 @@ export default function AdminConfigPage() {
           SiteSettings & { translation?: { warnings?: string[]; provider?: string | null } }
         >(res);
         if (data) {
-          setSettings({ contact: data.contact, footer: data.footer });
+          setSettings({
+            contact: data.contact,
+            footer: data.footer,
+            social: data.social,
+          });
           const warnings = data.translation?.warnings?.filter(Boolean) ?? [];
           if (warnings.length > 0) {
             setTranslationWarning(warnings.join(" "));
@@ -148,6 +163,17 @@ export default function AdminConfigPage() {
               ...current.footer,
               es: { ...current.footer.es, [field]: value },
             },
+          }
+        : current,
+    );
+  }
+
+  function updateSocial(field: keyof SiteSocialLinks, value: string) {
+    setSettings((current) =>
+      current
+        ? {
+            ...current,
+            social: { ...current.social, [field]: value },
           }
         : current,
     );
@@ -363,6 +389,59 @@ export default function AdminConfigPage() {
                     type="text"
                     value={settings.footer.es.location}
                     onChange={(e) => updateFooter("location", e.target.value)}
+                    className={adminInputClass}
+                  />
+                </AdminField>
+              </div>
+            </AdminPanel>
+
+            <AdminPanel title="Redes sociales">
+              <p className="mb-4 text-sm text-grey-dark">
+                URLs del footer (Facebook, Instagram, WhatsApp, LinkedIn). No se traducen; déjalas
+                vacías para ocultar el enlace activo.
+              </p>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <AdminField label="Facebook" htmlFor="social-facebook">
+                  <input
+                    id="social-facebook"
+                    type="url"
+                    inputMode="url"
+                    placeholder="https://facebook.com/…"
+                    value={settings.social.facebook}
+                    onChange={(e) => updateSocial("facebook", e.target.value)}
+                    className={adminInputClass}
+                  />
+                </AdminField>
+                <AdminField label="Instagram" htmlFor="social-instagram">
+                  <input
+                    id="social-instagram"
+                    type="url"
+                    inputMode="url"
+                    placeholder="https://instagram.com/…"
+                    value={settings.social.instagram}
+                    onChange={(e) => updateSocial("instagram", e.target.value)}
+                    className={adminInputClass}
+                  />
+                </AdminField>
+                <AdminField label="WhatsApp" htmlFor="social-whatsapp">
+                  <input
+                    id="social-whatsapp"
+                    type="url"
+                    inputMode="url"
+                    placeholder="https://wa.me/593…"
+                    value={settings.social.whatsapp}
+                    onChange={(e) => updateSocial("whatsapp", e.target.value)}
+                    className={adminInputClass}
+                  />
+                </AdminField>
+                <AdminField label="LinkedIn" htmlFor="social-linkedin">
+                  <input
+                    id="social-linkedin"
+                    type="url"
+                    inputMode="url"
+                    placeholder="https://linkedin.com/company/…"
+                    value={settings.social.linkedin}
+                    onChange={(e) => updateSocial("linkedin", e.target.value)}
                     className={adminInputClass}
                   />
                 </AdminField>

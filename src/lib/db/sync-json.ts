@@ -180,10 +180,14 @@ export async function syncDatabaseToJson(): Promise<void> {
     `SELECT contact, footer FROM site_settings WHERE id = 1`,
   );
   if (settingsRows[0]) {
-    writeJson(MANIFEST_PATHS.siteSettings, {
-      contact: settingsRows[0].contact,
-      footer: settingsRows[0].footer,
-    });
+    const { normalizeSiteSettings } = await import("@/lib/site-settings");
+    writeJson(
+      MANIFEST_PATHS.siteSettings,
+      normalizeSiteSettings({
+        contact: settingsRows[0].contact,
+        footer: settingsRows[0].footer,
+      }),
+    );
   }
 
   const { rows: blockedRows } = await query<{ filename: string }>(

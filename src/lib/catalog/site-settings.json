@@ -5,6 +5,12 @@
     "phone": "+593 2 123 4567",
     "address": "Quito, Ecuador"
   },
+  "social": {
+    "facebook": "",
+    "instagram": "",
+    "whatsapp": "",
+    "linkedin": ""
+  },
   "footer": {
     "en": {
       "ctaText": "Tell us about your build and our technical team will respond within 48 business hours.",

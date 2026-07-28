@@ -1,8 +1,10 @@
-import { SOCIAL_LINKS, type SocialNetwork } from "@/lib/site";
+import { type SocialNetwork } from "@/lib/site";
+import type { SiteSocialLinks } from "@/lib/site-settings";
 
 type FooterSocialLinksProps = {
   labels: Record<SocialNetwork, string>;
   sectionLabel: string;
+  links: SiteSocialLinks;
 };
 
 const SOCIAL_ORDER: SocialNetwork[] = [
@@ -58,6 +60,7 @@ function SocialIcon({ network }: { network: SocialNetwork }) {
 export function FooterSocialLinks({
   labels,
   sectionLabel,
+  links,
 }: FooterSocialLinksProps) {
   return (
     <div className="lg:col-span-3">
@@ -66,7 +69,7 @@ export function FooterSocialLinks({
       </p>
       <ul className="flex flex-wrap items-center gap-3">
         {SOCIAL_ORDER.map((network) => {
-          const href = SOCIAL_LINKS[network].trim() || "#";
+          const href = (links[network] ?? "").trim() || "#";
           const isPlaceholder = href === "#";
 
           return (

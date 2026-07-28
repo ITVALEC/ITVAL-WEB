@@ -12,8 +12,9 @@ export const CONTACT = {
 } as const;
 
 /**
- * Redes del footer. Vacío → enlace `#` (sin inventar URLs de marca).
- * Completar con perfiles oficiales cuando estén confirmados.
+ * Redes del footer (valores por defecto).
+ * En producción se editan desde Admin → Ajustes y viven en site-settings.
+ * Vacío → enlace `#` en el footer.
  */
 export const SOCIAL_LINKS = {
   facebook: "",

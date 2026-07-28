@@ -114,9 +114,18 @@ async function main() {
   }
   console.log(`Importando ${productCount} imágenes de productos…`);
 
+  const footerForDb = {
+    ...(settings.footer ?? {}),
+    social: settings.social ?? {
+      facebook: "",
+      instagram: "",
+      whatsapp: "",
+      linkedin: "",
+    },
+  };
   await client.query(
     `INSERT INTO site_settings (id, contact, footer) VALUES (1, $1::jsonb, $2::jsonb)`,
-    [JSON.stringify(settings.contact), JSON.stringify(settings.footer)],
+    [JSON.stringify(settings.contact), JSON.stringify(footerForDb)],
   );
 
   for (const filename of blocked.files ?? []) {

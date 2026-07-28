@@ -169,9 +169,24 @@ async function main() {
     `SELECT contact, footer FROM site_settings WHERE id = 1`,
   );
   if (settingsRows[0]) {
+    const footer = settingsRows[0].footer ?? {};
+    const social =
+      footer && typeof footer === "object" && !Array.isArray(footer) && "social" in footer
+        ? footer.social
+        : undefined;
+    const { social: _nested, ...footerLocales } =
+      footer && typeof footer === "object" && !Array.isArray(footer)
+        ? footer
+        : {};
     writeJson("src/lib/catalog/site-settings.json", {
       contact: settingsRows[0].contact,
-      footer: settingsRows[0].footer,
+      footer: footerLocales,
+      social: social ?? {
+        facebook: "",
+        instagram: "",
+        whatsapp: "",
+        linkedin: "",
+      },
     });
   }
 
