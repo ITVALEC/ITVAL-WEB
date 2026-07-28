@@ -51,6 +51,10 @@ export default async function ProductCategoryPage({ params }: PageProps) {
     locale,
     namespace: `${CATALOG_NS}.categories`,
   });
+  const tHub = await getTranslations({
+    locale,
+    namespace: `${CATALOG_NS}.hub`,
+  });
   const tNav = await getTranslations({ locale, namespace: "nav" });
   const tCommon = await getTranslations({ locale, namespace: "common" });
 
@@ -85,6 +89,10 @@ export default async function ProductCategoryPage({ params }: PageProps) {
         image={categoryImage ?? undefined}
         imageAlt={tCat(`${category}.title`)}
         breadcrumbAriaLabel={tCommon("breadcrumbNav")}
+        backLink={{
+          href: NAV_PATHS.products,
+          label: tHub("backToProducts"),
+        }}
         breadcrumbs={breadcrumbTrail(tNav("home"), [
           { label: tNav("products"), href: NAV_PATHS.products },
           { label: tCat(`${category}.title`) },

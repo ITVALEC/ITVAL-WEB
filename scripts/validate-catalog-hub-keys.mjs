@@ -15,6 +15,7 @@ const HUB_KEYS_USED = [
   "viewDetail",
   "categoriesNav",
   "allProducts",
+  "backToProducts",
   "benefits.quality.title",
   "benefits.quality.body",
   "benefits.precision.title",
@@ -82,10 +83,10 @@ function main() {
 
     const staleDb = {
       hub: {
-        title: bundled.hub?.title ?? "x",
-        subtitle: bundled.hub?.subtitle ?? "y",
-        viewCategory: bundled.hub?.viewCategory ?? "z",
-        viewDetail: bundled.hub?.viewDetail ?? "w",
+        title: bundled.hub?.title ?? "",
+        subtitle: bundled.hub?.subtitle ?? "",
+        viewCategory: bundled.hub?.viewCategory ?? "",
+        viewDetail: bundled.hub?.viewDetail ?? "",
       },
     };
     const merged = mergeCatalogMessages(bundled, staleDb);

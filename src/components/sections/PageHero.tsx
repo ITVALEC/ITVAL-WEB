@@ -3,6 +3,13 @@ import Image from "next/image";
 import { Container } from "@/components/layout/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Breadcrumbs, type BreadcrumbItem } from "@/components/ui/Breadcrumbs";
+import { Link } from "@/i18n/navigation";
+import { type Pathnames } from "@/i18n/routing";
+
+type PageHeroBackLink = {
+  href: Pathnames;
+  label: string;
+};
 
 type PageHeroProps = {
   title: string;
@@ -11,6 +18,8 @@ type PageHeroProps = {
   imageAlt?: string;
   breadcrumbs?: BreadcrumbItem[];
   breadcrumbAriaLabel?: string;
+  /** Enlace de retorno encima del breadcrumb (p. ej. categoría → hub). */
+  backLink?: PageHeroBackLink;
   /** Acciones bajo el subtítulo (p. ej. chips de categoría). */
   actions?: ReactNode;
 };
@@ -27,6 +36,7 @@ export function PageHero({
   imageAlt,
   breadcrumbs,
   breadcrumbAriaLabel,
+  backLink,
   actions,
 }: PageHeroProps) {
   return (
@@ -54,11 +64,21 @@ export function PageHero({
         </>
       ) : null}
       <Container className="relative z-10">
+        {backLink ? (
+          <Link
+            href={backLink.href}
+            className="mb-2 inline-flex min-h-11 items-center gap-2 text-sm font-medium text-white transition-colors duration-ds hover:text-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
+          >
+            <span aria-hidden="true">←</span>
+            {backLink.label}
+          </Link>
+        ) : null}
         {breadcrumbs ? (
           <Breadcrumbs
             items={breadcrumbs}
             light
             ariaLabel={breadcrumbAriaLabel}
+            className={backLink ? "mb-6 mt-0" : undefined}
           />
         ) : null}
         <SectionHeading as="h1" title={title} subtitle={subtitle} light />
