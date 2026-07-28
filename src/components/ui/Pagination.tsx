@@ -64,10 +64,10 @@ export function Pagination({
                   onClick={() => onPageChange(entry)}
                   aria-label={labels.goToPage(entry)}
                   aria-current={entry === page ? "page" : undefined}
-                  className={`min-h-10 min-w-10 rounded-md px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2 ${
+                  className={`min-h-10 min-w-10 rounded-card px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 ${
                     entry === page
                       ? "bg-navy text-white"
-                      : "text-navy hover:bg-slate-100"
+                      : "text-navy hover:bg-surface"
                   }`}
                 >
                   {entry}
@@ -110,7 +110,7 @@ function PageButton({
       onClick={onClick}
       disabled={disabled}
       aria-label={ariaLabel}
-      className="min-h-10 rounded-md px-3 text-sm font-semibold text-navy transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
+      className="min-h-10 rounded-card px-3 text-sm font-semibold text-navy transition-colors hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
     >
       {children}
     </button>

@@ -1,5 +1,5 @@
-import { Suspense } from "react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { Suspense } from "react";
 import { createPageMetadata, type LocalePageProps } from "@/lib/metadata";
 import { PageHero } from "@/components/sections/PageHero";
 import { ProductCatalogExplorer } from "@/components/catalog/ProductCatalogExplorer";
@@ -8,6 +8,8 @@ import { breadcrumbTrail } from "@/lib/breadcrumbs";
 import { CATALOG_NS } from "@/lib/i18n/namespaces";
 import { loadFilterConfig } from "@/lib/catalog/filter-config.server";
 import { loadProductImagesManifest } from "@/lib/catalog/product-images.server";
+
+const BENEFIT_KEYS = ["quality", "precision", "efficiency"] as const;
 
 export async function generateMetadata({ params }: LocalePageProps) {
   const { locale } = await params;
@@ -46,6 +48,23 @@ export default async function ProductsHubPage({
         breadcrumbs={breadcrumbTrail(tNav("home"), [
           { label: tNav("products") },
         ])}
+        actions={
+          <ul className="mt-10 grid gap-4 sm:grid-cols-3 sm:gap-6">
+            {BENEFIT_KEYS.map((key) => (
+              <li
+                key={key}
+                className="rounded-card border border-gold/25 bg-navy-dark/40 px-4 py-4"
+              >
+                <p className="text-ds-caption font-semibold uppercase tracking-[0.12em] text-gold">
+                  {t(`benefits.${key}.title`)}
+                </p>
+                <p className="mt-2 text-ds-caption leading-[1.5] text-white/80">
+                  {t(`benefits.${key}.body`)}
+                </p>
+              </li>
+            ))}
+          </ul>
+        }
       />
       <Suspense fallback={null}>
         <ProductCatalogExplorer

@@ -6,6 +6,8 @@ import { useTranslations } from "next-intl";
 import { Container } from "@/components/layout/Container";
 import { ProductSolutionCard } from "@/components/catalog/ProductSolutionCard";
 import { useProductCatalogData } from "@/components/catalog/use-product-catalog-data";
+import { AppLink } from "@/components/ui/AppLink";
+import { ButtonLink } from "@/components/ui/Button";
 import { CATALOG_NS } from "@/lib/i18n/namespaces";
 import { filterProductCatalog } from "@/lib/catalog/filter-products";
 import { CATALOG_PAGE_SIZE, paginateItems } from "@/lib/pagination";
@@ -23,20 +25,25 @@ import {
   type SystemKey,
 } from "@/lib/catalog/filter-keys";
 import type { FilterConfigFile } from "@/lib/catalog/filter-meta";
-import type { ProductKey } from "@/lib/catalog/types";
+import {
+  getProductCategoryPath,
+  PRODUCT_KEYS,
+  type ProductKey,
+} from "@/lib/catalog";
+import { NAV_PATHS } from "@/lib/routes";
 
 type SecondaryFilter = "all" | string;
 
 function pillClass(active: boolean): string {
-  return `shrink-0 whitespace-nowrap rounded-full px-3 py-2 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2 motion-reduce:transition-none sm:px-4 sm:text-sm ${
+  return `shrink-0 whitespace-nowrap rounded-pill px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] transition-colors duration-ds focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 motion-reduce:transition-none sm:px-4 sm:text-ds-caption ${
     active
-      ? "bg-navy text-white shadow-sm"
-      : "border border-grey/40 bg-white text-grey-dark hover:border-navy hover:text-navy"
+      ? "bg-navy text-white"
+      : "border border-navy/15 bg-white text-ink/80 hover:border-gold hover:text-navy"
   }`;
 }
 
 const selectClass =
-  "mt-1 block w-full rounded-md border border-grey/40 bg-white px-3 py-2.5 text-sm text-navy focus:border-cornflower focus:outline-none focus:ring-2 focus:ring-cornflower/30";
+  "mt-1 block w-full rounded-card border border-navy/15 bg-white px-3 py-2.5 text-sm text-navy focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/25";
 
 function isPrimaryGroup(value: string | null | undefined): value is PrimaryGroup {
   return Boolean(value && (PRIMARY_GROUPS as readonly string[]).includes(value));
@@ -59,6 +66,8 @@ export function ProductCatalogExplorer({
   imageManifest,
 }: ProductCatalogExplorerProps) {
   const t = useTranslations(`${CATALOG_NS}.explorer`);
+  const tHub = useTranslations(`${CATALOG_NS}.hub`);
+  const tCat = useTranslations(`${CATALOG_NS}.categories`);
   const products = useProductCatalogData(filterConfig);
   const searchParams = useSearchParams();
 
@@ -182,8 +191,6 @@ export function ProductCatalogExplorer({
     });
   }
 
-  // Solo se ofrecen grupos y opciones presentes en el catálogo publicado,
-  // para que los filtros siempre sean coherentes con las categorías reales.
   const available = useMemo(() => {
     const groups = new Set<Exclude<PrimaryGroup, "all">>();
     const sectors = new Set<SectorKey>();
@@ -262,10 +269,27 @@ export function ProductCatalogExplorer({
     </div>
   );
 
+  const catalogCta = (
+    <div className="flex flex-col gap-4 rounded-card bg-navy px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-6">
+      <div className="max-w-xl">
+        <p className="font-display text-lg font-bold text-white sm:text-xl">
+          {tHub("catalogCtaTitle")}
+        </p>
+        <p className="mt-1 text-ds-caption text-white/75">
+          {tHub("catalogCtaBody")}
+        </p>
+      </div>
+      <ButtonLink href={NAV_PATHS.contact} variant="primary" className="shrink-0">
+        {tHub("downloadCatalog")}
+        <span aria-hidden="true">↓</span>
+      </ButtonLink>
+    </div>
+  );
+
   return (
     <section
       id="catalog-explorer"
-      className="scroll-mt-24 py-12 lg:py-16"
+      className="scroll-mt-24 bg-surface py-section"
       aria-labelledby="catalog-explorer-heading"
     >
       <Container>
@@ -273,171 +297,225 @@ export function ProductCatalogExplorer({
           {t("sectionTitle")}
         </h2>
 
-        <div className="rounded-xl border border-grey/30 bg-slate-50/80 p-5 shadow-sm sm:p-6 lg:p-8">
-          <div className="space-y-6">
-            <div>
-              <label htmlFor={searchId} className="block text-sm font-semibold text-navy">
-                {t("searchLabel")}
-              </label>
-              <input
-                id={searchId}
-                type="search"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder={t("searchPlaceholder")}
-                className="mt-2 block w-full rounded-lg border border-grey/40 bg-white px-4 py-3 text-navy placeholder:text-grey focus:border-cornflower focus:outline-none focus:ring-2 focus:ring-cornflower/30"
-                autoComplete="off"
-                enterKeyHint="search"
-              />
-            </div>
-
-            <div className="-mx-1 overflow-x-auto pb-1 sm:mx-0 sm:overflow-visible sm:pb-0">
-              <div
-                role="group"
-                aria-label={t("primaryLabel")}
-                className="flex w-max gap-2 sm:w-auto sm:flex-wrap"
-              >
-                <button
-                  type="button"
-                  onClick={() => setPrimary("all")}
-                  aria-pressed={primary === "all"}
-                  className={pillClass(primary === "all")}
-                >
-                  {t("primary.all")}
-                </button>
-                {primaryGroups.map((group) => (
-                  <button
-                    key={group}
-                    type="button"
-                    onClick={() => setPrimary(group)}
-                    aria-pressed={primary === group}
-                    className={pillClass(primary === group)}
-                  >
-                    {t(`primary.${group}`)}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <details className="group rounded-lg border border-grey/30 bg-white lg:hidden">
-              <summary className="cursor-pointer list-none px-4 py-3 text-sm font-semibold text-navy marker:content-none [&::-webkit-details-marker]:hidden">
-                <span className="flex items-center justify-between gap-2">
-                  {t("advancedFilters")}
-                  <span
-                    className="text-cornflower-ink transition-transform group-open:rotate-180"
-                    aria-hidden="true"
-                  >
-                    ▾
-                  </span>
-                </span>
-              </summary>
-              <div className="border-t border-grey/20 px-4 pb-4 pt-3">
-                {advancedFilters}
-              </div>
-            </details>
-
-            <div className="hidden lg:block">{advancedFilters}</div>
-
-            <div
-              className="flex flex-col gap-3 border-t border-grey/20 pt-4 sm:flex-row sm:items-center sm:justify-between"
-              aria-live="polite"
-              aria-atomic="true"
+        <div className="grid gap-8 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10 xl:grid-cols-[260px_minmax(0,1fr)]">
+          <aside className="lg:sticky lg:top-28 lg:self-start">
+            <p className="text-ds-caption font-semibold uppercase tracking-[0.14em] text-grey">
+              {tHub("categoriesNav")}
+            </p>
+            <nav
+              aria-label={tHub("categoriesNav")}
+              className="mt-4 rounded-card border border-navy/10 bg-white p-2 shadow-card"
             >
-              <p id={resultsId} className="text-sm font-medium text-navy">
-                {t("resultsCount", { count: filtered.length })}
-              </p>
-              {hasActiveFilters && (
-                <button
-                  type="button"
-                  onClick={clearFilters}
-                  className="self-start rounded-md text-sm font-semibold text-cornflower-ink hover:text-action focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2 sm:self-auto"
-                >
-                  {t("clearFilters")}
-                </button>
-              )}
-            </div>
-
-            {activeChips.length > 0 && (
-              <div
-                className="flex flex-wrap items-center gap-2"
-                role="list"
-                aria-label={t("activeFilters")}
-              >
-                {activeChips.map((chip) => (
-                  <button
-                    key={chip.key}
-                    type="button"
-                    role="listitem"
-                    onClick={chip.onRemove}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-cornflower/40 bg-cornflower/10 px-3 py-1.5 text-xs font-medium text-navy hover:bg-cornflower/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2"
-                    aria-label={t("removeFilter", { filter: chip.label })}
+              <ul className="space-y-0.5">
+                <li>
+                  <a
+                    href="#catalog-explorer"
+                    className="flex items-center rounded-card bg-navy px-3 py-2.5 text-sm font-semibold text-white"
                   >
-                    <span>{chip.label}</span>
-                    <span aria-hidden="true">×</span>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="mt-10" ref={resultsRef} aria-describedby={resultsId}>
-          {filtered.length === 0 ? (
-            <div
-              className="rounded-lg border border-dashed border-grey/40 bg-white px-6 py-16 text-center"
-              role="status"
-            >
-              <p className="text-lg font-semibold text-navy">{t("emptyTitle")}</p>
-              <p className="mt-2 text-sm text-grey-dark">{t("emptyHint")}</p>
-              {hasActiveFilters && (
-                <button
-                  type="button"
-                  onClick={clearFilters}
-                  className="mt-6 rounded-md bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-navy/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2"
-                >
-                  {t("clearFilters")}
-                </button>
-              )}
-            </div>
-          ) : (
-            <>
-              <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {paginated.items.map((item) => (
-                  <li key={`${item.category}-${item.subcategory}`}>
-                    <ProductSolutionCard
-                      category={item.category}
-                      subcategory={item.subcategory}
-                      imageSrc={
-                        imageManifest?.subcategories?.[item.category]?.[
-                          item.subcategory
-                        ]
-                      }
-                    />
+                    {tHub("allProducts")}
+                  </a>
+                </li>
+                {PRODUCT_KEYS.map((category) => (
+                  <li key={category}>
+                    <AppLink
+                      href={getProductCategoryPath(category)}
+                      className="flex items-center rounded-card px-3 py-2.5 text-sm font-medium text-ink/85 transition-colors duration-ds hover:bg-surface hover:text-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                    >
+                      {tCat(`${category}.title`)}
+                    </AppLink>
                   </li>
                 ))}
               </ul>
-              <Pagination
-                page={paginated.page}
-                totalPages={paginated.totalPages}
-                onPageChange={goToPage}
-                labels={{
-                  navLabel: t("paginationNav"),
-                  previous: t("previousPage"),
-                  next: t("nextPage"),
-                  pageStatus: t("pageStatus", {
-                    page: paginated.page,
-                    totalPages: paginated.totalPages,
-                  }),
-                  goToPage: (p) => t("goToPage", { page: p }),
-                  showingRange: t("showingRange", {
-                    from: paginated.from,
-                    to: paginated.to,
-                    total: paginated.totalItems,
-                  }),
-                }}
-              />
-            </>
-          )}
+            </nav>
+          </aside>
+
+          <div className="min-w-0 space-y-8">
+            <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+              <div className="-mx-1 overflow-x-auto pb-1 sm:mx-0 sm:overflow-visible sm:pb-0">
+                <div
+                  role="group"
+                  aria-label={t("primaryLabel")}
+                  className="flex w-max gap-2 sm:w-auto sm:flex-wrap"
+                >
+                  <button
+                    type="button"
+                    onClick={() => setPrimary("all")}
+                    aria-pressed={primary === "all"}
+                    className={pillClass(primary === "all")}
+                  >
+                    {t("primary.all")}
+                  </button>
+                  {primaryGroups.map((group) => (
+                    <button
+                      key={group}
+                      type="button"
+                      onClick={() => setPrimary(group)}
+                      aria-pressed={primary === group}
+                      className={pillClass(primary === group)}
+                    >
+                      {t(`primary.${group}`)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <ButtonLink
+                href={NAV_PATHS.contact}
+                variant="secondary"
+                className="shrink-0 self-start border-navy bg-navy hover:border-gold hover:bg-navy-mid hover:text-gold xl:self-auto"
+              >
+                {tHub("downloadCatalog")}
+                <span aria-hidden="true">↓</span>
+              </ButtonLink>
+            </div>
+
+            <div className="rounded-card border border-navy/10 bg-white p-5 shadow-card sm:p-6 lg:p-8">
+              <div className="space-y-6">
+                <div>
+                  <label
+                    htmlFor={searchId}
+                    className="block text-sm font-semibold text-navy"
+                  >
+                    {t("searchLabel")}
+                  </label>
+                  <input
+                    id={searchId}
+                    type="search"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder={t("searchPlaceholder")}
+                    className="mt-2 block w-full rounded-card border border-navy/15 bg-surface px-4 py-3 text-navy placeholder:text-grey focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/25"
+                    autoComplete="off"
+                    enterKeyHint="search"
+                  />
+                </div>
+
+                <details className="group rounded-card border border-navy/10 bg-surface lg:hidden">
+                  <summary className="cursor-pointer list-none px-4 py-3 text-sm font-semibold text-navy marker:content-none [&::-webkit-details-marker]:hidden">
+                    <span className="flex items-center justify-between gap-2">
+                      {t("advancedFilters")}
+                      <span
+                        className="text-gold-deep transition-transform group-open:rotate-180"
+                        aria-hidden="true"
+                      >
+                        ▾
+                      </span>
+                    </span>
+                  </summary>
+                  <div className="border-t border-navy/10 px-4 pb-4 pt-3">
+                    {advancedFilters}
+                  </div>
+                </details>
+
+                <div className="hidden lg:block">{advancedFilters}</div>
+
+                <div
+                  className="flex flex-col gap-3 border-t border-navy/10 pt-4 sm:flex-row sm:items-center sm:justify-between"
+                  aria-live="polite"
+                  aria-atomic="true"
+                >
+                  <p id={resultsId} className="text-sm font-medium text-navy">
+                    {t("resultsCount", { count: filtered.length })}
+                  </p>
+                  {hasActiveFilters && (
+                    <button
+                      type="button"
+                      onClick={clearFilters}
+                      className="self-start rounded-card text-sm font-semibold text-gold-deep hover:text-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 sm:self-auto"
+                    >
+                      {t("clearFilters")}
+                    </button>
+                  )}
+                </div>
+
+                {activeChips.length > 0 && (
+                  <div
+                    className="flex flex-wrap items-center gap-2"
+                    role="list"
+                    aria-label={t("activeFilters")}
+                  >
+                    {activeChips.map((chip) => (
+                      <button
+                        key={chip.key}
+                        type="button"
+                        role="listitem"
+                        onClick={chip.onRemove}
+                        className="inline-flex items-center gap-1.5 rounded-pill border border-gold/35 bg-gold/10 px-3 py-1.5 text-xs font-medium text-navy hover:bg-gold/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
+                        aria-label={t("removeFilter", { filter: chip.label })}
+                      >
+                        <span>{chip.label}</span>
+                        <span aria-hidden="true">×</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div ref={resultsRef} aria-describedby={resultsId}>
+              {filtered.length === 0 ? (
+                <div
+                  className="rounded-card border border-dashed border-navy/20 bg-white px-6 py-16 text-center"
+                  role="status"
+                >
+                  <p className="font-display text-lg font-semibold text-navy">
+                    {t("emptyTitle")}
+                  </p>
+                  <p className="mt-2 text-ds-caption text-ink/80">
+                    {t("emptyHint")}
+                  </p>
+                  {hasActiveFilters && (
+                    <button
+                      type="button"
+                      onClick={clearFilters}
+                      className="mt-6 rounded-pill bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-navy-mid focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
+                    >
+                      {t("clearFilters")}
+                    </button>
+                  )}
+                </div>
+              ) : (
+                <>
+                  <ul className="grid gap-card-gap sm:grid-cols-2 xl:grid-cols-3">
+                    {paginated.items.map((item) => (
+                      <li key={`${item.category}-${item.subcategory}`}>
+                        <ProductSolutionCard
+                          category={item.category}
+                          subcategory={item.subcategory}
+                          imageSrc={
+                            imageManifest?.subcategories?.[item.category]?.[
+                              item.subcategory
+                            ]
+                          }
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                  <Pagination
+                    page={paginated.page}
+                    totalPages={paginated.totalPages}
+                    onPageChange={goToPage}
+                    labels={{
+                      navLabel: t("paginationNav"),
+                      previous: t("previousPage"),
+                      next: t("nextPage"),
+                      pageStatus: t("pageStatus", {
+                        page: paginated.page,
+                        totalPages: paginated.totalPages,
+                      }),
+                      goToPage: (p) => t("goToPage", { page: p }),
+                      showingRange: t("showingRange", {
+                        from: paginated.from,
+                        to: paginated.to,
+                        total: paginated.totalItems,
+                      }),
+                    }}
+                  />
+                </>
+              )}
+            </div>
+
+            {catalogCta}
+          </div>
         </div>
       </Container>
     </section>
@@ -461,7 +539,10 @@ function FilterSelect({
 }) {
   return (
     <div>
-      <label htmlFor={id} className="block text-xs font-semibold uppercase tracking-wider text-grey-dark">
+      <label
+        htmlFor={id}
+        className="block text-xs font-semibold uppercase tracking-wider text-grey"
+      >
         {label}
       </label>
       <select

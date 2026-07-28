@@ -109,16 +109,16 @@ export async function ProductDetailView({
               { label: tSub(`${subcategory}.title`) },
             ])}
           />
-          <h1 className="max-w-3xl text-2xl font-bold text-white sm:text-3xl lg:text-4xl">
+          <h1 className="max-w-3xl font-display text-2xl font-bold text-white sm:text-3xl lg:text-4xl">
             {tSub(`${subcategory}.title`)}
           </h1>
-          <p className="mt-4 max-w-2xl text-base text-white/85 sm:text-lg">
+          <p className="mt-4 max-w-2xl text-ds-body text-white/85">
             {tSub(`${subcategory}.description`)}
           </p>
         </Container>
       </section>
 
-      <section className="border-b border-grey/15 bg-white py-12 lg:py-16">
+      <section className="border-b border-navy/10 bg-white py-section">
         <Container>
           <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-12">
             {previewImages.length > 0 ? (
@@ -129,13 +129,13 @@ export async function ProductDetailView({
 
             <div className="flex min-w-0 flex-col gap-6">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-wider text-cornflower-ink">
+                <p className="text-ds-caption font-semibold uppercase tracking-[0.14em] text-gold-deep">
                   {tCatalog("detail.previewTitle")}
                 </p>
-                <h2 className="mt-2 text-2xl font-bold text-navy sm:text-3xl">
+                <h2 className="mt-2 font-display text-2xl font-bold text-navy sm:text-3xl">
                   {tSub(`${subcategory}.title`)}
                 </h2>
-                <p className="mt-3 text-base leading-relaxed text-grey-dark">
+                <p className="mt-3 text-ds-body leading-[1.5] text-ink/80">
                   {tSub(`${subcategory}.description`).trim() ||
                     tCatalog("detail.previewHint")}
                 </p>
@@ -147,7 +147,7 @@ export async function ProductDetailView({
                 const options = tSub(`${subcategory}.options`).trim();
                 if (!materials && !standards && !options) return null;
                 return (
-                  <dl className="divide-y divide-grey/15 overflow-hidden rounded-xl border border-grey/20">
+                  <dl className="divide-y divide-navy/10 overflow-hidden rounded-card border border-navy/10 shadow-card">
                     {materials ? (
                       <SpecRow
                         title={tCatalog("detail.materials")}
@@ -178,7 +178,7 @@ export async function ProductDetailView({
         </Container>
       </section>
 
-      <section className="py-16 lg:py-24">
+      <section className="bg-surface py-section">
         <Container>
           <div className="grid gap-8 md:grid-cols-2 md:gap-12">
             <ProductInfoBlock
@@ -203,7 +203,7 @@ export async function ProductDetailView({
           {relatedProjects.length > 0 && (
             <div className="mt-16">
               <SectionHeading title={tCatalog("detail.relatedProjects")} />
-              <ul className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              <ul className="mt-8 grid gap-card-gap sm:grid-cols-2 lg:grid-cols-3">
                 {relatedProjects.map((project) => (
                   <li key={project.id}>
                     <ProjectCard project={project} linkToDetail />
@@ -227,20 +227,20 @@ function ProductInfoBlock({
 }) {
   return (
     <div>
-      <h2 className="text-xl font-bold text-navy">{title}</h2>
+      <h2 className="font-display text-xl font-bold text-navy">{title}</h2>
       <ul className="mt-4 space-y-3">
         {items.map((item) => (
           <li
             key={item}
-            className="flex items-start gap-3 rounded-lg border border-grey/30 bg-slate-50 p-4"
+            className="flex items-start gap-3 rounded-card border border-navy/10 bg-white p-4 shadow-card"
           >
             <span
-              className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-cornflower-ink text-xs font-bold text-white"
+              className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gold text-xs font-bold text-navy"
               aria-hidden="true"
             >
               ✓
             </span>
-            <span className="text-navy">{item}</span>
+            <span className="text-ink">{item}</span>
           </li>
         ))}
       </ul>
@@ -254,7 +254,7 @@ function SpecRow({ title, content }: { title: string; content: string }) {
       <dt className="text-xs font-semibold uppercase tracking-wider text-grey">
         {title}
       </dt>
-      <dd className="mt-1 text-sm leading-relaxed text-grey-dark">{content}</dd>
+      <dd className="mt-1 text-sm leading-relaxed text-ink/80">{content}</dd>
     </div>
   );
 }

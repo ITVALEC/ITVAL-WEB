@@ -14,11 +14,7 @@ export function CtaBanner() {
       aria-labelledby="cta-heading"
     >
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_right,_rgba(200,154,75,0.16),_transparent_55%)]"
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/45 to-transparent"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gold/35"
         aria-hidden="true"
       />
       <Container className="relative">

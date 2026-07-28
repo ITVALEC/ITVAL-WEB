@@ -21,13 +21,13 @@ import { breadcrumbTrail } from "@/lib/breadcrumbs";
 const PAGE_SIZE = 9;
 
 const selectClass =
-  "mt-1.5 block w-full rounded-lg border border-grey/40 bg-white px-3 py-2.5 text-sm text-navy focus:border-cornflower focus:outline-none focus:ring-2 focus:ring-cornflower/30";
+  "mt-1.5 block w-full rounded-card border border-navy/15 bg-white px-3 py-2.5 text-sm text-navy focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/25";
 
 function pillClass(active: boolean): string {
-  return `rounded-full px-3 py-2 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2 motion-reduce:transition-none sm:px-4 sm:text-sm ${
+  return `rounded-pill px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] transition-colors duration-ds focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 motion-reduce:transition-none sm:px-4 sm:text-ds-caption ${
     active
-      ? "bg-navy text-white shadow-sm"
-      : "border border-grey/40 bg-white text-grey-dark hover:border-navy hover:text-navy"
+      ? "bg-navy text-white"
+      : "border border-navy/15 bg-white text-ink/80 hover:border-gold hover:text-navy"
   }`;
 }
 
@@ -114,16 +114,16 @@ export function ProjectGrid() {
           { label: tNav("projects") },
         ])}
       />
-      <section className="py-12 lg:py-20" aria-labelledby="projects-grid-heading">
+      <section className="bg-surface py-section" aria-labelledby="projects-grid-heading">
         <Container>
           <h2 id="projects-grid-heading" className="sr-only">
             {t("title")}
           </h2>
 
-          <div className="rounded-2xl border border-grey/25 bg-gradient-to-b from-slate-50 to-white p-4 shadow-sm sm:p-6 lg:p-8">
+          <div className="rounded-card border border-navy/10 bg-white p-4 shadow-card sm:p-6 lg:p-8">
             <div className="space-y-5 lg:space-y-6">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-grey-dark">
+                <p className="text-xs font-semibold uppercase tracking-wider text-grey">
                   {t("filters.solutionLabel")}
                 </p>
                 <div
@@ -159,7 +159,7 @@ export function ProjectGrid() {
                 <div>
                   <label
                     htmlFor="project-city-filter"
-                    className="block text-xs font-semibold uppercase tracking-wider text-grey-dark"
+                    className="block text-xs font-semibold uppercase tracking-wider text-grey"
                   >
                     {t("filters.cityLabel")}
                   </label>
@@ -187,7 +187,7 @@ export function ProjectGrid() {
                 <div>
                   <label
                     htmlFor="project-period-filter"
-                    className="block text-xs font-semibold uppercase tracking-wider text-grey-dark"
+                    className="block text-xs font-semibold uppercase tracking-wider text-grey"
                   >
                     {t("filters.periodLabel")}
                   </label>
@@ -217,7 +217,7 @@ export function ProjectGrid() {
                 </div>
               </div>
 
-              <div className="rounded-xl border border-grey/20 bg-white px-4 py-3 sm:px-5">
+              <div className="rounded-card border border-navy/10 bg-surface px-4 py-3 sm:px-5">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div aria-live="polite">
                     <p className="text-sm font-semibold text-navy">
@@ -229,7 +229,7 @@ export function ProjectGrid() {
                         : t("resultsAll", { total: PROJECTS.length })}
                     </p>
                     {paginated.length > 0 && filtered.length > PAGE_SIZE ? (
-                      <p className="mt-1 text-xs text-grey-dark">
+                      <p className="mt-1 text-xs text-ink/70">
                         {t("resultsPageRange", {
                           from: (currentPage - 1) * PAGE_SIZE + 1,
                           to: Math.min(currentPage * PAGE_SIZE, filtered.length),
@@ -242,7 +242,7 @@ export function ProjectGrid() {
                     <button
                       type="button"
                       onClick={clearFilters}
-                      className="self-start text-sm font-semibold text-cornflower-ink hover:text-action sm:self-auto"
+                      className="self-start text-sm font-semibold text-gold-deep hover:text-navy sm:self-auto"
                     >
                       {t("filters.clear")}
                     </button>
@@ -251,7 +251,7 @@ export function ProjectGrid() {
 
                 {activeChips.length > 0 ? (
                   <div
-                    className="mt-3 flex flex-wrap gap-2 border-t border-grey/15 pt-3"
+                    className="mt-3 flex flex-wrap gap-2 border-t border-navy/10 pt-3"
                     role="list"
                     aria-label={t("filters.activeLabel")}
                   >
@@ -259,7 +259,7 @@ export function ProjectGrid() {
                       <span
                         key={chip.key}
                         role="listitem"
-                        className="inline-flex rounded-full bg-cornflower/10 px-3 py-1 text-xs font-medium text-navy"
+                        className="inline-flex rounded-pill bg-gold/10 px-3 py-1 text-xs font-medium text-navy"
                       >
                         {chip.labelValues
                           ? t(chip.labelKey, chip.labelValues)
@@ -274,23 +274,23 @@ export function ProjectGrid() {
 
           {paginated.length === 0 ? (
             <div
-              className="mt-8 rounded-xl border border-dashed border-grey/40 bg-white px-6 py-12 text-center sm:mt-10"
+              className="mt-8 rounded-card border border-dashed border-navy/20 bg-white px-6 py-12 text-center sm:mt-10"
               role="status"
             >
-              <p className="text-lg font-semibold text-navy">{t("empty")}</p>
-              <p className="mt-2 text-sm text-grey-dark">{t("emptyHint")}</p>
+              <p className="font-display text-lg font-semibold text-navy">{t("empty")}</p>
+              <p className="mt-2 text-ds-caption text-ink/80">{t("emptyHint")}</p>
               {hasActiveFilters ? (
                 <button
                   type="button"
                   onClick={clearFilters}
-                  className="mt-5 rounded-lg bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-navy/90"
+                  className="mt-5 rounded-pill bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-navy-mid"
                 >
                   {t("filters.clear")}
                 </button>
               ) : null}
             </div>
           ) : (
-            <ul className="mt-8 grid gap-6 sm:mt-10 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3">
+            <ul className="mt-8 grid gap-card-gap sm:mt-10 sm:grid-cols-2 lg:grid-cols-3">
               {paginated.map((project) => (
                 <li key={project.id}>
                   <ProjectCard
@@ -314,11 +314,11 @@ export function ProjectGrid() {
                 type="button"
                 onClick={() => setPage((v) => Math.max(1, v - 1))}
                 disabled={currentPage <= 1}
-                className="rounded-full border border-grey/40 bg-white px-4 py-2 text-sm font-medium text-grey-dark transition-colors hover:border-navy hover:text-navy disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-pill border border-navy/15 bg-white px-4 py-2 text-sm font-medium text-ink/80 transition-colors hover:border-gold hover:text-navy disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {t("pagination.previous")}
               </button>
-              <span className="text-sm text-grey-dark">
+              <span className="text-sm text-ink/80">
                 {t("pagination.page", {
                   current: currentPage,
                   total: totalPages,
@@ -328,7 +328,7 @@ export function ProjectGrid() {
                 type="button"
                 onClick={() => setPage((v) => Math.min(totalPages, v + 1))}
                 disabled={currentPage >= totalPages}
-                className="rounded-full border border-grey/40 bg-white px-4 py-2 text-sm font-medium text-grey-dark transition-colors hover:border-navy hover:text-navy disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-pill border border-navy/15 bg-white px-4 py-2 text-sm font-medium text-ink/80 transition-colors hover:border-gold hover:text-navy disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {t("pagination.next")}
               </button>

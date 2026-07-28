@@ -90,12 +90,12 @@ export default async function ProductCategoryPage({ params }: PageProps) {
           { label: tCat(`${category}.title`) },
         ])}
       />
-      <section className="py-16 lg:py-24" aria-labelledby="subcategories-heading">
+      <section className="bg-surface py-section" aria-labelledby="subcategories-heading">
         <Container>
           <h2 id="subcategories-heading" className="sr-only">
             {tCat(`${category}.title`)}
           </h2>
-          <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="grid gap-card-gap sm:grid-cols-2 lg:grid-cols-3">
             {worksBySub.map(({ sub, worksImages }) => (
               <li key={sub}>
                 <SubcategoryCard

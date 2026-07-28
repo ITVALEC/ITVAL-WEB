@@ -75,14 +75,14 @@ export function ContactForm() {
   };
 
   const inputClass =
-    "mt-1 block w-full rounded-md border border-grey/40 bg-white px-3 py-2.5 text-navy placeholder:text-grey focus:border-cornflower focus:outline-none focus:ring-2 focus:ring-cornflower/30";
+    "mt-1 block w-full rounded-card border border-navy/15 bg-surface px-3 py-2.5 text-navy placeholder:text-grey focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/25";
 
   return (
     <form onSubmit={handleSubmit} noValidate aria-label={t("submit")}>
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-navy">
-            {t("name")} <span className="text-action" aria-hidden="true">*</span>
+            {t("name")} <span className="text-gold-deep" aria-hidden="true">*</span>
           </label>
           <input
             id="name"
@@ -104,7 +104,7 @@ export function ContactForm() {
 
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-navy">
-            {t("email")} <span className="text-action" aria-hidden="true">*</span>
+            {t("email")} <span className="text-gold-deep" aria-hidden="true">*</span>
           </label>
           <input
             id="email"
@@ -181,7 +181,7 @@ export function ContactForm() {
 
       <div className="mt-5">
         <label htmlFor="message" className="block text-sm font-medium text-navy">
-          {t("message")} <span className="text-action" aria-hidden="true">*</span>
+          {t("message")} <span className="text-gold-deep" aria-hidden="true">*</span>
         </label>
         <textarea
           id="message"
@@ -203,7 +203,7 @@ export function ContactForm() {
 
       <div className="mt-6" aria-live="polite">
         {status === "success" && (
-          <p className="mb-4 rounded-md bg-green-50 px-4 py-3 text-sm text-green-800">
+          <p className="mb-4 rounded-card bg-success/10 px-4 py-3 text-sm text-success">
             {t("success")}
           </p>
         )}

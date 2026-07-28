@@ -72,7 +72,8 @@ const config: Config = {
       boxShadow: {
         card: "0 8px 30px rgba(9, 26, 48, 0.08)",
         "card-hover": "0 16px 40px rgba(9, 26, 48, 0.14)",
-        gold: "0 8px 28px rgba(200, 154, 75, 0.28)",
+        /** Sombra neutra discreta — no glow dorado en CTAs. */
+        soft: "0 4px 14px rgba(9, 26, 48, 0.12)",
       },
       transitionDuration: {
         ds: "250ms",

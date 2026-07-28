@@ -3,7 +3,26 @@
     "title": "Products",
     "subtitle": "Choose a line to preview solutions: facades, windows, doors and more.",
     "viewCategory": "View category",
-    "viewDetail": "View details"
+    "viewDetail": "View details",
+    "categoriesNav": "Categories",
+    "allProducts": "All products",
+    "downloadCatalog": "Download catalog",
+    "catalogCtaTitle": "Complete product catalog",
+    "catalogCtaBody": "Request our catalog and explore every ITVAL solution in detail.",
+    "benefits": {
+      "quality": {
+        "title": "High quality",
+        "body": "Aluminum and glass materials and systems with dimensional control."
+      },
+      "precision": {
+        "title": "Precision & design",
+        "body": "Detail engineering for high-performance facades and fenestration."
+      },
+      "efficiency": {
+        "title": "Energy efficiency",
+        "body": "Solutions that improve comfort and reduce building energy use."
+      }
+    }
   },
   "detail": {
     "applications": "Applications",

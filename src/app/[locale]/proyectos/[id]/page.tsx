@@ -62,7 +62,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 
   return (
     <>
-      <section className="relative bg-navy py-12 lg:py-16">
+      <section className="relative bg-navy-dark py-section">
         <Container className="relative z-10">
           <Breadcrumbs
             light
@@ -74,19 +74,19 @@ export default async function ProjectDetailPage({ params }: PageProps) {
           />
           <div className="grid items-center gap-10 lg:grid-cols-2">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-wider text-cornflower">
+              <p className="text-ds-caption font-semibold uppercase tracking-[0.14em] text-gold">
                 {solutionLabel}
                 {project.year ? ` · ${project.year}` : ""}
               </p>
-              <h1 className="mt-3 text-3xl font-bold text-white sm:text-4xl">
+              <h1 className="mt-3 font-display text-3xl font-bold text-white sm:text-4xl lg:text-ds-h2">
                 {project.name}
               </h1>
-              <p className="mt-2 text-lg text-white/80">{project.location}</p>
-              <p className="mt-4 text-sm uppercase tracking-wider text-grey">
+              <p className="mt-2 text-ds-body text-white/80">{project.location}</p>
+              <p className="mt-4 text-xs uppercase tracking-wider text-white/55">
                 {tDetail("photos")}: {project.imageCount}
               </p>
             </div>
-            <div className="relative aspect-[4/3] overflow-hidden rounded-lg">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-card shadow-card">
               <Image
                 src={getProjectImage(project)}
                 alt={project.name}
@@ -100,12 +100,14 @@ export default async function ProjectDetailPage({ params }: PageProps) {
         </Container>
       </section>
 
-      <section className="py-16 lg:py-24">
+      <section className="bg-surface py-section">
         <Container>
           <div className="grid gap-12 lg:grid-cols-3">
             <div className="lg:col-span-2">
-              <h2 className="text-2xl font-bold text-navy">{tDetail("about")}</h2>
-              <p className="mt-4 text-lg leading-relaxed text-grey-dark">
+              <h2 className="font-display text-2xl font-bold text-navy">
+                {tDetail("about")}
+              </h2>
+              <p className="mt-4 text-ds-body leading-[1.5] text-ink/80">
                 {tDetail("description", {
                   name: project.name,
                   location: project.location,
@@ -113,11 +115,11 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                 })}
               </p>
             </div>
-            <aside className="rounded-lg border border-grey/30 bg-slate-50 p-6">
-              <h2 className="text-lg font-semibold text-navy">
+            <aside className="rounded-card border border-navy/10 bg-white p-6 shadow-card">
+              <h2 className="font-display text-lg font-semibold text-navy">
                 {tDetail("details")}
               </h2>
-              <dl className="mt-4 space-y-3 text-sm text-grey-dark">
+              <dl className="mt-4 space-y-3 text-sm text-ink/80">
                 <div>
                   <dt className="font-medium text-navy">{tDetail("location")}</dt>
                   <dd>{project.location}</dd>

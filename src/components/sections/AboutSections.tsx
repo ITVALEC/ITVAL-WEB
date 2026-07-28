@@ -10,9 +10,9 @@ export async function AboutMissionSection() {
     PORTFOLIO_MISSION_IMAGE ?? "/images/pages/about.svg";
 
   return (
-    <section className="py-16 lg:py-24" aria-labelledby="mission-heading">
+    <section className="bg-surface py-section" aria-labelledby="mission-heading">
       <Container>
-        <div className="grid items-stretch gap-0 lg:grid-cols-2">
+        <div className="grid items-stretch overflow-hidden rounded-card shadow-card lg:grid-cols-2">
           <div className="relative min-h-[320px] lg:min-h-[480px]">
             <Image
               src={missionImage}
@@ -32,11 +32,12 @@ export async function AboutMissionSection() {
           <div className="flex flex-col justify-center bg-white px-6 py-10 sm:px-10 lg:px-14 lg:py-16">
             <h2
               id="mission-heading"
-              className="text-2xl font-bold uppercase tracking-wide text-grey sm:text-3xl"
+              className="font-display text-2xl font-bold uppercase tracking-wide text-navy sm:text-3xl"
             >
               {t("title")}
             </h2>
-            <p className="mt-6 text-base leading-relaxed text-grey-dark sm:text-lg">
+            <div className="mt-3 h-0.5 w-16 bg-gold" aria-hidden="true" />
+            <p className="mt-6 text-ds-body leading-[1.5] text-ink/80">
               {t("body")}
             </p>
           </div>
@@ -60,7 +61,7 @@ function ValueIcon({ valueKey }: { valueKey: (typeof VALUE_KEYS)[number] }) {
   return (
     <svg
       viewBox="0 0 24 24"
-      className="h-8 w-8 shrink-0 fill-current"
+      className="h-8 w-8 shrink-0 fill-current text-gold"
       aria-hidden="true"
     >
       <path d={icons[valueKey]} />
@@ -72,25 +73,23 @@ export async function AboutProfileValuesSection() {
   const t = await getTranslations("aboutPage");
 
   return (
-    <section className="py-16 lg:py-24" aria-labelledby="profile-heading">
+    <section className="bg-white py-section" aria-labelledby="profile-heading">
       <Container>
-        <div className="grid overflow-hidden rounded-lg border border-grey/20 lg:grid-cols-2">
-          <div className="bg-white px-6 py-10 sm:px-10 lg:px-14 lg:py-16">
-            <h2
-              id="profile-heading"
-              className="sr-only"
-            >
+        <div className="grid overflow-hidden rounded-card border border-navy/10 shadow-card lg:grid-cols-2">
+          <div className="bg-surface px-6 py-10 sm:px-10 lg:px-14 lg:py-16">
+            <h2 id="profile-heading" className="sr-only">
               {t("profile.title")}
             </h2>
-            <p className="text-base leading-relaxed text-grey-dark sm:text-lg">
+            <p className="text-ds-body leading-[1.5] text-ink/80">
               {t("profile.body")}
             </p>
           </div>
 
-          <div className="bg-navy px-6 py-10 text-white sm:px-10 lg:px-14 lg:py-16">
-            <h3 className="text-xl font-bold uppercase tracking-wide">
+          <div className="bg-navy-dark px-6 py-10 text-white sm:px-10 lg:px-14 lg:py-16">
+            <h3 className="font-display text-xl font-bold uppercase tracking-wide">
               {t("values.title")}
             </h3>
+            <div className="mt-3 h-0.5 w-16 bg-gold" aria-hidden="true" />
             <ul className="mt-8 space-y-8">
               {VALUE_KEYS.map((key) => (
                 <li key={key} className="flex gap-4">
@@ -99,7 +98,7 @@ export async function AboutProfileValuesSection() {
                     <p className="font-bold uppercase tracking-wide">
                       {t(`values.items.${key}.title`)}
                     </p>
-                    <p className="mt-2 text-sm leading-relaxed text-white/85 sm:text-base">
+                    <p className="mt-2 text-ds-caption leading-[1.5] text-white/85 sm:text-base">
                       {t(`values.items.${key}.body`)}
                     </p>
                   </div>
