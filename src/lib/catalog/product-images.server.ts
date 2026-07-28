@@ -7,9 +7,11 @@ import { getDocument } from "@/lib/db/documents";
 import { isDatabaseEnabled, query } from "@/lib/db/pool";
 import { isBlockedImageSrc } from "./blocked-images";
 import bundled from "./product-images.json";
+import { PORTFOLIO_PROJECTS } from "./project-portfolio";
 import type { ProductKey } from "./types";
 import {
   MAX_PRODUCT_GALLERY_IMAGES,
+  isAdminProductUploadSrc,
   isRealProductImageSrc,
   normalizeProductGalleryList,
   type GalleryImageSource,
@@ -195,4 +197,68 @@ export async function getProjectReferenceGalleryLive(
   subcategory: string,
 ): Promise<ProductGalleryImage[]> {
   return getProductGalleryLive(category, subcategory, { source: "project" });
+}
+
+/**
+ * Mini-carrusel del listado de categoría: obras/referencias del producto
+ * (source=project), complementadas con galería del portfolio si hace falta.
+ * Si no hay obras, cae a la portada del producto (nunca placeholders SVG).
+ */
+export async function getSubcategoryWorksPreviewLive(
+  category: ProductKey,
+  subcategory: string,
+  limit = MAX_PRODUCT_GALLERY_IMAGES,
+): Promise<ProductGalleryImage[]> {
+  const max = Math.max(1, Math.min(limit, MAX_PRODUCT_GALLERY_IMAGES));
+  const seen = new Set<string>();
+  const out: ProductGalleryImage[] = [];
+
+  const push = (image: ProductGalleryImage) => {
+    const src = image.src?.trim();
+    if (!src || seen.has(src) || !isRealProductImageSrc(src)) return;
+    if (!publicImageFileExists(src)) return;
+    seen.add(src);
+    out.push({ ...image, src, source: image.source ?? "project" });
+  };
+
+  for (const image of await getProjectReferenceGalleryLive(
+    category,
+    subcategory,
+  )) {
+    if (out.length >= max) break;
+    push(image);
+  }
+
+  if (out.length < Math.min(2, max)) {
+    for (const project of PORTFOLIO_PROJECTS) {
+      if (project.productSubcategory !== subcategory) continue;
+      for (const src of [project.cover, ...project.gallery]) {
+        if (out.length >= max) break;
+        push({ src, caption: project.name, source: "project" });
+      }
+      if (out.length >= max) break;
+    }
+  }
+
+  // Fotos sueltas históricas en gallery/ (p. ej. 1 obra con caption de proyecto)
+  // que normalize marca como product por no llegar al umbral del dump.
+  if (out.length === 0) {
+    const loose = await getProductGalleryLive(category, subcategory);
+    for (const image of loose) {
+      if (out.length >= max) break;
+      if (isAdminProductUploadSrc(image.src)) continue;
+      // Evitar el fallback de portada que inyecta getProductGalleryLive.
+      if (image.source === "product" && !image.caption?.trim()) continue;
+      push({ ...image, source: "project" });
+    }
+  }
+
+  if (out.length === 0) {
+    const cover = await getProductImageLive(category, subcategory);
+    if (cover) {
+      return [{ src: cover, caption: "", source: "product" }];
+    }
+  }
+
+  return out.slice(0, max);
 }

@@ -9,7 +9,10 @@ import {
   isProductCategory,
 } from "@/lib/catalog";
 import { NAV_PATHS } from "@/lib/routes";
-import { getProductImageLive } from "@/lib/catalog/product-images.server";
+import {
+  getProductImageLive,
+  getSubcategoryWorksPreviewLive,
+} from "@/lib/catalog/product-images.server";
 import { breadcrumbTrail } from "@/lib/breadcrumbs";
 import { CATALOG_NS } from "@/lib/i18n/namespaces";
 import { type ProductKey } from "@/lib/catalog";
@@ -53,6 +56,26 @@ export default async function ProductCategoryPage({ params }: PageProps) {
 
   const subcategories = getPublishedProductSubcategories(category);
   const categoryImage = await getProductImageLive(category);
+  const tSub = await getTranslations({
+    locale,
+    namespace: `${CATALOG_NS}.subcategories.${category}`,
+  });
+
+  const worksBySub = await Promise.all(
+    subcategories.map(async (sub) => {
+      const works = await getSubcategoryWorksPreviewLive(category, sub);
+      const title = tSub(`${sub}.title`);
+      return {
+        sub,
+        worksImages: works.map((image) => ({
+          src: image.src,
+          alt: image.caption?.trim()
+            ? `${title} — ${image.caption.trim()}`
+            : title,
+        })),
+      };
+    }),
+  );
 
   return (
     <>
@@ -73,9 +96,13 @@ export default async function ProductCategoryPage({ params }: PageProps) {
             {tCat(`${category}.title`)}
           </h2>
           <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {subcategories.map((sub) => (
+            {worksBySub.map(({ sub, worksImages }) => (
               <li key={sub}>
-                <SubcategoryCard category={category} subcategory={sub} />
+                <SubcategoryCard
+                  category={category}
+                  subcategory={sub}
+                  worksImages={worksImages}
+                />
               </li>
             ))}
           </ul>
