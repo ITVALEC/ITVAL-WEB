@@ -7,7 +7,8 @@ import {
 } from "@/lib/admin/manifests";
 import { isDatabaseEnabled, query } from "@/lib/db/pool";
 import { syncDatabaseToJson } from "@/lib/db/sync-json";
-import type { SiteSettings } from "@/lib/site-settings";
+import { fillEnglishFromSpanish } from "@/lib/i18n/translate-es-to-en";
+import type { SiteFooterCopy, SiteSettings } from "@/lib/site-settings";
 
 async function getSettingsFromDb(): Promise<SiteSettings | null> {
   const { rows } = await query<{ contact: SiteSettings["contact"]; footer: SiteSettings["footer"] }>(
@@ -15,6 +16,52 @@ async function getSettingsFromDb(): Promise<SiteSettings | null> {
   );
   if (!rows[0]) return null;
   return { contact: rows[0].contact, footer: rows[0].footer };
+}
+
+async function translateFooterFromSpanish(
+  nextEs: SiteFooterCopy,
+  previousEs: SiteFooterCopy,
+  previousEn: SiteFooterCopy,
+): Promise<{ en: SiteFooterCopy; warnings: string[]; provider: string | null }> {
+  const translated = await fillEnglishFromSpanish({
+    tagline: {
+      es: nextEs.tagline,
+      previousEs: previousEs.tagline,
+      previousEn: previousEn.tagline,
+    },
+    experience: {
+      es: nextEs.experience,
+      previousEs: previousEs.experience,
+      previousEn: previousEn.experience,
+    },
+    ctaTitle: {
+      es: nextEs.ctaTitle,
+      previousEs: previousEs.ctaTitle,
+      previousEn: previousEn.ctaTitle,
+    },
+    ctaText: {
+      es: nextEs.ctaText,
+      previousEs: previousEs.ctaText,
+      previousEn: previousEn.ctaText,
+    },
+    location: {
+      es: nextEs.location,
+      previousEs: previousEs.location,
+      previousEn: previousEn.location,
+    },
+  });
+
+  return {
+    en: {
+      tagline: translated.values.tagline ?? previousEn.tagline,
+      experience: translated.values.experience ?? previousEn.experience,
+      ctaTitle: translated.values.ctaTitle ?? previousEn.ctaTitle,
+      ctaText: translated.values.ctaText ?? previousEn.ctaText,
+      location: translated.values.location ?? previousEn.location,
+    },
+    warnings: translated.warnings,
+    provider: translated.provider,
+  };
 }
 
 export async function GET() {
@@ -38,38 +85,42 @@ export async function PATCH(request: Request) {
 
   const body = (await request.json()) as Partial<SiteSettings>;
 
+  const current =
+    (isDatabaseEnabled() ? await getSettingsFromDb() : null) ??
+    readJsonFile<SiteSettings>(MANIFEST_PATHS.siteSettings);
+
+  const nextEs: SiteFooterCopy = {
+    ...current.footer.es,
+    ...body.footer?.es,
+  };
+
+  const { en: nextEn, warnings, provider } = await translateFooterFromSpanish(
+    nextEs,
+    current.footer.es,
+    current.footer.en,
+  );
+
+  const next: SiteSettings = {
+    contact: { ...current.contact, ...body.contact },
+    footer: {
+      es: nextEs,
+      en: nextEn,
+    },
+  };
+
   if (isDatabaseEnabled()) {
-    const current =
-      (await getSettingsFromDb()) ??
-      readJsonFile<SiteSettings>(MANIFEST_PATHS.siteSettings);
-
-    const next: SiteSettings = {
-      contact: { ...current.contact, ...body.contact },
-      footer: {
-        es: { ...current.footer.es, ...body.footer?.es },
-        en: { ...current.footer.en, ...body.footer?.en },
-      },
-    };
-
     await query(
       `INSERT INTO site_settings (id, contact, footer) VALUES (1, $1::jsonb, $2::jsonb)
        ON CONFLICT (id) DO UPDATE SET contact = $1::jsonb, footer = $2::jsonb`,
       [JSON.stringify(next.contact), JSON.stringify(next.footer)],
     );
-
     await syncDatabaseToJson();
-    return NextResponse.json(next);
+  } else {
+    writeJsonFile(MANIFEST_PATHS.siteSettings, next);
   }
 
-  const current = readJsonFile<SiteSettings>(MANIFEST_PATHS.siteSettings);
-  const next: SiteSettings = {
-    contact: { ...current.contact, ...body.contact },
-    footer: {
-      es: { ...current.footer.es, ...body.footer?.es },
-      en: { ...current.footer.en, ...body.footer?.en },
-    },
-  };
-
-  writeJsonFile(MANIFEST_PATHS.siteSettings, next);
-  return NextResponse.json(next);
+  return NextResponse.json({
+    ...next,
+    translation: { warnings, provider },
+  });
 }

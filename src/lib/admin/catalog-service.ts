@@ -14,6 +14,13 @@ import {
   SYSTEM_KEYS,
 } from "@/lib/catalog/filter-keys";
 import { applyCatalogLabelMigrations } from "@/lib/catalog/migrate-catalog-labels";
+import { fillEnglishFromSpanish } from "@/lib/i18n/translate-es-to-en";
+
+export type CatalogTranslationMeta = {
+  warnings: string[];
+  provider: string | null;
+  translatedCount: number;
+};
 
 const PLACEHOLDER_IMAGE = "/images/pages/products.svg";
 
@@ -559,61 +566,119 @@ export async function updateCatalogEntry(patch: {
   categoryKey: string;
   subcategoryKey?: string;
   titleEs?: string;
-  titleEn?: string;
   descriptionEs?: string;
-  descriptionEn?: string;
   materialsEs?: string;
-  materialsEn?: string;
   standardsEs?: string;
-  standardsEn?: string;
   optionsEs?: string;
-  optionsEn?: string;
-}): Promise<void> {
+}): Promise<CatalogTranslationMeta> {
   const es = await readCatalog("es");
   const en = await readCatalog("en");
 
   if (patch.type === "category") {
     es.categories[patch.categoryKey] ??= { title: "", description: "" };
     en.categories[patch.categoryKey] ??= { title: "", description: "" };
-    if (patch.titleEs != null) es.categories[patch.categoryKey].title = patch.titleEs.trim();
-    if (patch.titleEn != null) en.categories[patch.categoryKey].title = patch.titleEn.trim();
-    if (patch.descriptionEs != null) {
-      es.categories[patch.categoryKey].description = patch.descriptionEs.trim();
-    }
-    if (patch.descriptionEn != null) {
-      en.categories[patch.categoryKey].description = patch.descriptionEn.trim();
-    }
-  } else {
-    if (!patch.subcategoryKey) throw new Error("Subcategoría requerida.");
-    es.subcategories[patch.categoryKey] ??= {};
-    en.subcategories[patch.categoryKey] ??= {};
-    es.subcategories[patch.categoryKey][patch.subcategoryKey] ??= {
-      title: "",
-      description: "",
-    };
-    en.subcategories[patch.categoryKey][patch.subcategoryKey] ??= {
-      title: "",
-      description: "",
-    };
+    const prevEs = es.categories[patch.categoryKey];
+    const prevEn = en.categories[patch.categoryKey];
 
-    applySubcategoryTextFields(es.subcategories[patch.categoryKey][patch.subcategoryKey], {
-      title: patch.titleEs,
-      description: patch.descriptionEs,
-      materials: patch.materialsEs,
-      standards: patch.standardsEs,
-      options: patch.optionsEs,
+    const nextTitleEs = patch.titleEs != null ? patch.titleEs.trim() : prevEs.title;
+    const nextDescEs =
+      patch.descriptionEs != null ? patch.descriptionEs.trim() : prevEs.description;
+
+    const translated = await fillEnglishFromSpanish({
+      title: { es: nextTitleEs, previousEs: prevEs.title, previousEn: prevEn.title },
+      description: {
+        es: nextDescEs,
+        previousEs: prevEs.description,
+        previousEn: prevEn.description,
+      },
     });
-    applySubcategoryTextFields(en.subcategories[patch.categoryKey][patch.subcategoryKey], {
-      title: patch.titleEn,
-      description: patch.descriptionEn,
-      materials: patch.materialsEn,
-      standards: patch.standardsEn,
-      options: patch.optionsEn,
-    });
+
+    es.categories[patch.categoryKey].title = nextTitleEs;
+    es.categories[patch.categoryKey].description = nextDescEs;
+    en.categories[patch.categoryKey].title = translated.values.title ?? prevEn.title;
+    en.categories[patch.categoryKey].description =
+      translated.values.description ?? prevEn.description;
+
+    await writeCatalog("es", es);
+    await writeCatalog("en", en);
+    return {
+      warnings: translated.warnings,
+      provider: translated.provider,
+      translatedCount: translated.translatedCount,
+    };
   }
+
+  if (!patch.subcategoryKey) throw new Error("Subcategoría requerida.");
+  es.subcategories[patch.categoryKey] ??= {};
+  en.subcategories[patch.categoryKey] ??= {};
+  es.subcategories[patch.categoryKey][patch.subcategoryKey] ??= {
+    title: "",
+    description: "",
+  };
+  en.subcategories[patch.categoryKey][patch.subcategoryKey] ??= {
+    title: "",
+    description: "",
+  };
+
+  const prevEs = es.subcategories[patch.categoryKey][patch.subcategoryKey];
+  const prevEn = en.subcategories[patch.categoryKey][patch.subcategoryKey];
+
+  const nextTitleEs = patch.titleEs != null ? patch.titleEs.trim() : prevEs.title;
+  const nextDescEs =
+    patch.descriptionEs != null ? patch.descriptionEs.trim() : prevEs.description;
+  const nextMaterialsEs =
+    patch.materialsEs != null ? patch.materialsEs.trim() : (prevEs.materials ?? "");
+  const nextStandardsEs =
+    patch.standardsEs != null ? patch.standardsEs.trim() : (prevEs.standards ?? "");
+  const nextOptionsEs =
+    patch.optionsEs != null ? patch.optionsEs.trim() : (prevEs.options ?? "");
+
+  const translated = await fillEnglishFromSpanish({
+    title: { es: nextTitleEs, previousEs: prevEs.title, previousEn: prevEn.title },
+    description: {
+      es: nextDescEs,
+      previousEs: prevEs.description,
+      previousEn: prevEn.description,
+    },
+    materials: {
+      es: nextMaterialsEs,
+      previousEs: prevEs.materials ?? "",
+      previousEn: prevEn.materials ?? "",
+    },
+    standards: {
+      es: nextStandardsEs,
+      previousEs: prevEs.standards ?? "",
+      previousEn: prevEn.standards ?? "",
+    },
+    options: {
+      es: nextOptionsEs,
+      previousEs: prevEs.options ?? "",
+      previousEn: prevEn.options ?? "",
+    },
+  });
+
+  applySubcategoryTextFields(prevEs, {
+    title: nextTitleEs,
+    description: nextDescEs,
+    materials: nextMaterialsEs,
+    standards: nextStandardsEs,
+    options: nextOptionsEs,
+  });
+  applySubcategoryTextFields(prevEn, {
+    title: translated.values.title,
+    description: translated.values.description,
+    materials: translated.values.materials,
+    standards: translated.values.standards,
+    options: translated.values.options,
+  });
 
   await writeCatalog("es", es);
   await writeCatalog("en", en);
+  return {
+    warnings: translated.warnings,
+    provider: translated.provider,
+    translatedCount: translated.translatedCount,
+  };
 }
 
 export type CatalogHubTexts = {
@@ -636,21 +701,53 @@ export async function getCatalogHub(): Promise<CatalogHubTexts> {
   };
 }
 
-export async function updateCatalogHub(patch: Partial<CatalogHubTexts>): Promise<void> {
-  for (const locale of ["es", "en"] as const) {
-    const full = await readFullCatalog(locale);
-    const hub = {
-      ...((full.hub ?? {}) as Record<string, unknown>),
-    };
-    if (locale === "es") {
-      if (patch.titleEs != null) hub.title = patch.titleEs.trim();
-      if (patch.subtitleEs != null) hub.subtitle = patch.subtitleEs.trim();
-    } else {
-      if (patch.titleEn != null) hub.title = patch.titleEn.trim();
-      if (patch.subtitleEn != null) hub.subtitle = patch.subtitleEn.trim();
-    }
-    await writeFullCatalog(locale, { ...full, hub });
-  }
+export async function updateCatalogHub(
+  patch: Partial<Pick<CatalogHubTexts, "titleEs" | "subtitleEs">>,
+): Promise<CatalogTranslationMeta> {
+  const esFull = await readFullCatalog("es");
+  const enFull = await readFullCatalog("en");
+  const hubEs = {
+    ...((esFull.hub ?? {}) as { title?: string; subtitle?: string }),
+  };
+  const hubEn = {
+    ...((enFull.hub ?? {}) as { title?: string; subtitle?: string }),
+  };
+
+  const nextTitleEs = patch.titleEs != null ? patch.titleEs.trim() : (hubEs.title ?? "");
+  const nextSubtitleEs =
+    patch.subtitleEs != null ? patch.subtitleEs.trim() : (hubEs.subtitle ?? "");
+
+  const translated = await fillEnglishFromSpanish({
+    title: {
+      es: nextTitleEs,
+      previousEs: hubEs.title ?? "",
+      previousEn: hubEn.title ?? "",
+    },
+    subtitle: {
+      es: nextSubtitleEs,
+      previousEs: hubEs.subtitle ?? "",
+      previousEn: hubEn.subtitle ?? "",
+    },
+  });
+
+  await writeFullCatalog("es", {
+    ...esFull,
+    hub: { ...hubEs, title: nextTitleEs, subtitle: nextSubtitleEs },
+  });
+  await writeFullCatalog("en", {
+    ...enFull,
+    hub: {
+      ...hubEn,
+      title: translated.values.title ?? hubEn.title ?? "",
+      subtitle: translated.values.subtitle ?? hubEn.subtitle ?? "",
+    },
+  });
+
+  return {
+    warnings: translated.warnings,
+    provider: translated.provider,
+    translatedCount: translated.translatedCount,
+  };
 }
 
 export type PrimaryGroupLabelItem = {
@@ -677,32 +774,58 @@ export async function getPrimaryGroupLabels(): Promise<PrimaryGroupLabelItem[]> 
 }
 
 export async function updatePrimaryGroupLabels(
-  labels: { key: string; labelEs?: string; labelEn?: string }[],
-): Promise<void> {
+  labels: { key: string; labelEs?: string }[],
+): Promise<CatalogTranslationMeta> {
   const allowed = new Set<string>(PRIMARY_GROUP_KEYS);
   const byKey = new Map(
     labels.filter((row) => allowed.has(row.key)).map((row) => [row.key, row]),
   );
-  if (byKey.size === 0) return;
-
-  for (const locale of ["es", "en"] as const) {
-    const full = await readFullCatalog(locale);
-    const explorer = {
-      ...((full.explorer ?? {}) as Record<string, unknown>),
-    };
-    const primary = {
-      ...((explorer.primary ?? {}) as Record<string, string>),
-    };
-    for (const [key, row] of byKey) {
-      const next =
-        locale === "es"
-          ? row.labelEs?.trim()
-          : row.labelEn?.trim();
-      if (next) primary[key] = next;
-    }
-    explorer.primary = primary;
-    await writeFullCatalog(locale, { ...full, explorer });
+  if (byKey.size === 0) {
+    return { warnings: [], provider: null, translatedCount: 0 };
   }
+
+  const [esFull, enFull] = await Promise.all([readFullCatalog("es"), readFullCatalog("en")]);
+  const explorerEs = {
+    ...((esFull.explorer ?? {}) as Record<string, unknown>),
+  };
+  const explorerEn = {
+    ...((enFull.explorer ?? {}) as Record<string, unknown>),
+  };
+  const primaryEs = {
+    ...((explorerEs.primary ?? {}) as Record<string, string>),
+  };
+  const primaryEn = {
+    ...((explorerEn.primary ?? {}) as Record<string, string>),
+  };
+
+  const fields: Record<string, { es: string; previousEs?: string; previousEn?: string }> = {};
+  for (const [key, row] of byKey) {
+    if (row.labelEs == null) continue;
+    const nextEs = row.labelEs.trim();
+    if (!nextEs) continue;
+    fields[key] = {
+      es: nextEs,
+      previousEs: primaryEs[key] ?? "",
+      previousEn: primaryEn[key] ?? "",
+    };
+    primaryEs[key] = nextEs;
+  }
+
+  const translated = await fillEnglishFromSpanish(fields);
+  for (const key of Object.keys(fields)) {
+    primaryEn[key] = translated.values[key] ?? primaryEn[key] ?? fields[key].es;
+  }
+
+  explorerEs.primary = primaryEs;
+  explorerEn.primary = primaryEn;
+  await writeFullCatalog("es", { ...esFull, explorer: explorerEs });
+  await writeFullCatalog("en", { ...enFull, explorer: explorerEn });
+
+  return {
+    warnings: translated.warnings,
+    provider: translated.provider,
+    translatedCount: translated.translatedCount,
+  };
 }
 
 export async function listProjectCategoryOptions(): Promise<{ value: string; label: string }[]> {
@@ -716,16 +839,12 @@ export async function listProjectCategoryOptions(): Promise<{ value: string; lab
 export async function addCategory(input: {
   key: string;
   titleEs: string;
-  titleEn: string;
-  descriptionEs: string;
-  descriptionEn: string;
+  descriptionEs?: string;
   subcategoryKey: string;
   subTitleEs: string;
-  subTitleEn: string;
   subDescriptionEs?: string;
-  subDescriptionEn?: string;
   primaryGroup?: string;
-}): Promise<void> {
+}): Promise<CatalogTranslationMeta> {
   const key = input.key.trim();
   validateKey(key);
 
@@ -735,8 +854,25 @@ export async function addCategory(input: {
   const subKey = input.subcategoryKey.trim();
   validateKey(subKey);
 
+  const titleEs = input.titleEs.trim();
+  const descriptionEs = (input.descriptionEs ?? "").trim();
+  const subTitleEs = input.subTitleEs.trim();
+  const subDescriptionEs = (input.subDescriptionEs ?? "").trim();
+
+  const translated = await fillEnglishFromSpanish({
+    title: { es: titleEs },
+    description: { es: descriptionEs },
+    subTitle: { es: subTitleEs },
+    subDescription: { es: subDescriptionEs },
+  });
+
   tax[key] = [subKey];
   await writeTaxonomy(tax);
+
+  const titleEn = translated.values.title || titleEs;
+  const descriptionEn = translated.values.description || descriptionEs;
+  const subTitleEn = translated.values.subTitle || subTitleEs;
+  const subDescriptionEn = translated.values.subDescription || subDescriptionEs;
 
   for (const locale of ["es", "en"] as const) {
     const full = await readFullCatalog(locale);
@@ -744,15 +880,14 @@ export async function addCategory(input: {
     const subcategories = (full.subcategories ?? {}) as Record<string, Record<string, unknown>>;
 
     categories[key] = {
-      title: locale === "es" ? input.titleEs.trim() : input.titleEn.trim(),
-      description:
-        locale === "es" ? input.descriptionEs.trim() : input.descriptionEn.trim(),
+      title: locale === "es" ? titleEs : titleEn,
+      description: locale === "es" ? descriptionEs : descriptionEn,
     };
 
     subcategories[key] ??= {};
     subcategories[key][subKey] = buildSubcategoryContent(
-      locale === "es" ? input.subTitleEs.trim() : input.subTitleEn.trim(),
-      locale === "es" ? (input.subDescriptionEs ?? "") : (input.subDescriptionEn ?? ""),
+      locale === "es" ? subTitleEs : subTitleEn,
+      locale === "es" ? subDescriptionEs : subDescriptionEn,
       locale,
     );
 
@@ -771,16 +906,20 @@ export async function addCategory(input: {
   await writeFilterConfig(filterConfig);
 
   await updateProductImages(key, subKey);
+
+  return {
+    warnings: translated.warnings,
+    provider: translated.provider,
+    translatedCount: translated.translatedCount,
+  };
 }
 
 export async function addSubcategory(input: {
   categoryKey: string;
   key: string;
   titleEs: string;
-  titleEn: string;
   descriptionEs?: string;
-  descriptionEn?: string;
-}): Promise<void> {
+}): Promise<CatalogTranslationMeta> {
   const categoryKey = input.categoryKey.trim();
   const subKey = input.key.trim();
   validateKey(subKey);
@@ -789,20 +928,37 @@ export async function addSubcategory(input: {
   if (!tax[categoryKey]) throw new Error("Categoría no encontrada.");
   if (tax[categoryKey].includes(subKey)) throw new Error("Ya existe esa subcategoría.");
 
+  const titleEs = input.titleEs.trim();
+  const descriptionEs = (input.descriptionEs ?? "").trim();
+
+  const translated = await fillEnglishFromSpanish({
+    title: { es: titleEs },
+    description: { es: descriptionEs },
+  });
+
   tax[categoryKey] = [...tax[categoryKey], subKey];
   await writeTaxonomy(tax);
+
+  const titleEn = translated.values.title || titleEs;
+  const descriptionEn = translated.values.description || descriptionEs;
 
   for (const locale of ["es", "en"] as const) {
     const full = await readFullCatalog(locale);
     const subcategories = (full.subcategories ?? {}) as Record<string, Record<string, unknown>>;
     subcategories[categoryKey] ??= {};
     subcategories[categoryKey][subKey] = buildSubcategoryContent(
-      locale === "es" ? input.titleEs.trim() : input.titleEn.trim(),
-      locale === "es" ? (input.descriptionEs ?? "") : (input.descriptionEn ?? ""),
+      locale === "es" ? titleEs : titleEn,
+      locale === "es" ? descriptionEs : descriptionEn,
       locale,
     );
     await writeFullCatalog(locale, { ...full, subcategories });
   }
 
   await updateProductImages(categoryKey, subKey);
+
+  return {
+    warnings: translated.warnings,
+    provider: translated.provider,
+    translatedCount: translated.translatedCount,
+  };
 }

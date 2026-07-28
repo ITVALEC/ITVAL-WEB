@@ -23,7 +23,6 @@ import {
   AdminLoadingState,
   AdminSearchField,
   AdminStatusMessage,
-  AdminTabList,
 } from "@/components/admin/AdminUi";
 import type {
   CatalogCategoryItem,
@@ -36,6 +35,30 @@ import type {
 import type { AdminMediaItem } from "@/app/api/admin/media/route";
 import { adminErrorMessage, readAdminJson } from "@/lib/admin/api-client";
 import { MAX_PRODUCT_GALLERY_IMAGES } from "@/lib/catalog/product-images";
+
+type TranslationMeta = {
+  warnings?: string[];
+  provider?: string | null;
+  translatedCount?: number;
+};
+
+function feedbackFromTranslation(
+  base: string,
+  translation?: TranslationMeta | null,
+): { type: "success" | "error"; message: string } {
+  const warnings = translation?.warnings?.filter(Boolean) ?? [];
+  if (warnings.length > 0) {
+    return {
+      type: "error",
+      message: `${base} ${warnings.join(" ")}`,
+    };
+  }
+  const auto =
+    (translation?.translatedCount ?? 0) > 0
+      ? " Inglés actualizado automáticamente."
+      : " Inglés sin cambios (el español no cambió).";
+  return { type: "success", message: `${base}${auto}` };
+}
 
 type EditTarget =
   | { type: "category"; item: CatalogCategoryItem }
@@ -123,13 +146,9 @@ function suggestKey(label: string): string {
 export default function AdminCatalogoPage() {
   const [categories, setCategories] = useState<CatalogCategoryItem[]>([]);
   const [hub, setHub] = useState<CatalogHubTexts | null>(null);
-  const [hubLocale, setHubLocale] = useState<"es" | "en">("es");
   const [hubTitleEs, setHubTitleEs] = useState("");
-  const [hubTitleEn, setHubTitleEn] = useState("");
   const [hubSubtitleEs, setHubSubtitleEs] = useState("");
-  const [hubSubtitleEn, setHubSubtitleEn] = useState("");
   const [primaryLabels, setPrimaryLabels] = useState<PrimaryGroupLabelItem[]>([]);
-  const [primaryLabelsLocale, setPrimaryLabelsLocale] = useState<"es" | "en">("es");
   const [filterOptions, setFilterOptions] = useState<CatalogFilterOptions | null>(null);
   const [editFilters, setEditFilters] = useState<CatalogFilterSelection>(EMPTY_FILTERS);
   const [newCatGroup, setNewCatGroup] = useState("other");
@@ -138,17 +157,11 @@ export default function AdminCatalogoPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
   const [editing, setEditing] = useState<EditTarget | null>(null);
-  const [localeTab, setLocaleTab] = useState<"es" | "en">("es");
   const [titleEs, setTitleEs] = useState("");
-  const [titleEn, setTitleEn] = useState("");
   const [descriptionEs, setDescriptionEs] = useState("");
-  const [descriptionEn, setDescriptionEn] = useState("");
   const [materialsEs, setMaterialsEs] = useState("");
-  const [materialsEn, setMaterialsEn] = useState("");
   const [standardsEs, setStandardsEs] = useState("");
-  const [standardsEn, setStandardsEn] = useState("");
   const [optionsEs, setOptionsEs] = useState("");
-  const [optionsEn, setOptionsEn] = useState("");
   const [saving, setSaving] = useState(false);
   const [uploadSub, setUploadSub] = useState<CatalogSubcategoryItem | null>(null);
   const [productMedia, setProductMedia] = useState<ProductMediaState>({
@@ -176,9 +189,7 @@ export default function AdminCatalogoPage() {
         if (data.hub) {
           setHub(data.hub);
           setHubTitleEs(data.hub.titleEs ?? "");
-          setHubTitleEn(data.hub.titleEn ?? "");
           setHubSubtitleEs(data.hub.subtitleEs ?? "");
-          setHubSubtitleEn(data.hub.subtitleEn ?? "");
         }
         setSelectedCategory((current) => current ?? data.categories[0]?.key ?? null);
       } else {
@@ -291,25 +302,16 @@ export default function AdminCatalogoPage() {
   function openEdit(target: EditTarget) {
     setFeedback(null);
     setEditing(target);
-    setLocaleTab("es");
     setTitleEs(target.item.titleEs);
-    setTitleEn(target.item.titleEn);
     setDescriptionEs(target.item.descriptionEs);
-    setDescriptionEn(target.item.descriptionEn);
     if (target.type === "subcategory") {
       setMaterialsEs(target.item.materialsEs);
-      setMaterialsEn(target.item.materialsEn);
       setStandardsEs(target.item.standardsEs);
-      setStandardsEn(target.item.standardsEn);
       setOptionsEs(target.item.optionsEs);
-      setOptionsEn(target.item.optionsEn);
     } else {
       setMaterialsEs("");
-      setMaterialsEn("");
       setStandardsEs("");
-      setStandardsEn("");
       setOptionsEs("");
-      setOptionsEn("");
     }
     setEditFilters({
       primaryGroup: target.item.filters?.primaryGroup ?? "other",
@@ -336,18 +338,18 @@ export default function AdminCatalogoPage() {
         body: JSON.stringify({
           type: "hub",
           titleEs: hubTitleEs,
-          titleEn: hubTitleEn,
           subtitleEs: hubSubtitleEs,
-          subtitleEn: hubSubtitleEn,
         }),
       });
       if (res.ok) {
-        const data = await readAdminJson<{ hub?: CatalogHubTexts }>(res);
+        const data = await readAdminJson<{
+          hub?: CatalogHubTexts;
+          translation?: TranslationMeta;
+        }>(res);
         if (data?.hub) setHub(data.hub);
-        setFeedback({
-          type: "success",
-          message: "Textos de la página Productos actualizados.",
-        });
+        setFeedback(
+          feedbackFromTranslation("Textos de la página Productos actualizados.", data?.translation),
+        );
       } else {
         setFeedback({
           type: "error",
@@ -375,20 +377,23 @@ export default function AdminCatalogoPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           type: "primary-labels",
-          primaryGroupLabels: primaryLabels,
+          primaryGroupLabels: primaryLabels.map(({ key, labelEs }) => ({ key, labelEs })),
         }),
       });
       if (res.ok) {
         const data = await readAdminJson<{
           primaryGroupLabels?: PrimaryGroupLabelItem[];
           filterOptions?: CatalogFilterOptions;
+          translation?: TranslationMeta;
         }>(res);
         if (data?.primaryGroupLabels) setPrimaryLabels(data.primaryGroupLabels);
         if (data?.filterOptions) setFilterOptions(data.filterOptions);
-        setFeedback({
-          type: "success",
-          message: "Nombres de líneas actualizados. Las claves internas no cambiaron.",
-        });
+        setFeedback(
+          feedbackFromTranslation(
+            "Nombres de líneas actualizados. Las claves internas no cambiaron.",
+            data?.translation,
+          ),
+        );
       } else {
         setFeedback({
           type: "error",
@@ -405,13 +410,9 @@ export default function AdminCatalogoPage() {
     }
   }
 
-  function updatePrimaryLabel(
-    key: string,
-    field: "labelEs" | "labelEn",
-    value: string,
-  ) {
+  function updatePrimaryLabel(key: string, value: string) {
     setPrimaryLabels((prev) =>
-      prev.map((row) => (row.key === key ? { ...row, [field]: value } : row)),
+      prev.map((row) => (row.key === key ? { ...row, labelEs: value } : row)),
     );
   }
 
@@ -434,9 +435,7 @@ export default function AdminCatalogoPage() {
             type: "category" as const,
             categoryKey: editing.item.key,
             titleEs,
-            titleEn,
             descriptionEs,
-            descriptionEn,
             filters: editFilters,
           }
         : {
@@ -444,15 +443,10 @@ export default function AdminCatalogoPage() {
             categoryKey: editing.item.categoryKey,
             subcategoryKey: editing.item.key,
             titleEs,
-            titleEn,
             descriptionEs,
-            descriptionEn,
             materialsEs,
-            materialsEn,
             standardsEs,
-            standardsEn,
             optionsEs,
-            optionsEn,
             filters: subcategoryFilters,
           };
 
@@ -464,13 +458,15 @@ export default function AdminCatalogoPage() {
       });
 
       if (res.ok) {
-        setFeedback({
-          type: "success",
-          message:
+        const data = await readAdminJson<{ translation?: TranslationMeta }>(res);
+        setFeedback(
+          feedbackFromTranslation(
             editing.type === "subcategory"
               ? "Ficha del producto actualizada (descripción, materiales, normas y opciones)."
               : "Cambios guardados. Nombres y filtros actualizados en el sitio.",
-        });
+            data?.translation,
+          ),
+        );
         closeEdit();
         await load();
       } else {
@@ -502,25 +498,26 @@ export default function AdminCatalogoPage() {
           action: "add-category",
           key: newCatKey.trim(),
           titleEs,
-          titleEn,
           descriptionEs,
-          descriptionEn,
           subcategoryKey: newSubKey.trim(),
           subTitleEs: titleEs,
-          subTitleEn: titleEn,
           primaryGroup: newCatGroup,
         }),
       });
       if (res.ok) {
-        const data = await readAdminJson<{ categories?: CatalogCategoryItem[] }>(res);
+        const data = await readAdminJson<{
+          categories?: CatalogCategoryItem[];
+          translation?: TranslationMeta;
+        }>(res);
         if (data?.categories) setCategories(data.categories);
         else await load();
         setSelectedCategory(newCatKey.trim());
-        setFeedback({
-          type: "success",
-          message:
+        setFeedback(
+          feedbackFromTranslation(
             "Categoría creada. Reinicia el servidor (o haz deploy) para ver la nueva página en el sitio.",
-        });
+            data?.translation,
+          ),
+        );
         setCreateCategoryOpen(false);
         setNewCatKey("");
         setNewSubKey("");
@@ -554,18 +551,21 @@ export default function AdminCatalogoPage() {
           categoryKey: activeCategory.key,
           key: newSubOnlyKey.trim(),
           titleEs,
-          titleEn,
           descriptionEs,
-          descriptionEn,
         }),
       });
       if (res.ok) {
-        const data = await readAdminJson<{ categories?: CatalogCategoryItem[] }>(res);
+        const data = await readAdminJson<{
+          categories?: CatalogCategoryItem[];
+          translation?: TranslationMeta;
+        }>(res);
         if (data?.categories) setCategories(data.categories);
-        setFeedback({
-          type: "success",
-          message: "Producto creado. Reinicia el servidor para ver la nueva página.",
-        });
+        setFeedback(
+          feedbackFromTranslation(
+            "Producto creado. Reinicia el servidor para ver la nueva página.",
+            data?.translation,
+          ),
+        );
         setCreateSubOpen(false);
         setNewSubOnlyKey("");
         await load();
@@ -596,9 +596,7 @@ export default function AdminCatalogoPage() {
               setFeedback(null);
               setCreateCategoryOpen(true);
               setTitleEs("");
-              setTitleEn("");
               setDescriptionEs("");
-              setDescriptionEn("");
               setNewCatKey("");
               setNewSubKey("");
               setNewCatGroup("other");
@@ -619,67 +617,32 @@ export default function AdminCatalogoPage() {
               <div>
                 <h3 className="text-base font-semibold text-navy">Página Productos (hero)</h3>
                 <p className="mt-1 text-sm text-grey-dark">
-                  Título y descripción del encabezado de la página de productos.
+                  Edita en español. El inglés se genera automáticamente al guardar.
                 </p>
               </div>
               <AdminButton type="submit" disabled={saving}>
                 {saving ? "Guardando…" : "Guardar textos"}
               </AdminButton>
             </div>
-            <AdminTabList
-              label="Idioma del hero"
-              value={hubLocale}
-              onChange={setHubLocale}
-              options={[
-                { value: "es", label: "Español" },
-                { value: "en", label: "Inglés" },
-              ]}
-            />
-            {hubLocale === "es" ? (
-              <>
-                <AdminField label="Título (ES)" htmlFor="hub-title-es">
-                  <input
-                    id="hub-title-es"
-                    type="text"
-                    value={hubTitleEs}
-                    onChange={(e) => setHubTitleEs(e.target.value)}
-                    className={adminInputClass}
-                    required
-                  />
-                </AdminField>
-                <AdminField label="Descripción (ES)" htmlFor="hub-sub-es">
-                  <textarea
-                    id="hub-sub-es"
-                    value={hubSubtitleEs}
-                    onChange={(e) => setHubSubtitleEs(e.target.value)}
-                    className={adminTextareaClass}
-                    rows={3}
-                  />
-                </AdminField>
-              </>
-            ) : (
-              <>
-                <AdminField label="Título (EN)" htmlFor="hub-title-en">
-                  <input
-                    id="hub-title-en"
-                    type="text"
-                    value={hubTitleEn}
-                    onChange={(e) => setHubTitleEn(e.target.value)}
-                    className={adminInputClass}
-                    required
-                  />
-                </AdminField>
-                <AdminField label="Descripción (EN)" htmlFor="hub-sub-en">
-                  <textarea
-                    id="hub-sub-en"
-                    value={hubSubtitleEn}
-                    onChange={(e) => setHubSubtitleEn(e.target.value)}
-                    className={adminTextareaClass}
-                    rows={3}
-                  />
-                </AdminField>
-              </>
-            )}
+            <AdminField label="Título" htmlFor="hub-title-es">
+              <input
+                id="hub-title-es"
+                type="text"
+                value={hubTitleEs}
+                onChange={(e) => setHubTitleEs(e.target.value)}
+                className={adminInputClass}
+                required
+              />
+            </AdminField>
+            <AdminField label="Descripción" htmlFor="hub-sub-es">
+              <textarea
+                id="hub-sub-es"
+                value={hubSubtitleEs}
+                onChange={(e) => setHubSubtitleEs(e.target.value)}
+                className={adminTextareaClass}
+                rows={3}
+              />
+            </AdminField>
           </form>
         ) : null}
 
@@ -694,42 +657,26 @@ export default function AdminCatalogoPage() {
                   Nombres de líneas (grupos)
                 </h3>
                 <p className="mt-1 text-sm text-grey-dark">
-                  Etiquetas cortas visibles en el admin y filtros internos (Fachadas, Ventanas,
-                  Cubiertas…). La clave (`facades`, `exteriors`, etc.) no cambia: las rutas
-                  `/productos/...` se mantienen.
+                  Etiquetas en español (Fachadas, Ventanas, Cubiertas…). El inglés se traduce al
+                  guardar. La clave interna (`facades`, etc.) y las rutas no cambian.
                 </p>
               </div>
               <AdminButton type="submit" disabled={saving}>
                 {saving ? "Guardando…" : "Guardar nombres"}
               </AdminButton>
             </div>
-            <AdminTabList
-              label="Idioma de las líneas"
-              value={primaryLabelsLocale}
-              onChange={setPrimaryLabelsLocale}
-              options={[
-                { value: "es", label: "Español" },
-                { value: "en", label: "Inglés" },
-              ]}
-            />
             <div className="grid gap-3 sm:grid-cols-2">
               {primaryLabels.map((row) => (
                 <AdminField
                   key={row.key}
                   label={`${row.key}`}
-                  htmlFor={`primary-${primaryLabelsLocale}-${row.key}`}
+                  htmlFor={`primary-es-${row.key}`}
                 >
                   <input
-                    id={`primary-${primaryLabelsLocale}-${row.key}`}
+                    id={`primary-es-${row.key}`}
                     type="text"
-                    value={primaryLabelsLocale === "es" ? row.labelEs : row.labelEn}
-                    onChange={(e) =>
-                      updatePrimaryLabel(
-                        row.key,
-                        primaryLabelsLocale === "es" ? "labelEs" : "labelEn",
-                        e.target.value,
-                      )
-                    }
+                    value={row.labelEs}
+                    onChange={(e) => updatePrimaryLabel(row.key, e.target.value)}
                     className={adminInputClass}
                     required
                   />
@@ -843,9 +790,7 @@ export default function AdminCatalogoPage() {
                         setFeedback(null);
                         setCreateSubOpen(true);
                         setTitleEs("");
-                        setTitleEn("");
                         setDescriptionEs("");
-                        setDescriptionEn("");
                         setNewSubOnlyKey("");
                       }}
                     >
@@ -923,8 +868,8 @@ export default function AdminCatalogoPage() {
             ? `Pertenece a: ${
                 categories.find((c) => c.key === editing.item.categoryKey)?.titleEs ??
                 editing.item.categoryKey
-              }. Edita la intro de la ficha, materiales, normas y opciones (ES/EN).`
-            : "Cambia el nombre visible (ES/EN) sin alterar el código interno ni las rutas del sitio."
+              }. Edita en español; el inglés se genera al guardar.`
+            : "Cambia el nombre visible en español. El inglés se traduce automáticamente; el código interno y las rutas no cambian."
         }
         onClose={closeEdit}
         size="lg"
@@ -949,110 +894,53 @@ export default function AdminCatalogoPage() {
                   editing.item.categoryKey}
               </p>
             ) : null}
-            <AdminTabList
-              label="Idioma a editar"
-              value={localeTab}
-              onChange={setLocaleTab}
-              options={[
-                { value: "es", label: "Español" },
-                { value: "en", label: "Inglés" },
-              ]}
-            />
-            {localeTab === "es" ? (
+            <p className="rounded-lg border border-cornflower/25 bg-cornflower/5 px-3 py-2 text-xs text-navy">
+              Traducción automática ES → EN al guardar. No hace falta rellenar inglés.
+            </p>
+            <AdminField label="Nombre" htmlFor="title-es">
+              <input id="title-es" type="text" value={titleEs} onChange={(e) => setTitleEs(e.target.value)} className={adminInputClass} required />
+            </AdminField>
+            <AdminField
+              label={
+                editing.type === "subcategory"
+                  ? "Descripción / intro de la ficha"
+                  : "Descripción"
+              }
+              htmlFor="desc-es"
+            >
+              <textarea id="desc-es" value={descriptionEs} onChange={(e) => setDescriptionEs(e.target.value)} className={adminTextareaClass} rows={4} />
+            </AdminField>
+            {editing.type === "subcategory" ? (
               <>
-                <AdminField label="Nombre en español" htmlFor="title-es">
-                  <input id="title-es" type="text" value={titleEs} onChange={(e) => setTitleEs(e.target.value)} className={adminInputClass} required />
+                <AdminField label="Materiales" htmlFor="materials-es">
+                  <textarea
+                    id="materials-es"
+                    value={materialsEs}
+                    onChange={(e) => setMaterialsEs(e.target.value)}
+                    className={adminTextareaClass}
+                    rows={3}
+                  />
                 </AdminField>
-                <AdminField
-                  label={
-                    editing.type === "subcategory"
-                      ? "Descripción / intro de la ficha (español)"
-                      : "Descripción en español"
-                  }
-                  htmlFor="desc-es"
-                >
-                  <textarea id="desc-es" value={descriptionEs} onChange={(e) => setDescriptionEs(e.target.value)} className={adminTextareaClass} rows={4} />
+                <AdminField label="Normas técnicas" htmlFor="standards-es">
+                  <textarea
+                    id="standards-es"
+                    value={standardsEs}
+                    onChange={(e) => setStandardsEs(e.target.value)}
+                    className={adminTextareaClass}
+                    rows={3}
+                  />
                 </AdminField>
-                {editing.type === "subcategory" ? (
-                  <>
-                    <AdminField label="Materiales (español)" htmlFor="materials-es">
-                      <textarea
-                        id="materials-es"
-                        value={materialsEs}
-                        onChange={(e) => setMaterialsEs(e.target.value)}
-                        className={adminTextareaClass}
-                        rows={3}
-                      />
-                    </AdminField>
-                    <AdminField label="Normas técnicas (español)" htmlFor="standards-es">
-                      <textarea
-                        id="standards-es"
-                        value={standardsEs}
-                        onChange={(e) => setStandardsEs(e.target.value)}
-                        className={adminTextareaClass}
-                        rows={3}
-                      />
-                    </AdminField>
-                    <AdminField label="Opciones y variantes (español)" htmlFor="options-es">
-                      <textarea
-                        id="options-es"
-                        value={optionsEs}
-                        onChange={(e) => setOptionsEs(e.target.value)}
-                        className={adminTextareaClass}
-                        rows={3}
-                      />
-                    </AdminField>
-                  </>
-                ) : null}
+                <AdminField label="Opciones y variantes" htmlFor="options-es">
+                  <textarea
+                    id="options-es"
+                    value={optionsEs}
+                    onChange={(e) => setOptionsEs(e.target.value)}
+                    className={adminTextareaClass}
+                    rows={3}
+                  />
+                </AdminField>
               </>
-            ) : (
-              <>
-                <AdminField label="Nombre en inglés" htmlFor="title-en">
-                  <input id="title-en" type="text" value={titleEn} onChange={(e) => setTitleEn(e.target.value)} className={adminInputClass} required />
-                </AdminField>
-                <AdminField
-                  label={
-                    editing.type === "subcategory"
-                      ? "Descripción / intro de la ficha (inglés)"
-                      : "Descripción en inglés"
-                  }
-                  htmlFor="desc-en"
-                >
-                  <textarea id="desc-en" value={descriptionEn} onChange={(e) => setDescriptionEn(e.target.value)} className={adminTextareaClass} rows={4} />
-                </AdminField>
-                {editing.type === "subcategory" ? (
-                  <>
-                    <AdminField label="Materiales (inglés)" htmlFor="materials-en">
-                      <textarea
-                        id="materials-en"
-                        value={materialsEn}
-                        onChange={(e) => setMaterialsEn(e.target.value)}
-                        className={adminTextareaClass}
-                        rows={3}
-                      />
-                    </AdminField>
-                    <AdminField label="Normas técnicas (inglés)" htmlFor="standards-en">
-                      <textarea
-                        id="standards-en"
-                        value={standardsEn}
-                        onChange={(e) => setStandardsEn(e.target.value)}
-                        className={adminTextareaClass}
-                        rows={3}
-                      />
-                    </AdminField>
-                    <AdminField label="Opciones y variantes (inglés)" htmlFor="options-en">
-                      <textarea
-                        id="options-en"
-                        value={optionsEn}
-                        onChange={(e) => setOptionsEn(e.target.value)}
-                        className={adminTextareaClass}
-                        rows={3}
-                      />
-                    </AdminField>
-                  </>
-                ) : null}
-              </>
-            )}
+            ) : null}
 
             {filterOptions ? (
               <div className="space-y-4 rounded-xl border border-grey/20 bg-slate-50 p-4">
@@ -1131,7 +1019,7 @@ export default function AdminCatalogoPage() {
       >
         <form id="new-category-form" onSubmit={submitNewCategory} className="space-y-4">
           {feedback ? <AdminStatusMessage type={feedback.type} message={feedback.message} /> : null}
-          <AdminField label="Nombre en español" htmlFor="new-cat-es">
+          <AdminField label="Nombre" htmlFor="new-cat-es">
             <input
               id="new-cat-es"
               type="text"
@@ -1146,9 +1034,9 @@ export default function AdminCatalogoPage() {
               placeholder="Ej: Carpintería de aluminio"
             />
           </AdminField>
-          <AdminField label="Nombre en inglés" htmlFor="new-cat-en">
-            <input id="new-cat-en" type="text" value={titleEn} onChange={(e) => setTitleEn(e.target.value)} className={adminInputClass} required />
-          </AdminField>
+          <p className="text-xs text-grey-dark">
+            El nombre en inglés se genera automáticamente al crear.
+          </p>
           <AdminField label="Código interno (categoría)" htmlFor="new-cat-key" hint="Solo letras/números, empieza en minúscula. Ej: carpinteriaAluminio">
             <input id="new-cat-key" type="text" value={newCatKey} onChange={(e) => setNewCatKey(e.target.value)} className={adminInputClass} required pattern="[a-z][a-zA-Z0-9]*" />
           </AdminField>
@@ -1175,7 +1063,7 @@ export default function AdminCatalogoPage() {
               </select>
             </AdminField>
           ) : null}
-          <AdminField label="Descripción (ES)" htmlFor="new-cat-desc">
+          <AdminField label="Descripción" htmlFor="new-cat-desc">
             <textarea id="new-cat-desc" value={descriptionEs} onChange={(e) => setDescriptionEs(e.target.value)} className={adminTextareaClass} rows={3} />
           </AdminField>
         </form>
@@ -1203,7 +1091,7 @@ export default function AdminCatalogoPage() {
       >
         <form id="new-sub-form" onSubmit={submitNewSubcategory} className="space-y-4">
           {feedback ? <AdminStatusMessage type={feedback.type} message={feedback.message} /> : null}
-          <AdminField label="Nombre en español" htmlFor="new-sub-es">
+          <AdminField label="Nombre" htmlFor="new-sub-es">
             <input
               id="new-sub-es"
               type="text"
@@ -1216,13 +1104,13 @@ export default function AdminCatalogoPage() {
               required
             />
           </AdminField>
-          <AdminField label="Nombre en inglés" htmlFor="new-sub-en">
-            <input id="new-sub-en" type="text" value={titleEn} onChange={(e) => setTitleEn(e.target.value)} className={adminInputClass} required />
-          </AdminField>
+          <p className="text-xs text-grey-dark">
+            El nombre en inglés se genera automáticamente al crear.
+          </p>
           <AdminField label="Código interno" htmlFor="new-sub-only-key">
             <input id="new-sub-only-key" type="text" value={newSubOnlyKey} onChange={(e) => setNewSubOnlyKey(e.target.value)} className={adminInputClass} required pattern="[a-z][a-zA-Z0-9]*" />
           </AdminField>
-          <AdminField label="Descripción (ES)" htmlFor="new-sub-desc">
+          <AdminField label="Descripción" htmlFor="new-sub-desc">
             <textarea id="new-sub-desc" value={descriptionEs} onChange={(e) => setDescriptionEs(e.target.value)} className={adminTextareaClass} rows={3} />
           </AdminField>
         </form>

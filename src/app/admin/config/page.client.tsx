@@ -45,7 +45,7 @@ export default function AdminConfigPage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [settingsError, setSettingsError] = useState("");
-  const [footerLocale, setFooterLocale] = useState<"es" | "en">("es");
+  const [translationWarning, setTranslationWarning] = useState("");
 
   const [files, setFiles] = useState<string[]>([]);
   const [blockedLoading, setBlockedLoading] = useState(true);
@@ -96,19 +96,33 @@ export default function AdminConfigPage() {
     setSaving(true);
     setSaved(false);
     setSettingsError("");
+    setTranslationWarning("");
 
     try {
       const res = await fetch("/api/admin/site-settings", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(settings),
+        body: JSON.stringify({
+          contact: settings.contact,
+          footer: { es: settings.footer.es },
+        }),
       });
 
       if (res.ok) {
-        const data = await readAdminJson<SiteSettings>(res);
-        if (data) setSettings(data);
-        setSaved(true);
-        setTimeout(() => setSaved(false), 4000);
+        const data = await readAdminJson<
+          SiteSettings & { translation?: { warnings?: string[]; provider?: string | null } }
+        >(res);
+        if (data) {
+          setSettings({ contact: data.contact, footer: data.footer });
+          const warnings = data.translation?.warnings?.filter(Boolean) ?? [];
+          if (warnings.length > 0) {
+            setTranslationWarning(warnings.join(" "));
+            setSaved(false);
+          } else {
+            setSaved(true);
+            setTimeout(() => setSaved(false), 4000);
+          }
+        }
       } else {
         setSettingsError(await adminErrorMessage(res, "No se pudieron guardar los cambios."));
       }
@@ -125,18 +139,14 @@ export default function AdminConfigPage() {
     );
   }
 
-  function updateFooter(
-    locale: "es" | "en",
-    field: keyof SiteSettings["footer"]["es"],
-    value: string,
-  ) {
+  function updateFooter(field: keyof SiteSettings["footer"]["es"], value: string) {
     setSettings((current) =>
       current
         ? {
             ...current,
             footer: {
               ...current.footer,
-              [locale]: { ...current.footer[locale], [field]: value },
+              es: { ...current.footer.es, [field]: value },
             },
           }
         : current,
@@ -304,58 +314,55 @@ export default function AdminConfigPage() {
             </AdminPanel>
 
             <AdminPanel title="Textos del footer">
-              <AdminTabList
-                label="Idioma"
-                value={footerLocale}
-                onChange={setFooterLocale}
-                options={[
-                  { value: "es", label: "Español" },
-                  { value: "en", label: "Inglés" },
-                ]}
-              />
+              <p className="mb-4 text-sm text-grey-dark">
+                Edita en español. El inglés se genera automáticamente al guardar.
+              </p>
+              {translationWarning ? (
+                <AdminStatusMessage type="error" message={translationWarning} />
+              ) : null}
               <div className="mt-4 grid gap-4">
-                <AdminField label="Descripción breve" htmlFor={`footer-tagline-${footerLocale}`}>
+                <AdminField label="Descripción breve" htmlFor="footer-tagline-es">
                   <textarea
-                    id={`footer-tagline-${footerLocale}`}
-                    value={settings.footer[footerLocale].tagline}
-                    onChange={(e) => updateFooter(footerLocale, "tagline", e.target.value)}
+                    id="footer-tagline-es"
+                    value={settings.footer.es.tagline}
+                    onChange={(e) => updateFooter("tagline", e.target.value)}
                     className={adminTextareaClass}
                     rows={3}
                   />
                 </AdminField>
-                <AdminField label="Línea de experiencia" htmlFor={`footer-exp-${footerLocale}`}>
+                <AdminField label="Línea de experiencia" htmlFor="footer-exp-es">
                   <input
-                    id={`footer-exp-${footerLocale}`}
+                    id="footer-exp-es"
                     type="text"
-                    value={settings.footer[footerLocale].experience}
-                    onChange={(e) => updateFooter(footerLocale, "experience", e.target.value)}
+                    value={settings.footer.es.experience}
+                    onChange={(e) => updateFooter("experience", e.target.value)}
                     className={adminInputClass}
                   />
                 </AdminField>
-                <AdminField label="Título CTA" htmlFor={`footer-cta-t-${footerLocale}`}>
+                <AdminField label="Título CTA" htmlFor="footer-cta-t-es">
                   <input
-                    id={`footer-cta-t-${footerLocale}`}
+                    id="footer-cta-t-es"
                     type="text"
-                    value={settings.footer[footerLocale].ctaTitle}
-                    onChange={(e) => updateFooter(footerLocale, "ctaTitle", e.target.value)}
+                    value={settings.footer.es.ctaTitle}
+                    onChange={(e) => updateFooter("ctaTitle", e.target.value)}
                     className={adminInputClass}
                   />
                 </AdminField>
-                <AdminField label="Texto CTA" htmlFor={`footer-cta-x-${footerLocale}`}>
+                <AdminField label="Texto CTA" htmlFor="footer-cta-x-es">
                   <textarea
-                    id={`footer-cta-x-${footerLocale}`}
-                    value={settings.footer[footerLocale].ctaText}
-                    onChange={(e) => updateFooter(footerLocale, "ctaText", e.target.value)}
+                    id="footer-cta-x-es"
+                    value={settings.footer.es.ctaText}
+                    onChange={(e) => updateFooter("ctaText", e.target.value)}
                     className={adminTextareaClass}
                     rows={3}
                   />
                 </AdminField>
-                <AdminField label="Ubicación" htmlFor={`footer-loc-${footerLocale}`}>
+                <AdminField label="Ubicación" htmlFor="footer-loc-es">
                   <input
-                    id={`footer-loc-${footerLocale}`}
+                    id="footer-loc-es"
                     type="text"
-                    value={settings.footer[footerLocale].location}
-                    onChange={(e) => updateFooter(footerLocale, "location", e.target.value)}
+                    value={settings.footer.es.location}
+                    onChange={(e) => updateFooter("location", e.target.value)}
                     className={adminInputClass}
                   />
                 </AdminField>

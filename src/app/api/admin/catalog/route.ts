@@ -13,6 +13,7 @@ import {
   addCategory,
   addSubcategory,
   type CatalogFilterSelection,
+  type CatalogTranslationMeta,
 } from "@/lib/admin/catalog-service";
 import { revalidatePublicCatalog } from "@/lib/catalog/revalidate-public";
 import { syncDatabaseToJson } from "@/lib/db/sync-json";
@@ -20,6 +21,14 @@ import { syncDatabaseToJson } from "@/lib/db/sync-json";
 async function afterCatalogMutation() {
   await syncDatabaseToJson();
   revalidatePublicCatalog();
+}
+
+function translationPayload(meta: CatalogTranslationMeta) {
+  return {
+    warnings: meta.warnings,
+    provider: meta.provider,
+    translatedCount: meta.translatedCount,
+  };
 }
 
 export type {
@@ -61,18 +70,12 @@ export async function PATCH(request: Request) {
     categoryKey?: string;
     subcategoryKey?: string;
     titleEs?: string;
-    titleEn?: string;
     descriptionEs?: string;
-    descriptionEn?: string;
     materialsEs?: string;
-    materialsEn?: string;
     standardsEs?: string;
-    standardsEn?: string;
     optionsEs?: string;
-    optionsEn?: string;
     subtitleEs?: string;
-    subtitleEn?: string;
-    primaryGroupLabels?: { key: string; labelEs?: string; labelEn?: string }[];
+    primaryGroupLabels?: { key: string; labelEs?: string }[];
     filters?: Partial<CatalogFilterSelection>;
   };
 
@@ -82,26 +85,29 @@ export async function PATCH(request: Request) {
 
   try {
     if (body.type === "hub") {
-      await updateCatalogHub({
+      const translation = await updateCatalogHub({
         titleEs: body.titleEs,
-        titleEn: body.titleEn,
         subtitleEs: body.subtitleEs,
-        subtitleEn: body.subtitleEn,
       });
       await afterCatalogMutation();
-      return NextResponse.json({ ok: true, hub: await getCatalogHub() });
+      return NextResponse.json({
+        ok: true,
+        hub: await getCatalogHub(),
+        translation: translationPayload(translation),
+      });
     }
 
     if (body.type === "primary-labels") {
       if (!Array.isArray(body.primaryGroupLabels)) {
         return NextResponse.json({ error: "Datos incompletos" }, { status: 400 });
       }
-      await updatePrimaryGroupLabels(body.primaryGroupLabels);
+      const translation = await updatePrimaryGroupLabels(body.primaryGroupLabels);
       await afterCatalogMutation();
       return NextResponse.json({
         ok: true,
         primaryGroupLabels: await getPrimaryGroupLabels(),
         filterOptions: await listCatalogFilterOptions(),
+        translation: translationPayload(translation),
       });
     }
 
@@ -109,20 +115,15 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: "Datos incompletos" }, { status: 400 });
     }
 
-    await updateCatalogEntry({
+    const translation = await updateCatalogEntry({
       type: body.type,
       categoryKey: body.categoryKey,
       subcategoryKey: body.subcategoryKey,
       titleEs: body.titleEs,
-      titleEn: body.titleEn,
       descriptionEs: body.descriptionEs,
-      descriptionEn: body.descriptionEn,
       materialsEs: body.materialsEs,
-      materialsEn: body.materialsEn,
       standardsEs: body.standardsEs,
-      standardsEn: body.standardsEn,
       optionsEs: body.optionsEs,
-      optionsEn: body.optionsEn,
     });
 
     if (body.filters) {
@@ -142,7 +143,11 @@ export async function PATCH(request: Request) {
             ?.subcategories.find((s) => s.key === body.subcategoryKey);
 
     await afterCatalogMutation();
-    return NextResponse.json({ ok: true, item: updated });
+    return NextResponse.json({
+      ok: true,
+      item: updated,
+      translation: translationPayload(translation),
+    });
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "No se pudo guardar" },
@@ -161,46 +166,41 @@ export async function POST(request: Request) {
     key?: string;
     categoryKey?: string;
     titleEs?: string;
-    titleEn?: string;
     descriptionEs?: string;
-    descriptionEn?: string;
     subcategoryKey?: string;
     subTitleEs?: string;
-    subTitleEn?: string;
     subDescriptionEs?: string;
-    subDescriptionEn?: string;
     primaryGroup?: string;
   };
 
   try {
+    let translation: CatalogTranslationMeta;
+
     if (body.action === "add-category") {
-      if (!body.key || !body.titleEs || !body.titleEn || !body.subcategoryKey || !body.subTitleEs || !body.subTitleEn) {
-        return NextResponse.json({ error: "Completa categoría y primera subcategoría." }, { status: 400 });
+      if (!body.key || !body.titleEs || !body.subcategoryKey || !body.subTitleEs) {
+        return NextResponse.json(
+          { error: "Completa categoría y primera subcategoría." },
+          { status: 400 },
+        );
       }
-      await addCategory({
+      translation = await addCategory({
         key: body.key,
         titleEs: body.titleEs,
-        titleEn: body.titleEn,
         descriptionEs: body.descriptionEs ?? "",
-        descriptionEn: body.descriptionEn ?? "",
         subcategoryKey: body.subcategoryKey,
         subTitleEs: body.subTitleEs,
-        subTitleEn: body.subTitleEn,
         subDescriptionEs: body.subDescriptionEs,
-        subDescriptionEn: body.subDescriptionEn,
         primaryGroup: body.primaryGroup,
       });
     } else if (body.action === "add-subcategory") {
-      if (!body.categoryKey || !body.key || !body.titleEs || !body.titleEn) {
+      if (!body.categoryKey || !body.key || !body.titleEs) {
         return NextResponse.json({ error: "Datos incompletos." }, { status: 400 });
       }
-      await addSubcategory({
+      translation = await addSubcategory({
         categoryKey: body.categoryKey,
         key: body.key,
         titleEs: body.titleEs,
-        titleEn: body.titleEn,
         descriptionEs: body.descriptionEs,
-        descriptionEn: body.descriptionEn,
       });
     } else {
       return NextResponse.json({ error: "Acción no válida." }, { status: 400 });
@@ -208,7 +208,11 @@ export async function POST(request: Request) {
 
     const categories = await listCatalogTree();
     await afterCatalogMutation();
-    return NextResponse.json({ ok: true, categories });
+    return NextResponse.json({
+      ok: true,
+      categories,
+      translation: translationPayload(translation),
+    });
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "No se pudo crear" },
