@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState, useId } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/layout/Container";
+import { CategoryServiceIcon } from "@/components/catalog/CategoryServiceIcon";
 import { PrimaryGroupIcon } from "@/components/catalog/PrimaryGroupIcon";
 import { ProductSolutionCard } from "@/components/catalog/ProductSolutionCard";
 import { useProductCatalogData } from "@/components/catalog/use-product-catalog-data";
@@ -34,7 +35,7 @@ import {
 type SecondaryFilter = "all" | string;
 
 function pillClass(active: boolean): string {
-  return `inline-flex min-h-11 shrink-0 items-center gap-2 whitespace-nowrap rounded-pill px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] transition-colors duration-ds focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 motion-reduce:transition-none sm:px-4 sm:text-ds-caption ${
+  return `inline-flex min-h-11 shrink-0 items-center whitespace-nowrap rounded-pill px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] transition-colors duration-ds focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 motion-reduce:transition-none sm:px-4 sm:text-ds-caption ${
     active
       ? "bg-navy text-white"
       : "border border-navy/15 bg-white text-ink/80 hover:border-gold hover:text-navy"
@@ -220,11 +221,11 @@ export function ProductCatalogExplorer({
   const primaryGroups = available.primaryGroups;
 
   const primaryChips = (
-    <div className="-mx-1 overflow-x-auto pb-1 sm:mx-0 sm:overflow-visible sm:pb-0">
+    <div className="-mx-1 overflow-x-auto pb-1">
       <div
         role="group"
         aria-label={t("primaryLabel")}
-        className="flex w-max gap-2 sm:w-auto sm:flex-wrap"
+        className="flex w-max flex-nowrap gap-2"
       >
         <button
           type="button"
@@ -232,7 +233,6 @@ export function ProductCatalogExplorer({
           aria-pressed={primary === "all"}
           className={pillClass(primary === "all")}
         >
-          <PrimaryGroupIcon group="all" />
           {t("primary.all")}
         </button>
         {primaryGroups.map((group) => (
@@ -243,7 +243,6 @@ export function ProductCatalogExplorer({
             aria-pressed={primary === group}
             className={pillClass(primary === group)}
           >
-            <PrimaryGroupIcon group={group} />
             {t(`primary.${group}`)}
           </button>
         ))}
@@ -324,8 +323,9 @@ export function ProductCatalogExplorer({
                 <li>
                   <a
                     href="#catalog-explorer"
-                    className="flex min-h-11 items-center whitespace-nowrap rounded-card bg-navy px-3 py-2.5 text-sm font-semibold text-white"
+                    className="flex min-h-11 items-center gap-2.5 whitespace-nowrap rounded-card bg-navy px-3 py-2.5 text-sm font-semibold text-white"
                   >
+                    <PrimaryGroupIcon group="all" />
                     {tHub("allProducts")}
                   </a>
                 </li>
@@ -333,8 +333,9 @@ export function ProductCatalogExplorer({
                   <li key={category}>
                     <AppLink
                       href={getProductCategoryPath(category)}
-                      className="flex min-h-11 items-center whitespace-nowrap rounded-card px-3 py-2.5 text-sm font-medium text-ink/85 transition-colors duration-ds hover:bg-white hover:text-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                      className="flex min-h-11 items-center gap-2.5 whitespace-nowrap rounded-card px-3 py-2.5 text-sm font-medium text-ink/85 transition-colors duration-ds hover:bg-white hover:text-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
                     >
+                      <CategoryServiceIcon category={category} size="sm" />
                       {tCat(`${category}.title`)}
                     </AppLink>
                   </li>
