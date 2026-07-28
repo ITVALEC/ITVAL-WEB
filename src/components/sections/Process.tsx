@@ -25,7 +25,7 @@ export function Process() {
               className="ds-card ds-card-hover relative p-6"
             >
               <span
-                className="mb-4 block font-display text-4xl font-bold leading-none text-gold/40"
+                className="mb-4 block font-display text-4xl font-bold leading-none text-gold"
                 aria-hidden="true"
               >
                 {String(index + 1).padStart(2, "0")}

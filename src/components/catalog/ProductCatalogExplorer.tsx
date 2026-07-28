@@ -4,10 +4,10 @@ import { useEffect, useMemo, useRef, useState, useId } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/layout/Container";
+import { PrimaryGroupIcon } from "@/components/catalog/PrimaryGroupIcon";
 import { ProductSolutionCard } from "@/components/catalog/ProductSolutionCard";
 import { useProductCatalogData } from "@/components/catalog/use-product-catalog-data";
 import { AppLink } from "@/components/ui/AppLink";
-import { ButtonLink } from "@/components/ui/Button";
 import { CATALOG_NS } from "@/lib/i18n/namespaces";
 import { filterProductCatalog } from "@/lib/catalog/filter-products";
 import { CATALOG_PAGE_SIZE, paginateItems } from "@/lib/pagination";
@@ -30,12 +30,11 @@ import {
   PRODUCT_KEYS,
   type ProductKey,
 } from "@/lib/catalog";
-import { NAV_PATHS } from "@/lib/routes";
 
 type SecondaryFilter = "all" | string;
 
 function pillClass(active: boolean): string {
-  return `shrink-0 whitespace-nowrap rounded-pill px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] transition-colors duration-ds focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 motion-reduce:transition-none sm:px-4 sm:text-ds-caption ${
+  return `inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-pill px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] transition-colors duration-ds focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 motion-reduce:transition-none sm:px-4 sm:text-ds-caption ${
     active
       ? "bg-navy text-white"
       : "border border-navy/15 bg-white text-ink/80 hover:border-gold hover:text-navy"
@@ -220,6 +219,38 @@ export function ProductCatalogExplorer({
 
   const primaryGroups = available.primaryGroups;
 
+  const primaryChips = (
+    <div className="-mx-1 overflow-x-auto pb-1 sm:mx-0 sm:overflow-visible sm:pb-0">
+      <div
+        role="group"
+        aria-label={t("primaryLabel")}
+        className="flex w-max gap-2 sm:w-auto sm:flex-wrap"
+      >
+        <button
+          type="button"
+          onClick={() => setPrimary("all")}
+          aria-pressed={primary === "all"}
+          className={pillClass(primary === "all")}
+        >
+          <PrimaryGroupIcon group="all" />
+          {t("primary.all")}
+        </button>
+        {primaryGroups.map((group) => (
+          <button
+            key={group}
+            type="button"
+            onClick={() => setPrimary(group)}
+            aria-pressed={primary === group}
+            className={pillClass(primary === group)}
+          >
+            <PrimaryGroupIcon group={group} />
+            {t(`primary.${group}`)}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+
   const advancedFilters = (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <FilterSelect
@@ -269,22 +300,6 @@ export function ProductCatalogExplorer({
     </div>
   );
 
-  const catalogCta = (
-    <div className="flex flex-col gap-4 rounded-card bg-navy-dark px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-6">
-      <div className="max-w-xl">
-        <p className="font-display text-lg font-bold text-white sm:text-xl">
-          {tHub("catalogCtaTitle")}
-        </p>
-        <p className="mt-1 text-ds-caption text-white/75">
-          {tHub("catalogCtaBody")}
-        </p>
-      </div>
-      <ButtonLink href={NAV_PATHS.contact} variant="primary" className="shrink-0">
-        {tHub("downloadCatalog")}
-      </ButtonLink>
-    </div>
-  );
-
   return (
     <section
       id="catalog-explorer"
@@ -329,43 +344,6 @@ export function ProductCatalogExplorer({
           </aside>
 
           <div className="relative z-0 min-w-0 space-y-8">
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between lg:gap-6">
-              <div className="min-w-0 flex-1 overflow-x-auto pb-1 sm:overflow-visible sm:pb-0">
-                <div
-                  role="group"
-                  aria-label={t("primaryLabel")}
-                  className="flex w-max gap-2 sm:w-auto sm:flex-wrap"
-                >
-                  <button
-                    type="button"
-                    onClick={() => setPrimary("all")}
-                    aria-pressed={primary === "all"}
-                    className={pillClass(primary === "all")}
-                  >
-                    {t("primary.all")}
-                  </button>
-                  {primaryGroups.map((group) => (
-                    <button
-                      key={group}
-                      type="button"
-                      onClick={() => setPrimary(group)}
-                      aria-pressed={primary === group}
-                      className={pillClass(primary === group)}
-                    >
-                      {t(`primary.${group}`)}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <ButtonLink
-                href={NAV_PATHS.contact}
-                variant="navy"
-                className="shrink-0 self-start"
-              >
-                {tHub("downloadCatalog")}
-              </ButtonLink>
-            </div>
-
             <div className="rounded-card border border-navy/10 bg-white p-5 shadow-card sm:p-6 lg:p-8">
               <div className="space-y-6">
                 <div>
@@ -386,6 +364,8 @@ export function ProductCatalogExplorer({
                     enterKeyHint="search"
                   />
                 </div>
+
+                {primaryChips}
 
                 <details className="group rounded-card border border-navy/10 bg-surface lg:hidden">
                   <summary className="cursor-pointer list-none px-4 py-3 text-sm font-semibold text-navy marker:content-none [&::-webkit-details-marker]:hidden">
@@ -511,8 +491,6 @@ export function ProductCatalogExplorer({
                 </>
               )}
             </div>
-
-            {catalogCta}
           </div>
         </div>
       </Container>
