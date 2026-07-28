@@ -41,7 +41,7 @@
       "windows": "Windows",
       "doors": "Doors",
       "security": "Security",
-      "exteriors": "Exteriors",
+      "exteriors": "Covers",
       "interiors": "Interiors",
       "steel": "Steel",
       "other": "Other"
@@ -98,7 +98,7 @@
   },
   "categories": {
     "facades": {
-      "title": "Architectural facades",
+      "title": "Architectural Envelopes",
       "description": "Curtain wall, structural glazing and glass skin systems for corporate, commercial and institutional buildings."
     },
     "aluminumWindows": {

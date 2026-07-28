@@ -13,6 +13,7 @@ import {
   SECTOR_KEYS,
   SYSTEM_KEYS,
 } from "@/lib/catalog/filter-keys";
+import { applyCatalogLabelMigrations } from "@/lib/catalog/migrate-catalog-labels";
 
 const PLACEHOLDER_IMAGE = "/images/pages/products.svg";
 
@@ -178,7 +179,11 @@ async function writeTaxonomy(data: Taxonomy): Promise<void> {
 }
 
 async function readFullCatalog(locale: "es" | "en"): Promise<Record<string, unknown>> {
-  return getDocument<Record<string, unknown>>(catalogContentKey(locale));
+  const data = await getDocument<Record<string, unknown>>(catalogContentKey(locale));
+  if (applyCatalogLabelMigrations(locale, data)) {
+    await writeFullCatalog(locale, data);
+  }
+  return data;
 }
 
 async function writeFullCatalog(
@@ -645,6 +650,58 @@ export async function updateCatalogHub(patch: Partial<CatalogHubTexts>): Promise
       if (patch.subtitleEn != null) hub.subtitle = patch.subtitleEn.trim();
     }
     await writeFullCatalog(locale, { ...full, hub });
+  }
+}
+
+export type PrimaryGroupLabelItem = {
+  key: string;
+  labelEs: string;
+  labelEn: string;
+};
+
+const PRIMARY_GROUP_KEYS = PRIMARY_GROUPS.filter((g) => g !== "all");
+
+/** Nombres visibles de las líneas (Fachadas, Ventanas, Cubiertas, …). La clave interna no cambia. */
+export async function getPrimaryGroupLabels(): Promise<PrimaryGroupLabelItem[]> {
+  const [es, en] = await Promise.all([readFullCatalog("es"), readFullCatalog("en")]);
+  const primaryEs =
+    ((es.explorer as Record<string, unknown> | undefined)?.primary as Record<string, string>) ?? {};
+  const primaryEn =
+    ((en.explorer as Record<string, unknown> | undefined)?.primary as Record<string, string>) ?? {};
+
+  return PRIMARY_GROUP_KEYS.map((key) => ({
+    key,
+    labelEs: primaryEs[key] ?? key,
+    labelEn: primaryEn[key] ?? key,
+  }));
+}
+
+export async function updatePrimaryGroupLabels(
+  labels: { key: string; labelEs?: string; labelEn?: string }[],
+): Promise<void> {
+  const allowed = new Set<string>(PRIMARY_GROUP_KEYS);
+  const byKey = new Map(
+    labels.filter((row) => allowed.has(row.key)).map((row) => [row.key, row]),
+  );
+  if (byKey.size === 0) return;
+
+  for (const locale of ["es", "en"] as const) {
+    const full = await readFullCatalog(locale);
+    const explorer = {
+      ...((full.explorer ?? {}) as Record<string, unknown>),
+    };
+    const primary = {
+      ...((explorer.primary ?? {}) as Record<string, string>),
+    };
+    for (const [key, row] of byKey) {
+      const next =
+        locale === "es"
+          ? row.labelEs?.trim()
+          : row.labelEn?.trim();
+      if (next) primary[key] = next;
+    }
+    explorer.primary = primary;
+    await writeFullCatalog(locale, { ...full, explorer });
   }
 }
 

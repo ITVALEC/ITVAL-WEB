@@ -41,7 +41,7 @@
       "windows": "Ventanas",
       "doors": "Puertas",
       "security": "Seguridad",
-      "exteriors": "Exteriores",
+      "exteriors": "Cubiertas",
       "interiors": "Interiores",
       "steel": "Acero",
       "other": "Otros"
@@ -98,7 +98,7 @@
   },
   "categories": {
     "facades": {
-      "title": "Fachadas arquitectónicas",
+      "title": "Envolventes Arquitectónicos",
       "description": "Muro cortina, piel de vidrio y sistemas estructurales para edificios corporativos, comerciales e institucionales."
     },
     "aluminumWindows": {

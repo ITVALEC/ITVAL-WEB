@@ -2,6 +2,7 @@ import "server-only";
 
 import { unstable_noStore as noStore } from "next/cache";
 import { catalogContentKey, getDocument } from "@/lib/db/documents";
+import { applyCatalogLabelMigrations } from "@/lib/catalog/migrate-catalog-labels";
 
 async function loadBundledCatalog(
   locale: "es" | "en",
@@ -17,7 +18,9 @@ export async function loadProductsCatalogMessages(
   noStore();
 
   try {
-    return await getDocument<Record<string, unknown>>(catalogContentKey(locale));
+    const data = await getDocument<Record<string, unknown>>(catalogContentKey(locale));
+    applyCatalogLabelMigrations(locale, data);
+    return data;
   } catch {
     return loadBundledCatalog(locale);
   }

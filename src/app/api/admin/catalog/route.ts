@@ -6,6 +6,8 @@ import {
   listCatalogFilterOptions,
   getCatalogHub,
   updateCatalogHub,
+  getPrimaryGroupLabels,
+  updatePrimaryGroupLabels,
   updateCatalogEntry,
   updateCatalogFilters,
   addCategory,
@@ -26,6 +28,7 @@ export type {
   CatalogFilterSelection,
   CatalogFilterOptions,
   CatalogHubTexts,
+  PrimaryGroupLabelItem,
 } from "@/lib/admin/catalog-service";
 
 export async function GET(request: Request) {
@@ -43,6 +46,7 @@ export async function GET(request: Request) {
   return NextResponse.json({
     categories,
     hub,
+    primaryGroupLabels: await getPrimaryGroupLabels(),
     filterOptions: await listCatalogFilterOptions(),
   });
 }
@@ -53,7 +57,7 @@ export async function PATCH(request: Request) {
   }
 
   const body = (await request.json()) as {
-    type: "category" | "subcategory" | "hub";
+    type: "category" | "subcategory" | "hub" | "primary-labels";
     categoryKey?: string;
     subcategoryKey?: string;
     titleEs?: string;
@@ -68,6 +72,7 @@ export async function PATCH(request: Request) {
     optionsEn?: string;
     subtitleEs?: string;
     subtitleEn?: string;
+    primaryGroupLabels?: { key: string; labelEs?: string; labelEn?: string }[];
     filters?: Partial<CatalogFilterSelection>;
   };
 
@@ -85,6 +90,19 @@ export async function PATCH(request: Request) {
       });
       await afterCatalogMutation();
       return NextResponse.json({ ok: true, hub: await getCatalogHub() });
+    }
+
+    if (body.type === "primary-labels") {
+      if (!Array.isArray(body.primaryGroupLabels)) {
+        return NextResponse.json({ error: "Datos incompletos" }, { status: 400 });
+      }
+      await updatePrimaryGroupLabels(body.primaryGroupLabels);
+      await afterCatalogMutation();
+      return NextResponse.json({
+        ok: true,
+        primaryGroupLabels: await getPrimaryGroupLabels(),
+        filterOptions: await listCatalogFilterOptions(),
+      });
     }
 
     if (!body.categoryKey) {

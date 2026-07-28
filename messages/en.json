@@ -150,7 +150,7 @@
         "facades": "Facades & curtain wall",
         "doors": "Doors & access",
         "security": "Security",
-        "exteriors": "Covers & exteriors"
+        "exteriors": "Covers"
       },
       "periods": {
         "2020s": "2020 onwards",
@@ -233,7 +233,7 @@
       "submit": "Send request",
       "success": "Your message has been received. We will contact you soon.",
       "projectTypes": {
-        "facades": "Architectural facades",
+        "facades": "Architectural Envelopes",
         "aluminumWindows": "Aluminum windows",
         "doorsAccess": "Doors & access",
         "automaticDoors": "Automatic doors",

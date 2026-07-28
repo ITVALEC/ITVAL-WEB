@@ -31,6 +31,7 @@ import type {
   CatalogFilterOptions,
   CatalogFilterSelection,
   CatalogHubTexts,
+  PrimaryGroupLabelItem,
 } from "@/app/api/admin/catalog/route";
 import type { AdminMediaItem } from "@/app/api/admin/media/route";
 import { MAX_PRODUCT_GALLERY_IMAGES } from "@/lib/catalog/product-images";
@@ -126,6 +127,8 @@ export default function AdminCatalogoPage() {
   const [hubTitleEn, setHubTitleEn] = useState("");
   const [hubSubtitleEs, setHubSubtitleEs] = useState("");
   const [hubSubtitleEn, setHubSubtitleEn] = useState("");
+  const [primaryLabels, setPrimaryLabels] = useState<PrimaryGroupLabelItem[]>([]);
+  const [primaryLabelsLocale, setPrimaryLabelsLocale] = useState<"es" | "en">("es");
   const [filterOptions, setFilterOptions] = useState<CatalogFilterOptions | null>(null);
   const [editFilters, setEditFilters] = useState<CatalogFilterSelection>(EMPTY_FILTERS);
   const [newCatGroup, setNewCatGroup] = useState("other");
@@ -167,6 +170,7 @@ export default function AdminCatalogoPage() {
       const data = await res.json();
       setCategories(data.categories);
       setFilterOptions(data.filterOptions ?? null);
+      setPrimaryLabels(data.primaryGroupLabels ?? []);
       if (data.hub) {
         setHub(data.hub);
         setHubTitleEs(data.hub.titleEs ?? "");
@@ -312,6 +316,42 @@ export default function AdminCatalogoPage() {
       const data = await res.json();
       setFeedback({ type: "error", message: data.error ?? "No se pudo guardar." });
     }
+  }
+
+  async function savePrimaryLabels(event: React.FormEvent) {
+    event.preventDefault();
+    setSaving(true);
+    const res = await fetch("/api/admin/catalog", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: "primary-labels",
+        primaryGroupLabels: primaryLabels,
+      }),
+    });
+    setSaving(false);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.primaryGroupLabels) setPrimaryLabels(data.primaryGroupLabels);
+      if (data.filterOptions) setFilterOptions(data.filterOptions);
+      setFeedback({
+        type: "success",
+        message: "Nombres de líneas actualizados. Las claves internas no cambiaron.",
+      });
+    } else {
+      const data = await res.json();
+      setFeedback({ type: "error", message: data.error ?? "No se pudo guardar." });
+    }
+  }
+
+  function updatePrimaryLabel(
+    key: string,
+    field: "labelEs" | "labelEn",
+    value: string,
+  ) {
+    setPrimaryLabels((prev) =>
+      prev.map((row) => (row.key === key ? { ...row, [field]: value } : row)),
+    );
   }
 
   async function saveEdit(event: React.FormEvent) {
@@ -482,8 +522,7 @@ export default function AdminCatalogoPage() {
               <div>
                 <h3 className="text-base font-semibold text-navy">Página Productos (hero)</h3>
                 <p className="mt-1 text-sm text-grey-dark">
-                  Título y descripción del encabezado. Los botones de fachadas, ventanas, puertas, etc.
-                  se generan solos desde las líneas del catálogo.
+                  Título y descripción del encabezado de la página de productos.
                 </p>
               </div>
               <AdminButton type="submit" disabled={saving}>
@@ -547,14 +586,70 @@ export default function AdminCatalogoPage() {
           </form>
         ) : null}
 
+        {primaryLabels.length > 0 ? (
+          <form
+            onSubmit={savePrimaryLabels}
+            className="mb-6 space-y-4 rounded-xl border border-grey/20 bg-white p-4"
+          >
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <h3 className="text-base font-semibold text-navy">
+                  Nombres de líneas (grupos)
+                </h3>
+                <p className="mt-1 text-sm text-grey-dark">
+                  Etiquetas cortas visibles en el admin y filtros internos (Fachadas, Ventanas,
+                  Cubiertas…). La clave (`facades`, `exteriors`, etc.) no cambia: las rutas
+                  `/productos/...` se mantienen.
+                </p>
+              </div>
+              <AdminButton type="submit" disabled={saving}>
+                {saving ? "Guardando…" : "Guardar nombres"}
+              </AdminButton>
+            </div>
+            <AdminTabList
+              label="Idioma de las líneas"
+              value={primaryLabelsLocale}
+              onChange={setPrimaryLabelsLocale}
+              options={[
+                { value: "es", label: "Español" },
+                { value: "en", label: "Inglés" },
+              ]}
+            />
+            <div className="grid gap-3 sm:grid-cols-2">
+              {primaryLabels.map((row) => (
+                <AdminField
+                  key={row.key}
+                  label={`${row.key}`}
+                  htmlFor={`primary-${primaryLabelsLocale}-${row.key}`}
+                >
+                  <input
+                    id={`primary-${primaryLabelsLocale}-${row.key}`}
+                    type="text"
+                    value={primaryLabelsLocale === "es" ? row.labelEs : row.labelEn}
+                    onChange={(e) =>
+                      updatePrimaryLabel(
+                        row.key,
+                        primaryLabelsLocale === "es" ? "labelEs" : "labelEn",
+                        e.target.value,
+                      )
+                    }
+                    className={adminInputClass}
+                    required
+                  />
+                </AdminField>
+              ))}
+            </div>
+          </form>
+        ) : null}
+
         <div className="mb-4">
           <AdminSearchField
             id="catalog-search"
             label="Buscar línea de producto"
-            hint="Por nombre visible o código interno."
+            hint="Por nombre visible o código interno. Para renombrar una categoría: selecciónala → Editar nombre / datos."
             value={query}
             onChange={setQuery}
-            placeholder="Ej: muro cortina, fachadas, puertas…"
+            placeholder="Ej: muro cortina, envolventes, puertas…"
             resultsCount={filtered.length}
             resultsLabel={filtered.length === 1 ? "categoría" : "categorías"}
           />
@@ -623,7 +718,7 @@ export default function AdminCatalogoPage() {
                         </div>
                       ) : null}
                       <AdminButton variant="secondary" onClick={() => openEdit({ type: "category", item: activeCategory })}>
-                        Editar categoría
+                        Editar nombre / datos
                       </AdminButton>
                       <Link
                         href={`/admin/imagenes?kind=hero&category=${activeCategory.key}`}
@@ -725,14 +820,14 @@ export default function AdminCatalogoPage() {
 
       <AdminModal
         open={Boolean(editing)}
-        title={editing?.type === "category" ? "Editar categoría" : "Editar producto"}
+        title={editing?.type === "category" ? "Editar nombre de categoría" : "Editar producto"}
         description={
           editing?.type === "subcategory"
             ? `Pertenece a: ${
                 categories.find((c) => c.key === editing.item.categoryKey)?.titleEs ??
                 editing.item.categoryKey
               }. Edita la intro de la ficha, materiales, normas y opciones (ES/EN).`
-            : "Los cambios se ven en el sitio público (español e inglés)."
+            : "Cambia el nombre visible (ES/EN) sin alterar el código interno ni las rutas del sitio."
         }
         onClose={closeEdit}
         footer={

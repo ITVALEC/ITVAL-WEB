@@ -27,14 +27,6 @@ import type { ProductKey } from "@/lib/catalog/types";
 
 type SecondaryFilter = "all" | string;
 
-function pillClass(active: boolean): string {
-  return `shrink-0 whitespace-nowrap rounded-full px-3 py-2 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2 motion-reduce:transition-none sm:px-4 sm:text-sm ${
-    active
-      ? "bg-navy text-white shadow-sm"
-      : "border border-grey/40 bg-white text-grey-dark hover:border-navy hover:text-navy"
-  }`;
-}
-
 const selectClass =
   "mt-1 block w-full rounded-md border border-grey/40 bg-white px-3 py-2.5 text-sm text-navy focus:border-cornflower focus:outline-none focus:ring-2 focus:ring-cornflower/30";
 
@@ -182,17 +174,15 @@ export function ProductCatalogExplorer({
     });
   }
 
-  // Solo se ofrecen grupos y opciones presentes en el catálogo publicado,
+  // Solo se ofrecen opciones presentes en el catálogo publicado,
   // para que los filtros siempre sean coherentes con las categorías reales.
   const available = useMemo(() => {
-    const groups = new Set<Exclude<PrimaryGroup, "all">>();
     const sectors = new Set<SectorKey>();
     const materials = new Set<MaterialKey>();
     const systems = new Set<SystemKey>();
     const applications = new Set<ApplicationKey>();
 
     for (const item of products) {
-      groups.add(item.meta.primaryGroup);
       for (const key of item.meta.sectors) sectors.add(key);
       for (const key of item.meta.materials) materials.add(key);
       for (const key of item.meta.systems) systems.add(key);
@@ -200,18 +190,12 @@ export function ProductCatalogExplorer({
     }
 
     return {
-      primaryGroups: PRIMARY_GROUPS.filter(
-        (group): group is Exclude<PrimaryGroup, "all"> =>
-          group !== "all" && groups.has(group as Exclude<PrimaryGroup, "all">),
-      ),
       sectors: SECTOR_KEYS.filter((key) => sectors.has(key)),
       materials: MATERIAL_KEYS.filter((key) => materials.has(key)),
       systems: SYSTEM_KEYS.filter((key) => systems.has(key)),
       applications: APPLICATION_KEYS.filter((key) => applications.has(key)),
     };
   }, [products]);
-
-  const primaryGroups = available.primaryGroups;
 
   const advancedFilters = (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -289,34 +273,6 @@ export function ProductCatalogExplorer({
                 autoComplete="off"
                 enterKeyHint="search"
               />
-            </div>
-
-            <div className="-mx-1 overflow-x-auto pb-1 sm:mx-0 sm:overflow-visible sm:pb-0">
-              <div
-                role="group"
-                aria-label={t("primaryLabel")}
-                className="flex w-max gap-2 sm:w-auto sm:flex-wrap"
-              >
-              <button
-                type="button"
-                onClick={() => setPrimary("all")}
-                aria-pressed={primary === "all"}
-                className={pillClass(primary === "all")}
-              >
-                {t("primary.all")}
-              </button>
-              {primaryGroups.map((group) => (
-                <button
-                  key={group}
-                  type="button"
-                  onClick={() => setPrimary(group)}
-                  aria-pressed={primary === group}
-                  className={pillClass(primary === group)}
-                >
-                  {t(`primary.${group}`)}
-                </button>
-              ))}
-              </div>
             </div>
 
             <details className="group rounded-lg border border-grey/30 bg-white lg:hidden">

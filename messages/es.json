@@ -150,7 +150,7 @@
         "facades": "Fachadas y muro cortina",
         "doors": "Puertas y accesos",
         "security": "Seguridad",
-        "exteriors": "Cubiertas y exteriores"
+        "exteriors": "Cubiertas"
       },
       "periods": {
         "2020s": "2020 en adelante",
@@ -233,7 +233,7 @@
       "submit": "Enviar solicitud",
       "success": "Su mensaje ha sido recibido. Nos pondremos en contacto pronto.",
       "projectTypes": {
-        "facades": "Fachadas arquitectónicas",
+        "facades": "Envolventes Arquitectónicos",
         "aluminumWindows": "Ventanas y aluminio",
         "doorsAccess": "Puertas y accesos",
         "automaticDoors": "Puertas automáticas",
