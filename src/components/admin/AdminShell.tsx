@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -8,37 +8,71 @@ const NAV = [
   {
     href: "/admin/dashboard",
     label: "Inicio",
-    shortLabel: "Inicio",
     hint: "Resumen del sitio",
   },
   {
     href: "/admin/projects",
     label: "Obras",
-    shortLabel: "Obras",
     hint: "Proyectos realizados",
   },
   {
     href: "/admin/catalogo",
     label: "Catálogo",
-    shortLabel: "Catálogo",
     hint: "Categorías y productos",
   },
   {
     href: "/admin/imagenes",
     label: "Fotos",
-    shortLabel: "Fotos",
     hint: "Todas las imágenes",
   },
   {
     href: "/admin/config",
     label: "Ajustes",
-    shortLabel: "Ajustes",
     hint: "Contacto y footer",
   },
 ];
 
 const focusRing =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cornflower focus-visible:ring-offset-2";
+
+function NavLinks({
+  pathname,
+  onNavigate,
+  compact = false,
+}: {
+  pathname: string;
+  onNavigate?: () => void;
+  compact?: boolean;
+}) {
+  return (
+    <ul className={compact ? "flex flex-col gap-1" : "grid gap-1 lg:grid-cols-1"}>
+      {NAV.map((item) => {
+        const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+        return (
+          <li key={item.href}>
+            <Link
+              href={item.href}
+              onClick={onNavigate}
+              aria-current={active ? "page" : undefined}
+              className={`block min-h-11 rounded-lg px-3 py-2.5 transition-colors ${focusRing} ${
+                active
+                  ? "bg-navy text-white"
+                  : "text-grey-dark hover:bg-slate-50 hover:text-navy"
+              }`}
+            >
+              <span className="block text-sm font-semibold">{item.label}</span>
+              <span
+                className={`mt-0.5 block text-xs ${active ? "text-white/70" : "text-grey"}`}
+              >
+                {item.hint}
+              </span>
+            </Link>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
 
 export function AdminShell({
   title,
@@ -50,6 +84,46 @@ export function AdminShell({
   const pathname = usePathname();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  function closeMenu() {
+    setMenuOpen(false);
+  }
+
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [menuOpen]);
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    function onResize() {
+      if (window.matchMedia("(min-width: 768px)").matches) {
+        setMenuOpen(false);
+      }
+    }
+
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   async function logout() {
     await fetch("/api/admin/logout", { method: "POST" });
@@ -68,11 +142,45 @@ export function AdminShell({
 
       <header className="sticky top-0 z-40 border-b border-grey/20 bg-navy text-white shadow-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4">
-          <div className="min-w-0">
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-white/50 sm:text-xs">
-              Administración ITVAL
-            </p>
-            <h1 className="truncate text-base font-bold sm:text-lg">{title}</h1>
+          <div className="flex min-w-0 items-center gap-2">
+            <button
+              ref={menuButtonRef}
+              type="button"
+              onClick={() => setMenuOpen((open) => !open)}
+              className={`inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-lg border border-white/20 text-white hover:bg-white/10 md:hidden ${focusRing}`}
+              aria-expanded={menuOpen}
+              aria-controls="admin-nav-mobile"
+              aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+            >
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                {menuOpen ? (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                ) : (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                  />
+                )}
+              </svg>
+            </button>
+            <div className="min-w-0">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-white/50 sm:text-xs">
+                Administración ITVAL
+              </p>
+              <h1 className="truncate text-base font-bold sm:text-lg">{title}</h1>
+            </div>
           </div>
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
             <Link
@@ -85,15 +193,6 @@ export function AdminShell({
             </Link>
             <button
               type="button"
-              onClick={() => setMenuOpen((open) => !open)}
-              className={`min-h-11 rounded-lg border border-white/20 px-3 py-2 text-sm lg:hidden ${focusRing}`}
-              aria-expanded={menuOpen}
-              aria-controls="admin-nav"
-            >
-              {menuOpen ? "Cerrar menú" : "Menú"}
-            </button>
-            <button
-              type="button"
               onClick={logout}
               className={`min-h-11 rounded-lg bg-white/10 px-3 py-2 text-sm font-medium hover:bg-white/20 ${focusRing}`}
             >
@@ -101,44 +200,46 @@ export function AdminShell({
             </button>
           </div>
         </div>
-      </header>
 
-      <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 sm:py-6">
-        <div className="flex flex-col gap-5 lg:flex-row lg:gap-8">
+        {menuOpen ? (
           <nav
-            id="admin-nav"
-            className={`lg:block lg:w-60 lg:shrink-0 ${menuOpen ? "block" : "hidden"}`}
+            id="admin-nav-mobile"
+            className="border-t border-white/15 bg-white px-3 py-3 text-navy md:hidden"
             aria-label="Secciones del panel"
           >
-            <ul className="grid gap-1 rounded-xl border border-grey/20 bg-white p-2 shadow-sm sm:grid-cols-2 lg:grid-cols-1">
-              {NAV.map((item) => {
-                const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
-                return (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      onClick={() => setMenuOpen(false)}
-                      aria-current={active ? "page" : undefined}
-                      className={`block min-h-11 rounded-lg px-3 py-2.5 transition-colors ${focusRing} ${
-                        active
-                          ? "bg-navy text-white"
-                          : "text-grey-dark hover:bg-slate-50 hover:text-navy"
-                      }`}
-                    >
-                      <span className="block text-sm font-semibold">
-                        <span className="lg:hidden">{item.shortLabel}</span>
-                        <span className="hidden lg:inline">{item.label}</span>
-                      </span>
-                      <span
-                        className={`mt-0.5 block text-xs ${active ? "text-white/70" : "text-grey"}`}
-                      >
-                        {item.hint}
-                      </span>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
+            <NavLinks pathname={pathname} onNavigate={closeMenu} compact />
+            <Link
+              href="/es"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={closeMenu}
+              className={`mt-2 flex min-h-11 items-center justify-center rounded-lg border border-grey/30 px-3 text-sm font-medium text-navy hover:bg-slate-50 sm:hidden ${focusRing}`}
+            >
+              Ver sitio
+            </Link>
+          </nav>
+        ) : null}
+      </header>
+
+      {menuOpen ? (
+        <button
+          type="button"
+          className="fixed inset-0 z-30 bg-navy/40 md:hidden"
+          aria-label="Cerrar menú"
+          onClick={closeMenu}
+        />
+      ) : null}
+
+      <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 sm:py-6">
+        <div className="flex flex-col gap-5 md:flex-row md:gap-8">
+          <nav
+            id="admin-nav"
+            className="hidden md:block md:w-60 md:shrink-0"
+            aria-label="Secciones del panel"
+          >
+            <div className="rounded-xl border border-grey/20 bg-white p-2 shadow-sm">
+              <NavLinks pathname={pathname} />
+            </div>
           </nav>
 
           <main id="admin-main" className="min-w-0 flex-1" tabIndex={-1}>
