@@ -19,7 +19,7 @@
     "previewCounter": "{current} de {total}",
     "previewGoToImage": "Ver imagen {index}",
     "previewZoom": "Ampliar imagen",
-    "previewZoomHint": "Clic para ampliar",
+    "previewZoomHint": "Pasa el cursor para ampliar · clic para pantalla completa",
     "projectGallery": "Galería de obras y referencias",
     "closeGallery": "Cerrar imagen",
     "galleryPaginationNav": "Paginación de la galería",

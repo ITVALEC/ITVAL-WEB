@@ -18,6 +18,9 @@ type ProductPreviewCarouselProps = {
   images: PreviewImage[];
 };
 
+const HOVER_ZOOM_SCALE = 1.85;
+const REDUCED_MOTION_ZOOM_SCALE = 1.25;
+
 export function ProductPreviewCarousel({
   images: rawImages,
 }: ProductPreviewCarouselProps) {
@@ -25,6 +28,10 @@ export function ProductPreviewCarousel({
   const [failedSrcs, setFailedSrcs] = useState<Set<string>>(() => new Set());
   const [active, setActive] = useState(0);
   const [zoomed, setZoomed] = useState(false);
+  const [canHoverZoom, setCanHoverZoom] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
+  const [hovering, setHovering] = useState(false);
+  const [origin, setOrigin] = useState({ x: 50, y: 50 });
   const touchStartX = useRef<number | null>(null);
 
   const images = useMemo(
@@ -83,11 +90,32 @@ export function ProductPreviewCarousel({
     return () => window.removeEventListener("keydown", onKey);
   }, [zoomed, goPrev, goNext]);
 
+  useEffect(() => {
+    const hoverMq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const motionMq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => {
+      setCanHoverZoom(hoverMq.matches);
+      setReducedMotion(motionMq.matches);
+      if (!hoverMq.matches) setHovering(false);
+    };
+    sync();
+    hoverMq.addEventListener("change", sync);
+    motionMq.addEventListener("change", sync);
+    return () => {
+      hoverMq.removeEventListener("change", sync);
+      motionMq.removeEventListener("change", sync);
+    };
+  }, []);
+
   // Sin fotos reales: no inventar placeholders SVG.
   if (total === 0) return null;
 
   const hasMultiple = total > 1;
   const current = images[active];
+  const hoverActive = canHoverZoom && hovering;
+  const zoomScale = reducedMotion
+    ? REDUCED_MOTION_ZOOM_SCALE
+    : HOVER_ZOOM_SCALE;
 
   function onTouchStart(event: React.TouchEvent) {
     touchStartX.current = event.changedTouches[0]?.clientX ?? null;
@@ -101,6 +129,23 @@ export function ProductPreviewCarousel({
     if (Math.abs(delta) < 40) return;
     if (delta > 0) goPrev();
     else goNext();
+  }
+
+  function onHoverMove(event: React.MouseEvent<HTMLElement>) {
+    if (!canHoverZoom) return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) return;
+    const x = ((event.clientX - rect.left) / rect.width) * 100;
+    const y = ((event.clientY - rect.top) / rect.height) * 100;
+    setOrigin({
+      x: Math.min(100, Math.max(0, x)),
+      y: Math.min(100, Math.max(0, y)),
+    });
+    setHovering(true);
+  }
+
+  function onHoverLeave() {
+    setHovering(false);
   }
 
   return (
@@ -123,27 +168,45 @@ export function ProductPreviewCarousel({
         onTouchEnd={onTouchEnd}
         tabIndex={hasMultiple ? 0 : -1}
       >
-        {images.map((image, index) => (
-          <SafeImage
-            key={image.src}
-            src={image.src}
-            alt={image.alt}
-            fill
-            priority={index === 0}
-            aria-hidden={index !== active}
-            fallbackSrc={false}
-            onError={() => markFailed(image.src)}
-            className="object-cover transition-opacity duration-500 ease-in-out motion-reduce:transition-none"
-            style={{ opacity: index === active ? 1 : 0 }}
-            sizes="(max-width: 1024px) 100vw, 40vw"
-          />
-        ))}
+        {images.map((image, index) => {
+          const isActive = index === active;
+          return (
+            <SafeImage
+              key={image.src}
+              src={image.src}
+              alt={image.alt}
+              fill
+              priority={index === 0}
+              aria-hidden={!isActive}
+              fallbackSrc={false}
+              onError={() => markFailed(image.src)}
+              className={`object-cover transition-[opacity,transform] duration-300 ease-out motion-reduce:transition-none ${
+                isActive && hoverActive
+                  ? "duration-75 ease-linear motion-reduce:duration-0"
+                  : ""
+              }`}
+              style={{
+                opacity: isActive ? 1 : 0,
+                transform:
+                  isActive && hoverActive ? `scale(${zoomScale})` : "scale(1)",
+                transformOrigin: `${origin.x}% ${origin.y}%`,
+                willChange: isActive && canHoverZoom ? "transform" : undefined,
+              }}
+              sizes="(max-width: 1024px) 100vw, 40vw"
+            />
+          );
+        })}
 
         <button
           type="button"
           onClick={() => setZoomed(true)}
+          onMouseEnter={onHoverMove}
+          onMouseMove={onHoverMove}
+          onMouseLeave={onHoverLeave}
           aria-label={t("previewZoom")}
-          className="absolute inset-0 z-[1] cursor-zoom-in bg-transparent"
+          className={`absolute inset-0 z-[1] bg-transparent ${
+            canHoverZoom ? "cursor-crosshair" : "cursor-zoom-in"
+          }`}
         />
 
         {hasMultiple && (

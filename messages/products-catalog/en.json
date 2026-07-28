@@ -19,7 +19,7 @@
     "previewCounter": "{current} of {total}",
     "previewGoToImage": "View image {index}",
     "previewZoom": "Enlarge image",
-    "previewZoomHint": "Click to enlarge",
+    "previewZoomHint": "Hover to zoom · click for fullscreen",
     "projectGallery": "Project gallery & references",
     "closeGallery": "Close image",
     "galleryPaginationNav": "Gallery pagination",
