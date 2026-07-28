@@ -11,9 +11,8 @@ type PageProps = {
 };
 
 /**
- * Home — Fase 1 navy/oro.
- * Orden visual tipo mockup: Hero → métricas (barra) → servicios → obras → proceso → CTA.
- * Sin franja de logos de clientes: no hay assets reales de marcas en el repo.
+ * Home — Design System Master Guide v1 + composición mockup.
+ * Hero → métricas flotantes → servicios → obras (navy) → proceso → CTA.
  */
 export default async function HomePage({ params }: PageProps) {
   const { locale } = await params;

@@ -8,33 +8,34 @@ export function Process() {
 
   return (
     <section
-      className="bg-surface-muted py-16 lg:py-24"
+      className="bg-surface-muted py-section"
       aria-labelledby="process-heading"
     >
       <Container>
-        <SectionHeading id="process-heading" title={t("title")} subtitle={t("subtitle")} />
-        <ol className="mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+        <SectionHeading
+          id="process-heading"
+          title={t("title")}
+          subtitle={t("subtitle")}
+          rule={false}
+        />
+        <ol className="mt-14 grid gap-card-gap sm:grid-cols-2 lg:grid-cols-4">
           {PROCESS_STEP_KEYS.map((key, index) => (
-            <li key={key} className="relative">
+            <li
+              key={key}
+              className="ds-card ds-card-hover relative p-6"
+            >
               <span
-                className="mb-4 block font-display text-4xl font-semibold leading-none text-gold/40"
+                className="mb-4 block font-display text-4xl font-bold leading-none text-gold/40"
                 aria-hidden="true"
               >
                 {String(index + 1).padStart(2, "0")}
               </span>
-              <h3 className="text-base font-semibold text-navy">
+              <h3 className="text-ds-h3 text-[1.25rem] font-bold text-navy lg:text-[1.5rem]">
                 {t(`steps.${key}.title`)}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-grey-dark">
+              <p className="mt-2 text-ds-caption leading-[1.5] text-ink/80">
                 {t(`steps.${key}.description`)}
               </p>
-              {index < PROCESS_STEP_KEYS.length - 1 ? (
-                <span
-                  className="absolute right-0 top-5 hidden h-px w-8 bg-gold/40 lg:block"
-                  aria-hidden="true"
-                  style={{ transform: "translateX(calc(100% + 0.75rem))" }}
-                />
-              ) : null}
             </li>
           ))}
         </ol>

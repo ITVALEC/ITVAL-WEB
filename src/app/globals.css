@@ -3,6 +3,21 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --itval-primary: #0f2747;
+    --itval-dark: #091a30;
+    --itval-gold: #c89a4b;
+    --itval-white: #ffffff;
+    --itval-surface: #f5f7fa;
+    --itval-text: #1f2937;
+    --itval-success: #2e7d32;
+    --itval-error: #c62828;
+    --itval-radius-card: 20px;
+    --itval-container: 1440px;
+    --itval-section-pad: 96px;
+    --itval-ease: 250ms;
+  }
+
   html {
     scroll-behavior: smooth;
   }
@@ -14,7 +29,9 @@
   }
 
   body {
-    @apply bg-surface font-sans text-navy antialiased;
+    @apply bg-surface font-sans text-ink antialiased;
+    font-size: 1.125rem;
+    line-height: 1.5;
   }
 
   :focus:not(:focus-visible) {
@@ -32,7 +49,6 @@
       opacity: 0;
       transform: translateY(14px);
     }
-
     to {
       opacity: 1;
       transform: translateY(0);
@@ -86,15 +102,6 @@
     animation: fade-up 0.7s ease-out both;
   }
 
-  @keyframes gold-underline {
-    from {
-      transform: scaleX(0);
-    }
-    to {
-      transform: scaleX(1);
-    }
-  }
-
   .gold-rule {
     @apply relative;
   }
@@ -102,11 +109,18 @@
   .gold-rule::after {
     content: "";
     @apply absolute -bottom-3 left-0 h-0.5 w-16 origin-left bg-gold;
-    animation: gold-underline 0.8s ease-out 0.2s both;
   }
 
   .gold-rule-center::after {
     @apply left-1/2 -translate-x-1/2;
+  }
+
+  .ds-card {
+    @apply rounded-card bg-white shadow-card transition duration-ds;
+  }
+
+  .ds-card-hover {
+    @apply hover:shadow-card-hover hover:scale-[1.03] motion-reduce:hover:scale-100;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -118,10 +132,6 @@
     }
 
     .hero-scroll-cue {
-      animation: none;
-    }
-
-    .gold-rule::after {
       animation: none;
     }
   }
