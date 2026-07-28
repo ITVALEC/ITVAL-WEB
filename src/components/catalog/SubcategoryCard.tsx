@@ -23,6 +23,7 @@ export function SubcategoryCard({
   const t = useTranslations(CATALOG_NS);
   const tSub = useTranslations(`${CATALOG_NS}.subcategories.${category}`);
   const title = tSub(`${subcategory}.title`);
+  const description = tSub(`${subcategory}.description`);
   const href = getProductSubcategoryPath(category, subcategory);
 
   return (
@@ -35,6 +36,9 @@ export function SubcategoryCard({
           <h3 className="text-base font-semibold text-navy transition-colors group-hover:text-cornflower-ink">
             {title}
           </h3>
+          <p className="mt-2 line-clamp-4 flex-1 text-sm leading-relaxed text-grey-dark">
+            {description}
+          </p>
           <span className="mt-4 inline-block text-xs font-semibold uppercase tracking-wider text-cornflower-ink">
             {t("hub.viewDetail")} →
           </span>
