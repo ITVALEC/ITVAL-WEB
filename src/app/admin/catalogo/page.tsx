@@ -34,6 +34,7 @@ import type {
   PrimaryGroupLabelItem,
 } from "@/app/api/admin/catalog/route";
 import type { AdminMediaItem } from "@/app/api/admin/media/route";
+import { adminErrorMessage, readAdminJson } from "@/lib/admin/api-client";
 import { MAX_PRODUCT_GALLERY_IMAGES } from "@/lib/catalog/product-images";
 
 type EditTarget =
@@ -165,24 +166,35 @@ export default function AdminCatalogoPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const res = await fetch("/api/admin/catalog");
-    if (res.ok) {
-      const data = await res.json();
-      setCategories(data.categories);
-      setFilterOptions(data.filterOptions ?? null);
-      setPrimaryLabels(data.primaryGroupLabels ?? []);
-      if (data.hub) {
-        setHub(data.hub);
-        setHubTitleEs(data.hub.titleEs ?? "");
-        setHubTitleEn(data.hub.titleEn ?? "");
-        setHubSubtitleEs(data.hub.subtitleEs ?? "");
-        setHubSubtitleEn(data.hub.subtitleEn ?? "");
+    try {
+      const res = await fetch("/api/admin/catalog");
+      if (res.ok) {
+        const data = await res.json();
+        setCategories(data.categories);
+        setFilterOptions(data.filterOptions ?? null);
+        setPrimaryLabels(data.primaryGroupLabels ?? []);
+        if (data.hub) {
+          setHub(data.hub);
+          setHubTitleEs(data.hub.titleEs ?? "");
+          setHubTitleEn(data.hub.titleEn ?? "");
+          setHubSubtitleEs(data.hub.subtitleEs ?? "");
+          setHubSubtitleEn(data.hub.subtitleEn ?? "");
+        }
+        setSelectedCategory((current) => current ?? data.categories[0]?.key ?? null);
+      } else {
+        setFeedback({
+          type: "error",
+          message: await adminErrorMessage(res, "No se pudo cargar el catálogo."),
+        });
       }
-      setSelectedCategory((current) => current ?? data.categories[0]?.key ?? null);
-    } else {
-      setFeedback({ type: "error", message: "No se pudo cargar el catálogo." });
+    } catch {
+      setFeedback({
+        type: "error",
+        message: "Error de red al cargar el catálogo. Revisa la conexión.",
+      });
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
   useEffect(() => {
@@ -191,25 +203,36 @@ export default function AdminCatalogoPage() {
 
   const loadProductMedia = useCallback(async (sub: CatalogSubcategoryItem) => {
     setProductMedia({ cover: null, gallery: [], loading: true });
-    const params = new URLSearchParams({
-      kind: "product",
-      category: sub.categoryKey,
-      subcategory: sub.key,
-      pageSize: "50",
-    });
-    const res = await fetch(`/api/admin/media?${params.toString()}`);
-    if (!res.ok) {
+    try {
+      const params = new URLSearchParams({
+        kind: "product",
+        category: sub.categoryKey,
+        subcategory: sub.key,
+        pageSize: "50",
+      });
+      const res = await fetch(`/api/admin/media?${params.toString()}`);
+      if (!res.ok) {
+        setProductMedia({ cover: null, gallery: [], loading: false });
+        setFeedback({
+          type: "error",
+          message: await adminErrorMessage(res, "No se pudieron cargar las fotos del producto."),
+        });
+        return;
+      }
+      const data = (await res.json()) as { items: AdminMediaItem[] };
+      const cover =
+        data.items.find(
+          (item) => item.kind === "hero" && item.heroType === "subcategory",
+        ) ?? null;
+      const gallery = data.items.filter((item) => item.kind === "product");
+      setProductMedia({ cover, gallery, loading: false });
+    } catch {
       setProductMedia({ cover: null, gallery: [], loading: false });
-      setFeedback({ type: "error", message: "No se pudieron cargar las fotos del producto." });
-      return;
+      setFeedback({
+        type: "error",
+        message: "Error de red al cargar fotos del producto.",
+      });
     }
-    const data = (await res.json()) as { items: AdminMediaItem[] };
-    const cover =
-      data.items.find(
-        (item) => item.kind === "hero" && item.heroType === "subcategory",
-      ) ?? null;
-    const gallery = data.items.filter((item) => item.kind === "product");
-    setProductMedia({ cover, gallery, loading: false });
   }, []);
 
   useEffect(() => {
@@ -218,23 +241,34 @@ export default function AdminCatalogoPage() {
   }, [uploadSub, loadProductMedia]);
 
   async function confirmDeleteMedia() {
-    if (!deleteMediaTarget || !uploadSub) return;
+    if (!deleteMediaTarget || !uploadSub || saving) return;
     setSaving(true);
-    const res = await fetch(
-      `/api/admin/media?id=${encodeURIComponent(deleteMediaTarget.id)}`,
-      { method: "DELETE" },
-    );
-    setSaving(false);
-    if (res.ok) {
+    try {
+      const res = await fetch(
+        `/api/admin/media?id=${encodeURIComponent(deleteMediaTarget.id)}`,
+        { method: "DELETE" },
+      );
+      if (res.ok) {
+        setDeleteMediaTarget(null);
+        setFeedback({ type: "success", message: "Foto eliminada de la galería." });
+        setPreviewVersion((v) => v + 1);
+        await loadProductMedia(uploadSub);
+        await load();
+      } else {
+        setFeedback({
+          type: "error",
+          message: await adminErrorMessage(res, "No se pudo eliminar la foto."),
+        });
+        setDeleteMediaTarget(null);
+      }
+    } catch {
+      setFeedback({
+        type: "error",
+        message: "Error de red al eliminar. Revisa la conexión e inténtalo de nuevo.",
+      });
       setDeleteMediaTarget(null);
-      setFeedback({ type: "success", message: "Foto eliminada de la galería." });
-      setPreviewVersion((v) => v + 1);
-      loadProductMedia(uploadSub);
-      load();
-    } else {
-      const body = await res.json();
-      setFeedback({ type: "error", message: body.error ?? "No se pudo eliminar." });
-      setDeleteMediaTarget(null);
+    } finally {
+      setSaving(false);
     }
   }
 
@@ -292,55 +326,82 @@ export default function AdminCatalogoPage() {
 
   async function saveHub(event: React.FormEvent) {
     event.preventDefault();
+    if (saving) return;
     setSaving(true);
-    const res = await fetch("/api/admin/catalog", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        type: "hub",
-        titleEs: hubTitleEs,
-        titleEn: hubTitleEn,
-        subtitleEs: hubSubtitleEs,
-        subtitleEn: hubSubtitleEn,
-      }),
-    });
-    setSaving(false);
-    if (res.ok) {
-      const data = await res.json();
-      if (data.hub) setHub(data.hub);
-      setFeedback({
-        type: "success",
-        message: "Textos de la página Productos actualizados.",
+    setFeedback(null);
+    try {
+      const res = await fetch("/api/admin/catalog", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "hub",
+          titleEs: hubTitleEs,
+          titleEn: hubTitleEn,
+          subtitleEs: hubSubtitleEs,
+          subtitleEn: hubSubtitleEn,
+        }),
       });
-    } else {
-      const data = await res.json();
-      setFeedback({ type: "error", message: data.error ?? "No se pudo guardar." });
+      if (res.ok) {
+        const data = await readAdminJson<{ hub?: CatalogHubTexts }>(res);
+        if (data?.hub) setHub(data.hub);
+        setFeedback({
+          type: "success",
+          message: "Textos de la página Productos actualizados.",
+        });
+      } else {
+        setFeedback({
+          type: "error",
+          message: await adminErrorMessage(res, "No se pudieron guardar los textos."),
+        });
+      }
+    } catch {
+      setFeedback({
+        type: "error",
+        message: "Error de red al guardar. Revisa la conexión e inténtalo de nuevo.",
+      });
+    } finally {
+      setSaving(false);
     }
   }
 
   async function savePrimaryLabels(event: React.FormEvent) {
     event.preventDefault();
+    if (saving) return;
     setSaving(true);
-    const res = await fetch("/api/admin/catalog", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        type: "primary-labels",
-        primaryGroupLabels: primaryLabels,
-      }),
-    });
-    setSaving(false);
-    if (res.ok) {
-      const data = await res.json();
-      if (data.primaryGroupLabels) setPrimaryLabels(data.primaryGroupLabels);
-      if (data.filterOptions) setFilterOptions(data.filterOptions);
-      setFeedback({
-        type: "success",
-        message: "Nombres de líneas actualizados. Las claves internas no cambiaron.",
+    setFeedback(null);
+    try {
+      const res = await fetch("/api/admin/catalog", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "primary-labels",
+          primaryGroupLabels: primaryLabels,
+        }),
       });
-    } else {
-      const data = await res.json();
-      setFeedback({ type: "error", message: data.error ?? "No se pudo guardar." });
+      if (res.ok) {
+        const data = await readAdminJson<{
+          primaryGroupLabels?: PrimaryGroupLabelItem[];
+          filterOptions?: CatalogFilterOptions;
+        }>(res);
+        if (data?.primaryGroupLabels) setPrimaryLabels(data.primaryGroupLabels);
+        if (data?.filterOptions) setFilterOptions(data.filterOptions);
+        setFeedback({
+          type: "success",
+          message: "Nombres de líneas actualizados. Las claves internas no cambiaron.",
+        });
+      } else {
+        setFeedback({
+          type: "error",
+          message: await adminErrorMessage(res, "No se pudieron guardar los nombres."),
+        });
+      }
+    } catch {
+      setFeedback({
+        type: "error",
+        message: "Error de red al guardar. Revisa la conexión e inténtalo de nuevo.",
+      });
+    } finally {
+      setSaving(false);
     }
   }
 
@@ -356,9 +417,10 @@ export default function AdminCatalogoPage() {
 
   async function saveEdit(event: React.FormEvent) {
     event.preventDefault();
-    if (!editing) return;
+    if (!editing || saving) return;
 
     setSaving(true);
+    setFeedback(null);
     // Las subcategorías no sobreescriben el grupo del explorador de su categoría.
     const subcategoryFilters = {
       sectors: editFilters.sectors,
@@ -394,97 +456,132 @@ export default function AdminCatalogoPage() {
             filters: subcategoryFilters,
           };
 
-    const res = await fetch("/api/admin/catalog", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    setSaving(false);
-
-    if (res.ok) {
-      setFeedback({
-        type: "success",
-        message:
-          editing.type === "subcategory"
-            ? "Ficha del producto actualizada (descripción, materiales, normas y opciones)."
-            : "Cambios guardados. Nombres y filtros actualizados en el sitio.",
+    try {
+      const res = await fetch("/api/admin/catalog", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
       });
-      closeEdit();
-      load();
-    } else {
-      const data = await res.json();
-      setFeedback({ type: "error", message: data.error ?? "No se pudo guardar." });
+
+      if (res.ok) {
+        setFeedback({
+          type: "success",
+          message:
+            editing.type === "subcategory"
+              ? "Ficha del producto actualizada (descripción, materiales, normas y opciones)."
+              : "Cambios guardados. Nombres y filtros actualizados en el sitio.",
+        });
+        closeEdit();
+        await load();
+      } else {
+        setFeedback({
+          type: "error",
+          message: await adminErrorMessage(res, "No se pudo guardar."),
+        });
+      }
+    } catch {
+      setFeedback({
+        type: "error",
+        message: "Error de red al guardar. Revisa la conexión e inténtalo de nuevo.",
+      });
+    } finally {
+      setSaving(false);
     }
   }
 
   async function submitNewCategory(event: React.FormEvent) {
     event.preventDefault();
+    if (saving) return;
     setSaving(true);
-    const res = await fetch("/api/admin/catalog", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "add-category",
-        key: newCatKey.trim(),
-        titleEs,
-        titleEn,
-        descriptionEs,
-        descriptionEn,
-        subcategoryKey: newSubKey.trim(),
-        subTitleEs: titleEs,
-        subTitleEn: titleEn,
-        primaryGroup: newCatGroup,
-      }),
-    });
-    setSaving(false);
-    if (res.ok) {
-      const data = await res.json();
-      setCategories(data.categories);
-      setSelectedCategory(newCatKey.trim());
-      setFeedback({
-        type: "success",
-        message: "Categoría creada. Reinicia el servidor (o haz deploy) para ver la nueva página en el sitio.",
+    setFeedback(null);
+    try {
+      const res = await fetch("/api/admin/catalog", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "add-category",
+          key: newCatKey.trim(),
+          titleEs,
+          titleEn,
+          descriptionEs,
+          descriptionEn,
+          subcategoryKey: newSubKey.trim(),
+          subTitleEs: titleEs,
+          subTitleEn: titleEn,
+          primaryGroup: newCatGroup,
+        }),
       });
-      setCreateCategoryOpen(false);
-      setNewCatKey("");
-      setNewSubKey("");
-    } else {
-      const data = await res.json();
-      setFeedback({ type: "error", message: data.error ?? "No se pudo crear." });
+      if (res.ok) {
+        const data = await readAdminJson<{ categories?: CatalogCategoryItem[] }>(res);
+        if (data?.categories) setCategories(data.categories);
+        else await load();
+        setSelectedCategory(newCatKey.trim());
+        setFeedback({
+          type: "success",
+          message:
+            "Categoría creada. Reinicia el servidor (o haz deploy) para ver la nueva página en el sitio.",
+        });
+        setCreateCategoryOpen(false);
+        setNewCatKey("");
+        setNewSubKey("");
+      } else {
+        setFeedback({
+          type: "error",
+          message: await adminErrorMessage(res, "No se pudo crear la categoría."),
+        });
+      }
+    } catch {
+      setFeedback({
+        type: "error",
+        message: "Error de red al crear. Revisa la conexión e inténtalo de nuevo.",
+      });
+    } finally {
+      setSaving(false);
     }
   }
 
   async function submitNewSubcategory(event: React.FormEvent) {
     event.preventDefault();
-    if (!activeCategory) return;
+    if (!activeCategory || saving) return;
     setSaving(true);
-    const res = await fetch("/api/admin/catalog", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "add-subcategory",
-        categoryKey: activeCategory.key,
-        key: newSubOnlyKey.trim(),
-        titleEs,
-        titleEn,
-        descriptionEs,
-        descriptionEn,
-      }),
-    });
-    setSaving(false);
-    if (res.ok) {
-      const data = await res.json();
-      setCategories(data.categories);
-      setFeedback({
-        type: "success",
-        message: "Producto creado. Reinicia el servidor para ver la nueva página.",
+    setFeedback(null);
+    try {
+      const res = await fetch("/api/admin/catalog", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "add-subcategory",
+          categoryKey: activeCategory.key,
+          key: newSubOnlyKey.trim(),
+          titleEs,
+          titleEn,
+          descriptionEs,
+          descriptionEn,
+        }),
       });
-      setCreateSubOpen(false);
-      setNewSubOnlyKey("");
-      load();
-    } else {
-      const data = await res.json();
-      setFeedback({ type: "error", message: data.error ?? "No se pudo crear." });
+      if (res.ok) {
+        const data = await readAdminJson<{ categories?: CatalogCategoryItem[] }>(res);
+        if (data?.categories) setCategories(data.categories);
+        setFeedback({
+          type: "success",
+          message: "Producto creado. Reinicia el servidor para ver la nueva página.",
+        });
+        setCreateSubOpen(false);
+        setNewSubOnlyKey("");
+        await load();
+      } else {
+        setFeedback({
+          type: "error",
+          message: await adminErrorMessage(res, "No se pudo crear el producto."),
+        });
+      }
+    } catch {
+      setFeedback({
+        type: "error",
+        message: "Error de red al crear. Revisa la conexión e inténtalo de nuevo.",
+      });
+    } finally {
+      setSaving(false);
     }
   }
 
@@ -830,6 +927,7 @@ export default function AdminCatalogoPage() {
             : "Cambia el nombre visible (ES/EN) sin alterar el código interno ni las rutas del sitio."
         }
         onClose={closeEdit}
+        size="lg"
         footer={
           <>
             <AdminButton variant="secondary" onClick={closeEdit} disabled={saving}>
@@ -843,6 +941,7 @@ export default function AdminCatalogoPage() {
       >
         {editing ? (
           <form id="catalog-edit-form" onSubmit={saveEdit} className="space-y-4">
+            {feedback ? <AdminStatusMessage type={feedback.type} message={feedback.message} /> : null}
             {editing.type === "subcategory" ? (
               <p className="rounded-lg border border-grey/20 bg-slate-50 px-3 py-2 text-sm text-navy">
                 <span className="font-semibold">Categoría: </span>
@@ -1031,6 +1130,7 @@ export default function AdminCatalogoPage() {
         }
       >
         <form id="new-category-form" onSubmit={submitNewCategory} className="space-y-4">
+          {feedback ? <AdminStatusMessage type={feedback.type} message={feedback.message} /> : null}
           <AdminField label="Nombre en español" htmlFor="new-cat-es">
             <input
               id="new-cat-es"
@@ -1102,6 +1202,7 @@ export default function AdminCatalogoPage() {
         }
       >
         <form id="new-sub-form" onSubmit={submitNewSubcategory} className="space-y-4">
+          {feedback ? <AdminStatusMessage type={feedback.type} message={feedback.message} /> : null}
           <AdminField label="Nombre en español" htmlFor="new-sub-es">
             <input
               id="new-sub-es"
@@ -1131,6 +1232,7 @@ export default function AdminCatalogoPage() {
         open={Boolean(uploadSub)}
         title={uploadSub ? `Fotos — ${uploadSub.titleEs}` : "Fotos del producto"}
         description="Portada del catálogo (1) y galería del producto (hasta 6 ángulos, sin nombres de obra)."
+        size="xl"
         onClose={() => {
           setUploadSub(null);
           setDeleteMediaTarget(null);

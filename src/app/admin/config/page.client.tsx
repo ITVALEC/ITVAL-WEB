@@ -26,6 +26,7 @@ import {
   AdminStatusMessage,
   AdminTabList,
 } from "@/components/admin/AdminUi";
+import { adminErrorMessage, readAdminJson } from "@/lib/admin/api-client";
 import { paginateItems } from "@/lib/pagination";
 import type { SiteSettings } from "@/lib/site-settings";
 
@@ -90,26 +91,31 @@ export default function AdminConfigPage() {
 
   async function handleSettingsSubmit(event: React.FormEvent) {
     event.preventDefault();
-    if (!settings) return;
+    if (!settings || saving) return;
 
     setSaving(true);
     setSaved(false);
     setSettingsError("");
 
-    const res = await fetch("/api/admin/site-settings", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(settings),
-    });
+    try {
+      const res = await fetch("/api/admin/site-settings", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(settings),
+      });
 
-    setSaving(false);
-
-    if (res.ok) {
-      setSettings(await res.json());
-      setSaved(true);
-      setTimeout(() => setSaved(false), 4000);
-    } else {
-      setSettingsError("No se pudieron guardar los cambios.");
+      if (res.ok) {
+        const data = await readAdminJson<SiteSettings>(res);
+        if (data) setSettings(data);
+        setSaved(true);
+        setTimeout(() => setSaved(false), 4000);
+      } else {
+        setSettingsError(await adminErrorMessage(res, "No se pudieron guardar los cambios."));
+      }
+    } catch {
+      setSettingsError("Error de red al guardar. Revisa la conexión e inténtalo de nuevo.");
+    } finally {
+      setSaving(false);
     }
   }
 
@@ -160,45 +166,67 @@ export default function AdminConfigPage() {
   async function addBlockedFile(event: React.FormEvent) {
     event.preventDefault();
     const filename = newFile.trim();
-    if (!filename) return;
+    if (!filename || blockedSaving) return;
 
     setBlockedSaving(true);
     setBlockedFeedback(null);
 
-    const res = await fetch("/api/admin/blocked-images", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ filename }),
-    });
+    try {
+      const res = await fetch("/api/admin/blocked-images", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filename }),
+      });
 
-    setBlockedSaving(false);
-
-    if (res.ok) {
-      setNewFile("");
-      setCreateOpen(false);
-      setBlockedFeedback({ type: "success", message: `"${filename}" agregado.` });
-      loadBlocked();
-    } else {
-      setBlockedFeedback({ type: "error", message: "No se pudo agregar." });
+      if (res.ok) {
+        setNewFile("");
+        setCreateOpen(false);
+        setBlockedFeedback({ type: "success", message: `"${filename}" agregado.` });
+        await loadBlocked();
+      } else {
+        setBlockedFeedback({
+          type: "error",
+          message: await adminErrorMessage(res, "No se pudo agregar."),
+        });
+      }
+    } catch {
+      setBlockedFeedback({
+        type: "error",
+        message: "Error de red al agregar. Revisa la conexión e inténtalo de nuevo.",
+      });
+    } finally {
+      setBlockedSaving(false);
     }
   }
 
   async function confirmDeleteBlocked() {
-    if (!deleteTarget) return;
+    if (!deleteTarget || blockedSaving) return;
 
     setBlockedSaving(true);
-    const res = await fetch(
-      `/api/admin/blocked-images?filename=${encodeURIComponent(deleteTarget)}`,
-      { method: "DELETE" },
-    );
-    setBlockedSaving(false);
-    setDeleteTarget(null);
+    try {
+      const res = await fetch(
+        `/api/admin/blocked-images?filename=${encodeURIComponent(deleteTarget)}`,
+        { method: "DELETE" },
+      );
+      setDeleteTarget(null);
 
-    if (res.ok) {
-      setBlockedFeedback({ type: "success", message: "Archivo quitado de la lista." });
-      loadBlocked();
-    } else {
-      setBlockedFeedback({ type: "error", message: "No se pudo eliminar." });
+      if (res.ok) {
+        setBlockedFeedback({ type: "success", message: "Archivo quitado de la lista." });
+        await loadBlocked();
+      } else {
+        setBlockedFeedback({
+          type: "error",
+          message: await adminErrorMessage(res, "No se pudo eliminar."),
+        });
+      }
+    } catch {
+      setDeleteTarget(null);
+      setBlockedFeedback({
+        type: "error",
+        message: "Error de red al eliminar. Revisa la conexión e inténtalo de nuevo.",
+      });
+    } finally {
+      setBlockedSaving(false);
     }
   }
 
@@ -344,7 +372,14 @@ export default function AdminConfigPage() {
               title="Imágenes bloqueadas"
               description="Archivos que no deben publicarse (personas trabajando, etc.)."
               action={
-                <AdminButton onClick={() => setCreateOpen(true)}>+ Agregar</AdminButton>
+                <AdminButton
+                  onClick={() => {
+                    setBlockedFeedback(null);
+                    setCreateOpen(true);
+                  }}
+                >
+                  + Agregar
+                </AdminButton>
               }
             />
             <AdminInfoBanner>
@@ -430,12 +465,15 @@ export default function AdminConfigPage() {
               Cancelar
             </AdminButton>
             <AdminButton type="submit" form="blocked-form" disabled={blockedSaving}>
-              Agregar
+              {blockedSaving ? "Agregando…" : "Agregar"}
             </AdminButton>
           </>
         }
       >
-        <form id="blocked-form" onSubmit={addBlockedFile}>
+        <form id="blocked-form" onSubmit={addBlockedFile} className="space-y-4">
+          {blockedFeedback?.type === "error" ? (
+            <AdminStatusMessage type="error" message={blockedFeedback.message} />
+          ) : null}
           <AdminField label="Nombre exacto del archivo" htmlFor="blocked-name">
             <input
               id="blocked-name"

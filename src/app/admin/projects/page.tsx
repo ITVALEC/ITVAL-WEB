@@ -26,6 +26,7 @@ import {
   AdminSearchField,
   AdminStatusMessage,
 } from "@/components/admin/AdminUi";
+import { adminErrorMessage, readAdminJson } from "@/lib/admin/api-client";
 import { getCategoryLabel, PROJECT_CATEGORIES } from "@/lib/admin/categories";
 
 type ProjectCategory = { value: string; label: string };
@@ -103,18 +104,28 @@ export default function AdminProjectsPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    setFeedback(null);
 
     const params = new URLSearchParams({ page: String(page), pageSize: "10" });
     if (debouncedQuery) params.set("q", debouncedQuery);
 
-    const res = await fetch(`/api/admin/projects?${params.toString()}`);
-    if (res.ok) {
-      setData(await res.json());
-    } else {
-      setFeedback({ type: "error", message: "No se pudieron cargar los proyectos." });
+    try {
+      const res = await fetch(`/api/admin/projects?${params.toString()}`);
+      if (res.ok) {
+        setData(await res.json());
+      } else {
+        setFeedback({
+          type: "error",
+          message: await adminErrorMessage(res, "No se pudieron cargar los proyectos."),
+        });
+      }
+    } catch {
+      setFeedback({
+        type: "error",
+        message: "Error de red al cargar obras. Revisa la conexión.",
+      });
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, [page, debouncedQuery]);
 
   useEffect(() => {
@@ -122,6 +133,7 @@ export default function AdminProjectsPage() {
   }, [load]);
 
   function openEdit(project: AdminProject) {
+    setFeedback(null);
     setEditing(project);
     setForm(toForm(project));
   }
@@ -133,41 +145,55 @@ export default function AdminProjectsPage() {
 
   async function saveProject(event: React.FormEvent) {
     event.preventDefault();
-    if (!editing || !form) return;
+    if (!editing || !form || saving) return;
 
     setSaving(true);
     setFeedback(null);
 
-    const res = await fetch("/api/admin/projects", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id: editing.id,
-        name: form.name.trim(),
-        featured: form.featured,
-        productCategory: form.productCategory,
-        coverIndex: form.coverIndex,
-      }),
-    });
+    try {
+      const res = await fetch("/api/admin/projects", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: editing.id,
+          name: form.name.trim(),
+          featured: form.featured,
+          productCategory: form.productCategory,
+          coverIndex: form.coverIndex,
+        }),
+      });
 
-    setSaving(false);
-
-    if (res.ok) {
-      const result = await res.json();
-      setData((current) =>
-        current
-          ? {
-              ...current,
-              projects: current.projects.map((p) =>
-                p.id === editing.id ? { ...p, ...result.project } : p,
-              ),
-            }
-          : current,
-      );
-      setFeedback({ type: "success", message: `"${form.name}" actualizado correctamente.` });
-      closeEdit();
-    } else {
-      setFeedback({ type: "error", message: "No se pudo guardar el proyecto." });
+      if (res.ok) {
+        const result = await readAdminJson<{ project?: AdminProject }>(res);
+        if (result?.project) {
+          setData((current) =>
+            current
+              ? {
+                  ...current,
+                  projects: current.projects.map((p) =>
+                    p.id === editing.id ? { ...p, ...result.project } : p,
+                  ),
+                }
+              : current,
+          );
+        } else {
+          await load();
+        }
+        setFeedback({ type: "success", message: `"${form.name}" actualizado correctamente.` });
+        closeEdit();
+      } else {
+        setFeedback({
+          type: "error",
+          message: await adminErrorMessage(res, "No se pudo guardar el proyecto."),
+        });
+      }
+    } catch {
+      setFeedback({
+        type: "error",
+        message: "Error de red al guardar. Revisa la conexión e inténtalo de nuevo.",
+      });
+    } finally {
+      setSaving(false);
     }
   }
 
@@ -192,23 +218,34 @@ export default function AdminProjectsPage() {
   }
 
   async function confirmDeletePhoto() {
-    if (!editingProject || deletePhotoIndex == null) return;
+    if (!editingProject || deletePhotoIndex == null || deletingPhoto) return;
 
     setDeletingPhoto(true);
-    const mediaId = `project:${editingProject.id}:${deletePhotoIndex}`;
-    const res = await fetch(`/api/admin/media?id=${encodeURIComponent(mediaId)}`, {
-      method: "DELETE",
-    });
-    setDeletingPhoto(false);
-    setDeletePhotoIndex(null);
+    try {
+      const mediaId = `project:${editingProject.id}:${deletePhotoIndex}`;
+      const res = await fetch(`/api/admin/media?id=${encodeURIComponent(mediaId)}`, {
+        method: "DELETE",
+      });
+      setDeletePhotoIndex(null);
 
-    if (res.ok) {
-      setPreviewVersion((v) => v + 1);
-      setFeedback({ type: "success", message: "Foto eliminada del proyecto." });
-      await refreshEditingProject();
-    } else {
-      const data = await res.json();
-      setFeedback({ type: "error", message: data.error ?? "No se pudo eliminar la foto." });
+      if (res.ok) {
+        setPreviewVersion((v) => v + 1);
+        setFeedback({ type: "success", message: "Foto eliminada del proyecto." });
+        await refreshEditingProject();
+      } else {
+        setFeedback({
+          type: "error",
+          message: await adminErrorMessage(res, "No se pudo eliminar la foto."),
+        });
+      }
+    } catch {
+      setDeletePhotoIndex(null);
+      setFeedback({
+        type: "error",
+        message: "Error de red al eliminar. Revisa la conexión e inténtalo de nuevo.",
+      });
+    } finally {
+      setDeletingPhoto(false);
     }
   }
 
@@ -391,6 +428,7 @@ export default function AdminProjectsPage() {
         title="Editar proyecto"
         description={editingProject ? editingProject.id : undefined}
         onClose={closeEdit}
+        size="lg"
         footer={
           <>
             <AdminButton variant="secondary" onClick={closeEdit} disabled={saving}>
@@ -404,6 +442,7 @@ export default function AdminProjectsPage() {
       >
         {editingProject && form ? (
           <form id="project-edit-form" onSubmit={saveProject} className="space-y-4">
+            {feedback ? <AdminStatusMessage type={feedback.type} message={feedback.message} /> : null}
             <div>
               <p className="mb-2 text-sm font-medium text-navy">
                 Galería — clic para portada · botón × para eliminar

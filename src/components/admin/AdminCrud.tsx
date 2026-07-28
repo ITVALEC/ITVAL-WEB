@@ -79,11 +79,11 @@ export function AdminCrudToolbar({
 }) {
   return (
     <div className="mb-4 flex flex-col gap-3 border-b border-grey/10 pb-4 sm:flex-row sm:items-start sm:justify-between">
-      <div>
+      <div className="min-w-0">
         <h2 className="text-lg font-semibold text-navy">{title}</h2>
         {description ? <p className="mt-1 text-sm text-grey-dark">{description}</p> : null}
       </div>
-      {action ? <div className="shrink-0">{action}</div> : null}
+      {action ? <div className="flex w-full shrink-0 flex-wrap gap-2 sm:w-auto">{action}</div> : null}
     </div>
   );
 }
@@ -163,6 +163,12 @@ export function AdminDataTable<T extends { id: string }>({
   );
 }
 
+const modalSizeClass = {
+  md: "max-w-lg",
+  lg: "max-w-2xl",
+  xl: "max-w-3xl",
+} as const;
+
 export function AdminModal({
   open,
   title,
@@ -170,6 +176,7 @@ export function AdminModal({
   children,
   onClose,
   footer,
+  size = "md",
 }: {
   open: boolean;
   title: string;
@@ -177,6 +184,8 @@ export function AdminModal({
   children: ReactNode;
   onClose: () => void;
   footer?: ReactNode;
+  /** md = formularios cortos; lg/xl = galerías y formularios densos en móvil. */
+  size?: keyof typeof modalSizeClass;
 }) {
   const titleId = useId();
   const descId = useId();
@@ -260,11 +269,11 @@ export function AdminModal({
         aria-labelledby={titleId}
         aria-describedby={description ? descId : undefined}
         tabIndex={-1}
-        className="relative z-10 max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-t-2xl bg-white shadow-xl sm:rounded-2xl"
+        className={`relative z-10 flex max-h-[min(92vh,100dvh)] w-full flex-col overflow-hidden rounded-t-2xl bg-white shadow-xl sm:rounded-2xl ${modalSizeClass[size]}`}
       >
-        <header className="sticky top-0 border-b border-grey/10 bg-white px-5 py-4">
+        <header className="shrink-0 border-b border-grey/10 bg-white px-4 py-3 sm:px-5 sm:py-4">
           <div className="flex items-start justify-between gap-3">
-            <div>
+            <div className="min-w-0">
               <h2 id={titleId} className="text-lg font-semibold text-navy">
                 {title}
               </h2>
@@ -277,16 +286,18 @@ export function AdminModal({
             <button
               type="button"
               onClick={onClose}
-              className={`min-h-11 min-w-11 rounded-lg text-grey hover:bg-slate-100 ${focusRing}`}
+              className={`min-h-11 min-w-11 shrink-0 rounded-lg text-grey hover:bg-slate-100 ${focusRing}`}
               aria-label="Cerrar"
             >
               ✕
             </button>
           </div>
         </header>
-        <div className="px-5 py-4">{children}</div>
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4 sm:px-5">
+          {children}
+        </div>
         {footer ? (
-          <footer className="sticky bottom-0 flex flex-wrap justify-end gap-2 border-t border-grey/10 bg-slate-50 px-5 py-4">
+          <footer className="shrink-0 flex flex-wrap justify-end gap-2 border-t border-grey/10 bg-slate-50 px-4 py-3 sm:px-5 sm:py-4">
             {footer}
           </footer>
         ) : null}

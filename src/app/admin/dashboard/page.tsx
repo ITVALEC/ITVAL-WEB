@@ -32,7 +32,7 @@ export default async function AdminDashboardPage() {
           <ActionCard
             href="/admin/catalogo"
             title="Editar catálogo"
-            desc={`${catalog.length} categorías y ${subcategoryCount} líneas de producto. Cambia nombes y descripciones.`}
+            desc={`${catalog.length} categorías y ${subcategoryCount} líneas de producto. Cambia nombres y descripciones.`}
             stat={String(catalog.length)}
           />
           <ActionCard

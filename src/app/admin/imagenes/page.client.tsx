@@ -26,6 +26,7 @@ import {
   AdminStatusMessage,
   AdminTabList,
 } from "@/components/admin/AdminUi";
+import { adminErrorMessage, readAdminJson } from "@/lib/admin/api-client";
 import type { AdminMediaItem, MediaKind } from "@/app/api/admin/media/route";
 import {
   getProductCategoryLabel,
@@ -155,7 +156,6 @@ export default function AdminImagenesPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    setFeedback(null);
 
     const params = new URLSearchParams({ page: String(page), pageSize: "24" });
     if (debouncedQuery) params.set("q", debouncedQuery);
@@ -164,13 +164,24 @@ export default function AdminImagenesPage() {
     if (activeCategory) params.set("category", activeCategory);
     if (filterSubcategory) params.set("subcategory", filterSubcategory);
 
-    const res = await fetch(`/api/admin/media?${params.toString()}`);
-    if (res.ok) {
-      setData(await res.json());
-    } else {
-      setFeedback({ type: "error", message: "No se pudieron cargar las fotos." });
+    try {
+      const res = await fetch(`/api/admin/media?${params.toString()}`);
+      if (res.ok) {
+        setData(await res.json());
+      } else {
+        setFeedback({
+          type: "error",
+          message: await adminErrorMessage(res, "No se pudieron cargar las fotos."),
+        });
+      }
+    } catch {
+      setFeedback({
+        type: "error",
+        message: "Error de red al cargar fotos. Revisa la conexión.",
+      });
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, [page, debouncedQuery, kind, categoryFilter, filterCategory, filterSubcategory]);
 
   useEffect(() => {
@@ -178,6 +189,7 @@ export default function AdminImagenesPage() {
   }, [load]);
 
   function openEdit(item: AdminMediaItem) {
+    setFeedback(null);
     setEditing(item);
     setCaption(item.caption);
   }
@@ -189,42 +201,76 @@ export default function AdminImagenesPage() {
 
   async function saveCaption(event: React.FormEvent) {
     event.preventDefault();
-    if (!editing) return;
+    if (!editing || saving) return;
 
     setSaving(true);
-    const res = await fetch("/api/admin/media", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: editing.id, caption }),
-    });
-    setSaving(false);
+    setFeedback(null);
+    try {
+      const res = await fetch("/api/admin/media", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: editing.id, caption }),
+      });
 
-    if (res.ok) {
-      setFeedback({ type: "success", message: "Cambios guardados." });
-      closeEdit();
-      load();
-    } else {
-      setFeedback({ type: "error", message: "No se pudo guardar." });
+      if (res.ok) {
+        const data = await readAdminJson<{ caption?: string }>(res);
+        const nextCaption = data?.caption ?? caption.trim();
+        setFeedback({ type: "success", message: "Nombre de la foto guardado." });
+        setData((current) =>
+          current
+            ? {
+                ...current,
+                items: current.items.map((item) =>
+                  item.id === editing.id ? { ...item, caption: nextCaption } : item,
+                ),
+              }
+            : current,
+        );
+        closeEdit();
+      } else {
+        setFeedback({
+          type: "error",
+          message: await adminErrorMessage(res, "No se pudo guardar el nombre."),
+        });
+      }
+    } catch {
+      setFeedback({
+        type: "error",
+        message: "Error de red al guardar. Revisa la conexión e inténtalo de nuevo.",
+      });
+    } finally {
+      setSaving(false);
     }
   }
 
   async function confirmDelete() {
-    if (!deleteTarget) return;
+    if (!deleteTarget || saving) return;
     setSaving(true);
-    const res = await fetch(`/api/admin/media?id=${encodeURIComponent(deleteTarget.id)}`, {
-      method: "DELETE",
-    });
-    setSaving(false);
+    try {
+      const res = await fetch(`/api/admin/media?id=${encodeURIComponent(deleteTarget.id)}`, {
+        method: "DELETE",
+      });
 
-    if (res.ok) {
+      if (res.ok) {
+        setDeleteTarget(null);
+        setFeedback({ type: "success", message: "Foto eliminada." });
+        closeEdit();
+        await load();
+      } else {
+        setFeedback({
+          type: "error",
+          message: await adminErrorMessage(res, "No se pudo eliminar."),
+        });
+        setDeleteTarget(null);
+      }
+    } catch {
+      setFeedback({
+        type: "error",
+        message: "Error de red al eliminar. Revisa la conexión e inténtalo de nuevo.",
+      });
       setDeleteTarget(null);
-      setFeedback({ type: "success", message: "Foto eliminada." });
-      closeEdit();
-      load();
-    } else {
-      const body = await res.json();
-      setFeedback({ type: "error", message: body.error ?? "No se pudo eliminar." });
-      setDeleteTarget(null);
+    } finally {
+      setSaving(false);
     }
   }
 
@@ -385,6 +431,7 @@ export default function AdminImagenesPage() {
         title="Editar foto"
         description={editing ? associationLabel(editing) ?? editing.subtitle : undefined}
         onClose={closeEdit}
+        size="lg"
         footer={
           <>
             {editing?.kind !== "hero" ? (
@@ -405,6 +452,7 @@ export default function AdminImagenesPage() {
       >
         {editing ? (
           <div className="space-y-4">
+            {feedback ? <AdminStatusMessage type={feedback.type} message={feedback.message} /> : null}
             <div className="relative mx-auto h-52 w-full max-w-md overflow-hidden rounded-lg bg-slate-100">
               <AdminMediaImage
                 src={editing.src}
