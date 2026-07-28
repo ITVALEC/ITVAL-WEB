@@ -120,8 +120,8 @@
   },
   "cta": {
     "title": "¿Listo para escalar su próximo proyecto?",
-    "subtitle": "Nuestro equipo de ingeniería está preparado para evaluar su fachada o cancelería con respuesta en 48 horas hábiles.",
-    "button": "Solicitar cotización"
+    "subtitle": "Nuestro equipo técnico evaluará su fachada o sistema de aluminio y le responderá en un máximo de 48 horas hábiles.",
+    "button": "Solicitar asesoría técnica"
   },
   "projectsPage": {
     "title": "Proyectos",
@@ -268,6 +268,11 @@
     "rights": "Todos los derechos reservados.",
     "nav": "Navegación",
     "contact": "Contacto",
+    "social": "Redes sociales",
+    "socialFacebook": "Facebook",
+    "socialInstagram": "Instagram",
+    "socialWhatsapp": "WhatsApp",
+    "socialLinkedin": "LinkedIn",
     "ctaTitle": "¿Tienes un proyecto?",
     "ctaText": "Cuéntanos sobre tu obra y nuestro equipo técnico te responderá en 48 horas hábiles.",
     "location": "Quito · Guayaquil · Ecuador"

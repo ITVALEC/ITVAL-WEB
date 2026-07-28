@@ -120,8 +120,8 @@
   },
   "cta": {
     "title": "Ready to scale your next project?",
-    "subtitle": "Our engineering team is ready to evaluate your facade or fenestration with a response within 48 business hours.",
-    "button": "Request a quote"
+    "subtitle": "Our technical team will assess your facade or aluminum system and respond within a maximum of 48 business hours.",
+    "button": "Request technical advice"
   },
   "projectsPage": {
     "title": "Projects",
@@ -268,6 +268,11 @@
     "rights": "All rights reserved.",
     "nav": "Navigation",
     "contact": "Contact",
+    "social": "Social media",
+    "socialFacebook": "Facebook",
+    "socialInstagram": "Instagram",
+    "socialWhatsapp": "WhatsApp",
+    "socialLinkedin": "LinkedIn",
     "ctaTitle": "Have a project?",
     "ctaText": "Tell us about your build and our technical team will respond within 48 business hours.",
     "location": "Quito · Guayaquil · Ecuador"

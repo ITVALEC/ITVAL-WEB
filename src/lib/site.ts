@@ -10,3 +10,16 @@ export const CONTACT = {
   address: "Quito, Ecuador",
   hours: "Lunes a viernes, 8:00 – 17:00",
 } as const;
+
+/**
+ * Redes del footer. Vacío → enlace `#` (sin inventar URLs de marca).
+ * Completar con perfiles oficiales cuando estén confirmados.
+ */
+export const SOCIAL_LINKS = {
+  facebook: "",
+  instagram: "",
+  whatsapp: "",
+  linkedin: "",
+} as const;
+
+export type SocialNetwork = keyof typeof SOCIAL_LINKS;

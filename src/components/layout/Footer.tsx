@@ -1,9 +1,9 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Container } from "./Container";
-import { ButtonLink } from "@/components/ui/Button";
+import { FooterSocialLinks } from "./FooterSocialLinks";
 import { buildNavItems } from "@/lib/nav";
-import { NAV_PATHS, SITE } from "@/lib/constants";
+import { SITE } from "@/lib/constants";
 import { getSiteContact, getSiteFooterCopy } from "@/lib/site-settings";
 import { Logo } from "@/components/ui/Logo";
 
@@ -87,19 +87,15 @@ export async function Footer({ locale }: FooterProps) {
             </ul>
           </div>
 
-          <div className="lg:col-span-3">
-            <p className="mb-4 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-gold/80">
-              {footerCopy.ctaTitle}
-            </p>
-            <p className="text-ds-caption leading-[1.5] text-white/75">{footerCopy.ctaText}</p>
-            <ButtonLink
-              href={NAV_PATHS.contact}
-              variant="primary"
-              className="mt-5 inline-block"
-            >
-              {t("common.quoteNow")}
-            </ButtonLink>
-          </div>
+          <FooterSocialLinks
+            sectionLabel={t("footer.social")}
+            labels={{
+              facebook: t("footer.socialFacebook"),
+              instagram: t("footer.socialInstagram"),
+              whatsapp: t("footer.socialWhatsapp"),
+              linkedin: t("footer.socialLinkedin"),
+            }}
+          />
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-gold/15 pt-6 text-center text-xs text-white/50 sm:flex-row sm:text-left">

@@ -2,7 +2,12 @@ import { type ComponentProps, type ComponentPropsWithoutRef } from "react";
 import { Link } from "@/i18n/navigation";
 import { type Pathnames } from "@/i18n/routing";
 
-export type ButtonVariant = "primary" | "secondary" | "ghost" | "navy";
+export type ButtonVariant =
+  | "primary"
+  | "secondary"
+  | "ghost"
+  | "navy"
+  | "lightOutline";
 
 /** DS: pill 999px, min 44px, hover lift 4px + sombra suave (sin glow oro). */
 const BUTTON_BASE_CLASSES =
@@ -18,6 +23,9 @@ export const variantClasses: Record<ButtonVariant, string> = {
   /** CTA sólido navy sobre fondos claros (surface/white). */
   navy:
     "border border-navy bg-navy text-white shadow-none hover:border-gold hover:bg-navy-mid hover:text-gold focus-visible:ring-gold focus-visible:ring-offset-white",
+  /** CTA claro: blanco + texto navy + borde oro fino (banner home). */
+  lightOutline:
+    "border border-gold bg-white text-navy shadow-none hover:bg-surface hover:shadow-soft focus-visible:ring-gold focus-visible:ring-offset-navy-dark",
 };
 
 type ButtonProps = ComponentPropsWithoutRef<"button"> & {
