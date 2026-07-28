@@ -18,7 +18,7 @@ type PageHeroProps = {
   imageAlt?: string;
   breadcrumbs?: BreadcrumbItem[];
   breadcrumbAriaLabel?: string;
-  /** Enlace de retorno encima del breadcrumb (p. ej. categoría → hub). */
+  /** Enlace de retorno bajo el título y la descripción (p. ej. categoría → hub). */
   backLink?: PageHeroBackLink;
   /** Acciones bajo el subtítulo (p. ej. chips de categoría). */
   actions?: ReactNode;
@@ -64,24 +64,31 @@ export function PageHero({
         </>
       ) : null}
       <Container className="relative z-10">
-        {backLink ? (
-          <Link
-            href={backLink.href}
-            className="mb-2 inline-flex min-h-11 items-center gap-2 text-sm font-medium text-white transition-colors duration-ds hover:text-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
-          >
-            <span aria-hidden="true">←</span>
-            {backLink.label}
-          </Link>
-        ) : null}
         {breadcrumbs ? (
           <Breadcrumbs
             items={breadcrumbs}
             light
             ariaLabel={breadcrumbAriaLabel}
-            className={backLink ? "mb-6 mt-0" : undefined}
           />
         ) : null}
         <SectionHeading as="h1" title={title} subtitle={subtitle} light />
+        {backLink ? (
+          <Link
+            href={backLink.href}
+            className="fade-up group mt-8 inline-flex min-h-11 items-center gap-2 text-sm font-medium text-white transition-[color] duration-ds hover:text-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
+            style={{ animationDelay: "0.12s" }}
+          >
+            <span
+              aria-hidden="true"
+              className="inline-block transition-transform duration-ds ease-out group-hover:-translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0"
+            >
+              ←
+            </span>
+            <span className="transition-opacity duration-ds group-hover:opacity-90 motion-reduce:transition-none">
+              {backLink.label}
+            </span>
+          </Link>
+        ) : null}
         {actions ? <div className="relative z-10">{actions}</div> : null}
       </Container>
     </section>
