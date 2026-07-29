@@ -8,13 +8,14 @@ import {
 import { isDatabaseEnabled, query } from "@/lib/db/pool";
 import { syncDatabaseToJson } from "@/lib/db/sync-json";
 import { fillEnglishFromSpanish } from "@/lib/i18n/translate-es-to-en";
+import { isValidSocialUrl } from "@/lib/social";
 import {
   normalizeSiteSettings,
   normalizeSocialLinks,
   packSiteSettingsForDb,
   type SiteFooterCopy,
   type SiteSettings,
-  type SiteSocialLinks,
+  type SiteSocialLink,
 } from "@/lib/site-settings";
 
 async function getSettingsFromDb(): Promise<SiteSettings | null> {
@@ -44,16 +45,6 @@ async function translateFooterFromSpanish(
       previousEs: previousEs.experience,
       previousEn: previousEn.experience,
     },
-    ctaTitle: {
-      es: nextEs.ctaTitle,
-      previousEs: previousEs.ctaTitle,
-      previousEn: previousEn.ctaTitle,
-    },
-    ctaText: {
-      es: nextEs.ctaText,
-      previousEs: previousEs.ctaText,
-      previousEn: previousEn.ctaText,
-    },
     location: {
       es: nextEs.location,
       previousEs: previousEs.location,
@@ -65,13 +56,23 @@ async function translateFooterFromSpanish(
     en: {
       tagline: translated.values.tagline ?? previousEn.tagline,
       experience: translated.values.experience ?? previousEn.experience,
-      ctaTitle: translated.values.ctaTitle ?? previousEn.ctaTitle,
-      ctaText: translated.values.ctaText ?? previousEn.ctaText,
+      // CTA footer legacy: no se edita ni se muestra; conservar valores previos
+      ctaTitle: previousEn.ctaTitle ?? "",
+      ctaText: previousEn.ctaText ?? "",
       location: translated.values.location ?? previousEn.location,
     },
     warnings: translated.warnings,
     provider: translated.provider,
   };
+}
+
+function validateSocialPayload(social: SiteSocialLink[]): string | null {
+  for (const link of social) {
+    if (link.url && !isValidSocialUrl(link.url)) {
+      return `URL inválida en redes: "${link.url}". Usa https://, mailto: o tel:.`;
+    }
+  }
+  return null;
 }
 
 export async function GET() {
@@ -96,17 +97,30 @@ export async function PATCH(request: Request) {
   }
 
   const body = (await request.json()) as Partial<SiteSettings> & {
-    social?: Partial<SiteSocialLinks>;
+    social?: SiteSocialLink[];
   };
 
   const current =
     (isDatabaseEnabled() ? await getSettingsFromDb() : null) ??
     normalizeSiteSettings(readJsonFile<SiteSettings>(MANIFEST_PATHS.siteSettings));
 
+  // No aceptar edición de ctaTitle/ctaText desde el admin (CTA retirado a propósito)
   const nextEs: SiteFooterCopy = {
     ...current.footer.es,
-    ...body.footer?.es,
+    tagline: body.footer?.es?.tagline ?? current.footer.es.tagline,
+    experience: body.footer?.es?.experience ?? current.footer.es.experience,
+    location: body.footer?.es?.location ?? current.footer.es.location,
+    ctaTitle: current.footer.es.ctaTitle ?? "",
+    ctaText: current.footer.es.ctaText ?? "",
   };
+
+  const socialIncoming = normalizeSocialLinks(body.social ?? current.social, {
+    keepEmpty: true,
+  });
+  const socialError = validateSocialPayload(socialIncoming);
+  if (socialError) {
+    return NextResponse.json({ error: socialError }, { status: 400 });
+  }
 
   const { en: nextEn, warnings, provider } = await translateFooterFromSpanish(
     nextEs,
@@ -120,8 +134,8 @@ export async function PATCH(request: Request) {
       es: nextEs,
       en: nextEn,
     },
-    // URLs de redes: no se traducen
-    social: normalizeSocialLinks(body.social ?? current.social),
+    // URLs / iconos: no se traducen
+    social: normalizeSocialLinks(socialIncoming),
   };
 
   const packed = packSiteSettingsForDb(next);

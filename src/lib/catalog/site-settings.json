@@ -5,24 +5,19 @@
     "phone": "+593 2 123 4567",
     "address": "Quito, Ecuador"
   },
-  "social": {
-    "facebook": "",
-    "instagram": "",
-    "whatsapp": "",
-    "linkedin": ""
-  },
+  "social": [],
   "footer": {
     "en": {
-      "ctaText": "Tell us about your build and our technical team will respond within 48 business hours.",
+      "ctaText": "",
       "tagline": "Integrated solutions in glass, aluminum, and metal structures.",
-      "ctaTitle": "Have a project?",
+      "ctaTitle": "",
       "location": "Quito · Guayaquil · Ecuador",
       "experience": "Over 14 years of experience in Ecuador."
     },
     "es": {
-      "ctaText": "Cuéntanos sobre tu obra y nuestro equipo técnico te responderá en 48 horas hábiles.",
+      "ctaText": "",
       "tagline": "Soluciones integrales en vidrio, aluminio y estructuras metálicas.",
-      "ctaTitle": "¿Tienes un proyecto?",
+      "ctaTitle": "",
       "location": "Quito · Guayaquil · Ecuador",
       "experience": "Más de 14 años de experiencia en Ecuador."
     }

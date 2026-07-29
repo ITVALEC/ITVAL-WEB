@@ -49,10 +49,14 @@ export function englishNeedsRetranslation(es: string, en: string | undefined | n
   if (!enNorm) return true;
   if (enNorm === esNorm) return true;
   if (enNorm.toLowerCase() === esNorm.toLowerCase()) return true;
+  // EN mucho más corto que ES → traducción truncada / incompleta (p. ej. MyMemory 450 chars)
+  if (esNorm.length >= 40 && enNorm.length < Math.floor(esNorm.length * 0.45)) {
+    return true;
+  }
   // Acentos o palabras típicas de ES en el campo "EN" → copia sin traducir
   if (/[áéíóúñü¿¡]/i.test(enNorm)) return true;
   if (
-    /\b(soluciones|arquitect[oó]nicos|fachadas|edificios|experiencia|tambi[eé]n|integrales|estructuras|met[aá]licas|vidrio|aluminio|cortina|sistemas|corporativos|comerciales|institucionales)\b/i.test(
+    /\b(soluciones|arquitect[oó]nicos|fachadas|edificios|experiencia|tambi[eé]n|integrales|estructuras|met[aá]licas|vidrio|aluminio|cortina|sistemas|corporativos|comerciales|institucionales|asesor[ií]a|pr[oó]ximo|escalar|cu[eé]ntanos|nuestro|equipo|t[eé]cnico)\b/i.test(
       enNorm,
     )
   ) {
@@ -210,30 +214,68 @@ const googleProvider: Provider = {
   },
 };
 
+/** Parte textos largos para MyMemory (límite ~450) sin cortar a mitad de frase. */
+function chunkTextForMyMemory(text: string, maxLen = 420): string[] {
+  const trimmed = text.trim();
+  if (trimmed.length <= maxLen) return [trimmed];
+
+  const chunks: string[] = [];
+  let remaining = trimmed;
+  while (remaining.length > maxLen) {
+    const window = remaining.slice(0, maxLen);
+    const breakAt = Math.max(
+      window.lastIndexOf(". "),
+      window.lastIndexOf("? "),
+      window.lastIndexOf("! "),
+      window.lastIndexOf("; "),
+      window.lastIndexOf(", "),
+      window.lastIndexOf(" "),
+    );
+    const cut = breakAt > maxLen * 0.4 ? breakAt + 1 : maxLen;
+    chunks.push(remaining.slice(0, cut).trim());
+    remaining = remaining.slice(cut).trim();
+  }
+  if (remaining) chunks.push(remaining);
+  return chunks;
+}
+
+async function myMemoryTranslateChunk(text: string): Promise<string> {
+  const url = new URL("https://api.mymemory.translated.net/get");
+  url.searchParams.set("q", text.slice(0, 450));
+  url.searchParams.set("langpair", "es|en");
+  const email = process.env.MYMEMORY_EMAIL?.trim();
+  if (email) url.searchParams.set("de", email);
+  const res = await fetch(url.toString(), { method: "GET" });
+  if (!res.ok) throw new Error(`MyMemory HTTP ${res.status}`);
+  const data = (await res.json()) as {
+    responseStatus?: number;
+    responseData?: { translatedText?: string };
+  };
+  if (data.responseStatus && data.responseStatus !== 200) {
+    throw new Error(`MyMemory status ${data.responseStatus}`);
+  }
+  const out = data.responseData?.translatedText;
+  if (!out) throw new Error("MyMemory sin texto");
+  if (/MYMEMORY WARNING/i.test(out)) {
+    throw new Error("MyMemory cuota agotada");
+  }
+  return out;
+}
+
 const myMemoryProvider: Provider = {
   id: "mymemory",
   available: () => true,
   translateOne: async (text) => {
-    const url = new URL("https://api.mymemory.translated.net/get");
-    url.searchParams.set("q", text.slice(0, 450));
-    url.searchParams.set("langpair", "es|en");
-    const email = process.env.MYMEMORY_EMAIL?.trim();
-    if (email) url.searchParams.set("de", email);
-    const res = await fetch(url.toString(), { method: "GET" });
-    if (!res.ok) throw new Error(`MyMemory HTTP ${res.status}`);
-    const data = (await res.json()) as {
-      responseStatus?: number;
-      responseData?: { translatedText?: string };
-    };
-    if (data.responseStatus && data.responseStatus !== 200) {
-      throw new Error(`MyMemory status ${data.responseStatus}`);
+    const chunks = chunkTextForMyMemory(text);
+    if (chunks.length === 1) {
+      return myMemoryTranslateChunk(chunks[0]);
     }
-    const out = data.responseData?.translatedText;
-    if (!out) throw new Error("MyMemory sin texto");
-    if (/MYMEMORY WARNING/i.test(out)) {
-      throw new Error("MyMemory cuota agotada");
+    const parts: string[] = [];
+    for (let i = 0; i < chunks.length; i += 1) {
+      parts.push(await myMemoryTranslateChunk(chunks[i]));
+      if (i < chunks.length - 1) await sleep(120);
     }
-    return out;
+    return parts.join(" ").replace(/\s+/g, " ").trim();
   },
 };
 

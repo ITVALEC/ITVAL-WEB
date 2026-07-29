@@ -28,7 +28,14 @@ import {
 } from "@/components/admin/AdminUi";
 import { adminErrorMessage, readAdminJson } from "@/lib/admin/api-client";
 import { paginateItems } from "@/lib/pagination";
-import type { SiteSettings, SiteSocialLinks } from "@/lib/site-settings";
+import {
+  SOCIAL_ICON_KEYS,
+  SOCIAL_ICON_LABELS,
+  createSocialLinkId,
+  type SiteSocialLink,
+  type SocialIconKey,
+} from "@/lib/social";
+import type { SiteSettings } from "@/lib/site-settings";
 
 type ConfigTab = "contact" | "blocked";
 const BLOCKED_PAGE_SIZE = 15;
@@ -69,12 +76,7 @@ export default function AdminConfigPage() {
       setSettings({
         contact: data.contact,
         footer: data.footer,
-        social: data.social ?? {
-          facebook: "",
-          instagram: "",
-          whatsapp: "",
-          linkedin: "",
-        },
+        social: Array.isArray(data.social) ? data.social : [],
       });
     } else {
       setSettingsError("No se pudo cargar la configuración.");
@@ -154,7 +156,10 @@ export default function AdminConfigPage() {
     );
   }
 
-  function updateFooter(field: keyof SiteSettings["footer"]["es"], value: string) {
+  function updateFooter(
+    field: "tagline" | "experience" | "location",
+    value: string,
+  ) {
     setSettings((current) =>
       current
         ? {
@@ -168,15 +173,54 @@ export default function AdminConfigPage() {
     );
   }
 
-  function updateSocial(field: keyof SiteSocialLinks, value: string) {
+  function addSocialLink() {
+    setSettings((current) => {
+      if (!current) return current;
+      const next: SiteSocialLink = {
+        id: createSocialLinkId(),
+        label: "",
+        url: "",
+        icon: "website",
+      };
+      return { ...current, social: [...current.social, next] };
+    });
+  }
+
+  function updateSocialLink(
+    id: string,
+    patch: Partial<Pick<SiteSocialLink, "label" | "url" | "icon">>,
+  ) {
+    setSettings((current) => {
+      if (!current) return current;
+      return {
+        ...current,
+        social: current.social.map((link) =>
+          link.id === id ? { ...link, ...patch } : link,
+        ),
+      };
+    });
+  }
+
+  function removeSocialLink(id: string) {
     setSettings((current) =>
       current
-        ? {
-            ...current,
-            social: { ...current.social, [field]: value },
-          }
+        ? { ...current, social: current.social.filter((link) => link.id !== id) }
         : current,
     );
+  }
+
+  function moveSocialLink(id: string, direction: -1 | 1) {
+    setSettings((current) => {
+      if (!current) return current;
+      const index = current.social.findIndex((link) => link.id === id);
+      if (index < 0) return current;
+      const target = index + direction;
+      if (target < 0 || target >= current.social.length) return current;
+      const next = [...current.social];
+      const [row] = next.splice(index, 1);
+      next.splice(target, 0, row);
+      return { ...current, social: next };
+    });
   }
 
   const blockedRows = useMemo<BlockedRow[]>(
@@ -365,24 +409,6 @@ export default function AdminConfigPage() {
                     className={adminInputClass}
                   />
                 </AdminField>
-                <AdminField label="Título CTA" htmlFor="footer-cta-t-es">
-                  <input
-                    id="footer-cta-t-es"
-                    type="text"
-                    value={settings.footer.es.ctaTitle}
-                    onChange={(e) => updateFooter("ctaTitle", e.target.value)}
-                    className={adminInputClass}
-                  />
-                </AdminField>
-                <AdminField label="Texto CTA" htmlFor="footer-cta-x-es">
-                  <textarea
-                    id="footer-cta-x-es"
-                    value={settings.footer.es.ctaText}
-                    onChange={(e) => updateFooter("ctaText", e.target.value)}
-                    className={adminTextareaClass}
-                    rows={3}
-                  />
-                </AdminField>
                 <AdminField label="Ubicación" htmlFor="footer-loc-es">
                   <input
                     id="footer-loc-es"
@@ -395,57 +421,107 @@ export default function AdminConfigPage() {
               </div>
             </AdminPanel>
 
-            <AdminPanel title="Redes sociales">
-              <p className="mb-4 text-sm text-grey-dark">
-                URLs del footer (Facebook, Instagram, WhatsApp, LinkedIn). No se traducen; déjalas
-                vacías para ocultar el enlace activo.
-              </p>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <AdminField label="Facebook" htmlFor="social-facebook">
-                  <input
-                    id="social-facebook"
-                    type="url"
-                    inputMode="url"
-                    placeholder="https://facebook.com/…"
-                    value={settings.social.facebook}
-                    onChange={(e) => updateSocial("facebook", e.target.value)}
-                    className={adminInputClass}
-                  />
-                </AdminField>
-                <AdminField label="Instagram" htmlFor="social-instagram">
-                  <input
-                    id="social-instagram"
-                    type="url"
-                    inputMode="url"
-                    placeholder="https://instagram.com/…"
-                    value={settings.social.instagram}
-                    onChange={(e) => updateSocial("instagram", e.target.value)}
-                    className={adminInputClass}
-                  />
-                </AdminField>
-                <AdminField label="WhatsApp" htmlFor="social-whatsapp">
-                  <input
-                    id="social-whatsapp"
-                    type="url"
-                    inputMode="url"
-                    placeholder="https://wa.me/593…"
-                    value={settings.social.whatsapp}
-                    onChange={(e) => updateSocial("whatsapp", e.target.value)}
-                    className={adminInputClass}
-                  />
-                </AdminField>
-                <AdminField label="LinkedIn" htmlFor="social-linkedin">
-                  <input
-                    id="social-linkedin"
-                    type="url"
-                    inputMode="url"
-                    placeholder="https://linkedin.com/company/…"
-                    value={settings.social.linkedin}
-                    onChange={(e) => updateSocial("linkedin", e.target.value)}
-                    className={adminInputClass}
-                  />
-                </AdminField>
-              </div>
+            <AdminPanel>
+              <AdminCrudToolbar
+                title="Redes sociales"
+                description="Lista editable del footer. Elige icono y URL; no se traducen."
+                action={
+                  <AdminButton type="button" onClick={addSocialLink}>
+                    + Agregar red
+                  </AdminButton>
+                }
+              />
+              {settings.social.length === 0 ? (
+                <AdminEmptyState
+                  title="Sin redes"
+                  description="Agrega Facebook, Instagram, WhatsApp u otras con el botón de arriba."
+                />
+              ) : (
+                <ul className="mt-4 space-y-4">
+                  {settings.social.map((link, index) => (
+                    <li
+                      key={link.id}
+                      className="rounded-xl border border-navy/10 bg-surface/40 p-4"
+                    >
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        <AdminField label="Icono" htmlFor={`social-icon-${link.id}`}>
+                          <select
+                            id={`social-icon-${link.id}`}
+                            value={link.icon}
+                            onChange={(e) =>
+                              updateSocialLink(link.id, {
+                                icon: e.target.value as SocialIconKey,
+                              })
+                            }
+                            className={adminInputClass}
+                          >
+                            {SOCIAL_ICON_KEYS.map((key) => (
+                              <option key={key} value={key}>
+                                {SOCIAL_ICON_LABELS[key]}
+                              </option>
+                            ))}
+                          </select>
+                        </AdminField>
+                        <AdminField
+                          label="Etiqueta (opcional)"
+                          htmlFor={`social-label-${link.id}`}
+                        >
+                          <input
+                            id={`social-label-${link.id}`}
+                            type="text"
+                            value={link.label ?? ""}
+                            onChange={(e) =>
+                              updateSocialLink(link.id, { label: e.target.value })
+                            }
+                            placeholder={SOCIAL_ICON_LABELS[link.icon]}
+                            className={adminInputClass}
+                          />
+                        </AdminField>
+                        <div className="sm:col-span-2">
+                          <AdminField label="URL" htmlFor={`social-url-${link.id}`}>
+                            <input
+                              id={`social-url-${link.id}`}
+                              type="url"
+                              inputMode="url"
+                              placeholder="https://… o mailto:… o tel:…"
+                              value={link.url}
+                              onChange={(e) =>
+                                updateSocialLink(link.id, { url: e.target.value })
+                              }
+                              className={adminInputClass}
+                            />
+                          </AdminField>
+                        </div>
+                      </div>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        <AdminButton
+                          type="button"
+                          variant="secondary"
+                          onClick={() => moveSocialLink(link.id, -1)}
+                          disabled={index === 0}
+                        >
+                          Subir
+                        </AdminButton>
+                        <AdminButton
+                          type="button"
+                          variant="secondary"
+                          onClick={() => moveSocialLink(link.id, 1)}
+                          disabled={index === settings.social.length - 1}
+                        >
+                          Bajar
+                        </AdminButton>
+                        <AdminButton
+                          type="button"
+                          variant="danger"
+                          onClick={() => removeSocialLink(link.id)}
+                        >
+                          Eliminar
+                        </AdminButton>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </AdminPanel>
 
             <AdminSaveButton saving={saving} saved={saved} />
