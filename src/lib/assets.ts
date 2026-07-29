@@ -13,7 +13,8 @@ export const IMAGES = {
     projects: img("pages", "projects.svg"),
     products: img("pages", "products.jpg"),
     about: img("pages", "about.svg"),
-    contact: img("pages", "contact.svg"),
+    /** Foto real (fachada); el SVG de contacto era solo placeholder. */
+    contact: img("products", "facades.jpg"),
   },
   about: {
     history: img("about", "history.svg"),

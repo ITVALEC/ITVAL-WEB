@@ -587,7 +587,8 @@ export async function updateCatalogEntry(patch: {
     const prevEs = es.categories[patch.categoryKey];
     const prevEn = en.categories[patch.categoryKey];
 
-    const nextTitleEs = patch.titleEs != null ? patch.titleEs.trim() : prevEs.title;
+    const nextTitleEs =
+      patch.titleEs != null ? patch.titleEs.trim() || prevEs.title : prevEs.title;
     const nextDescEs =
       patch.descriptionEs != null ? patch.descriptionEs.trim() : prevEs.description;
 
@@ -630,7 +631,7 @@ export async function updateCatalogEntry(patch: {
   const prevEs = es.subcategories[patch.categoryKey][patch.subcategoryKey];
   const prevEn = en.subcategories[patch.categoryKey][patch.subcategoryKey];
 
-  const nextTitleEs = patch.titleEs != null ? patch.titleEs.trim() : prevEs.title;
+  const nextTitleEs = patch.titleEs != null ? patch.titleEs.trim() || prevEs.title : prevEs.title;
   const nextDescEs =
     patch.descriptionEs != null ? patch.descriptionEs.trim() : prevEs.description;
   const nextMaterialsEs =
@@ -721,7 +722,7 @@ export async function updateCatalogHub(
   };
 
   const nextTitleEs =
-    patch.titleEs != null ? patch.titleEs.trim() : String(hubEs.title ?? "");
+    patch.titleEs != null ? patch.titleEs.trim() || String(hubEs.title ?? "") : String(hubEs.title ?? "");
   const nextSubtitleEs =
     patch.subtitleEs != null
       ? patch.subtitleEs.trim()

@@ -138,6 +138,7 @@
       "allPeriods": "Todos los años",
       "clear": "Limpiar filtros",
       "activeLabel": "Filtros activos",
+      "removeFilter": "Quitar filtro {filter}",
       "chipCity": "{city}",
       "solutionLabel": "1. Tipo de solución",
       "cityLabel": "2. Ciudad",

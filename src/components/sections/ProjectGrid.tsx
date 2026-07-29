@@ -22,10 +22,10 @@ import { isCatalogPlaceholderSrc } from "@/lib/media/placeholder-src";
 const PAGE_SIZE = 9;
 
 const selectClass =
-  "mt-1.5 block w-full rounded-card border border-navy/15 bg-white px-3 py-2.5 text-sm text-navy focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/25";
+  "mt-1 block w-full rounded-card border border-navy/15 bg-white px-3 py-2.5 text-sm text-navy focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/25";
 
 function pillClass(active: boolean): string {
-  return `rounded-pill px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] transition-colors duration-ds focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 motion-reduce:transition-none sm:px-4 sm:text-ds-caption ${
+  return `inline-flex min-h-11 shrink-0 items-center whitespace-nowrap rounded-pill px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] transition-colors duration-ds focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 motion-reduce:transition-none sm:px-4 sm:text-ds-caption ${
     active
       ? "bg-navy text-white"
       : "border border-navy/15 bg-white text-ink/80 hover:border-gold hover:text-navy"
@@ -131,13 +131,13 @@ export function ProjectGrid({ projects: projectsProp }: ProjectGridProps) {
           </h2>
 
           <div className="rounded-card border border-navy/10 bg-white p-4 shadow-card sm:p-6 lg:p-8">
-            <div className="space-y-5 lg:space-y-6">
+            <div className="space-y-6">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-grey">
+                <p className="text-sm font-semibold text-navy">
                   {t("filters.solutionLabel")}
                 </p>
                 <div
-                  className="-mx-1 mt-2 flex gap-2 overflow-x-auto pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible"
+                  className="mt-3 -mx-1 flex gap-2 overflow-x-auto pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible"
                   role="group"
                   aria-label={t("filters.solutionLabel")}
                 >
@@ -145,7 +145,7 @@ export function ProjectGrid({ projects: projectsProp }: ProjectGridProps) {
                     type="button"
                     onClick={() => updateSolution("all")}
                     aria-pressed={filters.solution === "all"}
-                    className={`shrink-0 ${pillClass(filters.solution === "all")}`}
+                    className={pillClass(filters.solution === "all")}
                   >
                     {t("filters.allSolutions")}{" "}
                     <span className="opacity-80">({filterOptions.total})</span>
@@ -156,7 +156,7 @@ export function ProjectGrid({ projects: projectsProp }: ProjectGridProps) {
                       type="button"
                       onClick={() => updateSolution(option.value)}
                       aria-pressed={filters.solution === option.value}
-                      className={`shrink-0 ${pillClass(filters.solution === option.value)}`}
+                      className={pillClass(filters.solution === option.value)}
                     >
                       {t(`filters.solutions.${option.value}`)}{" "}
                       <span className="opacity-80">({option.count})</span>
@@ -165,21 +165,21 @@ export function ProjectGrid({ projects: projectsProp }: ProjectGridProps) {
                 </div>
               </div>
 
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div>
+              <div className="grid items-end gap-4 sm:grid-cols-2">
+                <div className="min-w-0">
                   <label
                     htmlFor="project-city-filter"
-                    className="block text-xs font-semibold uppercase tracking-wider text-grey"
+                    className="block text-sm font-semibold text-navy"
                   >
                     {t("filters.cityLabel")}
                   </label>
-                  {filters.solution !== "all" ? (
-                    <p className="mt-1 text-xs text-grey">
-                      {t("filters.cityHintForSolution", {
-                        solution: t(`filters.solutions.${filters.solution}`),
-                      })}
-                    </p>
-                  ) : null}
+                  <p className="mt-1 min-h-4 text-xs text-grey">
+                    {filters.solution !== "all"
+                      ? t("filters.cityHintForSolution", {
+                          solution: t(`filters.solutions.${filters.solution}`),
+                        })
+                      : "\u00a0"}
+                  </p>
                   <select
                     id="project-city-filter"
                     value={filters.city}
@@ -194,14 +194,16 @@ export function ProjectGrid({ projects: projectsProp }: ProjectGridProps) {
                     ))}
                   </select>
                 </div>
-                <div>
+                <div className="min-w-0">
                   <label
                     htmlFor="project-period-filter"
-                    className="block text-xs font-semibold uppercase tracking-wider text-grey"
+                    className="block text-sm font-semibold text-navy"
                   >
                     {t("filters.periodLabel")}
                   </label>
-                  <p className="mt-1 text-xs text-grey">{t("filters.periodHint")}</p>
+                  <p className="mt-1 min-h-4 text-xs text-grey">
+                    {t("filters.periodHint")}
+                  </p>
                   <select
                     id="project-period-filter"
                     value={filters.period}
@@ -227,58 +229,70 @@ export function ProjectGrid({ projects: projectsProp }: ProjectGridProps) {
                 </div>
               </div>
 
-              <div className="rounded-card border border-navy/10 bg-surface px-4 py-3 sm:px-5">
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <div aria-live="polite">
-                    <p className="text-sm font-semibold text-navy">
-                      {hasActiveFilters
-                        ? t("resultsFiltered", {
-                            count: filtered.length,
-                            total: projects.length,
-                          })
-                        : t("resultsAll", { total: projects.length })}
+              <div className="flex flex-col gap-3 border-t border-navy/10 pt-4 sm:flex-row sm:items-center sm:justify-between">
+                <div aria-live="polite">
+                  <p className="text-sm font-medium text-navy">
+                    {hasActiveFilters
+                      ? t("resultsFiltered", {
+                          count: filtered.length,
+                          total: projects.length,
+                        })
+                      : t("resultsAll", { total: projects.length })}
+                  </p>
+                  {paginated.length > 0 && filtered.length > PAGE_SIZE ? (
+                    <p className="mt-1 text-xs text-ink/70">
+                      {t("resultsPageRange", {
+                        from: (currentPage - 1) * PAGE_SIZE + 1,
+                        to: Math.min(currentPage * PAGE_SIZE, filtered.length),
+                        total: filtered.length,
+                      })}
                     </p>
-                    {paginated.length > 0 && filtered.length > PAGE_SIZE ? (
-                      <p className="mt-1 text-xs text-ink/70">
-                        {t("resultsPageRange", {
-                          from: (currentPage - 1) * PAGE_SIZE + 1,
-                          to: Math.min(currentPage * PAGE_SIZE, filtered.length),
-                          total: filtered.length,
-                        })}
-                      </p>
-                    ) : null}
-                  </div>
-                  {hasActiveFilters ? (
-                    <button
-                      type="button"
-                      onClick={clearFilters}
-                      className="self-start text-sm font-semibold text-gold-deep hover:text-navy sm:self-auto"
-                    >
-                      {t("filters.clear")}
-                    </button>
                   ) : null}
                 </div>
-
-                {activeChips.length > 0 ? (
-                  <div
-                    className="mt-3 flex flex-wrap gap-2 border-t border-navy/10 pt-3"
-                    role="list"
-                    aria-label={t("filters.activeLabel")}
+                {hasActiveFilters ? (
+                  <button
+                    type="button"
+                    onClick={clearFilters}
+                    className="self-start rounded-card text-sm font-semibold text-gold-deep hover:text-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 sm:self-auto"
                   >
-                    {activeChips.map((chip) => (
-                      <span
-                        key={chip.key}
-                        role="listitem"
-                        className="inline-flex rounded-pill bg-gold/10 px-3 py-1 text-xs font-medium text-navy"
-                      >
-                        {chip.labelValues
-                          ? t(chip.labelKey, chip.labelValues)
-                          : t(chip.labelKey)}
-                      </span>
-                    ))}
-                  </div>
+                    {t("filters.clear")}
+                  </button>
                 ) : null}
               </div>
+
+              {activeChips.length > 0 ? (
+                <div
+                  className="flex flex-wrap items-center gap-2"
+                  role="list"
+                  aria-label={t("filters.activeLabel")}
+                >
+                  {activeChips.map((chip) => {
+                    const label = chip.labelValues
+                      ? t(chip.labelKey, chip.labelValues)
+                      : t(chip.labelKey);
+                    return (
+                      <button
+                        key={chip.key}
+                        type="button"
+                        role="listitem"
+                        onClick={() => {
+                          if (chip.key === "solution") updateSolution("all");
+                          else if (chip.key === "city") updateCity("all");
+                          else if (chip.key === "period") {
+                            setFilters((c) => ({ ...c, period: "all" }));
+                            setPage(1);
+                          }
+                        }}
+                        className="inline-flex items-center gap-1.5 rounded-pill border border-gold/35 bg-gold/10 px-3 py-1.5 text-xs font-medium text-navy hover:bg-gold/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
+                        aria-label={t("filters.removeFilter", { filter: label })}
+                      >
+                        <span>{label}</span>
+                        <span aria-hidden="true">×</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : null}
             </div>
           </div>
 

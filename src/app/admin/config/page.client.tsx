@@ -336,7 +336,7 @@ export default function AdminConfigPage() {
             <AdminPanel>
               <AdminCrudToolbar
                 title="Contacto del sitio"
-                description="Teléfono, correo y dirección visibles en el sitio público."
+                description="Teléfono, correo y dirección visibles en el sitio. Todos los campos son opcionales: guarda solo lo que quieras cambiar."
               />
               {settingsError ? <AdminStatusMessage type="error" message={settingsError} /> : null}
               <div className="grid gap-4 sm:grid-cols-2">
@@ -347,7 +347,7 @@ export default function AdminConfigPage() {
                     value={settings.contact.email}
                     onChange={(e) => updateContact("email", e.target.value)}
                     className={adminInputClass}
-                    required
+                    placeholder="opcional"
                   />
                 </AdminField>
                 <AdminField label="Teléfono" htmlFor="contact-phone">
@@ -357,7 +357,7 @@ export default function AdminConfigPage() {
                     value={settings.contact.phone}
                     onChange={(e) => updateContact("phone", e.target.value)}
                     className={adminInputClass}
-                    required
+                    placeholder="opcional"
                   />
                 </AdminField>
                 <AdminField label="Dirección" htmlFor="contact-address">
@@ -367,15 +367,15 @@ export default function AdminConfigPage() {
                     value={settings.contact.address}
                     onChange={(e) => updateContact("address", e.target.value)}
                     className={adminInputClass}
-                    required
+                    placeholder="opcional"
                   />
                 </AdminField>
                 <AdminField label="URL de Google Maps" htmlFor="contact-maps-url">
                   <input
                     id="contact-maps-url"
-                    type="url"
+                    type="text"
                     inputMode="url"
-                    placeholder="https://maps.google.com/?q=…"
+                    placeholder="https://maps.google.com/?q=… (opcional)"
                     value={settings.contact.mapsUrl ?? ""}
                     onChange={(e) => updateContact("mapsUrl", e.target.value)}
                     className={adminInputClass}
@@ -388,7 +388,7 @@ export default function AdminConfigPage() {
                     value={settings.contact.hours}
                     onChange={(e) => updateContact("hours", e.target.value)}
                     className={adminInputClass}
-                    required
+                    placeholder="opcional"
                   />
                 </AdminField>
               </div>

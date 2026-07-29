@@ -156,7 +156,7 @@ export default function AdminProjectsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           id: editing.id,
-          name: form.name.trim(),
+          name: form.name.trim() || editing.name,
           featured: form.featured,
           productCategory: form.productCategory,
           coverIndex: form.coverIndex,
@@ -502,14 +502,14 @@ export default function AdminProjectsPage() {
               onError={(msg) => setFeedback({ type: "error", message: msg })}
             />
 
-            <AdminField label="Nombre del proyecto" htmlFor="edit-name" hint="Título visible en el sitio.">
+            <AdminField label="Nombre del proyecto" htmlFor="edit-name" hint="Título visible en el sitio. Puedes dejarlo igual y guardar otros cambios.">
               <input
                 id="edit-name"
                 type="text"
-                required
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 className={adminInputClass}
+                placeholder="Nombre del proyecto"
               />
             </AdminField>
 

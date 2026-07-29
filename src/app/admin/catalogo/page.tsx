@@ -631,7 +631,6 @@ export default function AdminCatalogoPage() {
                 value={hubTitleEs}
                 onChange={(e) => setHubTitleEs(e.target.value)}
                 className={adminInputClass}
-                required
               />
             </AdminField>
             <AdminField label="Descripción" htmlFor="hub-sub-es">
@@ -678,7 +677,7 @@ export default function AdminCatalogoPage() {
                     value={row.labelEs}
                     onChange={(e) => updatePrimaryLabel(row.key, e.target.value)}
                     className={adminInputClass}
-                    required
+                    placeholder="Nombre del grupo"
                   />
                 </AdminField>
               ))}
@@ -898,7 +897,7 @@ export default function AdminCatalogoPage() {
               Traducción automática ES → EN al guardar. No hace falta rellenar inglés.
             </p>
             <AdminField label="Nombre" htmlFor="title-es">
-              <input id="title-es" type="text" value={titleEs} onChange={(e) => setTitleEs(e.target.value)} className={adminInputClass} required />
+              <input id="title-es" type="text" value={titleEs} onChange={(e) => setTitleEs(e.target.value)} className={adminInputClass} placeholder="Nombre (opcional al guardar otros campos)" />
             </AdminField>
             <AdminField
               label={
