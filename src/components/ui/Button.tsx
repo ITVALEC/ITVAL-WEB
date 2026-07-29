@@ -9,9 +9,9 @@ export type ButtonVariant =
   | "navy"
   | "lightOutline";
 
-/** DS: pill 999px, min 44px, hover lift 4px + sombra suave (sin glow oro). */
+/** DS público: esquinas cuadradas (~2px), min 44px, hover lift 4px + sombra suave. */
 const BUTTON_BASE_CLASSES =
-  "inline-flex min-h-11 items-center justify-center gap-2 rounded-pill px-6 py-2.5 text-sm font-semibold uppercase tracking-wide transition-all duration-ds hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none motion-reduce:hover:translate-y-0";
+  "inline-flex min-h-11 items-center justify-center gap-2 rounded-[2px] px-6 py-2.5 text-sm font-semibold uppercase tracking-wide transition-all duration-ds hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none motion-reduce:hover:translate-y-0";
 
 export const variantClasses: Record<ButtonVariant, string> = {
   primary:

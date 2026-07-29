@@ -15,6 +15,11 @@ function isHomePath(pathname: string): boolean {
   return pathname === NAV_PATHS.home;
 }
 
+function isNavItemActive(pathname: string, href: string): boolean {
+  if (href === NAV_PATHS.home) return isHomePath(pathname);
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
 export function Header() {
   const t = useTranslations();
   const pathname = usePathname();
@@ -78,19 +83,27 @@ export function Header() {
           className="hidden items-center gap-8 md:flex lg:gap-10"
           aria-label={t("footer.nav")}
         >
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`rounded-card text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-white transition-colors duration-ds hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 ${
-                isOverlay
-                  ? "text-white/90 drop-shadow-sm focus-visible:ring-offset-transparent"
-                  : "focus-visible:ring-offset-navy-dark"
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
+          {navItems.map((item) => {
+            const active = isNavItemActive(pathname, item.href);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={active ? "page" : undefined}
+                className={`border-b pb-0.5 text-[0.7rem] font-semibold uppercase tracking-[0.18em] transition-[color,border-color] duration-ds focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 ${
+                  active
+                    ? "border-gold text-white"
+                    : "border-transparent text-white/90 hover:border-gold hover:text-gold"
+                } ${
+                  isOverlay
+                    ? "drop-shadow-sm focus-visible:ring-offset-transparent"
+                    : "focus-visible:ring-offset-navy-dark"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="hidden items-center gap-4 md:flex">
@@ -141,17 +154,25 @@ export function Header() {
           aria-label={t("footer.nav")}
         >
           <ul className="flex flex-col gap-1">
-            {navItems.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className="flex min-h-11 items-center rounded-card px-3 py-2.5 text-base font-medium text-white/90 hover:bg-white/10 hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
+            {navItems.map((item) => {
+              const active = isNavItemActive(pathname, item.href);
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    aria-current={active ? "page" : undefined}
+                    className={`flex min-h-11 items-center border-b px-3 py-2.5 text-base font-medium transition-[color,border-color] duration-ds focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold ${
+                      active
+                        ? "border-gold text-white"
+                        : "border-transparent text-white/90 hover:border-gold hover:text-gold"
+                    }`}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
             <li className="mt-3 flex items-center justify-between gap-3 px-3">
               <LanguageSwitcher transparent={false} />
               <ButtonLink

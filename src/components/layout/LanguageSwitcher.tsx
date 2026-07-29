@@ -23,33 +23,32 @@ export function LanguageSwitcher({ transparent = false }: LanguageSwitcherProps)
 
   return (
     <div
-      className={`flex items-center gap-1 p-0.5 ${
-        transparent
-          ? "rounded-sm"
-          : "rounded-sm border border-gold/30"
-      }`}
+      className="flex items-center gap-4"
       role="group"
       aria-label={t("languageSwitcher")}
     >
-      {routing.locales.map((lang) => (
-        <button
-          key={lang}
-          type="button"
-          onClick={() => switchLocale(lang)}
-          aria-pressed={locale === lang}
-          className={`rounded-sm px-2.5 py-1 text-xs font-semibold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 motion-reduce:transition-none ${
-            locale === lang
-              ? transparent
-                ? "bg-white/15 text-gold drop-shadow-sm"
-                : "bg-gold text-navy"
-              : transparent
-                ? "text-white/75 drop-shadow-sm hover:text-gold"
-                : "text-white/70 hover:text-gold"
-          } ${transparent ? "focus-visible:ring-offset-transparent" : "focus-visible:ring-offset-navy"}`}
-        >
-          {t(`locales.${lang}`)}
-        </button>
-      ))}
+      {routing.locales.map((lang) => {
+        const active = locale === lang;
+        return (
+          <button
+            key={lang}
+            type="button"
+            onClick={() => switchLocale(lang)}
+            aria-pressed={active}
+            className={`border-b pb-0.5 text-xs font-semibold uppercase tracking-[0.18em] transition-[color,border-color] duration-ds focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 motion-reduce:transition-none ${
+              active
+                ? "border-gold text-white"
+                : "border-transparent text-white/75 hover:border-gold hover:text-gold"
+            } ${
+              transparent
+                ? "drop-shadow-sm focus-visible:ring-offset-transparent"
+                : "focus-visible:ring-offset-navy-dark"
+            }`}
+          >
+            {t(`locales.${lang}`)}
+          </button>
+        );
+      })}
     </div>
   );
 }

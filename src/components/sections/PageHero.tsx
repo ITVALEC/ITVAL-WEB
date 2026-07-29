@@ -27,8 +27,8 @@ type PageHeroProps = {
 
 /**
  * Hero de páginas internas.
- * Overlay navy ~50–55% + gradientes para contraste del texto blanco
- * sin ocultar del todo la foto.
+ * Degradado oscuro desde la izquierda → transparente a la derecha
+ * (texto legible; foto visible a la derecha).
  */
 export function PageHero({
   title,
