@@ -225,7 +225,7 @@ export function ProductCatalogExplorer({
       <div
         role="group"
         aria-label={t("primaryLabel")}
-        className="flex w-max flex-nowrap gap-2"
+        className="mx-auto flex w-max min-w-full flex-nowrap justify-center gap-2"
       >
         <button
           type="button"
