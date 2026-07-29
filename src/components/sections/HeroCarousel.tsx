@@ -182,7 +182,7 @@ export function HeroCarousel({
           </button>
 
           <div
-            className="pointer-events-auto absolute inset-x-0 bottom-0 flex items-center justify-center gap-3 px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-3 sm:gap-4 sm:px-6 md:inset-x-auto md:right-6 md:justify-end md:px-0 lg:right-8"
+            className="pointer-events-auto absolute inset-x-0 bottom-[4.75rem] flex items-center justify-center gap-3 px-4 pt-3 sm:bottom-[5.75rem] sm:gap-4 sm:px-6 md:inset-x-auto md:right-6 md:bottom-[6.5rem] md:justify-end md:px-0 lg:right-8 lg:bottom-28"
             role="group"
             aria-label={navLabel}
           >
