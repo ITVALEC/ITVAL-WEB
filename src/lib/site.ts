@@ -12,14 +12,16 @@ export const CONTACT = {
 } as const;
 
 /**
- * Redes del footer (valores por defecto).
+ * Redes del footer (valores por defecto permanentes).
  * En producción se editan desde Admin → Ajustes y viven en site-settings.
- * Vacío → enlace `#` en el footer.
+ * Si una URL está vacía, el footer muestra el icono con enlace `#`
+ * (la sección NUNCA se oculta por lista vacía).
  */
 export const SOCIAL_LINKS = {
   facebook: "",
   instagram: "",
-  whatsapp: "",
+  /** WhatsApp por defecto al teléfono público de contacto. */
+  whatsapp: "https://wa.me/593996603613",
   linkedin: "",
 } as const;
 

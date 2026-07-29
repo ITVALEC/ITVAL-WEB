@@ -242,6 +242,11 @@ export function getSiteFooterCopy(locale: string): SiteFooterCopy {
 }
 
 export function getSiteSocialLinks(): SiteSocialLink[] {
-  const links = normalizeSocialLinks(getSiteSettings().social);
-  return links.length > 0 ? links : getDefaultSocialLinks();
+  // Público: nunca devolver vacío. Defaults permanentes si settings/DB fallan.
+  try {
+    const links = normalizeSocialLinks(getSiteSettings().social);
+    return links.length > 0 ? links : getDefaultSocialLinks();
+  } catch {
+    return getDefaultSocialLinks();
+  }
 }

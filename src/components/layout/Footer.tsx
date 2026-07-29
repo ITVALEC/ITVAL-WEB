@@ -89,7 +89,7 @@ export async function Footer({ locale }: FooterProps) {
           </div>
 
           <FooterSocialLinks
-            sectionLabel={t("footer.social")}
+            sectionLabel={t("footer.social") || "Redes sociales"}
             links={socialLinks}
           />
         </div>
