@@ -38,9 +38,23 @@ import {
 import type { SiteSettings } from "@/lib/site-settings";
 
 type ConfigTab = "contact" | "blocked";
+type SettingsSection = "contact" | "footer" | "social";
+
 const BLOCKED_PAGE_SIZE = 15;
 
 type BlockedRow = { id: string; filename: string };
+
+type SectionUiState = {
+  saving: boolean;
+  saved: boolean;
+  error: string;
+};
+
+const idleSection = (): SectionUiState => ({
+  saving: false,
+  saved: false,
+  error: "",
+});
 
 export default function AdminConfigPage() {
   const searchParams = useSearchParams();
@@ -49,10 +63,13 @@ export default function AdminConfigPage() {
 
   const [settings, setSettings] = useState<SiteSettings | null>(null);
   const [settingsLoading, setSettingsLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const [settingsError, setSettingsError] = useState("");
+  const [loadError, setLoadError] = useState("");
   const [translationWarning, setTranslationWarning] = useState("");
+  const [sectionUi, setSectionUi] = useState<Record<SettingsSection, SectionUiState>>({
+    contact: idleSection(),
+    footer: idleSection(),
+    social: idleSection(),
+  });
 
   const [files, setFiles] = useState<string[]>([]);
   const [blockedLoading, setBlockedLoading] = useState(true);
@@ -69,7 +86,7 @@ export default function AdminConfigPage() {
 
   const loadSettings = useCallback(async () => {
     setSettingsLoading(true);
-    setSettingsError("");
+    setLoadError("");
     const res = await fetch("/api/admin/site-settings");
     if (res.ok) {
       const data = (await res.json()) as SiteSettings;
@@ -79,7 +96,7 @@ export default function AdminConfigPage() {
         social: Array.isArray(data.social) ? data.social : [],
       });
     } else {
-      setSettingsError("No se pudo cargar la configuración.");
+      setLoadError("No se pudo cargar la configuración.");
     }
     setSettingsLoading(false);
   }, []);
@@ -101,24 +118,29 @@ export default function AdminConfigPage() {
     loadBlocked();
   }, [loadSettings, loadBlocked]);
 
-  async function handleSettingsSubmit(event: React.FormEvent) {
-    event.preventDefault();
-    if (!settings || saving) return;
+  function patchSectionUi(key: SettingsSection, patch: Partial<SectionUiState>) {
+    setSectionUi((current) => ({
+      ...current,
+      [key]: { ...current[key], ...patch },
+    }));
+  }
 
-    setSaving(true);
-    setSaved(false);
-    setSettingsError("");
-    setTranslationWarning("");
+  async function saveSettingsSection(
+    key: SettingsSection,
+    payload: Partial<Pick<SiteSettings, "contact" | "social">> & {
+      footer?: { es: SiteSettings["footer"]["es"] };
+    },
+  ) {
+    if (!settings || sectionUi[key].saving) return;
+
+    patchSectionUi(key, { saving: true, saved: false, error: "" });
+    if (key === "footer") setTranslationWarning("");
 
     try {
       const res = await fetch("/api/admin/site-settings", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contact: settings.contact,
-          footer: { es: settings.footer.es },
-          social: settings.social,
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (res.ok) {
@@ -132,21 +154,28 @@ export default function AdminConfigPage() {
             social: data.social,
           });
           const warnings = data.translation?.warnings?.filter(Boolean) ?? [];
-          if (warnings.length > 0) {
+          if (key === "footer" && warnings.length > 0) {
             setTranslationWarning(warnings.join(" "));
-            setSaved(false);
+            patchSectionUi(key, { saving: false, saved: false });
           } else {
-            setSaved(true);
-            setTimeout(() => setSaved(false), 4000);
+            patchSectionUi(key, { saving: false, saved: true });
+            window.setTimeout(() => patchSectionUi(key, { saved: false }), 4000);
           }
+        } else {
+          patchSectionUi(key, { saving: false, saved: true });
+          window.setTimeout(() => patchSectionUi(key, { saved: false }), 4000);
         }
       } else {
-        setSettingsError(await adminErrorMessage(res, "No se pudieron guardar los cambios."));
+        patchSectionUi(key, {
+          saving: false,
+          error: await adminErrorMessage(res, "No se pudieron guardar los cambios."),
+        });
       }
     } catch {
-      setSettingsError("Error de red al guardar. Revisa la conexión e inténtalo de nuevo.");
-    } finally {
-      setSaving(false);
+      patchSectionUi(key, {
+        saving: false,
+        error: "Error de red al guardar. Revisa la conexión e inténtalo de nuevo.",
+      });
     }
   }
 
@@ -325,218 +354,276 @@ export default function AdminConfigPage() {
       {section === "contact" ? (
         settingsLoading || !settings ? (
           <div className="mt-6">
-            {settingsError ? (
-              <AdminStatusMessage type="error" message={settingsError} />
+            {loadError ? (
+              <AdminStatusMessage type="error" message={loadError} />
             ) : (
               <AdminLoadingState label="Cargando configuración…" />
             )}
           </div>
         ) : (
-          <form onSubmit={handleSettingsSubmit} className="mt-6 space-y-6">
-            <AdminPanel>
-              <AdminCrudToolbar
-                title="Contacto del sitio"
-                description="Teléfono, correo y dirección visibles en el sitio. Todos los campos son opcionales: guarda solo lo que quieras cambiar."
-              />
-              {settingsError ? <AdminStatusMessage type="error" message={settingsError} /> : null}
-              <div className="grid gap-4 sm:grid-cols-2">
-                <AdminField label="Correo" htmlFor="contact-email">
-                  <input
-                    id="contact-email"
-                    type="email"
-                    value={settings.contact.email}
-                    onChange={(e) => updateContact("email", e.target.value)}
-                    className={adminInputClass}
-                    placeholder="opcional"
-                  />
-                </AdminField>
-                <AdminField label="Teléfono" htmlFor="contact-phone">
-                  <input
-                    id="contact-phone"
-                    type="tel"
-                    value={settings.contact.phone}
-                    onChange={(e) => updateContact("phone", e.target.value)}
-                    className={adminInputClass}
-                    placeholder="opcional"
-                  />
-                </AdminField>
-                <AdminField label="Dirección" htmlFor="contact-address">
-                  <input
-                    id="contact-address"
-                    type="text"
-                    value={settings.contact.address}
-                    onChange={(e) => updateContact("address", e.target.value)}
-                    className={adminInputClass}
-                    placeholder="opcional"
-                  />
-                </AdminField>
-                <AdminField label="URL de Google Maps" htmlFor="contact-maps-url">
-                  <input
-                    id="contact-maps-url"
-                    type="text"
-                    inputMode="url"
-                    placeholder="https://maps.google.com/?q=… (opcional)"
-                    value={settings.contact.mapsUrl ?? ""}
-                    onChange={(e) => updateContact("mapsUrl", e.target.value)}
-                    className={adminInputClass}
-                  />
-                </AdminField>
-                <AdminField label="Horario" htmlFor="contact-hours">
-                  <input
-                    id="contact-hours"
-                    type="text"
-                    value={settings.contact.hours}
-                    onChange={(e) => updateContact("hours", e.target.value)}
-                    className={adminInputClass}
-                    placeholder="opcional"
-                  />
-                </AdminField>
-              </div>
-            </AdminPanel>
+          <div className="mt-6 space-y-6">
+            <AdminInfoBanner>
+              Cada bloque se guarda por separado. Puedes editar solo contacto, solo textos del
+              footer o solo redes sin afectar el resto.
+            </AdminInfoBanner>
 
-            <AdminPanel title="Textos del footer">
-              <p className="mb-4 text-sm text-grey-dark">
-                Edita en español. El inglés se genera automáticamente al guardar.
-              </p>
-              {translationWarning ? (
-                <AdminStatusMessage type="error" message={translationWarning} />
-              ) : null}
-              <div className="mt-4 grid gap-4">
-                <AdminField label="Descripción breve" htmlFor="footer-tagline-es">
-                  <textarea
-                    id="footer-tagline-es"
-                    value={settings.footer.es.tagline}
-                    onChange={(e) => updateFooter("tagline", e.target.value)}
-                    className={adminTextareaClass}
-                    rows={3}
-                  />
-                </AdminField>
-                <AdminField label="Línea de experiencia" htmlFor="footer-exp-es">
-                  <input
-                    id="footer-exp-es"
-                    type="text"
-                    value={settings.footer.es.experience}
-                    onChange={(e) => updateFooter("experience", e.target.value)}
-                    className={adminInputClass}
-                  />
-                </AdminField>
-                <AdminField label="Ubicación" htmlFor="footer-loc-es">
-                  <input
-                    id="footer-loc-es"
-                    type="text"
-                    value={settings.footer.es.location}
-                    onChange={(e) => updateFooter("location", e.target.value)}
-                    className={adminInputClass}
-                  />
-                </AdminField>
-              </div>
-            </AdminPanel>
-
-            <AdminPanel>
-              <AdminCrudToolbar
-                title="Redes sociales"
-                description="Lista editable del footer. Elige icono y URL; no se traducen."
-                action={
-                  <AdminButton type="button" onClick={addSocialLink}>
-                    + Agregar red
-                  </AdminButton>
-                }
-              />
-              {settings.social.length === 0 ? (
-                <AdminEmptyState
-                  title="Sin redes"
-                  description="Agrega Facebook, Instagram, WhatsApp u otras con el botón de arriba."
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                void saveSettingsSection("contact", { contact: settings.contact });
+              }}
+              className="space-y-4"
+            >
+              <AdminPanel>
+                <AdminCrudToolbar
+                  title="Contacto del sitio"
+                  description="Teléfono, correo y dirección visibles en el sitio. Todos los campos son opcionales."
                 />
-              ) : (
-                <ul className="mt-4 space-y-4">
-                  {settings.social.map((link, index) => (
-                    <li
-                      key={link.id}
-                      className="rounded-xl border border-navy/10 bg-surface/40 p-4"
-                    >
-                      <div className="grid gap-3 sm:grid-cols-2">
-                        <AdminField label="Icono" htmlFor={`social-icon-${link.id}`}>
-                          <select
-                            id={`social-icon-${link.id}`}
-                            value={link.icon}
-                            onChange={(e) =>
-                              updateSocialLink(link.id, {
-                                icon: e.target.value as SocialIconKey,
-                              })
-                            }
-                            className={adminInputClass}
-                          >
-                            {SOCIAL_ICON_KEYS.map((key) => (
-                              <option key={key} value={key}>
-                                {SOCIAL_ICON_LABELS[key]}
-                              </option>
-                            ))}
-                          </select>
-                        </AdminField>
-                        <AdminField
-                          label="Etiqueta (opcional)"
-                          htmlFor={`social-label-${link.id}`}
-                        >
-                          <input
-                            id={`social-label-${link.id}`}
-                            type="text"
-                            value={link.label ?? ""}
-                            onChange={(e) =>
-                              updateSocialLink(link.id, { label: e.target.value })
-                            }
-                            placeholder={SOCIAL_ICON_LABELS[link.icon]}
-                            className={adminInputClass}
-                          />
-                        </AdminField>
-                        <div className="sm:col-span-2">
-                          <AdminField label="URL" htmlFor={`social-url-${link.id}`}>
-                            <input
-                              id={`social-url-${link.id}`}
-                              type="url"
-                              inputMode="url"
-                              placeholder="https://… o mailto:… o tel:…"
-                              value={link.url}
+                {sectionUi.contact.error ? (
+                  <AdminStatusMessage type="error" message={sectionUi.contact.error} />
+                ) : null}
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <AdminField label="Correo" htmlFor="contact-email">
+                    <input
+                      id="contact-email"
+                      type="email"
+                      value={settings.contact.email}
+                      onChange={(e) => updateContact("email", e.target.value)}
+                      className={adminInputClass}
+                      placeholder="opcional"
+                    />
+                  </AdminField>
+                  <AdminField label="Teléfono" htmlFor="contact-phone">
+                    <input
+                      id="contact-phone"
+                      type="tel"
+                      value={settings.contact.phone}
+                      onChange={(e) => updateContact("phone", e.target.value)}
+                      className={adminInputClass}
+                      placeholder="opcional"
+                    />
+                  </AdminField>
+                  <AdminField label="Dirección" htmlFor="contact-address">
+                    <input
+                      id="contact-address"
+                      type="text"
+                      value={settings.contact.address}
+                      onChange={(e) => updateContact("address", e.target.value)}
+                      className={adminInputClass}
+                      placeholder="opcional"
+                    />
+                  </AdminField>
+                  <AdminField label="URL de Google Maps" htmlFor="contact-maps-url">
+                    <input
+                      id="contact-maps-url"
+                      type="text"
+                      inputMode="url"
+                      placeholder="https://maps.google.com/?q=… (opcional)"
+                      value={settings.contact.mapsUrl ?? ""}
+                      onChange={(e) => updateContact("mapsUrl", e.target.value)}
+                      className={adminInputClass}
+                    />
+                  </AdminField>
+                  <AdminField label="Horario" htmlFor="contact-hours">
+                    <input
+                      id="contact-hours"
+                      type="text"
+                      value={settings.contact.hours}
+                      onChange={(e) => updateContact("hours", e.target.value)}
+                      className={adminInputClass}
+                      placeholder="opcional"
+                    />
+                  </AdminField>
+                </div>
+                <div className="mt-5">
+                  <AdminSaveButton
+                    saving={sectionUi.contact.saving}
+                    saved={sectionUi.contact.saved}
+                    label="Guardar contacto"
+                  />
+                </div>
+              </AdminPanel>
+            </form>
+
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                void saveSettingsSection("footer", {
+                  footer: { es: settings.footer.es },
+                });
+              }}
+              className="space-y-4"
+            >
+              <AdminPanel title="Textos del footer">
+                <p className="mb-4 text-sm text-grey-dark">
+                  Edita en español. El inglés se genera automáticamente al guardar este bloque.
+                </p>
+                {translationWarning ? (
+                  <AdminStatusMessage type="error" message={translationWarning} />
+                ) : null}
+                {sectionUi.footer.error ? (
+                  <AdminStatusMessage type="error" message={sectionUi.footer.error} />
+                ) : null}
+                <div className="mt-4 grid gap-4">
+                  <AdminField label="Descripción breve" htmlFor="footer-tagline-es">
+                    <textarea
+                      id="footer-tagline-es"
+                      value={settings.footer.es.tagline}
+                      onChange={(e) => updateFooter("tagline", e.target.value)}
+                      className={adminTextareaClass}
+                      rows={3}
+                    />
+                  </AdminField>
+                  <AdminField label="Línea de experiencia" htmlFor="footer-exp-es">
+                    <input
+                      id="footer-exp-es"
+                      type="text"
+                      value={settings.footer.es.experience}
+                      onChange={(e) => updateFooter("experience", e.target.value)}
+                      className={adminInputClass}
+                    />
+                  </AdminField>
+                  <AdminField label="Ubicación" htmlFor="footer-loc-es">
+                    <input
+                      id="footer-loc-es"
+                      type="text"
+                      value={settings.footer.es.location}
+                      onChange={(e) => updateFooter("location", e.target.value)}
+                      className={adminInputClass}
+                    />
+                  </AdminField>
+                </div>
+                <div className="mt-5">
+                  <AdminSaveButton
+                    saving={sectionUi.footer.saving}
+                    saved={sectionUi.footer.saved}
+                    label="Guardar textos del footer"
+                  />
+                </div>
+              </AdminPanel>
+            </form>
+
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                void saveSettingsSection("social", { social: settings.social });
+              }}
+              className="space-y-4"
+            >
+              <AdminPanel>
+                <AdminCrudToolbar
+                  title="Redes sociales"
+                  description="Lista editable del footer. Guarda solo este bloque cuando termines de editar."
+                  action={
+                    <AdminButton type="button" onClick={addSocialLink}>
+                      + Agregar red
+                    </AdminButton>
+                  }
+                />
+                {sectionUi.social.error ? (
+                  <AdminStatusMessage type="error" message={sectionUi.social.error} />
+                ) : null}
+                {settings.social.length === 0 ? (
+                  <AdminEmptyState
+                    title="Sin redes"
+                    description="Agrega Facebook, Instagram, WhatsApp u otras con el botón de arriba."
+                  />
+                ) : (
+                  <ul className="mt-4 space-y-4">
+                    {settings.social.map((link, index) => (
+                      <li
+                        key={link.id}
+                        className="rounded-xl border border-navy/10 bg-surface/40 p-4"
+                      >
+                        <div className="grid gap-3 sm:grid-cols-2">
+                          <AdminField label="Icono" htmlFor={`social-icon-${link.id}`}>
+                            <select
+                              id={`social-icon-${link.id}`}
+                              value={link.icon}
                               onChange={(e) =>
-                                updateSocialLink(link.id, { url: e.target.value })
+                                updateSocialLink(link.id, {
+                                  icon: e.target.value as SocialIconKey,
+                                })
                               }
+                              className={adminInputClass}
+                            >
+                              {SOCIAL_ICON_KEYS.map((iconKey) => (
+                                <option key={iconKey} value={iconKey}>
+                                  {SOCIAL_ICON_LABELS[iconKey]}
+                                </option>
+                              ))}
+                            </select>
+                          </AdminField>
+                          <AdminField
+                            label="Etiqueta (opcional)"
+                            htmlFor={`social-label-${link.id}`}
+                          >
+                            <input
+                              id={`social-label-${link.id}`}
+                              type="text"
+                              value={link.label ?? ""}
+                              onChange={(e) =>
+                                updateSocialLink(link.id, { label: e.target.value })
+                              }
+                              placeholder={SOCIAL_ICON_LABELS[link.icon]}
                               className={adminInputClass}
                             />
                           </AdminField>
+                          <div className="sm:col-span-2">
+                            <AdminField label="URL" htmlFor={`social-url-${link.id}`}>
+                              <input
+                                id={`social-url-${link.id}`}
+                                type="text"
+                                inputMode="url"
+                                placeholder="https://… o mailto:… o tel:…"
+                                value={link.url}
+                                onChange={(e) =>
+                                  updateSocialLink(link.id, { url: e.target.value })
+                                }
+                                className={adminInputClass}
+                              />
+                            </AdminField>
+                          </div>
                         </div>
-                      </div>
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        <AdminButton
-                          type="button"
-                          variant="secondary"
-                          onClick={() => moveSocialLink(link.id, -1)}
-                          disabled={index === 0}
-                        >
-                          Subir
-                        </AdminButton>
-                        <AdminButton
-                          type="button"
-                          variant="secondary"
-                          onClick={() => moveSocialLink(link.id, 1)}
-                          disabled={index === settings.social.length - 1}
-                        >
-                          Bajar
-                        </AdminButton>
-                        <AdminButton
-                          type="button"
-                          variant="danger"
-                          onClick={() => removeSocialLink(link.id)}
-                        >
-                          Eliminar
-                        </AdminButton>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </AdminPanel>
-
-            <AdminSaveButton saving={saving} saved={saved} />
-          </form>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          <AdminButton
+                            type="button"
+                            variant="secondary"
+                            onClick={() => moveSocialLink(link.id, -1)}
+                            disabled={index === 0}
+                          >
+                            Subir
+                          </AdminButton>
+                          <AdminButton
+                            type="button"
+                            variant="secondary"
+                            onClick={() => moveSocialLink(link.id, 1)}
+                            disabled={index === settings.social.length - 1}
+                          >
+                            Bajar
+                          </AdminButton>
+                          <AdminButton
+                            type="button"
+                            variant="danger"
+                            onClick={() => removeSocialLink(link.id)}
+                          >
+                            Eliminar
+                          </AdminButton>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <div className="mt-5">
+                  <AdminSaveButton
+                    saving={sectionUi.social.saving}
+                    saved={sectionUi.social.saved}
+                    label="Guardar redes sociales"
+                  />
+                </div>
+              </AdminPanel>
+            </form>
+          </div>
         )
       ) : (
         <div className="mt-6">
