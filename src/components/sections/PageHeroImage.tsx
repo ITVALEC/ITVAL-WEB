@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Container } from "@/components/layout/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Breadcrumbs, type BreadcrumbItem } from "@/components/ui/Breadcrumbs";
+import { HeroMediaOverlay } from "@/components/sections/HeroMediaOverlay";
 
 type PageHeroImageProps = {
   title: string;
@@ -33,24 +34,20 @@ export function PageHeroImage({
         sizes="(max-width: 1280px) 100vw, 1280px"
         loading="eager"
       />
-      <div className="absolute inset-0 bg-navy/70" aria-hidden="true" />
-      <div
-        className="absolute inset-0 bg-gradient-to-r from-navy/95 from-0% via-navy/85 via-50% to-navy/65 to-100%"
-        aria-hidden="true"
-      />
-      <div
-        className="absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/20 to-navy/45"
-        aria-hidden="true"
-      />
+      <HeroMediaOverlay variant="page" />
       <Container className="relative z-10">
         {breadcrumbs ? (
-          <Breadcrumbs
-            items={breadcrumbs}
-            light
-            ariaLabel={breadcrumbAriaLabel}
-          />
+          <div className="fade-up">
+            <Breadcrumbs
+              items={breadcrumbs}
+              light
+              ariaLabel={breadcrumbAriaLabel}
+            />
+          </div>
         ) : null}
-        <SectionHeading as="h1" title={title} subtitle={subtitle} light />
+        <div className="fade-up" style={{ animationDelay: "0.06s" }}>
+          <SectionHeading as="h1" title={title} subtitle={subtitle} light />
+        </div>
       </Container>
     </section>
   );

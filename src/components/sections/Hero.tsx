@@ -3,6 +3,7 @@ import { Container } from "@/components/layout/Container";
 import { ButtonLink } from "@/components/ui/Button";
 import { AccentText, accentAfterColon } from "@/components/ui/AccentText";
 import { HeroCarousel } from "@/components/sections/HeroCarousel";
+import { HeroMediaOverlay } from "@/components/sections/HeroMediaOverlay";
 import { NAV_PATHS } from "@/lib/constants";
 import { PROCESS_STEP_KEYS } from "@/lib/content-keys";
 import { getHeroBackgroundSources } from "@/lib/hero-images";
@@ -37,16 +38,7 @@ export function Hero() {
         )}
       />
 
-      {/* Overlay 35% (DS) + gradiente lateral para contraste de texto */}
-      <div className="absolute inset-0 bg-navy-dark/35" aria-hidden="true" />
-      <div
-        className="absolute inset-0 bg-gradient-to-r from-navy-dark/80 via-navy-dark/35 to-transparent"
-        aria-hidden="true"
-      />
-      <div
-        className="absolute inset-0 bg-gradient-to-t from-navy-dark/70 via-transparent to-navy-dark/40"
-        aria-hidden="true"
-      />
+      <HeroMediaOverlay variant="home" />
 
       <Container className="relative z-10 flex min-h-[100svh] flex-col justify-center pb-28 pt-24 sm:pb-32 sm:pt-28 lg:pb-40 lg:pt-32">
         <div className="max-w-3xl">

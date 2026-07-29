@@ -5,6 +5,7 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ProjectCard } from "@/components/ui/ProjectCard";
 import { ButtonLink } from "@/components/ui/Button";
+import { HeroMediaOverlay } from "@/components/sections/HeroMediaOverlay";
 import { PRODUCT_LIST_ITEM_KEYS } from "@/lib/content-keys";
 import { getProjectsForProductSubcategory } from "@/lib/catalog";
 import {
@@ -87,32 +88,30 @@ export async function ProductDetailView({
             loading="eager"
           />
         ) : null}
-        <div className="absolute inset-0 bg-navy/70" aria-hidden="true" />
-        <div
-          className={`absolute inset-0 ${heroIsReal ? "bg-gradient-to-r from-navy/95 via-navy/85 to-navy/65" : ""}`}
-          aria-hidden="true"
-        />
-        <div
-          className="absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/20 to-navy/45"
-          aria-hidden="true"
-        />
+        {heroIsReal ? (
+          <HeroMediaOverlay variant="page" />
+        ) : (
+          <div className="absolute inset-0 bg-navy/55" aria-hidden="true" />
+        )}
         <Container className="relative z-10">
-          <Breadcrumbs
-            light
-            ariaLabel={tCommon("breadcrumbNav")}
-            items={breadcrumbTrail(tNav("home"), [
-              { label: tNav("products"), href: NAV_PATHS.products },
-              {
-                label: tCat(`${category}.title`),
-                href: productCategoryPath(category),
-              },
-              { label: tSub(`${subcategory}.title`) },
-            ])}
-          />
-          <h1 className="max-w-3xl font-display text-2xl font-bold text-white sm:text-3xl lg:text-4xl">
+          <div className="fade-up">
+            <Breadcrumbs
+              light
+              ariaLabel={tCommon("breadcrumbNav")}
+              items={breadcrumbTrail(tNav("home"), [
+                { label: tNav("products"), href: NAV_PATHS.products },
+                {
+                  label: tCat(`${category}.title`),
+                  href: productCategoryPath(category),
+                },
+                { label: tSub(`${subcategory}.title`) },
+              ])}
+            />
+          </div>
+          <h1 className="fade-up max-w-3xl font-display text-2xl font-bold text-white sm:text-3xl lg:text-4xl" style={{ animationDelay: "0.06s" }}>
             {tSub(`${subcategory}.title`)}
           </h1>
-          <p className="mt-4 max-w-2xl text-ds-body text-white/85">
+          <p className="fade-up mt-4 max-w-2xl text-ds-body text-white/85" style={{ animationDelay: "0.1s" }}>
             {tSub(`${subcategory}.description`)}
           </p>
         </Container>

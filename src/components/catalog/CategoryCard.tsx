@@ -30,7 +30,7 @@ export function CategoryCard({ category, imageSrc: imageSrcProp }: CategoryCardP
             sizes="(max-width: 768px) 100vw, 50vw"
           />
           <div
-            className="absolute inset-0 bg-gradient-to-t from-navy-dark/80 to-transparent"
+            className="absolute inset-0 bg-gradient-to-t from-navy-dark/90 via-navy-dark/35 to-transparent"
             aria-hidden="true"
           />
           <div className="absolute bottom-0 p-5">

@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/layout/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { CategoryCarousel } from "@/components/catalog/CategoryCarousel";
 import { AppLink } from "@/components/ui/AppLink";
 import { PRODUCT_KEYS } from "@/lib/catalog";
@@ -18,7 +19,7 @@ export function ProductsPreview() {
       aria-labelledby="products-heading"
     >
       <Container>
-        <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-end">
+        <ScrollReveal className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-end">
           <SectionHeading
             id="products-heading"
             title={title}
@@ -32,14 +33,16 @@ export function ProductsPreview() {
           >
             {tc("viewProducts")} →
           </AppLink>
-        </div>
-        <CategoryCarousel
-          categories={PRODUCT_KEYS}
-          navLabel={t("carouselNav")}
-          previousLabel={t("previous")}
-          nextLabel={t("next")}
-          variant="service"
-        />
+        </ScrollReveal>
+        <ScrollReveal delayMs={80} className="mt-0">
+          <CategoryCarousel
+            categories={PRODUCT_KEYS}
+            navLabel={t("carouselNav")}
+            previousLabel={t("previous")}
+            nextLabel={t("next")}
+            variant="service"
+          />
+        </ScrollReveal>
       </Container>
     </section>
   );

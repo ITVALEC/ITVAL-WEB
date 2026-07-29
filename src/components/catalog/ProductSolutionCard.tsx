@@ -41,7 +41,7 @@ export function ProductSolutionCard({
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
           <div
-            className="absolute inset-0 bg-gradient-to-t from-navy-dark/75 via-navy-dark/15 to-transparent"
+            className="absolute inset-0 bg-gradient-to-t from-navy-dark/88 via-navy-dark/30 to-transparent"
             aria-hidden="true"
           />
           <span className="absolute left-3 top-3 max-w-[calc(100%-1.5rem)] truncate rounded-pill bg-navy px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white sm:left-4 sm:top-4 sm:max-w-[75%] sm:px-3 sm:text-xs">

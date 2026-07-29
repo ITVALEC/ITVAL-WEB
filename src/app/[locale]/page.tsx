@@ -4,16 +4,12 @@ import { Metrics } from "@/components/sections/Metrics";
 import { ProductsPreview } from "@/components/sections/ProductsPreview";
 import { FeaturedProjects } from "@/components/sections/FeaturedProjects";
 import { Process } from "@/components/sections/Process";
-import { CtaBanner } from "@/components/sections/CtaBanner";
 
 type PageProps = {
   params: Promise<{ locale: string }>;
 };
 
-/**
- * Home — Design System Master Guide v1 + composición mockup.
- * Hero → métricas flotantes → servicios → obras (navy) → proceso → CTA.
- */
+/** Home: Hero, metricas, servicios, obras y proceso. Sin CtaBanner. */
 export default async function HomePage({ params }: PageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
@@ -25,7 +21,6 @@ export default async function HomePage({ params }: PageProps) {
       <ProductsPreview />
       <FeaturedProjects />
       <Process />
-      <CtaBanner />
     </>
   );
 }

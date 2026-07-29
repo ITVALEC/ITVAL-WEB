@@ -83,7 +83,7 @@ export function FeaturedProjectsCarousel({
                 sizes="(max-width: 640px) 85vw, (max-width: 1024px) 45vw, 28vw"
               />
               <div
-                className="absolute inset-0 bg-gradient-to-t from-navy-dark via-navy-dark/40 to-transparent"
+                className="absolute inset-0 bg-gradient-to-t from-navy-dark via-navy-dark/55 to-navy-dark/15"
                 aria-hidden="true"
               />
               <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">

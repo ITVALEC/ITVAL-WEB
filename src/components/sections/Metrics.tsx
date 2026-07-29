@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/layout/Container";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { METRIC_KEYS } from "@/lib/content-keys";
 import { PROJECTS } from "@/lib/projects";
 
@@ -70,29 +71,31 @@ export function Metrics() {
         {t("title")}
       </h2>
       <Container className="relative">
-        <div className="rounded-card border border-gold/25 bg-navy-dark px-3 py-6 shadow-card-hover sm:px-8 sm:py-8 lg:px-10 lg:py-9">
-          <dl className="relative grid grid-cols-1 gap-6 min-[420px]:grid-cols-3 min-[420px]:gap-0 min-[420px]:divide-x min-[420px]:divide-gold/20">
-            {METRIC_KEYS.map((key) => (
-              <div
-                key={key}
-                className="fade-up flex flex-col items-center px-1 text-center min-[420px]:px-4 sm:px-6 lg:px-8"
-              >
-                <dt className="sr-only">{t(`${key}.label`)}</dt>
-                <dd className="flex flex-col items-center">
-                  <span className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-full border border-gold/50 text-gold sm:mb-4 sm:h-12 sm:w-12">
-                    <MetricIcon name={key} />
-                  </span>
-                  <span className="block font-display text-[clamp(1.75rem,1rem+2vw,3rem)] font-bold tracking-tight text-white">
-                    {values[key]}
-                  </span>
-                  <span className="mt-2 block max-w-[10rem] text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-white/65 sm:max-w-[12rem] sm:text-ds-caption sm:tracking-[0.16em]">
-                    {t(`${key}.label`)}
-                  </span>
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </div>
+        <ScrollReveal>
+          <div className="rounded-card border border-gold/25 bg-navy-dark px-3 py-6 shadow-card-hover sm:px-8 sm:py-8 lg:px-10 lg:py-9">
+            <dl className="relative grid grid-cols-1 gap-6 min-[420px]:grid-cols-3 min-[420px]:gap-0 min-[420px]:divide-x min-[420px]:divide-gold/20">
+              {METRIC_KEYS.map((key) => (
+                <div
+                  key={key}
+                  className="flex flex-col items-center px-1 text-center min-[420px]:px-4 sm:px-6 lg:px-8"
+                >
+                  <dt className="sr-only">{t(`${key}.label`)}</dt>
+                  <dd className="flex flex-col items-center">
+                    <span className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-full border border-gold/50 text-gold sm:mb-4 sm:h-12 sm:w-12">
+                      <MetricIcon name={key} />
+                    </span>
+                    <span className="block font-display text-[clamp(1.75rem,1rem+2vw,3rem)] font-bold tracking-tight text-white">
+                      {values[key]}
+                    </span>
+                    <span className="mt-2 block max-w-[10rem] text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-white/65 sm:max-w-[12rem] sm:text-ds-caption sm:tracking-[0.16em]">
+                      {t(`${key}.label`)}
+                    </span>
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </ScrollReveal>
       </Container>
     </section>
   );

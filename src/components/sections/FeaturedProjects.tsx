@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/layout/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { FeaturedProjectsCarousel } from "@/components/sections/FeaturedProjectsCarousel";
 import { accentLastWords } from "@/components/ui/AccentText";
 import { getFeaturedProjects, NAV_PATHS } from "@/lib/constants";
@@ -23,7 +24,7 @@ export function FeaturedProjects() {
         aria-hidden="true"
       />
       <Container className="relative">
-        <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-end">
+        <ScrollReveal className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-end">
           <SectionHeading
             id="featured-heading"
             title={title}
@@ -39,14 +40,16 @@ export function FeaturedProjects() {
             {tc("viewAllProjects")}
             <span aria-hidden="true">→</span>
           </Link>
-        </div>
+        </ScrollReveal>
 
-        <FeaturedProjectsCarousel
-          projects={featured}
-          navLabel={t("title")}
-          previousLabel={tProducts("previous")}
-          nextLabel={tProducts("next")}
-        />
+        <ScrollReveal delayMs={90}>
+          <FeaturedProjectsCarousel
+            projects={featured}
+            navLabel={t("title")}
+            previousLabel={tProducts("previous")}
+            nextLabel={tProducts("next")}
+          />
+        </ScrollReveal>
       </Container>
     </section>
   );

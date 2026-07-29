@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Container } from "@/components/layout/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Breadcrumbs, type BreadcrumbItem } from "@/components/ui/Breadcrumbs";
+import { HeroMediaOverlay } from "@/components/sections/HeroMediaOverlay";
 import { Link } from "@/i18n/navigation";
 import { type Pathnames } from "@/i18n/routing";
 
@@ -26,8 +27,8 @@ type PageHeroProps = {
 
 /**
  * Hero de páginas internas.
- * Overlay navy denso (saturación baja) para contraste WCAG del texto blanco
- * incluso con fondos claros (cielo, vidrio, etc.).
+ * Overlay navy ~50–55% + gradientes para contraste del texto blanco
+ * sin ocultar del todo la foto.
  */
 export function PageHero({
   title,
@@ -51,27 +52,22 @@ export function PageHero({
             sizes="(max-width: 1280px) 100vw, 1280px"
             loading="eager"
           />
-          {/* Capa base navy desaturada — evita texto blanco ilegible sobre cielo claro */}
-          <div className="absolute inset-0 bg-navy/70" aria-hidden="true" />
-          <div
-            className="absolute inset-0 bg-gradient-to-r from-navy/95 from-0% via-navy/85 via-50% to-navy/65 to-100%"
-            aria-hidden="true"
-          />
-          <div
-            className="absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/20 to-navy/45"
-            aria-hidden="true"
-          />
+          <HeroMediaOverlay variant="page" />
         </>
       ) : null}
       <Container className="relative z-10">
         {breadcrumbs ? (
-          <Breadcrumbs
-            items={breadcrumbs}
-            light
-            ariaLabel={breadcrumbAriaLabel}
-          />
+          <div className="fade-up">
+            <Breadcrumbs
+              items={breadcrumbs}
+              light
+              ariaLabel={breadcrumbAriaLabel}
+            />
+          </div>
         ) : null}
-        <SectionHeading as="h1" title={title} subtitle={subtitle} light />
+        <div className="fade-up" style={{ animationDelay: "0.06s" }}>
+          <SectionHeading as="h1" title={title} subtitle={subtitle} light />
+        </div>
         {backLink ? (
           <Link
             href={backLink.href}
