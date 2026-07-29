@@ -125,6 +125,35 @@
     @apply hover:shadow-card-hover hover:scale-[1.03] motion-reduce:hover:scale-100;
   }
 
+  /**
+   * Hero home scrim: horizontal L→R.
+   * Móvil: más cobertura a la izquierda (texto a ancho completo).
+   * md+: niveles corporativos 95/80/45/15/0.
+   */
+  .hero-home-scrim {
+    background-image: linear-gradient(
+      to right,
+      rgba(9, 26, 48, 0.96) 0%,
+      rgba(9, 26, 48, 0.88) 28%,
+      rgba(9, 26, 48, 0.62) 58%,
+      rgba(9, 26, 48, 0.28) 82%,
+      transparent 100%
+    );
+  }
+
+  @media (min-width: 768px) {
+    .hero-home-scrim {
+      background-image: linear-gradient(
+        to right,
+        rgba(9, 26, 48, 0.95) 0%,
+        rgba(9, 26, 48, 0.8) 25%,
+        rgba(9, 26, 48, 0.45) 50%,
+        rgba(9, 26, 48, 0.15) 70%,
+        transparent 100%
+      );
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .hero-reveal,
     .fade-up {

@@ -3,20 +3,15 @@ type HeroMediaOverlayProps = {
   variant?: "home" | "page";
 };
 
-/** Navy dark #091A30 - degradado horizontal del hero home (sin oscurecer toda la foto). */
-const HOME_HERO_SCRIM =
-  "linear-gradient(to right, rgba(9, 26, 48, 0.95) 0%, rgba(9, 26, 48, 0.80) 25%, rgba(9, 26, 48, 0.45) 50%, rgba(9, 26, 48, 0.15) 70%, transparent 100%)";
-
 /**
  * Capas de contraste sobre fotos de hero / banners.
- * En home: solo scrim horizontal L->R; la arquitectura queda clara a la derecha.
+ * En home: scrim horizontal responsive (.hero-home-scrim en globals.css).
  */
 export function HeroMediaOverlay({ variant = "page" }: HeroMediaOverlayProps) {
   if (variant === "home") {
     return (
       <div
-        className="pointer-events-none absolute inset-0 z-[1]"
-        style={{ backgroundImage: HOME_HERO_SCRIM }}
+        className="hero-home-scrim pointer-events-none absolute inset-0 z-[1]"
         aria-hidden="true"
       />
     );

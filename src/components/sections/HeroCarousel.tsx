@@ -1,10 +1,18 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
 
-const SLIDE_INTERVAL_MS = 8000;
+const SLIDE_INTERVAL_MS = 7000;
 const FADE_DURATION_MS = 2000;
+const SWIPE_THRESHOLD_PX = 48;
 
 type HeroCarouselProps = {
   images: { src: string; alt: string }[];
@@ -25,8 +33,8 @@ export function HeroCarousel({
   overlay,
 }: HeroCarouselProps) {
   const [active, setActive] = useState(0);
-  const [paused, setPaused] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const pointerStartX = useRef<number | null>(null);
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -52,8 +60,9 @@ export function HeroCarousel({
     goTo(active + 1);
   }, [active, goTo]);
 
+  // Autoplay continuo. Se reinicia al cambiar de slide (flechas, dots, swipe o auto).
   useEffect(() => {
-    if (images.length <= 1 || reducedMotion || paused) return;
+    if (images.length <= 1 || reducedMotion) return;
 
     const id = window.setInterval(() => {
       if (document.hidden) return;
@@ -61,12 +70,16 @@ export function HeroCarousel({
     }, SLIDE_INTERVAL_MS);
 
     return () => window.clearInterval(id);
-  }, [images.length, reducedMotion, paused]);
+  }, [images.length, reducedMotion, active]);
 
   useEffect(() => {
     if (images.length <= 1) return;
 
     const onKeyDown = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (target?.closest("input, textarea, select, [contenteditable='true']")) {
+        return;
+      }
       if (event.key === "ArrowLeft") {
         event.preventDefault();
         goPrev();
@@ -80,21 +93,48 @@ export function HeroCarousel({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [images.length, goPrev, goNext]);
 
+  const onPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    const target = event.target as HTMLElement | null;
+    if (target?.closest("button, a")) return;
+    pointerStartX.current = event.clientX;
+  };
+
+  const onPointerUp = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (pointerStartX.current == null || images.length <= 1) {
+      pointerStartX.current = null;
+      return;
+    }
+    const delta = event.clientX - pointerStartX.current;
+    pointerStartX.current = null;
+    if (Math.abs(delta) < SWIPE_THRESHOLD_PX) return;
+    if (delta > 0) goPrev();
+    else goNext();
+  };
+
+  const onPointerCancel = () => {
+    pointerStartX.current = null;
+  };
+
   if (images.length === 0) return null;
 
-  const showSingle = images.length === 1 || reducedMotion;
-  const currentIndex = showSingle ? 0 : active;
-  const hasMultiple = !showSingle;
+  const hasMultiple = images.length > 1;
+  const currentIndex = active;
+  const useFade = hasMultiple && !reducedMotion;
+
+  const arrowClass =
+    "pointer-events-auto flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/25 bg-navy-dark/55 text-white transition hover:border-white/45 hover:bg-navy-dark/75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy sm:h-11 sm:w-11 md:h-12 md:w-12";
 
   return (
     <div
-      className="absolute inset-0"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
+      className="absolute inset-0 touch-pan-y"
+      onPointerDown={onPointerDown}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerCancel}
     >
       <div className="absolute inset-0 z-0">
         {images.map((image, index) => {
-          const isActive = showSingle ? index === 0 : index === currentIndex;
+          const isActive = index === currentIndex;
 
           return (
             <Image
@@ -104,12 +144,13 @@ export function HeroCarousel({
               fill
               priority={index === 0}
               aria-hidden={!isActive}
-              className="object-cover object-[70%_center] motion-reduce:transition-none motion-reduce:opacity-100"
+              draggable={false}
+              className="object-cover object-[55%_center] motion-reduce:transition-none motion-reduce:opacity-100 sm:object-[62%_center] lg:object-[70%_center]"
               style={{
                 opacity: isActive ? 1 : 0,
-                transition: showSingle
-                  ? undefined
-                  : `opacity ${FADE_DURATION_MS}ms ease-in-out`,
+                transition: useFade
+                  ? `opacity ${FADE_DURATION_MS}ms ease-in-out`
+                  : undefined,
                 zIndex: isActive ? 1 : 0,
               }}
               sizes="100vw"
@@ -126,57 +167,84 @@ export function HeroCarousel({
             type="button"
             aria-label={previousLabel}
             onClick={goPrev}
-            className="pointer-events-auto absolute left-3 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-navy-dark/55 text-white transition hover:border-white/45 hover:bg-navy-dark/75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy sm:left-6 sm:h-12 sm:w-12"
+            className={`${arrowClass} absolute left-3 top-1/2 hidden -translate-y-1/2 md:left-5 md:flex lg:left-8`}
           >
-            <svg
-              viewBox="0 0 24 24"
-              className="h-5 w-5 fill-none stroke-current"
-              strokeWidth="2"
-              aria-hidden="true"
-            >
-              <path d="M15 5l-7 7 7 7" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+            <Chevron direction="prev" />
           </button>
 
           <button
             type="button"
             aria-label={nextLabel}
             onClick={goNext}
-            className="pointer-events-auto absolute right-3 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-navy-dark/55 text-white transition hover:border-white/45 hover:bg-navy-dark/75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy sm:right-6 sm:h-12 sm:w-12"
+            className={`${arrowClass} absolute right-3 top-1/2 hidden -translate-y-1/2 md:right-5 md:flex lg:right-8`}
           >
-            <svg
-              viewBox="0 0 24 24"
-              className="h-5 w-5 fill-none stroke-current"
-              strokeWidth="2"
-              aria-hidden="true"
-            >
-              <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+            <Chevron direction="next" />
           </button>
 
           <div
-            className="pointer-events-auto absolute bottom-6 right-4 flex gap-2 sm:right-8"
-            role="tablist"
+            className="pointer-events-auto absolute inset-x-0 bottom-0 flex items-center justify-center gap-3 px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-3 sm:gap-4 sm:px-6 md:inset-x-auto md:right-6 md:justify-end md:px-0 lg:right-8"
+            role="group"
             aria-label={navLabel}
           >
-            {images.map((image, index) => (
-              <button
-                key={image.src}
-                type="button"
-                role="tab"
-                aria-selected={index === currentIndex}
-                aria-label={goToSlideLabels[index] ?? `Slide ${index + 1}`}
-                onClick={() => goTo(index)}
-                className={`h-2 rounded-full transition-[width,background-color] duration-500 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy motion-reduce:transition-none ${
-                  index === currentIndex
-                    ? "w-7 bg-white"
-                    : "w-2 bg-white/45 hover:bg-white/70"
-                }`}
-              />
-            ))}
+            <button
+              type="button"
+              aria-label={previousLabel}
+              onClick={goPrev}
+              className={`${arrowClass} md:hidden`}
+            >
+              <Chevron direction="prev" />
+            </button>
+
+            <div
+              className="flex max-w-[min(100%,18rem)] flex-wrap items-center justify-center gap-1.5 sm:max-w-none sm:gap-2"
+              role="tablist"
+              aria-label={navLabel}
+            >
+              {images.map((image, index) => (
+                <button
+                  key={image.src}
+                  type="button"
+                  role="tab"
+                  aria-selected={index === currentIndex}
+                  aria-label={goToSlideLabels[index] ?? `Slide ${index + 1}`}
+                  onClick={() => goTo(index)}
+                  className={`h-2 rounded-full transition-[width,background-color] duration-500 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy motion-reduce:transition-none ${
+                    index === currentIndex
+                      ? "w-6 bg-white sm:w-7"
+                      : "w-2 bg-white/45 hover:bg-white/70"
+                  }`}
+                />
+              ))}
+            </div>
+
+            <button
+              type="button"
+              aria-label={nextLabel}
+              onClick={goNext}
+              className={`${arrowClass} md:hidden`}
+            >
+              <Chevron direction="next" />
+            </button>
           </div>
         </div>
       ) : null}
     </div>
+  );
+}
+
+function Chevron({ direction }: { direction: "prev" | "next" }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="h-5 w-5 fill-none stroke-current"
+      strokeWidth="2"
+      aria-hidden="true"
+    >
+      {direction === "prev" ? (
+        <path d="M15 5l-7 7 7 7" strokeLinecap="round" strokeLinejoin="round" />
+      ) : (
+        <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
+      )}
+    </svg>
   );
 }
