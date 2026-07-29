@@ -33,7 +33,7 @@ export function Pagination({
 
   return (
     <nav
-      className={`mt-10 flex flex-col items-center gap-4 border-t border-grey/20 pt-8 ${className}`}
+      className={`mt-10 flex flex-col items-center gap-4 border-t border-grey/20 pb-2 pt-8 sm:pb-4 ${className}`}
       aria-label={labels.navLabel}
     >
       <p className="text-sm text-grey-dark">{labels.showingRange}</p>
@@ -52,19 +52,19 @@ export function Pagination({
             entry === "ellipsis" ? (
               <li
                 key={`ellipsis-${index}`}
-                className="px-2 text-sm text-grey"
+                className="inline-flex h-10 min-w-10 items-center justify-center px-2 text-sm text-grey"
                 aria-hidden="true"
               >
                 …
               </li>
             ) : (
-              <li key={entry} role="listitem">
+              <li key={entry} role="listitem" className="inline-flex">
                 <button
                   type="button"
                   onClick={() => onPageChange(entry)}
                   aria-label={labels.goToPage(entry)}
                   aria-current={entry === page ? "page" : undefined}
-                  className={`min-h-10 min-w-10 rounded-card px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 ${
+                  className={`inline-flex h-10 min-w-10 items-center justify-center rounded-xl px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 ${
                     entry === page
                       ? "bg-navy text-white"
                       : "text-navy hover:bg-surface"
@@ -110,7 +110,7 @@ function PageButton({
       onClick={onClick}
       disabled={disabled}
       aria-label={ariaLabel}
-      className="min-h-10 rounded-card px-3 text-sm font-semibold text-navy transition-colors hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
+      className="inline-flex h-10 items-center justify-center rounded-xl px-3 text-sm font-semibold text-navy transition-colors hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
     >
       {children}
     </button>

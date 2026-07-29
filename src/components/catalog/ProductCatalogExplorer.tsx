@@ -302,7 +302,7 @@ export function ProductCatalogExplorer({
   return (
     <section
       id="catalog-explorer"
-      className="scroll-mt-24 bg-surface py-section"
+      className="scroll-mt-24 bg-surface py-section pb-[max(3.5rem,env(safe-area-inset-bottom))]"
       aria-labelledby="catalog-explorer-heading"
     >
       <Container>
@@ -310,33 +310,39 @@ export function ProductCatalogExplorer({
           {t("sectionTitle")}
         </h2>
 
-        <div className="grid gap-8 lg:grid-cols-[220px_minmax(0,1fr)] lg:items-start lg:gap-12 xl:grid-cols-[240px_minmax(0,1fr)]">
-          <aside className="relative z-0 isolate min-w-0 lg:sticky lg:top-28 lg:self-start">
-            <p className="text-ds-caption font-semibold uppercase tracking-[0.14em] text-grey">
+        <div className="grid gap-8 lg:grid-cols-[minmax(12.5rem,15rem)_minmax(0,1fr)] lg:items-start lg:gap-10 xl:grid-cols-[minmax(14rem,16rem)_minmax(0,1fr)] xl:gap-12">
+          <aside className="relative z-0 isolate min-w-0 lg:sticky lg:top-28 lg:max-h-[calc(100svh-7.5rem)] lg:self-start lg:overflow-y-auto lg:overscroll-contain lg:pb-6 lg:pr-2">
+            <p className="px-1 text-ds-caption font-semibold uppercase tracking-[0.14em] text-grey">
               {tHub("categoriesNav")}
             </p>
             <nav
               aria-label={tHub("categoriesNav")}
-              className="mt-3 -mx-1 overflow-x-auto pb-1 lg:mx-0 lg:overflow-visible lg:pb-0"
+              className="mt-3 -mx-1 overflow-x-auto px-1 pb-2 lg:mx-0 lg:overflow-visible lg:pb-0"
             >
-              <ul className="flex w-max gap-2 lg:w-auto lg:flex-col lg:gap-0.5">
-                <li>
+              <ul className="flex w-max gap-2 lg:w-full lg:flex-col lg:gap-1">
+                <li className="lg:w-full">
                   <a
                     href="#catalog-explorer"
-                    className="flex min-h-11 items-center gap-2.5 whitespace-nowrap rounded-card bg-navy px-3 py-2.5 text-sm font-semibold text-white"
+                    className="flex min-h-11 w-full items-center gap-2.5 whitespace-nowrap rounded-xl border border-navy bg-navy px-3 py-2.5 text-sm font-semibold text-white"
                   >
-                    <PrimaryGroupIcon group="all" />
-                    {tHub("allProducts")}
+                    <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center">
+                      <PrimaryGroupIcon group="all" />
+                    </span>
+                    <span className="min-w-0 truncate">{tHub("allProducts")}</span>
                   </a>
                 </li>
                 {PRODUCT_KEYS.map((category) => (
-                  <li key={category}>
+                  <li key={category} className="lg:w-full">
                     <AppLink
                       href={getProductCategoryPath(category)}
-                      className="flex min-h-11 items-center gap-2.5 whitespace-nowrap rounded-card px-3 py-2.5 text-sm font-medium text-ink/85 transition-colors duration-ds hover:bg-white hover:text-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                      className="flex min-h-11 w-full items-center gap-2.5 whitespace-nowrap rounded-xl border border-transparent px-3 py-2.5 text-sm font-medium text-ink/85 transition-colors duration-ds hover:border-navy/10 hover:bg-white hover:text-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
                     >
-                      <CategoryServiceIcon category={category} size="sm" />
-                      {tCat(`${category}.title`)}
+                      <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center">
+                        <CategoryServiceIcon category={category} size="sm" />
+                      </span>
+                      <span className="min-w-0 truncate lg:whitespace-normal lg:break-words">
+                        {tCat(`${category}.title`)}
+                      </span>
                     </AppLink>
                   </li>
                 ))}
