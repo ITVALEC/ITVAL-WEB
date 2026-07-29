@@ -5,7 +5,32 @@
     "phone": "+593 2 123 4567",
     "address": "Quito, Ecuador"
   },
-  "social": [],
+  "social": [
+    {
+      "id": "default-facebook",
+      "label": "",
+      "url": "#",
+      "icon": "facebook"
+    },
+    {
+      "id": "default-instagram",
+      "label": "",
+      "url": "#",
+      "icon": "instagram"
+    },
+    {
+      "id": "default-whatsapp",
+      "label": "",
+      "url": "#",
+      "icon": "whatsapp"
+    },
+    {
+      "id": "default-linkedin",
+      "label": "",
+      "url": "#",
+      "icon": "linkedin"
+    }
+  ],
   "footer": {
     "en": {
       "ctaText": "",

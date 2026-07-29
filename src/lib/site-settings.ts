@@ -70,27 +70,41 @@ const DEFAULT_FOOTER: SiteSettings["footer"] = {
   },
 };
 
+const DEFAULT_SOCIAL_ORDER: {
+  key: keyof SiteSocialLinksLegacy;
+  icon: SocialIconKey;
+}[] = [
+  { key: "facebook", icon: "facebook" },
+  { key: "instagram", icon: "instagram" },
+  { key: "whatsapp", icon: "whatsapp" },
+  { key: "linkedin", icon: "linkedin" },
+];
+
+/** Facebook, Instagram, WhatsApp y LinkedIn siempre disponibles en el footer. */
+export function getDefaultSocialLinks(): SiteSocialLink[] {
+  return DEFAULT_SOCIAL_ORDER.map(({ key, icon }) => {
+    const configured = String(SOCIAL_LINKS[key] ?? "").trim();
+    return {
+      id: `default-${key}`,
+      label: "",
+      url: configured || "#",
+      icon,
+    };
+  });
+}
+
 function legacyRecordToSocialLinks(
   value: Partial<SiteSocialLinksLegacy>,
 ): SiteSocialLink[] {
-  const order: { key: keyof SiteSocialLinksLegacy; icon: SocialIconKey }[] = [
-    { key: "facebook", icon: "facebook" },
-    { key: "instagram", icon: "instagram" },
-    { key: "whatsapp", icon: "whatsapp" },
-    { key: "linkedin", icon: "linkedin" },
-  ];
-  const links: SiteSocialLink[] = [];
-  for (const { key, icon } of order) {
-    const url = String(value[key] ?? SOCIAL_LINKS[key] ?? "").trim();
-    if (!url) continue;
-    links.push({
+  return DEFAULT_SOCIAL_ORDER.map(({ key, icon }) => {
+    const configured = String(value[key] ?? SOCIAL_LINKS[key] ?? "").trim();
+    return {
       id: `legacy-${key}`,
       label: "",
-      url,
+      url: configured || "#",
       icon,
-    });
-  }
-  return links;
+    };
+  });
 }
 
 function normalizeOneSocialLink(raw: unknown, index: number): SiteSocialLink | null {
@@ -110,6 +124,7 @@ function normalizeOneSocialLink(raw: unknown, index: number): SiteSocialLink | n
 /**
  * Acepta lista dinámica o el Record legacy de 4 redes.
  * Filtra URLs inválidas; `keepEmpty` sirve en admin mientras se edita.
+ * Si no hay links útiles, cae a los 4 defaults (sección siempre visible).
  */
 export function normalizeSocialLinks(
   value?: SiteSocialLink[] | Partial<SiteSocialLinksLegacy> | null,
@@ -126,8 +141,12 @@ export function normalizeSocialLinks(
       out.push({
         ...normalized,
         id: normalized.id || createSocialLinkId(),
+        url: normalized.url || (keepEmpty ? "" : "#"),
       });
     });
+    if (out.length === 0) {
+      return keepEmpty ? [] : getDefaultSocialLinks();
+    }
     return out;
   }
 
@@ -135,7 +154,7 @@ export function normalizeSocialLinks(
     return legacyRecordToSocialLinks(value as Partial<SiteSocialLinksLegacy>);
   }
 
-  return [];
+  return getDefaultSocialLinks();
 }
 
 /** Normaliza lectura desde JSON/BD (social top-level o anidado en footer). */
@@ -175,10 +194,13 @@ export function normalizeSiteSettings(raw: unknown): SiteSettings {
       es: footerEs,
       en: footerEn,
     },
-    social: normalizeSocialLinks(
-      base.social ?? nestedSocial ?? defaultsTyped.social ?? [],
-      { keepEmpty: true },
-    ),
+    social: (() => {
+      const normalized = normalizeSocialLinks(
+        base.social ?? nestedSocial ?? defaultsTyped.social,
+        { keepEmpty: true },
+      );
+      return normalized.length > 0 ? normalized : getDefaultSocialLinks();
+    })(),
   };
 }
 
@@ -220,5 +242,6 @@ export function getSiteFooterCopy(locale: string): SiteFooterCopy {
 }
 
 export function getSiteSocialLinks(): SiteSocialLink[] {
-  return normalizeSocialLinks(getSiteSettings().social);
+  const links = normalizeSocialLinks(getSiteSettings().social);
+  return links.length > 0 ? links : getDefaultSocialLinks();
 }

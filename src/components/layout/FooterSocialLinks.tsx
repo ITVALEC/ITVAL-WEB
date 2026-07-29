@@ -6,12 +6,16 @@ type FooterSocialLinksProps = {
   links: SiteSocialLink[];
 };
 
-export function FooterSocialLinks({ sectionLabel, links }: FooterSocialLinksProps) {
-  const visible = links.filter((link) => link.url.trim());
+/** Fallback visual si la lista llega vacía (defaults de datos viven en site-settings). */
+const FALLBACK_SOCIAL_LINKS: SiteSocialLink[] = [
+  { id: "default-facebook", url: "#", icon: "facebook" },
+  { id: "default-instagram", url: "#", icon: "instagram" },
+  { id: "default-whatsapp", url: "#", icon: "whatsapp" },
+  { id: "default-linkedin", url: "#", icon: "linkedin" },
+];
 
-  if (visible.length === 0) {
-    return null;
-  }
+export function FooterSocialLinks({ sectionLabel, links }: FooterSocialLinksProps) {
+  const displayLinks = links.length > 0 ? links : FALLBACK_SOCIAL_LINKS;
 
   return (
     <div className="lg:col-span-3">
@@ -19,10 +23,11 @@ export function FooterSocialLinks({ sectionLabel, links }: FooterSocialLinksProp
         {sectionLabel}
       </p>
       <ul className="flex flex-wrap items-center gap-3">
-        {visible.map((link) => {
-          const href = link.url.trim();
+        {displayLinks.map((link) => {
+          const href = link.url.trim() || "#";
           const label =
             (link.label ?? "").trim() || SOCIAL_ICON_LABELS[link.icon] || link.icon;
+          const isPlaceholder = href === "#";
           const isMailOrTel = /^(mailto:|tel:)/i.test(href);
 
           return (
@@ -30,12 +35,14 @@ export function FooterSocialLinks({ sectionLabel, links }: FooterSocialLinksProp
               <a
                 href={href}
                 aria-label={label}
-                {...(isMailOrTel
-                  ? {}
-                  : {
-                      target: "_blank",
-                      rel: "noopener noreferrer",
-                    })}
+                {...(isPlaceholder
+                  ? { "aria-disabled": true }
+                  : isMailOrTel
+                    ? {}
+                    : {
+                        target: "_blank",
+                        rel: "noopener noreferrer",
+                      })}
                 className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-gold/35 text-white/85 transition-colors duration-ds hover:border-gold hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy-dark"
               >
                 <SocialIcon icon={link.icon} />

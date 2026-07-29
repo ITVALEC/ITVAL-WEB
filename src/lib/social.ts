@@ -40,7 +40,7 @@ export function isSocialIconKey(value: unknown): value is SocialIconKey {
 /** URL basica: http(s), mailto, tel o vacia. */
 export function isValidSocialUrl(url: string): boolean {
   const trimmed = url.trim();
-  if (!trimmed) return true;
+  if (!trimmed || trimmed === "#") return true;
   if (/^(mailto:|tel:)/i.test(trimmed)) return true;
   try {
     const parsed = new URL(trimmed);
