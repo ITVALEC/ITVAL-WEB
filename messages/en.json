@@ -55,7 +55,9 @@
     "imageAlt": "Architectural glass and aluminum facade on a corporate building",
     "carousel": {
       "navLabel": "Homepage project gallery",
-      "goToSlide": "View image {index}"
+      "goToSlide": "View image {index}",
+      "previous": "Previous image",
+      "next": "Next image"
     },
     "taglines": {
       "navLabel": "Featured messages",

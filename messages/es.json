@@ -55,7 +55,9 @@
     "imageAlt": "Fachada arquitectónica de vidrio y aluminio en edificio corporativo",
     "carousel": {
       "navLabel": "Galería de proyectos en inicio",
-      "goToSlide": "Ver imagen {index}"
+      "goToSlide": "Ver imagen {index}",
+      "previous": "Imagen anterior",
+      "next": "Imagen siguiente"
     },
     "taglines": {
       "navLabel": "Mensajes destacados",

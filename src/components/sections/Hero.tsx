@@ -11,9 +11,9 @@ import { loadProductImagesManifest } from "@/lib/catalog/product-images.server";
 import type { ProductKey } from "@/lib/catalog/types";
 
 const heroTextShadow =
-  "0 2px 16px rgba(0,0,0,0.75), 0 0 32px rgba(0,0,0,0.4)";
+  "0 2px 16px rgba(0,0,0,0.55), 0 0 28px rgba(0,0,0,0.25)";
 
-/** Hero home: fotos reales (site/hero + portadas), sin SVG placeholder. */
+/** Hero home: solo portadas del catálogo (DB / manifiesto), sin creatividades con texto. */
 export async function Hero() {
   const t = await getTranslations("hero");
   const tc = await getTranslations("common");
@@ -48,15 +48,16 @@ export async function Hero() {
           goToSlideLabels={backgroundImages.map((_, index) =>
             t("carousel.goToSlide", { index: index + 1 }),
           )}
+          previousLabel={t("carousel.previous")}
+          nextLabel={t("carousel.next")}
+          overlay={<HeroMediaOverlay variant="home" />}
         />
       ) : (
         <div className="absolute inset-0 bg-navy-dark" aria-hidden="true" />
       )}
 
-      <HeroMediaOverlay variant="home" />
-
-      <Container className="relative z-10 flex min-h-[100svh] flex-col justify-center pb-28 pt-24 sm:pb-32 sm:pt-28 lg:pb-40 lg:pt-32">
-        <div className="max-w-3xl">
+      <Container className="pointer-events-none relative z-10 flex min-h-[100svh] flex-col justify-center pb-28 pt-24 sm:pb-32 sm:pt-28 lg:pb-40 lg:pt-32">
+        <div className="pointer-events-auto max-w-xl lg:max-w-2xl">
           <p
             className="hero-reveal mb-4 text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-gold sm:mb-5 sm:text-ds-caption sm:tracking-[0.28em]"
             style={{ textShadow: heroTextShadow }}
@@ -70,7 +71,7 @@ export async function Hero() {
             <AccentText text={title} accent={accent} accentClassName="text-gold" />
           </h1>
           <p
-            className="hero-reveal hero-reveal-delay-1 mt-5 max-w-2xl break-words text-base leading-[1.5] text-white/90 sm:mt-6 sm:text-ds-body"
+            className="hero-reveal hero-reveal-delay-1 mt-5 max-w-xl break-words text-base leading-[1.5] text-white/90 sm:mt-6 sm:text-ds-body"
             style={{ textShadow: heroTextShadow }}
           >
             {t("subtitle")}
