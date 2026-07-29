@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import "server-only";
 import defaults from "./catalog/site-settings.json";
-import { SOCIAL_LINKS } from "@/lib/site";
+import { CONTACT, SOCIAL_LINKS } from "@/lib/site";
 import {
   createSocialLinkId,
   isSocialIconKey,
@@ -15,6 +15,8 @@ export type SiteContact = {
   email: string;
   phone: string;
   address: string;
+  /** URL de Google Maps (place o search). Vacío → se deriva de `address`. */
+  mapsUrl: string;
   hours: string;
 };
 
@@ -181,14 +183,23 @@ export function normalizeSiteSettings(raw: unknown): SiteSettings {
     ...(footerLocales.en ?? {}),
   };
 
+  const mergedContact = {
+    email: CONTACT.email,
+    phone: CONTACT.phone,
+    address: CONTACT.address,
+    mapsUrl: CONTACT.mapsUrl,
+    hours: CONTACT.hours,
+    ...(defaultsTyped.contact ?? {}),
+    ...(base.contact ?? {}),
+  };
+
   return {
     contact: {
-      email: "",
-      phone: "",
-      address: "",
-      hours: "",
-      ...(defaultsTyped.contact ?? {}),
-      ...(base.contact ?? {}),
+      email: String(mergedContact.email ?? "").trim() || CONTACT.email,
+      phone: String(mergedContact.phone ?? "").trim() || CONTACT.phone,
+      address: String(mergedContact.address ?? "").trim() || CONTACT.address,
+      mapsUrl: String(mergedContact.mapsUrl ?? "").trim() || CONTACT.mapsUrl,
+      hours: String(mergedContact.hours ?? "").trim() || CONTACT.hours,
     },
     footer: {
       es: footerEs,
@@ -233,7 +244,29 @@ export function getSiteSettings(): SiteSettings {
 }
 
 export function getSiteContact(): SiteContact {
-  return getSiteSettings().contact;
+  const contact = getSiteSettings().contact;
+  return {
+    ...contact,
+    email: contact.email.trim() || CONTACT.email,
+    phone: contact.phone.trim() || CONTACT.phone,
+    address: contact.address.trim() || CONTACT.address,
+    mapsUrl: (contact.mapsUrl ?? "").trim() || CONTACT.mapsUrl,
+    hours: contact.hours.trim() || CONTACT.hours,
+  };
+}
+
+/** Enlace externo a Google Maps (nueva pestaña). */
+export function buildGoogleMapsUrl(contact: SiteContact): string {
+  const custom = (contact.mapsUrl ?? "").trim();
+  if (custom && /^https?:\/\//i.test(custom)) return custom;
+  const query = contact.address.trim() || CONTACT.address;
+  return `https://maps.google.com/?q=${encodeURIComponent(query)}`;
+}
+
+/** Embed iframe sin API key (q=dirección). */
+export function buildGoogleMapsEmbedUrl(contact: SiteContact): string {
+  const query = contact.address.trim() || CONTACT.address;
+  return `https://maps.google.com/maps?q=${encodeURIComponent(query)}&z=15&output=embed`;
 }
 
 export function getSiteFooterCopy(locale: string): SiteFooterCopy {

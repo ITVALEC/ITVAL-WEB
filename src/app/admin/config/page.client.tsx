@@ -370,6 +370,17 @@ export default function AdminConfigPage() {
                     required
                   />
                 </AdminField>
+                <AdminField label="URL de Google Maps" htmlFor="contact-maps-url">
+                  <input
+                    id="contact-maps-url"
+                    type="url"
+                    inputMode="url"
+                    placeholder="https://maps.google.com/?q=…"
+                    value={settings.contact.mapsUrl ?? ""}
+                    onChange={(e) => updateContact("mapsUrl", e.target.value)}
+                    className={adminInputClass}
+                  />
+                </AdminField>
                 <AdminField label="Horario" htmlFor="contact-hours">
                   <input
                     id="contact-hours"

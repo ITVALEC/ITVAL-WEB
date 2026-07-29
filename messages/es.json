@@ -255,7 +255,7 @@
       "email": "Correo",
       "phone": "Teléfono",
       "address": "Dirección",
-      "addressValue": "Quito, Ecuador",
+      "addressValue": "Panamericana Norte Km 16.5, Oe4-237 y Miguel Guarderas, Calderón, Quito, Ecuador",
       "hours": "Horario",
       "hoursValue": "Lunes a viernes, 9:00 – 18:00"
     }
@@ -271,6 +271,9 @@
     "socialInstagram": "Instagram",
     "socialWhatsapp": "WhatsApp",
     "socialLinkedin": "LinkedIn",
+    "maps": "Ubicación",
+    "viewOnMaps": "Ver en Google Maps",
+    "mapsAria": "Ver ubicación de ITVAL en Google Maps: {address}",
     "ctaTitle": "¿Tienes un proyecto?",
     "ctaText": "Cuéntanos sobre tu obra y nuestro equipo técnico te responderá en 48 horas hábiles.",
     "location": "Quito · Guayaquil · Ecuador"

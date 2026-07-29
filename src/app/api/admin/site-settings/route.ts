@@ -129,7 +129,11 @@ export async function PATCH(request: Request) {
   );
 
   const next: SiteSettings = {
-    contact: { ...current.contact, ...body.contact },
+    contact: {
+      ...current.contact,
+      ...body.contact,
+      mapsUrl: String(body.contact?.mapsUrl ?? current.contact.mapsUrl ?? "").trim(),
+    },
     footer: {
       es: nextEs,
       en: nextEn,
@@ -137,6 +141,14 @@ export async function PATCH(request: Request) {
     // URLs / iconos: no se traducen
     social: normalizeSocialLinks(socialIncoming),
   };
+
+  const mapsUrl = next.contact.mapsUrl;
+  if (mapsUrl && !/^https?:\/\//i.test(mapsUrl)) {
+    return NextResponse.json(
+      { error: "URL de Google Maps inválida. Usa https://…" },
+      { status: 400 },
+    );
+  }
 
   const packed = packSiteSettingsForDb(next);
 

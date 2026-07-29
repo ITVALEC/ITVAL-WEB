@@ -7,7 +7,11 @@ export const SITE = {
 export const CONTACT = {
   email: "info@itval.com.ec",
   phone: "+593 2 123 4567",
-  address: "Quito, Ecuador",
+  address:
+    "Panamericana Norte Km 16.5, Oe4-237 y Miguel Guarderas, Calderón, Quito, Ecuador",
+  /** URL de Google Maps (place/search). Vacío → se genera desde `address`. */
+  mapsUrl:
+    "https://maps.google.com/?q=Panamericana%20Norte%20Km%2016.5%2C%20Oe4-237%20y%20Miguel%20Guarderas%2C%20Calder%C3%B3n%2C%20Quito%2C%20Ecuador",
   hours: "Lunes a viernes, 8:00 – 17:00",
 } as const;
 

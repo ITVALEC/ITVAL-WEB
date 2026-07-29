@@ -27,7 +27,7 @@ const FALLBACK_SOCIAL_LINKS: SiteSocialLink[] = REQUIRED_SOCIAL.map(({ icon, id 
 
 /**
  * Garantiza Facebook, Instagram, WhatsApp y LinkedIn en pantalla.
- * Nunca devolver lista vacia: si faltan redes o URLs, se rellenan con `#`.
+ * Conserva redes adicionales configuradas en admin.
  */
 function ensureVisibleSocialLinks(links: SiteSocialLink[]): SiteSocialLink[] {
   const byIcon = new Map<SocialIconKey, SiteSocialLink>();
@@ -36,7 +36,6 @@ function ensureVisibleSocialLinks(links: SiteSocialLink[]): SiteSocialLink[] {
     if (!REQUIRED_SOCIAL.some((r) => r.icon === link.icon)) continue;
     const url = (link.url ?? "").trim() || "#";
     const prev = byIcon.get(link.icon);
-    // Preferir URL real sobre placeholder.
     if (!prev || (prev.url === "#" && url !== "#")) {
       byIcon.set(link.icon, {
         ...link,
@@ -46,7 +45,7 @@ function ensureVisibleSocialLinks(links: SiteSocialLink[]): SiteSocialLink[] {
     }
   }
 
-  return REQUIRED_SOCIAL.map(({ icon, id }) => {
+  const required = REQUIRED_SOCIAL.map(({ icon, id }) => {
     const existing = byIcon.get(icon);
     if (existing) return existing;
     return {
@@ -56,6 +55,14 @@ function ensureVisibleSocialLinks(links: SiteSocialLink[]): SiteSocialLink[] {
       label: SOCIAL_ICON_LABELS[icon],
     };
   });
+
+  const requiredIcons = new Set(REQUIRED_SOCIAL.map((r) => r.icon));
+  const extras = links.filter((link) => {
+    if (requiredIcons.has(link.icon)) return false;
+    return Boolean((link.url ?? "").trim());
+  });
+
+  return [...required, ...extras];
 }
 
 export function FooterSocialLinks({ sectionLabel, links }: FooterSocialLinksProps) {
@@ -91,7 +98,7 @@ export function FooterSocialLinks({ sectionLabel, links }: FooterSocialLinksProp
                         target: "_blank",
                         rel: "noopener noreferrer",
                       })}
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-gold/50 bg-white/5 text-gold transition-colors duration-ds hover:border-gold hover:bg-gold/15 hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy-dark"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-[2px] border border-gold/50 bg-white/5 text-gold transition-colors duration-ds hover:border-gold hover:bg-gold/15 hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy-dark"
               >
                 <SocialIcon icon={link.icon} solid />
               </a>

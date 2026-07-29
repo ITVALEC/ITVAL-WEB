@@ -1,10 +1,17 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Container } from "./Container";
+import { FooterMap } from "./FooterMap";
 import { FooterSocialLinks } from "./FooterSocialLinks";
 import { buildNavItems } from "@/lib/nav";
 import { SITE } from "@/lib/constants";
-import { getSiteContact, getSiteFooterCopy, getSiteSocialLinks } from "@/lib/site-settings";
+import {
+  buildGoogleMapsEmbedUrl,
+  buildGoogleMapsUrl,
+  getSiteContact,
+  getSiteFooterCopy,
+  getSiteSocialLinks,
+} from "@/lib/site-settings";
 import { Logo } from "@/components/ui/Logo";
 
 type FooterProps = {
@@ -18,6 +25,9 @@ export async function Footer({ locale }: FooterProps) {
   const socialLinks = getSiteSocialLinks();
   const year = new Date().getFullYear();
   const navItems = buildNavItems((key) => t(key));
+  const mapsUrl = buildGoogleMapsUrl(contact);
+  const embedUrl = buildGoogleMapsEmbedUrl(contact);
+  const mapsAria = t("footer.mapsAria", { address: contact.address });
 
   return (
     <footer className="border-t border-gold/25 bg-navy-dark text-white">
@@ -93,6 +103,15 @@ export async function Footer({ locale }: FooterProps) {
             links={socialLinks}
           />
         </div>
+
+        <FooterMap
+          sectionLabel={t("footer.maps")}
+          viewLabel={t("footer.viewOnMaps")}
+          address={contact.address}
+          mapsUrl={mapsUrl}
+          embedUrl={embedUrl}
+          ariaLabel={mapsAria}
+        />
 
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-gold/15 pt-6 text-center text-xs text-white/50 sm:flex-row sm:text-left">
           <p>
