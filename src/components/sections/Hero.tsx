@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/layout/Container";
 import { ButtonLink } from "@/components/ui/Button";
 import { AccentText, accentAfterColon } from "@/components/ui/AccentText";
@@ -7,16 +7,27 @@ import { HeroMediaOverlay } from "@/components/sections/HeroMediaOverlay";
 import { NAV_PATHS } from "@/lib/constants";
 import { PROCESS_STEP_KEYS } from "@/lib/content-keys";
 import { getHeroBackgroundSources } from "@/lib/hero-images";
+import { loadProductImagesManifest } from "@/lib/catalog/product-images.server";
+import type { ProductKey } from "@/lib/catalog/types";
 
 const heroTextShadow =
   "0 2px 16px rgba(0,0,0,0.75), 0 0 32px rgba(0,0,0,0.4)";
 
-export function Hero() {
-  const t = useTranslations("hero");
-  const tc = useTranslations("common");
-  const tProcess = useTranslations("process");
+/** Hero home: fotos reales (site/hero + portadas), sin SVG placeholder. */
+export async function Hero() {
+  const t = await getTranslations("hero");
+  const tc = await getTranslations("common");
+  const tProcess = await getTranslations("process");
 
-  const backgroundImages = getHeroBackgroundSources().map((src) => ({
+  let liveCategories: Partial<Record<ProductKey, string>> | undefined;
+  try {
+    const manifest = await loadProductImagesManifest();
+    liveCategories = manifest.categories as Partial<Record<ProductKey, string>>;
+  } catch {
+    liveCategories = undefined;
+  }
+
+  const backgroundImages = getHeroBackgroundSources(liveCategories).map((src) => ({
     src,
     alt: t("imageAlt"),
   }));
@@ -30,13 +41,17 @@ export function Hero() {
 
   return (
     <section className="relative min-h-[100svh] overflow-hidden bg-navy-dark">
-      <HeroCarousel
-        images={backgroundImages}
-        navLabel={t("carousel.navLabel")}
-        goToSlideLabels={backgroundImages.map((_, index) =>
-          t("carousel.goToSlide", { index: index + 1 }),
-        )}
-      />
+      {backgroundImages.length > 0 ? (
+        <HeroCarousel
+          images={backgroundImages}
+          navLabel={t("carousel.navLabel")}
+          goToSlideLabels={backgroundImages.map((_, index) =>
+            t("carousel.goToSlide", { index: index + 1 }),
+          )}
+        />
+      ) : (
+        <div className="absolute inset-0 bg-navy-dark" aria-hidden="true" />
+      )}
 
       <HeroMediaOverlay variant="home" />
 

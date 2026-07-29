@@ -9,6 +9,7 @@ import { isDatabaseEnabled, query } from "@/lib/db/pool";
 import { syncDatabaseToJson } from "@/lib/db/sync-json";
 import { fillEnglishFromSpanish } from "@/lib/i18n/translate-es-to-en";
 import { isValidSocialUrl } from "@/lib/social";
+import { revalidatePublicSite } from "@/lib/catalog/revalidate-public";
 import {
   normalizeSiteSettings,
   normalizeSocialLinks,
@@ -162,6 +163,8 @@ export async function PATCH(request: Request) {
   } else {
     writeJsonFile(MANIFEST_PATHS.siteSettings, next);
   }
+
+  revalidatePublicSite();
 
   return NextResponse.json({
     ...next,

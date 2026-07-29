@@ -1,18 +1,21 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/layout/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { FeaturedProjectsCarousel } from "@/components/sections/FeaturedProjectsCarousel";
 import { accentLastWords } from "@/components/ui/AccentText";
-import { getFeaturedProjects, NAV_PATHS } from "@/lib/constants";
+import { NAV_PATHS } from "@/lib/routes";
+import { loadFeaturedPortfolioProjectsLive } from "@/lib/catalog/project-portfolio.server";
 
-export function FeaturedProjects() {
-  const t = useTranslations("featuredProjects");
-  const tc = useTranslations("common");
-  const tProducts = useTranslations("products");
-  const featured = getFeaturedProjects();
+export async function FeaturedProjects() {
+  const t = await getTranslations("featuredProjects");
+  const tc = await getTranslations("common");
+  const tProducts = await getTranslations("products");
+  const featured = await loadFeaturedPortfolioProjectsLive();
   const title = t("title");
+
+  if (featured.length === 0) return null;
 
   return (
     <section
@@ -41,8 +44,7 @@ export function FeaturedProjects() {
             <span aria-hidden="true">→</span>
           </Link>
         </ScrollReveal>
-
-        <ScrollReveal delayMs={90}>
+        <ScrollReveal delayMs={80}>
           <FeaturedProjectsCarousel
             projects={featured}
             navLabel={t("title")}

@@ -7,12 +7,12 @@ import { ProjectCard } from "@/components/ui/ProjectCard";
 import { ButtonLink } from "@/components/ui/Button";
 import { HeroMediaOverlay } from "@/components/sections/HeroMediaOverlay";
 import { PRODUCT_LIST_ITEM_KEYS } from "@/lib/content-keys";
-import { getProjectsForProductSubcategory } from "@/lib/catalog";
 import {
   getProductImageLive,
   getProductOnlyGalleryLive,
   getProjectReferenceGalleryLive,
 } from "@/lib/catalog/product-images.server";
+import { loadPortfolioProjectsLive } from "@/lib/catalog/project-portfolio.server";
 import {
   isCatalogPlaceholderSrc,
   isRealProductImageSrc,
@@ -48,7 +48,10 @@ export async function ProductDetailView({
   const tNav = await getTranslations({ locale, namespace: "nav" });
   const tCommon = await getTranslations({ locale, namespace: "common" });
 
-  const relatedProjects = getProjectsForProductSubcategory(subcategory);
+  const allProjects = await loadPortfolioProjectsLive();
+  const relatedProjects = allProjects
+    .filter((project) => project.productSubcategory === subcategory)
+    .slice(0, 3);
   const heroImage = await getProductImageLive(category, subcategory);
   const productGalleryImages = await getProductOnlyGalleryLive(category, subcategory);
   const worksGallery = await getProjectReferenceGalleryLive(category, subcategory);

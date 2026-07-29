@@ -53,19 +53,6 @@ export function HeroCarousel({
   const showSingle = images.length === 1 || reducedMotion;
   const currentIndex = showSingle ? 0 : active;
 
-  if (showSingle) {
-    return (
-      <Image
-        src={images[0].src}
-        alt={images[0].alt}
-        fill
-        priority
-        className="object-cover object-[70%_center]"
-        sizes="100vw"
-      />
-    );
-  }
-
   return (
     <div
       className="absolute inset-0"
@@ -73,7 +60,7 @@ export function HeroCarousel({
       onMouseLeave={() => setPaused(false)}
     >
       {images.map((image, index) => {
-        const isActive = index === currentIndex;
+        const isActive = showSingle ? index === 0 : index === currentIndex;
 
         return (
           <Image
@@ -86,7 +73,9 @@ export function HeroCarousel({
             className="object-cover object-[70%_center] motion-reduce:transition-none motion-reduce:opacity-100"
             style={{
               opacity: isActive ? 1 : 0,
-              transition: `opacity ${FADE_DURATION_MS}ms ease-in-out`,
+              transition: showSingle
+                ? undefined
+                : `opacity ${FADE_DURATION_MS}ms ease-in-out`,
               zIndex: isActive ? 1 : 0,
             }}
             sizes="100vw"
@@ -94,27 +83,29 @@ export function HeroCarousel({
         );
       })}
 
-      <div
-        className="absolute bottom-6 right-4 z-20 flex gap-2 sm:right-8"
-        role="tablist"
-        aria-label={navLabel}
-      >
-        {images.map((image, index) => (
-          <button
-            key={image.src}
-            type="button"
-            role="tab"
-            aria-selected={index === currentIndex}
-            aria-label={goToSlideLabels[index] ?? `Slide ${index + 1}`}
-            onClick={() => goTo(index)}
-            className={`h-2 rounded-full transition-[width,background-color] duration-500 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy motion-reduce:transition-none ${
-              index === currentIndex
-                ? "w-7 bg-white"
-                : "w-2 bg-white/45 hover:bg-white/70"
-            }`}
-          />
-        ))}
-      </div>
+      {!showSingle ? (
+        <div
+          className="absolute bottom-6 right-4 z-20 flex gap-2 sm:right-8"
+          role="tablist"
+          aria-label={navLabel}
+        >
+          {images.map((image, index) => (
+            <button
+              key={image.src}
+              type="button"
+              role="tab"
+              aria-selected={index === currentIndex}
+              aria-label={goToSlideLabels[index] ?? `Slide ${index + 1}`}
+              onClick={() => goTo(index)}
+              className={`h-2 rounded-full transition-[width,background-color] duration-500 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy motion-reduce:transition-none ${
+                index === currentIndex
+                  ? "w-7 bg-white"
+                  : "w-2 bg-white/45 hover:bg-white/70"
+              }`}
+            />
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }

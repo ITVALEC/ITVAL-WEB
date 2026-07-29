@@ -3,7 +3,7 @@
 import Image, { type ImageProps } from "next/image";
 import { useEffect, useState } from "react";
 
-const DEFAULT_FALLBACK = "/images/pages/projects.svg";
+const DEFAULT_FALLBACK = "/images/pages/products.jpg";
 
 type SafeImageProps = Omit<ImageProps, "src" | "alt"> & {
   src: string;

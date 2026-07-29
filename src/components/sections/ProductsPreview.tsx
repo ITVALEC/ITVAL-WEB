@@ -1,17 +1,28 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/layout/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { CategoryCarousel } from "@/components/catalog/CategoryCarousel";
 import { AppLink } from "@/components/ui/AppLink";
-import { PRODUCT_KEYS } from "@/lib/catalog";
+import { PRODUCT_KEYS, type ProductKey } from "@/lib/catalog";
 import { NAV_PATHS } from "@/lib/routes";
 import { accentLastWords } from "@/components/ui/AccentText";
+import { getProductImageLive } from "@/lib/catalog/product-images.server";
 
-export function ProductsPreview() {
-  const t = useTranslations("products");
-  const tc = useTranslations("common");
+/** Home: carrusel de categorías con fotos reales (no solo iconos). */
+export async function ProductsPreview() {
+  const t = await getTranslations("products");
+  const tc = await getTranslations("common");
   const title = t("title");
+
+  const categoryImages = Object.fromEntries(
+    await Promise.all(
+      PRODUCT_KEYS.map(async (key) => {
+        const src = await getProductImageLive(key);
+        return [key, src] as const;
+      }),
+    ),
+  ) as Partial<Record<ProductKey, string>>;
 
   return (
     <section
@@ -37,10 +48,11 @@ export function ProductsPreview() {
         <ScrollReveal delayMs={80} className="mt-0">
           <CategoryCarousel
             categories={PRODUCT_KEYS}
+            categoryImages={categoryImages}
             navLabel={t("carouselNav")}
             previousLabel={t("previous")}
             nextLabel={t("next")}
-            variant="service"
+            variant="card"
           />
         </ScrollReveal>
       </Container>

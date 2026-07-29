@@ -596,19 +596,39 @@ async function updateMediaSrc(item: AdminMediaItem, newSrc: string): Promise<voi
 
   if (item.kind === "product" && item.category && item.subcategory && item.productIndex != null) {
     if (isDatabaseEnabled()) {
-      await query(
+      const result = await query(
         `UPDATE product_gallery_images SET src = $4
          WHERE category = $1 AND subcategory = $2 AND sort_order = $3`,
         [item.category, item.subcategory, item.productIndex, newSrc],
       );
-      return;
+      if ((result.rowCount ?? 0) > 0) {
+        return;
+      }
+      // Sin fila en DB: el ítem vino del manifiesto JSON (fallback). Seed + update doc.
+      await seedProductGalleryFromJsonIfEmpty(item.category, item.subcategory);
+      const retry = await query(
+        `UPDATE product_gallery_images SET src = $4
+         WHERE category = $1 AND subcategory = $2 AND sort_order = $3`,
+        [item.category, item.subcategory, item.productIndex, newSrc],
+      );
+      if ((retry.rowCount ?? 0) > 0) {
+        return;
+      }
     }
 
-    const data = readJsonFile<ProductManifest>(MANIFEST_PATHS.products);
-    const gallery = data.galleries?.[item.category]?.[item.subcategory];
-    if (!gallery?.[item.productIndex]) throw new Error("Imagen no encontrada.");
-    gallery[item.productIndex].src = newSrc;
-    writeJsonFile(MANIFEST_PATHS.products, data);
+    const data = await loadProductManifest();
+    data.galleries ??= {};
+    data.galleries[item.category] ??= {};
+    data.galleries[item.category][item.subcategory] ??= [];
+    const gallery = data.galleries[item.category][item.subcategory];
+    if (!gallery[item.productIndex]) {
+      throw new Error("Imagen no encontrada.");
+    }
+    gallery[item.productIndex] = {
+      ...gallery[item.productIndex],
+      src: newSrc,
+    };
+    await setDocument("productImages", data);
     return;
   }
 
@@ -686,6 +706,9 @@ export async function addProjectImage(
   }
   data.generatedAt = new Date().toISOString();
   writeJsonFile(MANIFEST_PATHS.projects, data);
+
+  const { revalidatePublicCatalog } = await import("@/lib/catalog/revalidate-public");
+  revalidatePublicCatalog();
 
   return {
     id: `project:${projectId}:${project.gallery.length - 1}`,
@@ -843,6 +866,9 @@ export async function addProductImage(
     source: "product",
   });
   writeJsonFile(MANIFEST_PATHS.products, data);
+
+  const { revalidatePublicCatalog } = await import("@/lib/catalog/revalidate-public");
+  revalidatePublicCatalog();
 
   return {
     id: `product:${category}:${subcategory}:${index}`,
@@ -1136,6 +1162,7 @@ export async function deleteMediaItem(item: AdminMediaItem): Promise<void> {
     } catch {
       /* ok */
     }
+    await afterMutation();
     return;
   }
 
@@ -1166,6 +1193,7 @@ export async function deleteMediaItem(item: AdminMediaItem): Promise<void> {
     } catch {
       /* ok */
     }
+    await afterMutation();
   }
 }
 

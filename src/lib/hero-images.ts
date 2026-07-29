@@ -1,8 +1,19 @@
 import { IMAGES } from "./assets";
 import manifest from "./catalog/product-images.json";
+import { isCatalogPlaceholderSrc } from "@/lib/media/placeholder-src";
 import { type ProductKey } from "./catalog/types";
 
-/** Imágenes de fondo del hero — carrusel independiente del texto. */
+/**
+ * Fondos del hero home.
+ * Prioridad: fotos dedicadas en site/hero → portadas reales de categorías → nunca SVG solo.
+ */
+export const HERO_DEDICATED_SLIDES = [
+  "/images/site/hero/design-build.png",
+  "/images/site/hero/experience.png",
+  "/images/site/hero/innovative.png",
+] as const;
+
+/** Categorías cuyas portadas refuerzan el carrusel si las dedicadas faltan. */
 export const HERO_SLIDE_CATEGORIES = [
   "facades",
   "aluminumWindows",
@@ -15,15 +26,40 @@ export const HERO_SLIDE_CATEGORIES = [
 export type HeroSlideCategory = (typeof HERO_SLIDE_CATEGORIES)[number];
 
 type ProductImageManifest = {
-  categories: Partial<Record<ProductKey, string>>;
+  categories?: Partial<Record<ProductKey, string>>;
 };
 
-const data = manifest as ProductImageManifest;
+function isRasterPublicSrc(src: string): boolean {
+  const value = src.trim();
+  if (!value || isCatalogPlaceholderSrc(value)) return false;
+  return /\.(jpe?g|png|webp|avif|gif)$/i.test(value.split("?")[0] ?? value);
+}
 
-export function getHeroBackgroundSources(): string[] {
-  const slides = HERO_SLIDE_CATEGORIES.flatMap(
-    (category) => data.categories[category] ?? [],
-  );
+/** Fuentes de fondo del hero (carrusel). Sin placeholders SVG. */
+export function getHeroBackgroundSources(
+  liveCategories?: Partial<Record<ProductKey, string>> | null,
+): string[] {
+  const data = (liveCategories
+    ? { categories: liveCategories }
+    : (manifest as ProductImageManifest)) as ProductImageManifest;
 
-  return slides.length > 0 ? slides : [IMAGES.hero];
+  const dedicated = HERO_DEDICATED_SLIDES.filter(isRasterPublicSrc);
+
+  const fromCategories = HERO_SLIDE_CATEGORIES.map(
+    (category) => data.categories?.[category],
+  ).filter((src): src is string => typeof src === "string" && isRasterPublicSrc(src));
+
+  const slides: string[] = [...dedicated];
+  for (const src of fromCategories) {
+    if (!slides.includes(src)) slides.push(src);
+  }
+
+  if (slides.length > 0) return slides;
+
+  // Último recurso raster de páginas (no SVG).
+  if (isRasterPublicSrc(IMAGES.pages.products)) {
+    return [IMAGES.pages.products];
+  }
+
+  return [];
 }

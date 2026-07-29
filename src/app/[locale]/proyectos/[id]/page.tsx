@@ -5,18 +5,15 @@ import { Container } from "@/components/layout/Container";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ButtonLink } from "@/components/ui/Button";
 import { ProjectGallery } from "@/components/projects/ProjectGallery";
-import {
-  getProjectById,
-  isProjectId,
-} from "@/lib/catalog";
-import {
-  getProjectGallery,
-  getProjectImage,
-  PROJECTS,
-} from "@/lib/projects";
+import { PROJECTS } from "@/lib/projects";
 import { NAV_PATHS } from "@/lib/routes";
 import { breadcrumbTrail } from "@/lib/breadcrumbs";
 import { getProjectSolutionGroup } from "@/lib/catalog/project-filters";
+import {
+  getPortfolioProjectLive,
+  loadPortfolioProjectsLive,
+} from "@/lib/catalog/project-portfolio.server";
+import { isCatalogPlaceholderSrc } from "@/lib/media/placeholder-src";
 
 type PageProps = {
   params: Promise<{ locale: string; id: string }>;
@@ -28,9 +25,9 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps) {
   const { locale, id } = await params;
-  if (!isProjectId(id)) return {};
+  const project = await getPortfolioProjectLive(id);
+  if (!project) return {};
 
-  const project = getProjectById(id)!;
   const t = await getTranslations({ locale, namespace: "projectDetail" });
 
   return {
@@ -44,9 +41,9 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function ProjectDetailPage({ params }: PageProps) {
   const { locale, id } = await params;
-  if (!isProjectId(id)) notFound();
+  const project = await getPortfolioProjectLive(id);
+  if (!project) notFound();
 
-  const project = getProjectById(id)!;
   setRequestLocale(locale);
 
   const tPage = await getTranslations({ locale, namespace: "projectsPage" });
@@ -54,11 +51,18 @@ export default async function ProjectDetailPage({ params }: PageProps) {
   const tNav = await getTranslations({ locale, namespace: "nav" });
   const tCommon = await getTranslations({ locale, namespace: "common" });
 
-  const gallery = getProjectGallery(id);
+  const gallery = project.gallery.filter((src) => !isCatalogPlaceholderSrc(src));
+  const cover =
+    project.cover && !isCatalogPlaceholderSrc(project.cover)
+      ? project.cover
+      : gallery[0] ?? "/images/pages/products.jpg";
   const solutionGroup = getProjectSolutionGroup(project);
   const solutionLabel = solutionGroup
     ? tPage(`filters.solutions.${solutionGroup}`)
     : project.productCategory;
+
+  // Prefetch list so related static params stay warm after admin edits.
+  void loadPortfolioProjectsLive();
 
   return (
     <>
@@ -83,12 +87,12 @@ export default async function ProjectDetailPage({ params }: PageProps) {
               </h1>
               <p className="mt-2 text-ds-body text-white/80">{project.location}</p>
               <p className="mt-4 text-xs uppercase tracking-wider text-white/55">
-                {tDetail("photos")}: {project.imageCount}
+                {tDetail("photos")}: {gallery.length}
               </p>
             </div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-card shadow-card">
               <Image
-                src={getProjectImage(project)}
+                src={cover}
                 alt={project.name}
                 fill
                 className="object-cover"

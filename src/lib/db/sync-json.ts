@@ -122,6 +122,7 @@ export async function syncDatabaseToJson(): Promise<void> {
   }
 
   // Preferir documento productImages de app_documents (portadas + estructura).
+  // También escribir el documento en JSON cuando solo hay filas de galería.
   const { rows: productDocRows } = await query<{ data: Record<string, unknown> }>(
     `SELECT data FROM app_documents WHERE key = 'productImages' LIMIT 1`,
   );

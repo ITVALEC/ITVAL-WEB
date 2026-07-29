@@ -14,6 +14,7 @@ import { listProjectsFromDb, searchProjectsFromDb, updateProjectInDb } from "@/l
 import { syncDatabaseToJson } from "@/lib/db/sync-json";
 import type { PortfolioProject } from "@/lib/catalog/project-portfolio";
 import { resolveProjectCover } from "@/lib/catalog/project-cover";
+import { revalidatePublicCatalog } from "@/lib/catalog/revalidate-public";
 
 type ProjectManifest = {
   projects: PortfolioProject[];
@@ -92,6 +93,7 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: "Proyecto no encontrado" }, { status: 404 });
     }
     await syncDatabaseToJson();
+    revalidatePublicCatalog();
     return NextResponse.json({ project });
   }
 
@@ -119,6 +121,7 @@ export async function PATCH(request: Request) {
   data.projects[index] = project;
   data.generatedAt = new Date().toISOString();
   writeJsonFile(MANIFEST_PATHS.projects, data);
+  revalidatePublicCatalog();
 
   return NextResponse.json({ project });
 }

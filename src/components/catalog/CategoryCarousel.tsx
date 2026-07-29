@@ -12,6 +12,8 @@ type CategoryCarouselProps = {
   nextLabel: string;
   /** "card" = foto + texto; "service" = iconos lineales tipo mockup. */
   variant?: "card" | "service";
+  /** Portadas vivas (DB/disco) por categoría; evita JSON estático del build. */
+  categoryImages?: Partial<Record<ProductKey, string>>;
 };
 
 export function CategoryCarousel({
@@ -20,6 +22,7 @@ export function CategoryCarousel({
   previousLabel,
   nextLabel,
   variant = "card",
+  categoryImages,
 }: CategoryCarouselProps) {
   const scrollerRef = useRef<HTMLUListElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -84,7 +87,10 @@ export function CategoryCarousel({
             {variant === "service" ? (
               <CategoryServiceItem category={category} />
             ) : (
-              <CategoryCard category={category} />
+              <CategoryCard
+                category={category}
+                imageSrc={categoryImages?.[category]}
+              />
             )}
           </li>
         ))}

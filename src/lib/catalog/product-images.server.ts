@@ -38,13 +38,27 @@ function publicImageFileExists(src: string): boolean {
   }
 }
 
+function isRasterSrc(src: string): boolean {
+  return /\.(jpe?g|png|webp|avif|gif)$/i.test(
+    (src.split("?")[0] ?? src).trim(),
+  );
+}
+
+/**
+ * Foto publicable: no placeholder SVG.
+ * Si el archivo aún no está en disco (symlink/NFS), igual servimos rutas raster
+ * para que Next Image / el static file server las resuelvan en runtime.
+ */
+function isRenderableProductSrc(src: string): boolean {
+  if (!isRealProductImageSrc(src)) return false;
+  if (publicImageFileExists(src)) return true;
+  return isRasterSrc(src);
+}
+
 function keepRenderableProductImages(
   images: ProductGalleryImage[],
 ): ProductGalleryImage[] {
-  return images.filter(
-    (image) =>
-      isRealProductImageSrc(image.src) && publicImageFileExists(image.src),
-  );
+  return images.filter((image) => isRenderableProductSrc(image.src));
 }
 
 /** Manifiesto vivo (DB / disco), no el snapshot del build. */
@@ -132,13 +146,13 @@ export async function getProductImageLive(
   const data = await loadProductImagesManifest();
   if (subcategory) {
     const image = data.subcategories?.[category]?.[subcategory];
-    if (!image || !isRealProductImageSrc(image) || !publicImageFileExists(image)) {
+    if (!image || !isRenderableProductSrc(image)) {
       return undefined;
     }
     return image;
   }
   const image = data.categories?.[category];
-  if (!image || !isRealProductImageSrc(image) || !publicImageFileExists(image)) {
+  if (!image || !isRenderableProductSrc(image)) {
     return undefined;
   }
   return image;
@@ -173,11 +187,7 @@ export async function getProductGalleryLive(
 
   if (!options.source || options.source === "product") {
     const primary = data.subcategories?.[category]?.[subcategory];
-    if (
-      primary &&
-      isRealProductImageSrc(primary) &&
-      publicImageFileExists(primary)
-    ) {
+    if (primary && isRenderableProductSrc(primary)) {
       return [{ src: primary, caption: "", source: "product" }];
     }
   }
@@ -215,8 +225,7 @@ export async function getSubcategoryWorksPreviewLive(
 
   const push = (image: ProductGalleryImage) => {
     const src = image.src?.trim();
-    if (!src || seen.has(src) || !isRealProductImageSrc(src)) return;
-    if (!publicImageFileExists(src)) return;
+    if (!src || seen.has(src) || !isRenderableProductSrc(src)) return;
     seen.add(src);
     out.push({ ...image, src, source: image.source ?? "project" });
   };

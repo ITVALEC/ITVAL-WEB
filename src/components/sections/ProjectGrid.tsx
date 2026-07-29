@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { Container } from "@/components/layout/Container";
 import { ProjectCard } from "@/components/ui/ProjectCard";
 import { PageHeroImage } from "@/components/sections/PageHeroImage";
-import { PROJECTS, getFeaturedProjects } from "@/lib/projects";
+import { PROJECTS, type Project } from "@/lib/projects";
 import {
   buildProjectFilterOptions,
   filterProjectsByState,
@@ -17,6 +17,7 @@ import {
   type ProjectSolutionGroup,
 } from "@/lib/catalog/project-filters";
 import { breadcrumbTrail } from "@/lib/breadcrumbs";
+import { isCatalogPlaceholderSrc } from "@/lib/media/placeholder-src";
 
 const PAGE_SIZE = 9;
 
@@ -31,7 +32,13 @@ function pillClass(active: boolean): string {
   }`;
 }
 
-export function ProjectGrid() {
+type ProjectGridProps = {
+  /** Obras vivas desde servidor; si falta, usa el manifiesto del build. */
+  projects?: readonly Project[];
+};
+
+export function ProjectGrid({ projects: projectsProp }: ProjectGridProps) {
+  const projects = projectsProp ?? PROJECTS;
   const t = useTranslations("projectsPage");
   const tNav = useTranslations("nav");
   const tCommon = useTranslations("common");
@@ -44,13 +51,13 @@ export function ProjectGrid() {
   const [page, setPage] = useState(1);
 
   const filterOptions = useMemo(
-    () => buildProjectFilterOptions(PROJECTS, filters),
-    [filters],
+    () => buildProjectFilterOptions(projects, filters),
+    [filters, projects],
   );
 
   const filtered = useMemo(
-    () => filterProjectsByState(PROJECTS, filters),
-    [filters],
+    () => filterProjectsByState(projects, filters),
+    [filters, projects],
   );
 
   const activeChips = useMemo(
@@ -74,8 +81,8 @@ export function ProjectGrid() {
   function updateSolution(solution: ProjectSolutionGroup | "all") {
     setFilters((current) => {
       const next: ProjectFilterState = { ...current, solution };
-      if (!isValidCityForFilters(PROJECTS, next, next.city)) next.city = "all";
-      if (!isValidPeriodForFilters(PROJECTS, next, next.period)) {
+      if (!isValidCityForFilters(projects, next, next.city)) next.city = "all";
+      if (!isValidPeriodForFilters(projects, next, next.period)) {
         next.period = "all";
       }
       return next;
@@ -86,7 +93,7 @@ export function ProjectGrid() {
   function updateCity(city: string) {
     setFilters((current) => {
       const next = { ...current, city };
-      if (!isValidPeriodForFilters(PROJECTS, next, next.period)) {
+      if (!isValidPeriodForFilters(projects, next, next.period)) {
         next.period = "all";
       }
       return next;
@@ -99,8 +106,11 @@ export function ProjectGrid() {
     setPage(1);
   }
 
+  const featuredCover = projects.find((p) => p.featured)?.cover ?? projects[0]?.cover;
   const heroImage =
-    getFeaturedProjects()[0]?.cover ?? "/images/pages/projects.svg";
+    featuredCover && !isCatalogPlaceholderSrc(featuredCover)
+      ? featuredCover
+      : "/images/pages/products.jpg";
 
   return (
     <>
@@ -224,9 +234,9 @@ export function ProjectGrid() {
                       {hasActiveFilters
                         ? t("resultsFiltered", {
                             count: filtered.length,
-                            total: PROJECTS.length,
+                            total: projects.length,
                           })
-                        : t("resultsAll", { total: PROJECTS.length })}
+                        : t("resultsAll", { total: projects.length })}
                     </p>
                     {paginated.length > 0 && filtered.length > PAGE_SIZE ? (
                       <p className="mt-1 text-xs text-ink/70">
