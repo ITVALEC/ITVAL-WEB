@@ -28,7 +28,7 @@ const NAV = [
   {
     href: "/admin/config",
     label: "Ajustes",
-    hint: "Contacto y footer",
+    hint: "Inicio, contacto y footer",
   },
 ];
 

@@ -9,6 +9,7 @@ import "server-only";
  * 3. Google Cloud Translation — `GOOGLE_TRANSLATE_API_KEY` o `TRANSLATION_API_KEY`
  * 4. MyMemory (sin clave, rate-limited) — útil si aún no hay API key en el VPS
  *
+ * Si un proveedor deja texto en español o truncado, se reintenta con el siguiente.
  * En `/var/www/itval/shared/.env.production.local` basta con una de las claves anteriores.
  * Si falla la traducción, el guardado ES no debe tumbarse: se conserva el EN previo.
  */
@@ -38,6 +39,10 @@ function normalizeText(value: string | undefined | null): string {
   return (value ?? "").trim();
 }
 
+/** Palabras/frases típicas de ES residual en un campo “EN”. */
+const SPANISH_LEXICON =
+  /\b(soluciones|arquitect[oó]nicos?|fachadas?|edificios?|experiencia|tambi[eé]n|integrales?|estructuras?|met[aá]licas?|vidrio|aluminio|cortina|sistemas?|corporativos?|comerciales?|institucionales?|asesor[ií]a|pr[oó]ximo|escalar|cu[eé]ntanos|nuestro|nuestra|nuestros|nuestras|equipo|t[eé]cnico|t[eé]cnica|dise[nñ]amos|fabricamos|instalamos|proyectos?|destacados?|proceso|consultor[ií]a|ingenier[ií]a|fabricaci[oó]n|instalaci[oó]n|entrega|requerimientos?|planos?|especificaciones?|producci[oó]n|montaje|obra|pruebas?|calidad|metodolog[ií]a|presupuestos?|plazos?|cancelar[ií]a|muro|unitizadas?|desempe[nñ]o|referentes?|empresarial|an[aá]lisis|visita|propuesta|preliminar|desarrollo|modelado|aprobaci[oó]n|estanqueidad|acta)\b/i;
+
 /**
  * True si el inglés previo no sirve: vacío, idéntico al ES, o claramente en español.
  * Evita que un fallback ES→EN fallido quede congelado para siempre.
@@ -55,13 +60,7 @@ export function englishNeedsRetranslation(es: string, en: string | undefined | n
   }
   // Acentos o palabras típicas de ES en el campo "EN" → copia sin traducir
   if (/[áéíóúñü¿¡]/i.test(enNorm)) return true;
-  if (
-    /\b(soluciones|arquitect[oó]nicos|fachadas|edificios|experiencia|tambi[eé]n|integrales|estructuras|met[aá]licas|vidrio|aluminio|cortina|sistemas|corporativos|comerciales|institucionales|asesor[ií]a|pr[oó]ximo|escalar|cu[eé]ntanos|nuestro|equipo|t[eé]cnico)\b/i.test(
-      enNorm,
-    )
-  ) {
-    return true;
-  }
+  if (SPANISH_LEXICON.test(enNorm)) return true;
   return false;
 }
 
@@ -279,9 +278,110 @@ const myMemoryProvider: Provider = {
   },
 };
 
+const PROVIDER_CHAIN = [deeplProvider, openaiProvider, googleProvider, myMemoryProvider];
+
+function listAvailableProviders(): Provider[] {
+  return PROVIDER_CHAIN.filter((p) => p.available());
+}
+
 function pickProvider(): Provider | null {
-  const ordered = [deeplProvider, openaiProvider, googleProvider, myMemoryProvider];
-  return ordered.find((p) => p.available()) ?? null;
+  return listAvailableProviders()[0] ?? null;
+}
+
+async function translateBatchWithProvider(
+  provider: Provider,
+  texts: string[],
+): Promise<string[]> {
+  if (provider.translateMany) {
+    return withRetry(() => provider.translateMany!(texts));
+  }
+  const translated: string[] = [];
+  for (const text of texts) {
+    translated.push(await withRetry(() => provider.translateOne(text)));
+    if (provider.id === "mymemory") await sleep(120);
+  }
+  return translated;
+}
+
+/**
+ * Traduce un lote; si algún resultado sigue en español/truncado, reintenta
+ * esos campos con el siguiente proveedor disponible.
+ */
+async function translateWithFailover(
+  items: { key: string; es: string }[],
+  warnings: string[],
+): Promise<{ values: Record<string, string>; provider: string | null; translatedCount: number }> {
+  const providers = listAvailableProviders();
+  const values: Record<string, string> = {};
+
+  if (providers.length === 0) {
+    return { values, provider: null, translatedCount: 0 };
+  }
+
+  if (providers.length === 1 && providers[0].id === "mymemory") {
+    warnings.push(
+      "Solo MyMemory está disponible (sin API key). La calidad puede ser limitada; configura DEEPL_AUTH_KEY, OPENAI_API_KEY o GOOGLE_TRANSLATE_API_KEY en producción.",
+    );
+  }
+
+  let pending = [...items];
+  let primaryProvider: string | null = null;
+  let translatedCount = 0;
+  const failedProviders: string[] = [];
+
+  for (const provider of providers) {
+    if (pending.length === 0) break;
+
+    try {
+      const texts = pending.map((t) => t.es);
+      const translated = await translateBatchWithProvider(provider, texts);
+      if (!primaryProvider) primaryProvider = provider.id;
+
+      const stillPending: typeof pending = [];
+      pending.forEach((item, index) => {
+        const out = normalizeText(translated[index]);
+        if (out && !englishNeedsRetranslation(item.es, out)) {
+          values[item.key] = out;
+          translatedCount += 1;
+        } else if (out && !values[item.key]) {
+          // Conservar candidata aunque sea imperfecta; otro proveedor puede mejorarla.
+          values[item.key] = out;
+          stillPending.push(item);
+        } else {
+          stillPending.push(item);
+        }
+      });
+      pending = stillPending;
+
+      if (pending.length > 0 && provider !== providers[providers.length - 1]) {
+        warnings.push(
+          `${provider.id} dejó ${pending.length} texto(s) sin traducir bien; reintentando con el siguiente proveedor.`,
+        );
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Error desconocido";
+      failedProviders.push(`${provider.id}: ${message}`);
+    }
+  }
+
+  if (pending.length > 0) {
+    for (const item of pending) {
+      if (!values[item.key]) {
+        values[item.key] = item.es;
+      }
+    }
+    if (failedProviders.length > 0) {
+      warnings.push(
+        `No se pudo traducir completamente al inglés (${failedProviders.join("; ")}). Se conservó el mejor resultado disponible.`,
+      );
+    } else {
+      warnings.push(
+        `Quedaron ${pending.length} texto(s) con traducción dudosa. Revisa el inglés o configura una API de traducción de pago.`,
+      );
+    }
+  }
+
+  return { values, provider: primaryProvider, translatedCount };
 }
 
 /** Traduce un texto ES → EN. Lanza si no hay proveedor o falla. */
@@ -294,12 +394,16 @@ export async function translateEsToEn(text: string): Promise<string> {
       "No hay proveedor de traducción. Configura DEEPL_AUTH_KEY, OPENAI_API_KEY o GOOGLE_TRANSLATE_API_KEY.",
     );
   }
-  return withRetry(() => provider.translateOne(trimmed));
+  const result = await translateWithFailover([{ key: "text", es: trimmed }], []);
+  const out = result.values.text;
+  if (!out) throw new Error("Traducción vacía");
+  return out;
 }
 
 /**
  * Rellena campos EN a partir de ES.
  * Si el ES no cambió, reutiliza el EN anterior (evita retraducir).
+ * Si la traducción queda en español, prueba el siguiente proveedor.
  */
 export async function fillEnglishFromSpanish(
   fields: Record<string, TranslateFieldInput>,
@@ -344,8 +448,8 @@ export async function fillEnglishFromSpanish(
     };
   }
 
-  const provider = pickProvider();
-  if (!provider) {
+  const providers = listAvailableProviders();
+  if (providers.length === 0) {
     for (const item of toTranslate) {
       const previousEn = normalizeText(fields[item.key]?.previousEn);
       values[item.key] =
@@ -365,57 +469,29 @@ export async function fillEnglishFromSpanish(
     };
   }
 
-  try {
-    const texts = toTranslate.map((t) => t.es);
-    let translated: string[];
+  const translated = await translateWithFailover(toTranslate, warnings);
 
-    if (provider.translateMany) {
-      translated = await withRetry(() => provider.translateMany!(texts));
+  for (const item of toTranslate) {
+    const out = normalizeText(translated.values[item.key]);
+    const previousEn = normalizeText(fields[item.key]?.previousEn);
+    if (out && !englishNeedsRetranslation(item.es, out)) {
+      values[item.key] = out;
+    } else if (previousEn && !englishNeedsRetranslation(item.es, previousEn)) {
+      values[item.key] = previousEn;
+    } else if (out) {
+      values[item.key] = out;
     } else {
-      translated = [];
-      for (const text of texts) {
-        translated.push(await withRetry(() => provider.translateOne(text)));
-        if (provider.id === "mymemory") await sleep(120);
-      }
+      values[item.key] = item.es;
     }
-
-    toTranslate.forEach((item, index) => {
-      const out = normalizeText(translated[index]);
-      const previousEn = normalizeText(fields[item.key]?.previousEn);
-      values[item.key] =
-        out ||
-        (previousEn && !englishNeedsRetranslation(item.es, previousEn)
-          ? previousEn
-          : item.es);
-    });
-
-    return {
-      values,
-      warnings,
-      provider: provider.id,
-      translatedCount: toTranslate.length,
-      skippedCount,
-    };
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Error desconocido";
-    for (const item of toTranslate) {
-      const previousEn = normalizeText(fields[item.key]?.previousEn);
-      values[item.key] =
-        previousEn && !englishNeedsRetranslation(item.es, previousEn)
-          ? previousEn
-          : item.es;
-    }
-    warnings.push(
-      `No se pudo traducir al inglés (${provider.id}: ${message}). Se guardó el español y se conservó el inglés previo cuando existía.`,
-    );
-    return {
-      values,
-      warnings,
-      provider: provider.id,
-      translatedCount: 0,
-      skippedCount,
-    };
   }
+
+  return {
+    values,
+    warnings,
+    provider: translated.provider,
+    translatedCount: translated.translatedCount,
+    skippedCount,
+  };
 }
 
 export function getConfiguredTranslationProvider(): string | null {

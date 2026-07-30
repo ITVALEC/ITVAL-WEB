@@ -35,12 +35,57 @@ import {
   type SiteSocialLink,
   type SocialIconKey,
 } from "@/lib/social";
+import type { SiteHomeCopy } from "@/lib/home-copy";
+import { DEFAULT_HOME_COPY, HOME_COPY_FIELD_KEYS } from "@/lib/home-copy";
 import type { SiteSettings } from "@/lib/site-settings";
 
-type ConfigTab = "contact" | "blocked";
-type SettingsSection = "contact" | "footer" | "social";
+type ConfigTab = "home" | "contact" | "blocked";
+type SettingsSection = "home" | "contact" | "footer" | "social";
 
 const BLOCKED_PAGE_SIZE = 15;
+
+const HOME_FIELD_GROUPS: {
+  title: string;
+  fields: { key: (typeof HOME_COPY_FIELD_KEYS)[number]; label: string; rows?: number }[];
+}[] = [
+  {
+    title: "Hero (cabecera)",
+    fields: [
+      { key: "heroTitle", label: "Título principal", rows: 2 },
+      { key: "heroSubtitle", label: "Descripción / subtítulo", rows: 4 },
+    ],
+  },
+  {
+    title: "Sección de productos",
+    fields: [
+      { key: "productsTitle", label: "Título" },
+      { key: "productsSubtitle", label: "Descripción", rows: 3 },
+    ],
+  },
+  {
+    title: "Proyectos destacados",
+    fields: [
+      { key: "featuredTitle", label: "Título" },
+      { key: "featuredSubtitle", label: "Descripción", rows: 3 },
+    ],
+  },
+  {
+    title: "Nuestro proceso",
+    fields: [
+      { key: "processTitle", label: "Título de la sección" },
+      { key: "processSubtitle", label: "Descripción de la sección", rows: 3 },
+      { key: "processConsultationTitle", label: "Paso 1 — título" },
+      { key: "processConsultationDescription", label: "Paso 1 — descripción", rows: 3 },
+      { key: "processEngineeringTitle", label: "Paso 2 — título" },
+      { key: "processEngineeringDescription", label: "Paso 2 — descripción", rows: 3 },
+      { key: "processFabricationTitle", label: "Paso 3 — título" },
+      { key: "processFabricationDescription", label: "Paso 3 — descripción", rows: 3 },
+      { key: "processInstallationTitle", label: "Paso 4 — título" },
+      { key: "processInstallationDescription", label: "Paso 4 — descripción", rows: 3 },
+    ],
+  },
+];
+
 
 type BlockedRow = { id: string; filename: string };
 
@@ -58,7 +103,9 @@ const idleSection = (): SectionUiState => ({
 
 export default function AdminConfigPage() {
   const searchParams = useSearchParams();
-  const initialTab = searchParams.get("tab") === "blocked" ? "blocked" : "contact";
+  const tabParam = searchParams.get("tab");
+  const initialTab: ConfigTab =
+    tabParam === "blocked" ? "blocked" : tabParam === "contact" ? "contact" : "home";
   const [section, setSection] = useState<ConfigTab>(initialTab);
 
   const [settings, setSettings] = useState<SiteSettings | null>(null);
@@ -66,6 +113,7 @@ export default function AdminConfigPage() {
   const [loadError, setLoadError] = useState("");
   const [translationWarning, setTranslationWarning] = useState("");
   const [sectionUi, setSectionUi] = useState<Record<SettingsSection, SectionUiState>>({
+    home: idleSection(),
     contact: idleSection(),
     footer: idleSection(),
     social: idleSection(),
@@ -93,6 +141,7 @@ export default function AdminConfigPage() {
       setSettings({
         contact: data.contact,
         footer: data.footer,
+        home: data.home ?? DEFAULT_HOME_COPY,
         social: Array.isArray(data.social) ? data.social : [],
       });
     } else {
@@ -129,12 +178,13 @@ export default function AdminConfigPage() {
     key: SettingsSection,
     payload: Partial<Pick<SiteSettings, "contact" | "social">> & {
       footer?: { es: SiteSettings["footer"]["es"] };
+      home?: { es: SiteHomeCopy };
     },
   ) {
     if (!settings || sectionUi[key].saving) return;
 
     patchSectionUi(key, { saving: true, saved: false, error: "" });
-    if (key === "footer") setTranslationWarning("");
+    if (key === "footer" || key === "home") setTranslationWarning("");
 
     try {
       const res = await fetch("/api/admin/site-settings", {
@@ -151,10 +201,11 @@ export default function AdminConfigPage() {
           setSettings({
             contact: data.contact,
             footer: data.footer,
+            home: data.home ?? DEFAULT_HOME_COPY,
             social: data.social,
           });
           const warnings = data.translation?.warnings?.filter(Boolean) ?? [];
-          if (key === "footer" && warnings.length > 0) {
+          if ((key === "footer" || key === "home") && warnings.length > 0) {
             setTranslationWarning(warnings.join(" "));
             patchSectionUi(key, { saving: false, saved: false });
           } else {
@@ -196,6 +247,20 @@ export default function AdminConfigPage() {
             footer: {
               ...current.footer,
               es: { ...current.footer.es, [field]: value },
+            },
+          }
+        : current,
+    );
+  }
+
+  function updateHome(field: (typeof HOME_COPY_FIELD_KEYS)[number], value: string) {
+    setSettings((current) =>
+      current
+        ? {
+            ...current,
+            home: {
+              ...current.home,
+              es: { ...current.home.es, [field]: value },
             },
           }
         : current,
@@ -346,12 +411,94 @@ export default function AdminConfigPage() {
         value={section}
         onChange={setSection}
         options={[
+          { value: "home", label: "Página de inicio" },
           { value: "contact", label: "Contacto y footer" },
           { value: "blocked", label: "Imágenes bloqueadas" },
         ]}
       />
 
-      {section === "contact" ? (
+      {section === "home" ? (
+        settingsLoading || !settings ? (
+          <div className="mt-6">
+            {loadError ? (
+              <AdminStatusMessage type="error" message={loadError} />
+            ) : (
+              <AdminLoadingState label="Cargando textos del inicio…" />
+            )}
+          </div>
+        ) : (
+          <div className="mt-6 space-y-6">
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                void saveSettingsSection("home", {
+                  home: { es: settings.home.es },
+                });
+              }}
+              className="space-y-4"
+            >
+              <AdminPanel>
+                <AdminCrudToolbar
+                  title="Textos de la página de inicio"
+                  description="Edita en español. El inglés se genera automáticamente al guardar."
+                />
+                <AdminInfoBanner>
+                  Estos textos se muestran en el hero, productos, proyectos destacados y proceso de
+                  la página de inicio pública.
+                </AdminInfoBanner>
+                {translationWarning ? (
+                  <AdminStatusMessage type="error" message={translationWarning} />
+                ) : null}
+                {sectionUi.home.error ? (
+                  <AdminStatusMessage type="error" message={sectionUi.home.error} />
+                ) : null}
+                <div className="mt-4 space-y-8">
+                  {HOME_FIELD_GROUPS.map((group) => (
+                    <div key={group.title}>
+                      <h3 className="mb-3 text-sm font-semibold text-navy">{group.title}</h3>
+                      <div className="grid gap-4">
+                        {group.fields.map((field) => {
+                          const id = `home-${field.key}`;
+                          const value = settings.home.es[field.key];
+                          const rows = field.rows ?? 1;
+                          return (
+                            <AdminField key={field.key} label={field.label} htmlFor={id}>
+                              {rows > 1 ? (
+                                <textarea
+                                  id={id}
+                                  value={value}
+                                  onChange={(e) => updateHome(field.key, e.target.value)}
+                                  className={adminTextareaClass}
+                                  rows={rows}
+                                />
+                              ) : (
+                                <input
+                                  id={id}
+                                  type="text"
+                                  value={value}
+                                  onChange={(e) => updateHome(field.key, e.target.value)}
+                                  className={adminInputClass}
+                                />
+                              )}
+                            </AdminField>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-5">
+                  <AdminSaveButton
+                    saving={sectionUi.home.saving}
+                    saved={sectionUi.home.saved}
+                    label="Guardar textos del inicio"
+                  />
+                </div>
+              </AdminPanel>
+            </form>
+          </div>
+        )
+      ) : section === "contact" ? (
         settingsLoading || !settings ? (
           <div className="mt-6">
             {loadError ? (

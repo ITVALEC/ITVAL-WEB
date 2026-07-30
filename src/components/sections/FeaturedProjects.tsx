@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/layout/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -7,13 +7,15 @@ import { FeaturedProjectsCarousel } from "@/components/sections/FeaturedProjects
 import { accentLastWords } from "@/components/ui/AccentText";
 import { NAV_PATHS } from "@/lib/routes";
 import { loadFeaturedPortfolioProjectsLive } from "@/lib/catalog/project-portfolio.server";
+import { getSiteHomeCopy } from "@/lib/site-settings";
 
 export async function FeaturedProjects() {
-  const t = await getTranslations("featuredProjects");
+  const locale = await getLocale();
+  const home = getSiteHomeCopy(locale);
   const tc = await getTranslations("common");
   const tProducts = await getTranslations("products");
   const featured = await loadFeaturedPortfolioProjectsLive();
-  const title = t("title");
+  const title = home.featuredTitle;
 
   if (featured.length === 0) return null;
 
@@ -31,7 +33,7 @@ export async function FeaturedProjects() {
           <SectionHeading
             id="featured-heading"
             title={title}
-            subtitle={t("subtitle")}
+            subtitle={home.featuredSubtitle}
             light
             accent={accentLastWords(title, 1)}
             rule={false}
@@ -47,7 +49,7 @@ export async function FeaturedProjects() {
         <ScrollReveal delayMs={80}>
           <FeaturedProjectsCarousel
             projects={featured}
-            navLabel={t("title")}
+            navLabel={title}
             previousLabel={tProducts("previous")}
             nextLabel={tProducts("next")}
           />

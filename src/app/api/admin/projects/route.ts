@@ -15,11 +15,37 @@ import { syncDatabaseToJson } from "@/lib/db/sync-json";
 import type { PortfolioProject } from "@/lib/catalog/project-portfolio";
 import { resolveProjectCover } from "@/lib/catalog/project-cover";
 import { revalidatePublicCatalog } from "@/lib/catalog/revalidate-public";
+import { isServablePublicImage } from "@/lib/admin/media-service";
+import { isSharedPlaceholderSrc } from "@/lib/admin/media-placeholder";
 
 type ProjectManifest = {
   projects: PortfolioProject[];
   [key: string]: unknown;
 };
+
+export type AdminProjectPayload = PortfolioProject & {
+  coverFileMissing: boolean;
+  galleryFileMissing: boolean[];
+};
+
+function withFilePresence(project: PortfolioProject): AdminProjectPayload {
+  const galleryFileMissing = project.gallery.map(
+    (src) =>
+      !src?.trim() ||
+      isSharedPlaceholderSrc(src) ||
+      !isServablePublicImage(src),
+  );
+  const coverFileMissing =
+    !project.cover?.trim() ||
+    isSharedPlaceholderSrc(project.cover) ||
+    !isServablePublicImage(project.cover);
+
+  return {
+    ...project,
+    coverFileMissing,
+    galleryFileMissing,
+  };
+}
 
 export async function GET(request: Request) {
   if (!(await isAdminAuthenticated())) {
@@ -59,7 +85,7 @@ export async function GET(request: Request) {
   const paginated = paginateAdminList(projects, page, pageSize);
 
   return NextResponse.json({
-    projects: paginated.items,
+    projects: paginated.items.map(withFilePresence),
     total: paginated.totalItems,
     page: paginated.page,
     pageSize,
@@ -94,7 +120,7 @@ export async function PATCH(request: Request) {
     }
     await syncDatabaseToJson();
     revalidatePublicCatalog();
-    return NextResponse.json({ project });
+    return NextResponse.json({ project: withFilePresence(project) });
   }
 
   const data = readJsonFile<ProjectManifest>(MANIFEST_PATHS.projects);
@@ -123,5 +149,5 @@ export async function PATCH(request: Request) {
   writeJsonFile(MANIFEST_PATHS.projects, data);
   revalidatePublicCatalog();
 
-  return NextResponse.json({ project });
+  return NextResponse.json({ project: withFilePresence(project) });
 }

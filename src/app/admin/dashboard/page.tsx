@@ -44,7 +44,7 @@ export default async function AdminDashboardPage() {
           <ActionCard
             href="/admin/config"
             title="Ajustes del sitio"
-            desc="Teléfono, correo, textos del footer e imágenes que no deben publicarse."
+            desc="Textos de la página de inicio, contacto, footer e imágenes bloqueadas."
             stat="Contacto"
           />
         </div>

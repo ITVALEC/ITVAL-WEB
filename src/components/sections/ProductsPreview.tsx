@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Container } from "@/components/layout/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
@@ -8,12 +8,15 @@ import { PRODUCT_KEYS, type ProductKey } from "@/lib/catalog";
 import { NAV_PATHS } from "@/lib/routes";
 import { accentLastWords } from "@/components/ui/AccentText";
 import { getProductImageLive } from "@/lib/catalog/product-images.server";
+import { getSiteHomeCopy } from "@/lib/site-settings";
 
 /** Home: carrusel de categorías con fotos reales (no solo iconos). */
 export async function ProductsPreview() {
+  const locale = await getLocale();
+  const home = getSiteHomeCopy(locale);
   const t = await getTranslations("products");
   const tc = await getTranslations("common");
-  const title = t("title");
+  const title = home.productsTitle;
 
   const categoryImages = Object.fromEntries(
     await Promise.all(
@@ -34,7 +37,7 @@ export async function ProductsPreview() {
           <SectionHeading
             id="products-heading"
             title={title}
-            subtitle={t("subtitle")}
+            subtitle={home.productsSubtitle}
             accent={accentLastWords(title, 1)}
             rule={false}
           />

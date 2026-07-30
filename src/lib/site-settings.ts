@@ -2,6 +2,11 @@ import fs from "node:fs";
 import path from "node:path";
 import "server-only";
 import defaults from "./catalog/site-settings.json";
+import {
+  DEFAULT_HOME_COPY,
+  normalizeHomeCopy,
+  type SiteHomeCopy,
+} from "@/lib/home-copy";
 import { CONTACT, SOCIAL_LINKS } from "@/lib/site";
 import {
   createSocialLinkId,
@@ -10,6 +15,8 @@ import {
   type SiteSocialLink,
   type SocialIconKey,
 } from "@/lib/social";
+
+export type { SiteHomeCopy };
 
 export type SiteContact = {
   email: string;
@@ -45,12 +52,17 @@ export type SiteSettings = {
     es: SiteFooterCopy;
     en: SiteFooterCopy;
   };
+  home: {
+    es: SiteHomeCopy;
+    en: SiteHomeCopy;
+  };
   social: SiteSocialLink[];
 };
 
-/** Forma guardada en Postgres (`footer` JSONB puede incluir `social`). */
+/** Forma guardada en Postgres (`footer` JSONB puede incluir `social` y `home`). */
 export type SiteFooterStored = SiteSettings["footer"] & {
   social?: SiteSocialLink[] | Partial<SiteSocialLinksLegacy>;
+  home?: SiteSettings["home"];
 };
 
 const SETTINGS_PATH = path.join(process.cwd(), "src/lib/catalog/site-settings.json");
@@ -160,18 +172,20 @@ export function normalizeSocialLinks(
   return getDefaultSocialLinks();
 }
 
-/** Normaliza lectura desde JSON/BD (social top-level o anidado en footer). */
+/** Normaliza lectura desde JSON/BD (social/home top-level o anidados en footer). */
 export function normalizeSiteSettings(raw: unknown): SiteSettings {
   const base = (raw && typeof raw === "object" ? raw : {}) as {
     contact?: SiteContact;
     footer?: SiteFooterStored;
+    home?: SiteSettings["home"];
     social?: SiteSocialLink[] | Partial<SiteSocialLinksLegacy>;
   };
   const defaultsTyped = defaults as Partial<SiteSettings> & {
     social?: SiteSocialLink[] | Partial<SiteSocialLinksLegacy>;
+    home?: SiteSettings["home"];
   };
   const footerRaw = (base.footer ?? defaultsTyped.footer ?? DEFAULT_FOOTER) as SiteFooterStored;
-  const { social: nestedSocial, ...footerLocales } = footerRaw;
+  const { social: nestedSocial, home: nestedHome, ...footerLocales } = footerRaw;
 
   const footerEs = {
     ...DEFAULT_FOOTER.es,
@@ -183,6 +197,8 @@ export function normalizeSiteSettings(raw: unknown): SiteSettings {
     ...(defaultsTyped.footer?.en ?? {}),
     ...(footerLocales.en ?? {}),
   };
+
+  const homeSource = base.home ?? nestedHome ?? defaultsTyped.home ?? DEFAULT_HOME_COPY;
 
   const mergedContact = {
     email: CONTACT.email,
@@ -206,6 +222,10 @@ export function normalizeSiteSettings(raw: unknown): SiteSettings {
       es: footerEs,
       en: footerEn,
     },
+    home: {
+      es: normalizeHomeCopy("es", homeSource.es),
+      en: normalizeHomeCopy("en", homeSource.en),
+    },
     social: (() => {
       const source = base.social ?? nestedSocial ?? defaultsTyped.social;
       // Array (aunque vacío) = lista configurada; no forzar defaults.
@@ -223,7 +243,7 @@ export function normalizeSiteSettings(raw: unknown): SiteSettings {
   };
 }
 
-/** Empaqueta social dentro de footer para columnas Postgres contact/footer. */
+/** Empaqueta social + home dentro de footer para columnas Postgres contact/footer. */
 export function packSiteSettingsForDb(settings: SiteSettings): {
   contact: SiteContact;
   footer: SiteFooterStored;
@@ -237,6 +257,10 @@ export function packSiteSettingsForDb(settings: SiteSettings): {
         keepEmpty: true,
         allowEmptyList: true,
       }),
+      home: {
+        es: settings.home.es,
+        en: settings.home.en,
+      },
     },
   };
 }
@@ -283,6 +307,11 @@ export function buildGoogleMapsEmbedUrl(contact: SiteContact): string {
 export function getSiteFooterCopy(locale: string): SiteFooterCopy {
   const settings = getSiteSettings();
   return locale === "en" ? settings.footer.en : settings.footer.es;
+}
+
+export function getSiteHomeCopy(locale: string): SiteHomeCopy {
+  const settings = getSiteSettings();
+  return locale === "en" ? settings.home.en : settings.home.es;
 }
 
 export function getSiteSocialLinks(): SiteSocialLink[] {

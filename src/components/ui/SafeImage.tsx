@@ -10,7 +10,7 @@ type SafeImageProps = Omit<ImageProps, "src" | "alt"> & {
   alt: string;
   /**
    * Imagen de respaldo si `src` falla.
-   * - string: usa esa ruta (por defecto pages/projects.svg en contextos de obras)
+   * - string: usa esa ruta (por defecto pages/products.jpg)
    * - false: no sustituir; deja de intentar (el caller puede ocultar el slide)
    */
   fallbackSrc?: string | false;
@@ -32,12 +32,17 @@ export function SafeImage({
     setFailed(false);
   }, [src]);
 
-  if (failed && fallbackSrc === false) {
+  const effectiveFallback =
+    typeof fallbackSrc === "string" && fallbackSrc.trim() && fallbackSrc !== src
+      ? fallbackSrc.trim()
+      : false;
+
+  if (failed && effectiveFallback === false) {
     return null;
   }
 
   const resolvedSrc =
-    failed && typeof fallbackSrc === "string" ? fallbackSrc : currentSrc;
+    failed && typeof effectiveFallback === "string" ? effectiveFallback : currentSrc;
 
   return (
     <Image
@@ -48,8 +53,8 @@ export function SafeImage({
       onError={(event) => {
         if (!failed) {
           setFailed(true);
-          if (typeof fallbackSrc === "string" && currentSrc !== fallbackSrc) {
-            setCurrentSrc(fallbackSrc);
+          if (typeof effectiveFallback === "string" && currentSrc !== effectiveFallback) {
+            setCurrentSrc(effectiveFallback);
           }
         }
         onError?.(event);

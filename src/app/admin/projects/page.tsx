@@ -41,6 +41,8 @@ type AdminProject = {
   cover: string;
   gallery: string[];
   coverIndex?: number | null;
+  coverFileMissing?: boolean;
+  galleryFileMissing?: boolean[];
 };
 
 type ProjectsResponse = {
@@ -308,7 +310,8 @@ export default function AdminProjectsPage() {
                         src={row.cover}
                         version={previewVersion}
                         sizes="64px"
-                        fallbackSrc="/images/pages/projects.svg"
+                        fileMissing={row.coverFileMissing}
+                        emptyLabel="Archivo ausente"
                       />
                     </div>
                   ),
@@ -380,7 +383,8 @@ export default function AdminProjectsPage() {
                       src={row.cover}
                       version={previewVersion}
                       sizes="80px"
-                      fallbackSrc="/images/pages/projects.svg"
+                      fileMissing={row.coverFileMissing}
+                      emptyLabel="Archivo ausente"
                     />
                   </div>
                   <div className="min-w-0 flex-1">
@@ -465,7 +469,8 @@ export default function AdminProjectsPage() {
                         src={src}
                         version={previewVersion}
                         sizes="96px"
-                        fallbackSrc="/images/pages/projects.svg"
+                        fileMissing={editingProject.galleryFileMissing?.[index]}
+                        emptyLabel="Archivo ausente"
                       />
                     </button>
                     {editingProject.gallery.length > 1 ? (

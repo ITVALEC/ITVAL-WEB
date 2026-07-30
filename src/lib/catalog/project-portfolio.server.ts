@@ -5,6 +5,7 @@ import { unstable_noStore as noStore } from "next/cache";
 import { isDatabaseEnabled } from "@/lib/db/pool";
 import { listProjectsFromDb } from "@/lib/db/repositories/projects";
 import { MANIFEST_PATHS } from "@/lib/admin/manifests";
+import { isServablePublicImage } from "@/lib/admin/media-service";
 import {
   PORTFOLIO_PROJECTS,
   type PortfolioProject,
@@ -17,15 +18,44 @@ import {
 import { pickProjectCoverIndex, resolveProjectCover } from "@/lib/catalog/project-cover";
 import { isCatalogPlaceholderSrc } from "@/lib/media/placeholder-src";
 
+const PUBLIC_COVER_FALLBACK = "/images/pages/products.jpg";
+
 function sanitizeProject(project: PortfolioProject): PortfolioProject | null {
   const gallery = filterImageSrcList(project.gallery).filter(
-    (src) => !isCatalogPlaceholderSrc(src),
+    (src) =>
+      !isCatalogPlaceholderSrc(src) &&
+      !isBlockedImageSrc(src) &&
+      isServablePublicImage(src),
   );
   if (gallery.length === 0) return null;
 
-  const coverIndex = project.coverIndex ?? pickProjectCoverIndex(gallery);
+  const preferredIndex = project.coverIndex ?? pickProjectCoverIndex(gallery);
+  // Recalcular índice sobre la galería filtrada (puede haber cambiado).
+  let coverIndex = 0;
+  const preferredSrc =
+    project.coverIndex != null &&
+    project.coverIndex >= 0 &&
+    project.coverIndex < project.gallery.length
+      ? project.gallery[project.coverIndex]
+      : null;
+  if (preferredSrc) {
+    const idx = gallery.indexOf(preferredSrc);
+    coverIndex = idx >= 0 ? idx : pickProjectCoverIndex(gallery);
+  } else {
+    coverIndex =
+      preferredIndex >= 0 && preferredIndex < gallery.length
+        ? preferredIndex
+        : pickProjectCoverIndex(gallery);
+  }
+
   const cover = resolveProjectCover(gallery, coverIndex);
-  if (isCatalogPlaceholderSrc(cover) || isBlockedImageSrc(cover)) return null;
+  if (
+    isCatalogPlaceholderSrc(cover) ||
+    isBlockedImageSrc(cover) ||
+    !isServablePublicImage(cover)
+  ) {
+    return null;
+  }
 
   const city = normalizePortfolioCity(project.city, project.folder);
   return {
@@ -33,7 +63,7 @@ function sanitizeProject(project: PortfolioProject): PortfolioProject | null {
     city,
     location: `${city}, Ecuador`,
     coverIndex,
-    cover,
+    cover: isServablePublicImage(cover) ? cover : PUBLIC_COVER_FALLBACK,
     gallery,
     imageCount: gallery.length,
   };
@@ -98,7 +128,12 @@ export async function loadPortfolioMissionImageLive(): Promise<string | null> {
       fs.readFileSync(MANIFEST_PATHS.projects, "utf8"),
     ) as { missionImage?: string | null };
     const src = raw.missionImage?.trim();
-    if (src && !isBlockedImageSrc(src) && !isCatalogPlaceholderSrc(src)) {
+    if (
+      src &&
+      !isBlockedImageSrc(src) &&
+      !isCatalogPlaceholderSrc(src) &&
+      isServablePublicImage(src)
+    ) {
       return src;
     }
   } catch {

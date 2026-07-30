@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { Container } from "@/components/layout/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Breadcrumbs, type BreadcrumbItem } from "@/components/ui/Breadcrumbs";
 import { HeroMediaOverlay } from "@/components/sections/HeroMediaOverlay";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 type PageHeroImageProps = {
   title: string;
@@ -26,13 +26,14 @@ export function PageHeroImage({
 }: PageHeroImageProps) {
   return (
     <section className="relative overflow-hidden bg-navy py-16 lg:py-20">
-      <Image
+      <SafeImage
         src={image}
         alt={imageAlt}
         fill
         className="object-cover object-[70%_center] saturate-[0.55]"
         sizes="(max-width: 1280px) 100vw, 1280px"
         loading="eager"
+        fallbackSrc="/images/pages/products.jpg"
       />
       <HeroMediaOverlay variant="page" />
       <Container className="relative z-10">

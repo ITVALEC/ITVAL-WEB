@@ -1,13 +1,14 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Container } from "@/components/layout/Container";
 import { ButtonLink } from "@/components/ui/Button";
 import { AccentText, accentAfterColon } from "@/components/ui/AccentText";
 import { HeroCarousel } from "@/components/sections/HeroCarousel";
 import { HeroMediaOverlay } from "@/components/sections/HeroMediaOverlay";
 import { NAV_PATHS } from "@/lib/constants";
-import { PROCESS_STEP_KEYS } from "@/lib/content-keys";
 import { getHeroBackgroundSources } from "@/lib/hero-images";
+import { isServablePublicImage } from "@/lib/admin/media-service";
 import { loadProductImagesManifest } from "@/lib/catalog/product-images.server";
+import { getSiteHomeCopy } from "@/lib/site-settings";
 import type { ProductKey } from "@/lib/catalog/types";
 
 const heroTextShadow =
@@ -15,9 +16,10 @@ const heroTextShadow =
 
 /** Hero home: solo portadas del catálogo (DB / manifiesto), sin creatividades con texto. */
 export async function Hero() {
+  const locale = await getLocale();
+  const home = getSiteHomeCopy(locale);
   const t = await getTranslations("hero");
   const tc = await getTranslations("common");
-  const tProcess = await getTranslations("process");
 
   let liveCategories: Partial<Record<ProductKey, string>> | undefined;
   try {
@@ -27,17 +29,21 @@ export async function Hero() {
     liveCategories = undefined;
   }
 
-  const backgroundImages = getHeroBackgroundSources(liveCategories).map((src) => ({
-    src,
-    alt: t("imageAlt"),
-  }));
+  const backgroundImages = getHeroBackgroundSources(liveCategories)
+    .filter((src) => isServablePublicImage(src))
+    .map((src) => ({
+      src,
+      alt: t("imageAlt"),
+    }));
 
-  const title = t("title");
+  const title = home.heroTitle;
   const accent = accentAfterColon(title);
 
-  const eyebrow = [PROCESS_STEP_KEYS[1], PROCESS_STEP_KEYS[2], PROCESS_STEP_KEYS[3]]
-    .map((key) => tProcess(`steps.${key}.title`))
-    .join(" · ");
+  const eyebrow = [
+    home.processEngineeringTitle,
+    home.processFabricationTitle,
+    home.processInstallationTitle,
+  ].join(" · ");
 
   return (
     <section className="relative min-h-svh overflow-hidden bg-navy-dark supports-[height:100dvh]:min-h-dvh">
@@ -74,7 +80,7 @@ export async function Hero() {
             className="hero-reveal hero-reveal-delay-1 mt-4 max-w-xl break-words text-[0.9375rem] leading-[1.55] text-white/90 sm:mt-6 sm:text-ds-body sm:leading-[1.5] [@media(max-height:560px)]:mt-3 [@media(max-height:560px)]:line-clamp-3"
             style={{ textShadow: heroTextShadow }}
           >
-            {t("subtitle")}
+            {home.heroSubtitle}
           </p>
 
           <div className="hero-reveal hero-reveal-delay-3 mt-7 flex w-full flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap [@media(max-height:560px)]:mt-5">

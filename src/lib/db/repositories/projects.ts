@@ -28,6 +28,8 @@ function pickServableCover(gallery: string[], coverIndex: number): string {
   const preferred = resolveProjectCover(gallery, coverIndex);
   if (isServablePublicImage(preferred)) return preferred;
   const fallback = gallery.find((src) => isServablePublicImage(src));
+  // Si nada es servible, conservar la ruta preferida para que el admin marque fileMissing
+  // (el sitio público filtra estas obras/galerías en sanitizeProject).
   return fallback ?? preferred;
 }
 

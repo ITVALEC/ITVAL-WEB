@@ -30,8 +30,8 @@ npm start
 
 ## Traducción automática (admin)
 
-El panel admin edita solo en **español**. Al guardar, el servidor genera/actualiza el inglés.
+El panel admin edita solo en **español**. Al guardar, el servidor genera/actualiza el inglés (catálogo, footer e **textos de la página de inicio**).
 
-Proveedores (prioridad): `DEEPL_AUTH_KEY` → `OPENAI_API_KEY` → `GOOGLE_TRANSLATE_API_KEY` / `TRANSLATION_API_KEY` → MyMemory (sin clave).
+Proveedores (prioridad): `DEEPL_AUTH_KEY` → `OPENAI_API_KEY` → `GOOGLE_TRANSLATE_API_KEY` / `TRANSLATION_API_KEY` → MyMemory (sin clave). Si un proveedor deja texto en español o truncado, se reintenta con el siguiente.
 
 En VPS añade una clave en `/var/www/itval/shared/.env.production.local` (ver `.env.example`). Si falla la API, el español se guarda igual y el admin muestra un aviso.

@@ -7,6 +7,11 @@ import {
 } from "@/lib/admin/manifests";
 import { isDatabaseEnabled, query } from "@/lib/db/pool";
 import { syncDatabaseToJson } from "@/lib/db/sync-json";
+import {
+  HOME_COPY_FIELD_KEYS,
+  mergeHomeCopyEs,
+  type SiteHomeCopy,
+} from "@/lib/home-copy";
 import { fillEnglishFromSpanish } from "@/lib/i18n/translate-es-to-en";
 import { isValidSocialUrl } from "@/lib/social";
 import { revalidatePublicSite } from "@/lib/catalog/revalidate-public";
@@ -67,6 +72,35 @@ async function translateFooterFromSpanish(
   };
 }
 
+async function translateHomeFromSpanish(
+  nextEs: SiteHomeCopy,
+  previousEs: SiteHomeCopy,
+  previousEn: SiteHomeCopy,
+): Promise<{ en: SiteHomeCopy; warnings: string[]; provider: string | null }> {
+  const fields = Object.fromEntries(
+    HOME_COPY_FIELD_KEYS.map((key) => [
+      key,
+      {
+        es: nextEs[key],
+        previousEs: previousEs[key],
+        previousEn: previousEn[key],
+      },
+    ]),
+  );
+
+  const translated = await fillEnglishFromSpanish(fields);
+  const en = { ...previousEn };
+  for (const key of HOME_COPY_FIELD_KEYS) {
+    en[key] = translated.values[key] ?? previousEn[key];
+  }
+
+  return {
+    en,
+    warnings: translated.warnings,
+    provider: translated.provider,
+  };
+}
+
 function validateSocialPayload(social: SiteSocialLink[]): string | null {
   for (const link of social) {
     if (link.url && !isValidSocialUrl(link.url)) {
@@ -99,24 +133,34 @@ export async function PATCH(request: Request) {
 
   const body = (await request.json()) as Partial<SiteSettings> & {
     social?: SiteSocialLink[];
+    home?: { es?: Partial<SiteHomeCopy> };
   };
 
   const current =
     (isDatabaseEnabled() ? await getSettingsFromDb() : null) ??
     normalizeSiteSettings(readJsonFile<SiteSettings>(MANIFEST_PATHS.siteSettings));
 
-  // No aceptar edición de ctaTitle/ctaText desde el admin (CTA retirado a propósito)
-  const nextEs: SiteFooterCopy = {
-    ...current.footer.es,
-    tagline: body.footer?.es?.tagline ?? current.footer.es.tagline,
-    experience: body.footer?.es?.experience ?? current.footer.es.experience,
-    location: body.footer?.es?.location ?? current.footer.es.location,
-    ctaTitle: current.footer.es.ctaTitle ?? "",
-    ctaText: current.footer.es.ctaText ?? "",
-  };
-
-  // Solo tocar social si el body lo envía (guardado independiente del admin).
+  const footerProvided = Boolean(body.footer?.es);
+  const homeProvided = Boolean(body.home?.es);
   const socialProvided = Array.isArray(body.social);
+  const contactProvided = Boolean(body.contact);
+
+  // No aceptar edición de ctaTitle/ctaText desde el admin (CTA retirado a propósito)
+  const nextEs: SiteFooterCopy = footerProvided
+    ? {
+        ...current.footer.es,
+        tagline: body.footer?.es?.tagline ?? current.footer.es.tagline,
+        experience: body.footer?.es?.experience ?? current.footer.es.experience,
+        location: body.footer?.es?.location ?? current.footer.es.location,
+        ctaTitle: current.footer.es.ctaTitle ?? "",
+        ctaText: current.footer.es.ctaText ?? "",
+      }
+    : current.footer.es;
+
+  const nextHomeEs = homeProvided
+    ? mergeHomeCopyEs(current.home.es, body.home?.es)
+    : current.home.es;
+
   const socialIncoming = socialProvided
     ? normalizeSocialLinks(body.social, {
         keepEmpty: true,
@@ -128,23 +172,49 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: socialError }, { status: 400 });
   }
 
-  const { en: nextEn, warnings, provider } = await translateFooterFromSpanish(
-    nextEs,
-    current.footer.es,
-    current.footer.en,
-  );
+  const warnings: string[] = [];
+  let provider: string | null = null;
+
+  let nextFooterEn = current.footer.en;
+  if (footerProvided) {
+    const footerResult = await translateFooterFromSpanish(
+      nextEs,
+      current.footer.es,
+      current.footer.en,
+    );
+    nextFooterEn = footerResult.en;
+    warnings.push(...footerResult.warnings);
+    provider = footerResult.provider ?? provider;
+  }
+
+  let nextHomeEn = current.home.en;
+  if (homeProvided) {
+    const homeResult = await translateHomeFromSpanish(
+      nextHomeEs,
+      current.home.es,
+      current.home.en,
+    );
+    nextHomeEn = homeResult.en;
+    warnings.push(...homeResult.warnings);
+    provider = homeResult.provider ?? provider;
+  }
 
   const next: SiteSettings = {
-    contact: {
-      ...current.contact,
-      ...(body.contact ?? {}),
-      mapsUrl: String(body.contact?.mapsUrl ?? current.contact.mapsUrl ?? "").trim(),
-    },
+    contact: contactProvided
+      ? {
+          ...current.contact,
+          ...(body.contact ?? {}),
+          mapsUrl: String(body.contact?.mapsUrl ?? current.contact.mapsUrl ?? "").trim(),
+        }
+      : current.contact,
     footer: {
       es: nextEs,
-      en: nextEn,
+      en: nextFooterEn,
     },
-    // Persistimos la lista tal cual (vacía, sin URL, etc.). No reinyectar defaults.
+    home: {
+      es: nextHomeEs,
+      en: nextHomeEn,
+    },
     social: socialIncoming,
   };
 

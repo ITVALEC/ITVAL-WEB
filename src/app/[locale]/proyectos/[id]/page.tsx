@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Container } from "@/components/layout/Container";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ButtonLink } from "@/components/ui/Button";
 import { ProjectGallery } from "@/components/projects/ProjectGallery";
+import { SafeImage } from "@/components/ui/SafeImage";
 import { PROJECTS } from "@/lib/projects";
 import { NAV_PATHS } from "@/lib/routes";
 import { breadcrumbTrail } from "@/lib/breadcrumbs";
@@ -91,13 +91,14 @@ export default async function ProjectDetailPage({ params }: PageProps) {
               </p>
             </div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-card shadow-card">
-              <Image
+              <SafeImage
                 src={cover}
                 alt={project.name}
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 loading="eager"
+                fallbackSrc="/images/pages/products.jpg"
               />
             </div>
           </div>

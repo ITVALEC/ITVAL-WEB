@@ -36,6 +36,7 @@ function MissingPreview({ label }: { label: string }) {
 /**
  * Miniatura del panel admin: muestra la imagen real o un estado vacío claro
  * (sin el SVG "pages/products"). Cache-bust opcional tras subir/reemplazar.
+ * Nunca reintenta la misma URL rota (eso duplicaba 404 en consola).
  */
 export function AdminMediaImage({
   src,
@@ -69,8 +70,8 @@ export function AdminMediaImage({
       className={className}
       sizes={sizes}
       unoptimized
-      // Evita caer en otro SVG marcador; el onError muestra "Sin foto".
-      fallbackSrc={withCacheBust(resolved, version)}
+      // No reintentar la misma URL: un 404 basta para mostrar "Sin foto".
+      fallbackSrc={false}
       onError={() => setLoadFailed(true)}
     />
   );
