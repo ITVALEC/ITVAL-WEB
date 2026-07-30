@@ -191,6 +191,11 @@ jobs:
           test ! -w /var/www/eudora
 
           test "$(stat -c '%U' "$ENV_FILE")" = "itval"
+          ENV_MODE="$(stat -c '%a' "$ENV_FILE")"
+          if [ "$ENV_MODE" != "600" ]; then
+            echo "AVISO: permisos de ENV eran $ENV_MODE; corrigiendo a 600"
+            chmod 600 "$ENV_FILE"
+          fi
           test "$(stat -c '%a' "$ENV_FILE")" = "600"
 
           for VARIABLE in DATABASE_URL ADMIN_PASSWORD ADMIN_SECRET; do
@@ -240,13 +245,24 @@ jobs:
             exit 1
           fi
 
-          # Forzar raíz de disco para subidas y para GET de imágenes
-          if ! grep -qE '^ITVAL_IMAGES_ROOT=' "$ENV_FILE"; then
-            echo "ITVAL_IMAGES_ROOT=$SHARED_IMAGES" >> "$ENV_FILE"
-            echo "Añadido ITVAL_IMAGES_ROOT=$SHARED_IMAGES"
-          else
-            sed -i "s|^ITVAL_IMAGES_ROOT=.*|ITVAL_IMAGES_ROOT=$SHARED_IMAGES|" "$ENV_FILE"
+          # Prefer shared/images for uploads and /api/media/file.
+          # Avoid sed -i here: with umask 027 it can change ENV mode away from 600.
+          if grep -qE '^ITVAL_IMAGES_ROOT=' "$ENV_FILE"; then
+            TMP_ENV="$(mktemp)"
+            grep -vE '^ITVAL_IMAGES_ROOT=' "$ENV_FILE" > "$TMP_ENV"
+            printf 'ITVAL_IMAGES_ROOT=%s
+' "$SHARED_IMAGES" >> "$TMP_ENV"
+            chmod 600 "$TMP_ENV"
+            chown --reference="$ENV_FILE" "$TMP_ENV" 2>/dev/null || true
+            mv -f "$TMP_ENV" "$ENV_FILE"
+            chmod 600 "$ENV_FILE"
             echo "Actualizado ITVAL_IMAGES_ROOT=$SHARED_IMAGES"
+          else
+            printf '
+ITVAL_IMAGES_ROOT=%s
+' "$SHARED_IMAGES" >> "$ENV_FILE"
+            chmod 600 "$ENV_FILE"
+            echo "Anadido ITVAL_IMAGES_ROOT=$SHARED_IMAGES"
           fi
 
           export ITVAL_IMAGES_ROOT="$SHARED_IMAGES"
