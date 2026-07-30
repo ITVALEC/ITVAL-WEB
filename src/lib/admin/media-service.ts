@@ -11,7 +11,7 @@ import {
   isSharedPlaceholderSrc,
   normalizePublicSrc,
 } from "@/lib/admin/media-placeholder";
-import { getImagesRoot, resolveImageDiskPath } from "@/lib/media/images-root";
+import { getImagesRoot, resolveImageDiskPath, resolveExistingImageDiskPath } from "@/lib/media/images-root";
 import { MANIFEST_PATHS, readJsonFile, writeJsonFile } from "./manifests";
 import { getProductCategoryLabel, getSubcategoryLabel } from "./product-labels";
 import {
@@ -161,8 +161,8 @@ function isValidImageBuffer(buffer: Buffer): boolean {
 /** True si el archivo existe, es un fichero real y tiene cabecera de imagen válida. */
 export function isServablePublicImage(src: string): boolean {
   try {
-    const diskPath = publicPathFromSrc(normalizePublicSrc(src));
-    if (!fs.existsSync(diskPath)) return false;
+    const diskPath = resolveExistingImageDiskPath(normalizePublicSrc(src));
+    if (!diskPath) return false;
     const stat = fs.statSync(diskPath);
     if (!stat.isFile() || stat.size < 32) return false;
     const fd = fs.openSync(diskPath, "r");

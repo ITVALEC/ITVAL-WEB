@@ -1,6 +1,5 @@
 import "server-only";
 
-import fs from "node:fs";
 import { unstable_noStore as noStore } from "next/cache";
 import { getDocument } from "@/lib/db/documents";
 import { isDatabaseEnabled, query } from "@/lib/db/pool";
@@ -17,7 +16,7 @@ import {
   type ProductGalleryImage,
 } from "./product-images";
 import { isCatalogPlaceholderSrc } from "@/lib/media/placeholder-src";
-import { resolveImageDiskPath } from "@/lib/media/images-root";
+import { resolveExistingImageDiskPath } from "@/lib/media/images-root";
 
 export type ProductImageManifest = {
   categories?: Partial<Record<ProductKey, string>>;
@@ -32,7 +31,7 @@ function publicImageFileExists(src: string): boolean {
   if (!src?.trim() || isCatalogPlaceholderSrc(src)) return false;
   try {
     const clean = src.replace(/\\/g, "/").split("?")[0] ?? src;
-    return fs.existsSync(resolveImageDiskPath(clean));
+    return Boolean(resolveExistingImageDiskPath(clean));
   } catch {
     return false;
   }

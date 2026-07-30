@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { NextResponse } from "next/server";
-import { resolveImageDiskPath } from "@/lib/media/images-root";
+import { resolveExistingImageDiskPath } from "@/lib/media/images-root";
 
 const CONTENT_TYPES: Record<string, string> = {
   ".jpg": "image/jpeg",
@@ -13,7 +13,7 @@ const CONTENT_TYPES: Record<string, string> = {
   ".svg": "image/svg+xml",
 };
 
-/** Serve /images/* from ITVAL_IMAGES_ROOT or public/images. */
+/** Serve /images/* from shared and/or public/images. */
 export function servePublicImage(segments: string[]): NextResponse {
   if (segments.length === 0) {
     return new NextResponse("Not found", { status: 404 });
@@ -21,14 +21,8 @@ export function servePublicImage(segments: string[]): NextResponse {
 
   const publicSrc = `/images/${segments.map(decodeURIComponent).join("/")}`;
 
-  let diskPath: string;
-  try {
-    diskPath = resolveImageDiskPath(publicSrc);
-  } catch {
-    return new NextResponse("Not found", { status: 404 });
-  }
-
-  if (!fs.existsSync(diskPath)) {
+  const diskPath = resolveExistingImageDiskPath(publicSrc);
+  if (!diskPath) {
     return new NextResponse("Not found", { status: 404 });
   }
 

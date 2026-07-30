@@ -222,25 +222,25 @@ jobs:
             rsync -a "$PREVIOUS_RELEASE/public/images/" "$SHARED_IMAGES/"
           fi
 
-          # Si public/images era un symlink a shared, quitarlo: Next no sirve bien
-          # symlinks fuera del proyecto (404 al subir fotos nuevas).
-          if [ -L "$RELEASE_DIR/public/images" ]; then
-            echo "Eliminando symlink public/images (se sirve vía route handler)..."
-            rm -f "$RELEASE_DIR/public/images"
-          elif [ -d "$RELEASE_DIR/public/images/projects" ] ||
-               [ -d "$RELEASE_DIR/public/images/products" ]; then
-            # Por si quedó algo del rsync; projects/products viven solo en shared.
-            rm -rf "$RELEASE_DIR/public/images/projects" "$RELEASE_DIR/public/images/products"
-          fi
-
-          mkdir -p "$RELEASE_DIR/public/images"
-
-          # Incorporar placeholders/pages del release a shared sin borrar lo existente.
-          if [ -d "$RELEASE_DIR/public/images" ]; then
+          # Incorporar placeholders/pages del release a shared antes de sustituir.
+          if [ -d "$RELEASE_DIR/public/images" ] &&
+             [ ! -L "$RELEASE_DIR/public/images" ]; then
             rsync -a "$RELEASE_DIR/public/images/" "$SHARED_IMAGES/"
+            rm -rf "$RELEASE_DIR/public/images"
+          elif [ -L "$RELEASE_DIR/public/images" ]; then
+            rm -f "$RELEASE_DIR/public/images"
           fi
 
-          # Forzar raíz de disco para subidas y para GET /images/*
+          mkdir -p "$RELEASE_DIR/public"
+          # Symlink para herramientas/fs; HTTP se sirve vía /api/media/file (rewrite).
+          ln -sfn "$SHARED_IMAGES" "$RELEASE_DIR/public/images"
+
+          if [ ! -e "$RELEASE_DIR/public/images" ]; then
+            echo "ERROR: no se pudo vincular public/images -> $SHARED_IMAGES"
+            exit 1
+          fi
+
+          # Forzar raíz de disco para subidas y para GET de imágenes
           if ! grep -qE '^ITVAL_IMAGES_ROOT=' "$ENV_FILE"; then
             echo "ITVAL_IMAGES_ROOT=$SHARED_IMAGES" >> "$ENV_FILE"
             echo "Añadido ITVAL_IMAGES_ROOT=$SHARED_IMAGES"
@@ -252,6 +252,7 @@ jobs:
           export ITVAL_IMAGES_ROOT="$SHARED_IMAGES"
 
           echo "Imágenes compartidas: $SHARED_IMAGES"
+          echo "Symlink: $(readlink -f "$RELEASE_DIR/public/images" 2>/dev/null || true)"
           echo "Archivos en shared: $(find "$SHARED_IMAGES" -type f 2>/dev/null | wc -l)"
 
           echo "===== VINCULANDO VARIABLES ====="
@@ -422,6 +423,46 @@ jobs:
 
             exit 1
           fi
+
+          echo "===== COMPROBANDO SERVICIO DE IMÁGENES ====="
+
+          MEDIA_OK=0
+          for ATTEMPT in $(seq 1 10); do
+            if curl \
+              --fail \
+              --silent \
+              --show-error \
+              --max-time 15 \
+              "http://localhost:3001/api/media/file?path=pages/products.jpg" \
+              -o /tmp/itval-media-probe.jpg &&
+              [ -s /tmp/itval-media-probe.jpg ]; then
+              MEDIA_OK=1
+              break
+            fi
+            echo "Intento $ATTEMPT: esperando /api/media/file..."
+            sleep 2
+          done
+
+          if [ "$MEDIA_OK" -ne 1 ]; then
+            echo "ERROR: /api/media/file no sirve imágenes desde ITVAL_IMAGES_ROOT."
+            pm2 logs itval-web --lines 80 --nostream || true
+            exit 1
+          fi
+
+          if ! curl \
+            --fail \
+            --silent \
+            --show-error \
+            --max-time 15 \
+            "http://localhost:3001/images/pages/products.jpg" \
+            -o /tmp/itval-images-rewrite.jpg ||
+            [ ! -s /tmp/itval-images-rewrite.jpg ]; then
+            echo "ERROR: rewrite /images/* → /api/media/file no funciona."
+            pm2 logs itval-web --lines 80 --nostream || true
+            exit 1
+          fi
+
+          echo "Servicio de imágenes OK (API + rewrite /images)."
 
           echo "===== GUARDANDO CONFIGURACIÓN PM2 ====="
 
