@@ -1,6 +1,7 @@
 import type { PortfolioProject } from "@/lib/catalog/project-portfolio";
 import type { ProductKey } from "@/lib/catalog/types";
 import { resolveProjectCover } from "@/lib/catalog/project-cover";
+import { isServablePublicImage } from "@/lib/admin/media-service";
 import { query } from "@/lib/db/pool";
 
 type ProjectRow = {
@@ -23,6 +24,13 @@ type ImageRow = {
   sort_order: number;
 };
 
+function pickServableCover(gallery: string[], coverIndex: number): string {
+  const preferred = resolveProjectCover(gallery, coverIndex);
+  if (isServablePublicImage(preferred)) return preferred;
+  const fallback = gallery.find((src) => isServablePublicImage(src));
+  return fallback ?? preferred;
+}
+
 function mapProject(row: ProjectRow, gallery: string[]): PortfolioProject {
   const coverIndex = row.cover_index ?? 0;
   return {
@@ -34,7 +42,7 @@ function mapProject(row: ProjectRow, gallery: string[]): PortfolioProject {
     folder: row.folder ?? "",
     productCategory: row.product_category as ProductKey,
     productSubcategory: row.product_subcategory ?? "",
-    cover: resolveProjectCover(gallery, coverIndex),
+    cover: pickServableCover(gallery, coverIndex),
     gallery,
     imageCount: gallery.length,
     featured: row.featured,

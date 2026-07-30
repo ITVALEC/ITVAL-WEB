@@ -143,14 +143,76 @@ function ensureDir(dir: string) {
   fs.mkdirSync(dir, { recursive: true });
 }
 
+function isValidImageBuffer(buffer: Buffer): boolean {
+  if (buffer.length < 12) return false;
+  // JPEG
+  if (buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff) return true;
+  // PNG
+  if (
+    buffer[0] === 0x89 &&
+    buffer[1] === 0x50 &&
+    buffer[2] === 0x4e &&
+    buffer[3] === 0x47
+  ) {
+    return true;
+  }
+  // GIF
+  if (buffer.toString("ascii", 0, 3) === "GIF") return true;
+  // WEBP
+  if (
+    buffer.toString("ascii", 0, 4) === "RIFF" &&
+    buffer.toString("ascii", 8, 12) === "WEBP"
+  ) {
+    return true;
+  }
+  // AVIF / HEIF container
+  if (buffer.toString("ascii", 4, 8) === "ftyp") return true;
+  return false;
+}
+
+/** True si el archivo existe, es un fichero real y tiene cabecera de imagen válida. */
+export function isServablePublicImage(src: string): boolean {
+  try {
+    const diskPath = publicPathFromSrc(normalizePublicSrc(src));
+    if (!fs.existsSync(diskPath)) return false;
+    const stat = fs.statSync(diskPath);
+    if (!stat.isFile() || stat.size < 32) return false;
+    const fd = fs.openSync(diskPath, "r");
+    try {
+      const header = Buffer.alloc(16);
+      fs.readSync(fd, header, 0, 16, 0);
+      return isValidImageBuffer(header);
+    } finally {
+      fs.closeSync(fd);
+    }
+  } catch {
+    return false;
+  }
+}
+
 export function writeImageFile(
   buffer: Buffer,
   destPublicSrc: string,
 ): string {
   try {
+    if (!isValidImageBuffer(buffer)) {
+      throw new Error(
+        "El archivo no parece una imagen válida. Usa JPG, PNG, WebP o AVIF.",
+      );
+    }
     const diskPath = publicPathFromSrc(destPublicSrc);
     ensureDir(path.dirname(diskPath));
+    // Si hay symlink roto o basura previa, bórralo antes de escribir.
+    try {
+      fs.lstatSync(diskPath);
+      fs.unlinkSync(diskPath);
+    } catch {
+      /* no existía */
+    }
     fs.writeFileSync(diskPath, buffer);
+    if (!isServablePublicImage(destPublicSrc)) {
+      throw new Error("La imagen se guardó pero no se puede leer en el servidor.");
+    }
     return destPublicSrc;
   } catch (error) {
     const message = error instanceof Error ? error.message : "Error al guardar";
@@ -160,23 +222,22 @@ export function writeImageFile(
     if (message.includes("ENOSPC")) {
       throw new Error("No hay espacio en disco para guardar la imagen.");
     }
+    if (
+      message.includes("no parece una imagen") ||
+      message.includes("no se puede leer")
+    ) {
+      throw error instanceof Error ? error : new Error(message);
+    }
     throw new Error(`No se pudo guardar la imagen: ${message}`);
   }
 }
 
 export function replaceImageAtSrc(src: string, buffer: Buffer): string {
-  const diskPath = publicPathFromSrc(src);
-  ensureDir(path.dirname(diskPath));
-  fs.writeFileSync(diskPath, buffer);
-  return src;
+  return writeImageFile(buffer, src);
 }
 
 function mediaFileExists(src: string): boolean {
-  try {
-    return fs.existsSync(publicPathFromSrc(normalizePublicSrc(src)));
-  } catch {
-    return false;
-  }
+  return isServablePublicImage(src);
 }
 
 function withFilePresence(item: AdminMediaItem): AdminMediaItem {
@@ -479,20 +540,6 @@ async function afterMutation() {
   }
 }
 
-function isUnderProjectDir(src: string, projectId: string): boolean {
-  return normalizePublicSrc(src).startsWith(`/images/projects/${projectId}/`);
-}
-
-function isUnderProductGalleryDir(
-  src: string,
-  category: string,
-  subcategory: string,
-): boolean {
-  return normalizePublicSrc(src).startsWith(
-    `/images/products/gallery/${category}/${subcategory}/`,
-  );
-}
-
 function dedicatedProjectSrc(projectId: string, originalName: string, ext: string): string {
   const base = sanitizeBaseName(path.basename(originalName, ext));
   return `/images/projects/${projectId}/${base}-${Date.now()}${ext}`;
@@ -570,33 +617,23 @@ export async function replaceMediaImage(
     // Portadas: siempre ruta propia (nunca pages/products.svg ni otros marcadores).
     targetSrc = dedicatedHeroSrc(item, ext);
   } else if (item.kind === "project" && item.projectId) {
-    // Si falta el archivo o la ruta no está bajo /projects/{id}/, crear ruta dedicada.
-    if (previousMissing || !isUnderProjectDir(previousSrc, item.projectId)) {
-      targetSrc = dedicatedProjectSrc(item.projectId, originalName, ext);
-    } else if (path.extname(previousSrc).toLowerCase() !== ext) {
-      const base = previousSrc.replace(/\.[^.]+$/, "");
-      targetSrc = `${base}${ext}`;
-    }
+    // Siempre archivo nuevo bajo /projects/{id}/ — evita sobrescribir cover.jpeg corruptos.
+    targetSrc = dedicatedProjectSrc(item.projectId, originalName, ext);
   } else if (item.kind === "product" && item.category && item.subcategory) {
-    if (
-      previousMissing ||
-      !isUnderProductGalleryDir(previousSrc, item.category, item.subcategory)
-    ) {
-      targetSrc = dedicatedProductGallerySrc(
-        item.category,
-        item.subcategory,
-        originalName,
-        ext,
-      );
-    } else if (path.extname(previousSrc).toLowerCase() !== ext) {
-      const base = previousSrc.replace(/\.[^.]+$/, "");
-      targetSrc = `${base}${ext}`;
-    }
+    // Igual para galería de producto: ruta nueva dedicada.
+    targetSrc = dedicatedProductGallerySrc(
+      item.category,
+      item.subcategory,
+      originalName,
+      ext,
+    );
   } else if (isSharedPlaceholderSrc(previousSrc)) {
     throw new Error("No se puede reemplazar un marcador compartido sin destino propio.");
-  } else if (path.extname(previousSrc).toLowerCase() !== ext) {
+  } else if (path.extname(previousSrc).toLowerCase() !== ext || previousMissing) {
     const base = previousSrc.replace(/\.[^.]+$/, "");
-    targetSrc = `${base}${ext}`;
+    targetSrc = previousMissing
+      ? `${base}-${Date.now()}${ext}`
+      : `${base}${ext}`;
   }
 
   // 1) Escribir archivo primero (si falla, no tocamos DB/JSON).
