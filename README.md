@@ -35,3 +35,11 @@ El panel admin edita solo en **español**. Al guardar, el servidor genera/actual
 Proveedores (prioridad): `DEEPL_AUTH_KEY` → `OPENAI_API_KEY` → `GOOGLE_TRANSLATE_API_KEY` / `TRANSLATION_API_KEY` → MyMemory (sin clave). Si un proveedor deja texto en español o truncado, se reintenta con el siguiente.
 
 En VPS añade una clave en `/var/www/itval/shared/.env.production.local` (ver `.env.example`). Si falla la API, el español se guarda igual y el admin muestra un aviso.
+
+## Imágenes en producción
+
+Las fotos de obras y catálogo **no viajan en el deploy**. Viven en el VPS:
+
+`/var/www/itval/shared/images` → symlink `public/images`
+
+El código solo guarda rutas (`/images/projects/...`). Cada deploy sube cambios técnicos; no vuelve a copiar miles de fotos del repo sobre `shared`.

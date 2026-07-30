@@ -139,6 +139,7 @@ jobs:
             --exclude=".env" \
             --exclude=".env.*" \
             --exclude="*.log" \
+            --exclude="public/images/" \
             -e "ssh -p $VPS_PORT -i $HOME/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=15" \
             ./ \
             "$VPS_USER@$VPS_HOST:/var/www/itval/releases/$RELEASE/"
@@ -207,27 +208,24 @@ jobs:
             readlink -f "$ROOT/current" 2>/dev/null || true
           )"
 
-          echo "===== PERSISTIENDO IMÁGENES ENTRE DEPLOYS ====="
+          echo "===== IMÁGENES PERSISTENTES (solo shared, sin re-subir del repo) ====="
 
           mkdir -p "$SHARED_IMAGES"
 
-          # Recupera fotos de la versión anterior (subidas por admin) antes de
-          # sobrescribir public/images con el symlink compartido.
+          # Si una release antigua aún tenía public/images real (no symlink),
+          # recupérala una sola vez hacia shared. No volver a mezclar el repo.
           if [ -n "$PREVIOUS_RELEASE" ] &&
              [ -d "$PREVIOUS_RELEASE/public/images" ] &&
              [ ! -L "$PREVIOUS_RELEASE/public/images" ]; then
-            echo "Migrando imágenes de la release anterior..."
+            echo "Migrando imágenes de la release anterior (única vez)..."
             rsync -a "$PREVIOUS_RELEASE/public/images/" "$SHARED_IMAGES/"
-          elif [ -n "$PREVIOUS_RELEASE" ] &&
-               [ -L "$PREVIOUS_RELEASE/public/images" ]; then
-            echo "La release anterior ya usaba imágenes compartidas."
           fi
 
-          # Incorpora assets del repo (placeholders / nuevos archivos) sin borrar
-          # las fotos ya subidas en shared/images.
+          # Nunca rsync del código hacia shared: eso re-subía miles de fotos
+          # en cada deploy y podía pisar subidas del admin.
           if [ -d "$RELEASE_DIR/public/images" ] &&
              [ ! -L "$RELEASE_DIR/public/images" ]; then
-            rsync -a "$RELEASE_DIR/public/images/" "$SHARED_IMAGES/"
+            echo "Quitando public/images del release (las fotos viven en shared)..."
             rm -rf "$RELEASE_DIR/public/images"
           fi
 
@@ -241,6 +239,7 @@ jobs:
 
           echo "Imágenes compartidas: $SHARED_IMAGES"
           echo "Symlink activo: $(readlink -f "$RELEASE_DIR/public/images")"
+          echo "Contenido shared (muestra): $(find "$SHARED_IMAGES" -type f 2>/dev/null | wc -l) archivos"
 
           echo "===== VINCULANDO VARIABLES ====="
 

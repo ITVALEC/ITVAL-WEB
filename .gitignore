@@ -37,3 +37,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Fotos del sitio: viven en el VPS (/var/www/itval/shared/images).
+# No re-subir en cada deploy; el código solo fija rutas /images/...
+# Conservar localmente para desarrollo (git update-index --skip-worktree si hace falta).
+/public/images/projects/
+/public/images/products/
