@@ -3,7 +3,7 @@
     "title": "Productos",
     "subtitle": "Elija una línea para previsualizar soluciones: fachadas, ventanas, puertas y más.",
     "viewCategory": "Ver categoría",
-    "viewDetail": "Ver solución",
+    "viewDetail": "Ver ficha",
     "categoriesNav": "Categorías",
     "allProducts": "Todos los productos",
     "backToProducts": "Volver a productos",
@@ -20,7 +20,10 @@
         "title": "Eficiencia energética",
         "body": "Soluciones que mejoran confort y reducen consumo en edificación."
       }
-    }
+    },
+    "catalogCtaBody": "Escríbanos y le enviamos el catálogo con todas las soluciones ITVAL.",
+    "catalogCtaTitle": "¿Quiere el catálogo completo?",
+    "downloadCatalog": "Solicitar catálogo"
   },
   "detail": {
     "applications": "Aplicaciones",
@@ -30,7 +33,7 @@
     "options": "Opciones y variantes",
     "relatedProjects": "Proyectos relacionados",
     "previewTitle": "Vista previa del producto",
-    "previewHint": "Galería del producto: acabados, detalles y la solución desde distintos ángulos. Las obras están en la sección de referencias.",
+    "previewHint": "Fotos del producto: acabados, detalles y la solución en sí. Las obras van en la galería de referencias.",
     "previewPrevious": "Ver imagen anterior",
     "previewNext": "Ver imagen siguiente",
     "previewCounter": "{current} de {total}",
@@ -54,7 +57,7 @@
     "primaryLabel": "Filtrar por línea",
     "primary": {
       "all": "Todos",
-      "facades": "Fachadas",
+      "facades": "Envolventes",
       "windows": "Ventanas",
       "doors": "Puertas",
       "security": "Seguridad",
@@ -116,7 +119,7 @@
   "categories": {
     "facades": {
       "title": "Envolventes Arquitectónicos",
-      "description": "Muro cortina, piel de vidrio y sistemas estructurales para edificios corporativos, comerciales e institucionales."
+      "description": "Las fachadas arquitectónicas protegen el exterior de una edificación, integrando estructura, vidrio y revestimientos para brindar seguridad, eficiencia y un diseño moderno."
     },
     "aluminumWindows": {
       "title": "Ventanas y sistemas de aluminio",
@@ -124,7 +127,7 @@
     },
     "doorsAccess": {
       "title": "Puertas y accesos",
-      "description": "Corredizas, batientes, plegables y herméticas para edificios, locales comerciales e industria."
+      "description": "Corredizas, batientes, plegables y herméticas para edificios, locales comerciales y galpones industriales."
     },
     "automaticDoors": {
       "title": "Puertas automáticas",
@@ -158,8 +161,8 @@
   "subcategories": {
     "facades": {
       "curtainWallStick": {
-        "title": "Muro cortina Stick",
-        "description": "Muro cortina Stick: solución ITVAL en aluminio y vidrio para fachadas arquitectónicas, con ingeniería, fabricación e instalación certificada.",
+        "title": "Sistema STICK",
+        "description": "Es un sistema de fachada de edificio ensamblado en sitio o taller, que consta de montantes (verticales) y travesaños (horizontales) a los cuales se montan los vidrios mediante tapas y contratapas al exterior los cuales son visibles.",
         "applications": {
           "i1": "Edificios corporativos y comerciales",
           "i2": "Proyectos institucionales y de salud",
@@ -170,13 +173,13 @@
           "i2": "Estética arquitectónica y valor de marca",
           "i3": "Acompañamiento integral desde cotización a instalación"
         },
-        "materials": "Aluminio, vidrio laminado/templado, acero, herrajes y sellantes estructurales según especificación.",
+        "materials": "Aluminio, vidrio laminado/templado/cámara, anclajes, herrajes y sellantes estructurales según especificación.",
         "standards": "NEC, ASTM, ASCE, AISC, AISI, Aluminum Design Manual; NIJ 0108.04 cuando aplica.",
-        "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
+        "options": "Acabado en anodizado o pintura electrostática"
       },
       "stickRpt": {
-        "title": "Stick RPT",
-        "description": "Stick RPT: solución ITVAL en aluminio y vidrio para fachadas arquitectónicas, con ingeniería, fabricación e instalación certificada.",
+        "title": "Sistema STICK-RPT (rotura de puente térmico)",
+        "description": "Es un sistema diseñado para mejorar la eficiencia energética al evitar la conducción de calor a través de marcos de aluminio al insertar entre ellos un material de baja conductividad térmica reduciendo significativamente transmitancia térmica y mejorando el confort al interior.",
         "applications": {
           "i1": "Edificios corporativos y comerciales",
           "i2": "Proyectos institucionales y de salud",
@@ -192,8 +195,8 @@
         "options": "Acabados, dimensiones, tipos de vidrio y configuraciones personalizadas según proyecto."
       },
       "structuralGlazing": {
-        "title": "Vidriado estructural",
-        "description": "Vidriado estructural: solución ITVAL en aluminio y vidrio para fachadas arquitectónicas, con ingeniería, fabricación e instalación certificada.",
+        "title": "Sistema Piel de vidrio.",
+        "description": "Es un sistema de fachada de edificio ensamblado sitio o taller, que consta de montantes (verticales) y travesaños (horizontales), al contrario del sistema Stick este no contiene aluminio al exterior, para montar o fijar los vidrios se utiliza silicón estructural, siendo visible al exterior solo vidrio.",
         "applications": {
           "i1": "Edificios corporativos y comerciales",
           "i2": "Proyectos institucionales y de salud",

@@ -1,51 +1,25 @@
 {
   "contact": {
-    "email": "info@itval.com.ec",
-    "hours": "Lunes a viernes, 8:00 – 17:00",
-    "phone": "+593 2 123 4567",
-    "address": "Panamericana Norte Km 16.5, Oe4-237 y Miguel Guarderas, Calderón, Quito, Ecuador",
-    "mapsUrl": "https://maps.google.com/?q=Panamericana%20Norte%20Km%2016.5%2C%20Oe4-237%20y%20Miguel%20Guarderas%2C%20Calder%C3%B3n%2C%20Quito%2C%20Ecuador"
+    "email": "ventas@itval.com.ec",
+    "phone": "+593 996603613",
+    "address": "ITVAL CIA LTDA, Panamericana Norte",
+    "mapsUrl": "https://maps.google.com/?q=Panamericana%20Norte%20Km%2016.5%2C%20Oe4-237%20y%20Miguel%20Guarderas%2C%20Calder%C3%B3n%2C%20Quito%2C%20Ecuador",
+    "hours": "Lunes a viernes, 8:00 – 17:00"
   },
-  "social": [
-    {
-      "id": "default-facebook",
-      "label": "",
-      "url": "#",
-      "icon": "facebook"
-    },
-    {
-      "id": "default-instagram",
-      "label": "",
-      "url": "#",
-      "icon": "instagram"
-    },
-    {
-      "id": "default-whatsapp",
-      "label": "",
-      "url": "https://wa.me/593996603613",
-      "icon": "whatsapp"
-    },
-    {
-      "id": "default-linkedin",
-      "label": "",
-      "url": "#",
-      "icon": "linkedin"
-    }
-  ],
   "footer": {
-    "en": {
-      "ctaText": "",
-      "tagline": "Integrated solutions in glass, aluminum, and metal structures.",
-      "ctaTitle": "",
-      "location": "Quito · Guayaquil · Ecuador",
-      "experience": "Over 14 years of experience in Ecuador."
-    },
     "es": {
-      "ctaText": "",
       "tagline": "Soluciones integrales en vidrio, aluminio y estructuras metálicas.",
-      "ctaTitle": "",
-      "location": "Quito · Guayaquil · Ecuador",
-      "experience": "Más de 14 años de experiencia en Ecuador."
+      "experience": "Más de 14 años de experiencia en Ecuador.",
+      "ctaTitle": "¿Tienes un proyecto?",
+      "ctaText": "Cuéntanos sobre tu obra y nuestro equipo técnico te responderá en 48 horas hábiles.",
+      "location": "Quito · Guayaquil · Ecuador"
+    },
+    "en": {
+      "tagline": "Integrated solutions in glass, aluminum, and metal structures.",
+      "experience": "Over 14 years of experience in Ecuador.",
+      "ctaTitle": "Have a project?",
+      "ctaText": "Tell us about your build and our technical team will respond within 48 business hours.",
+      "location": "Quito · Guayaquil · Ecuador"
     }
   },
   "home": {
@@ -85,5 +59,27 @@
       "processInstallationTitle": "Installation and delivery",
       "processInstallationDescription": "On-site assembly, watertightness testing and delivery certificate."
     }
-  }
+  },
+  "social": [
+    {
+      "id": "legacy-whatsapp",
+      "url": "#",
+      "icon": "whatsapp"
+    },
+    {
+      "id": "legacy-linkedin",
+      "url": "#",
+      "icon": "linkedin"
+    },
+    {
+      "id": "social-ms6unll2-zx1g5g",
+      "url": "https://www.facebook.com/p/Itval-Cia-Ltda-100089616863846/",
+      "icon": "facebook"
+    },
+    {
+      "id": "social-ms6w4t30-hgrgcn",
+      "url": "",
+      "icon": "instagram"
+    }
+  ]
 }

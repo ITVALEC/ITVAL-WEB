@@ -32,7 +32,7 @@ function legacyRedirect(request: NextRequest): NextResponse | null {
 export default function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (pathname.startsWith("/admin") || pathname.startsWith("/api/admin")) {
+  if (pathname.startsWith("/admin") || pathname.startsWith("/api")) {
     return NextResponse.next();
   }
 

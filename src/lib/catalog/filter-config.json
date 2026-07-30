@@ -1,224 +1,538 @@
 {
   "categories": {
     "facades": {
-      "primaryGroup": "facades",
-      "sectors": ["corporate", "commercial", "institutional"],
-      "materials": ["aluminum", "laminatedGlass", "temperedGlass"],
-      "systems": ["structural", "rpt"],
-      "applications": ["facade"]
-    },
-    "aluminumWindows": {
-      "primaryGroup": "windows",
-      "sectors": ["corporate", "commercial", "residential", "institutional"],
-      "materials": ["aluminum", "temperedGlass", "laminatedGlass"],
-      "systems": ["sliding", "rpt"],
-      "applications": ["facade", "access"]
-    },
-    "doorsAccess": {
-      "primaryGroup": "doors",
-      "sectors": ["corporate", "commercial", "institutional"],
-      "materials": ["aluminum", "temperedGlass", "stainlessSteel"],
-      "systems": ["sliding", "hermetic", "structural"],
-      "applications": ["access"]
-    },
-    "automaticDoors": {
-      "primaryGroup": "doors",
-      "sectors": ["commercial", "corporate", "institutional", "pharmaceutical"],
-      "materials": ["aluminum", "temperedGlass", "laminatedGlass"],
-      "systems": ["automatic", "armored"],
-      "applications": ["access"]
+      "sectors": [
+        "corporate",
+        "commercial",
+        "institutional"
+      ],
+      "systems": [
+        "structural",
+        "rpt"
+      ],
+      "materials": [
+        "aluminum",
+        "laminatedGlass",
+        "temperedGlass"
+      ],
+      "applications": [
+        "facade"
+      ],
+      "primaryGroup": "facades"
     },
     "security": {
-      "primaryGroup": "security",
-      "sectors": ["judicial", "institutional", "commercial", "corporate"],
-      "materials": ["laminatedGlass", "stainlessSteel", "temperedGlass"],
-      "systems": ["armored", "structural"],
-      "applications": ["protection", "division"]
-    },
-    "coversExteriors": {
-      "primaryGroup": "exteriors",
-      "sectors": ["commercial", "corporate", "residential", "institutional"],
-      "materials": ["aluminum", "temperedGlass", "laminatedGlass"],
-      "systems": ["structural", "sliding"],
-      "applications": ["roof", "protection", "facade"]
+      "sectors": [
+        "judicial",
+        "institutional",
+        "commercial",
+        "corporate"
+      ],
+      "systems": [
+        "armored",
+        "structural"
+      ],
+      "materials": [
+        "laminatedGlass",
+        "stainlessSteel",
+        "temperedGlass"
+      ],
+      "applications": [
+        "protection",
+        "division"
+      ],
+      "primaryGroup": "security"
     },
     "acmLouvers": {
-      "primaryGroup": "exteriors",
-      "sectors": ["commercial", "corporate", "institutional"],
-      "materials": ["acm", "aluminum"],
-      "systems": ["structural"],
-      "applications": ["facade", "protection"]
+      "sectors": [
+        "commercial",
+        "corporate",
+        "institutional"
+      ],
+      "systems": [
+        "structural"
+      ],
+      "materials": [
+        "acm",
+        "aluminum"
+      ],
+      "applications": [
+        "facade",
+        "protection"
+      ],
+      "primaryGroup": "exteriors"
     },
-    "corporateInteriors": {
-      "primaryGroup": "interiors",
-      "sectors": ["corporate", "commercial", "institutional"],
-      "materials": ["temperedGlass", "aluminum", "laminatedGlass"],
-      "systems": ["sliding", "structural"],
-      "applications": ["division", "decoration", "access"]
+    "doorsAccess": {
+      "sectors": [
+        "corporate",
+        "commercial",
+        "institutional"
+      ],
+      "systems": [
+        "sliding",
+        "hermetic",
+        "structural"
+      ],
+      "materials": [
+        "aluminum",
+        "temperedGlass",
+        "stainlessSteel"
+      ],
+      "applications": [
+        "access"
+      ],
+      "primaryGroup": "doors"
     },
-    "architecturalGlass": {
-      "primaryGroup": "interiors",
-      "sectors": ["corporate", "commercial", "residential", "institutional"],
-      "materials": ["temperedGlass", "laminatedGlass"],
-      "systems": ["structural"],
-      "applications": ["decoration", "division", "access"]
+    "automaticDoors": {
+      "sectors": [
+        "commercial",
+        "corporate",
+        "institutional",
+        "pharmaceutical"
+      ],
+      "systems": [
+        "automatic",
+        "armored"
+      ],
+      "materials": [
+        "aluminum",
+        "temperedGlass",
+        "laminatedGlass"
+      ],
+      "applications": [
+        "access"
+      ],
+      "primaryGroup": "doors"
     },
     "stainlessSteel": {
-      "primaryGroup": "steel",
-      "sectors": ["corporate", "institutional", "pharmaceutical", "commercial"],
-      "materials": ["stainlessSteel"],
-      "systems": ["sliding", "structural"],
-      "applications": ["access", "division", "decoration"]
+      "sectors": [
+        "corporate",
+        "institutional",
+        "pharmaceutical",
+        "commercial"
+      ],
+      "systems": [
+        "sliding",
+        "structural"
+      ],
+      "materials": [
+        "stainlessSteel"
+      ],
+      "applications": [
+        "access",
+        "division",
+        "decoration"
+      ],
+      "primaryGroup": "steel"
+    },
+    "aluminumWindows": {
+      "sectors": [
+        "corporate",
+        "commercial",
+        "residential",
+        "institutional"
+      ],
+      "systems": [
+        "sliding",
+        "rpt"
+      ],
+      "materials": [
+        "aluminum",
+        "temperedGlass",
+        "laminatedGlass"
+      ],
+      "applications": [
+        "facade",
+        "access"
+      ],
+      "primaryGroup": "windows"
+    },
+    "coversExteriors": {
+      "sectors": [
+        "commercial",
+        "corporate",
+        "residential",
+        "institutional"
+      ],
+      "systems": [
+        "structural",
+        "sliding"
+      ],
+      "materials": [
+        "aluminum",
+        "temperedGlass",
+        "laminatedGlass"
+      ],
+      "applications": [
+        "roof",
+        "protection",
+        "facade"
+      ],
+      "primaryGroup": "exteriors"
+    },
+    "architecturalGlass": {
+      "sectors": [
+        "corporate",
+        "commercial",
+        "residential",
+        "institutional"
+      ],
+      "systems": [
+        "structural"
+      ],
+      "materials": [
+        "temperedGlass",
+        "laminatedGlass"
+      ],
+      "applications": [
+        "decoration",
+        "division",
+        "access"
+      ],
+      "primaryGroup": "interiors"
+    },
+    "corporateInteriors": {
+      "sectors": [
+        "corporate",
+        "commercial",
+        "institutional"
+      ],
+      "systems": [
+        "sliding",
+        "structural"
+      ],
+      "materials": [
+        "temperedGlass",
+        "aluminum",
+        "laminatedGlass"
+      ],
+      "applications": [
+        "division",
+        "decoration",
+        "access"
+      ],
+      "primaryGroup": "interiors"
     }
   },
   "subcategories": {
     "facades": {
-      "curtainWallStick": {
-        "systems": ["structural"],
-        "tags": ["muro cortina", "stick", "curtain wall"]
-      },
       "stickRpt": {
-        "systems": ["rpt", "structural"],
-        "tags": ["rpt", "puente termico"]
-      },
-      "structuralGlazing": {
-        "systems": ["structural"],
-        "tags": ["vidriado estructural", "structural glazing"]
+        "tags": [
+          "rpt",
+          "puente termico"
+        ],
+        "sectors": [
+          "corporate",
+          "commercial",
+          "institutional"
+        ],
+        "systems": [
+          "rpt",
+          "structural"
+        ],
+        "materials": [
+          "aluminum",
+          "laminatedGlass",
+          "temperedGlass"
+        ],
+        "applications": [
+          "facade"
+        ]
       },
       "glassSkin": {
-        "tags": ["piel de vidrio", "glass skin"]
-      }
-    },
-    "aluminumWindows": {
-      "projected": {
-        "systems": ["structural"],
-        "tags": ["proyectable", "abatible"]
+        "tags": [
+          "piel de vidrio",
+          "glass skin"
+        ]
       },
-      "sliding": {
-        "systems": ["sliding"],
-        "tags": ["corrediza", "corredizo"]
+      "curtainWallStick": {
+        "tags": [
+          "muro cortina",
+          "stick",
+          "curtain wall"
+        ],
+        "sectors": [
+          "corporate",
+          "commercial",
+          "institutional"
+        ],
+        "systems": [
+          "structural"
+        ],
+        "materials": [
+          "aluminum",
+          "laminatedGlass",
+          "temperedGlass"
+        ],
+        "applications": [
+          "facade"
+        ]
       },
-      "visusFemec": {
-        "tags": ["visus", "femec"]
-      },
-      "thermalSolar": {
-        "tags": ["control solar", "termico", "dvH"]
-      }
-    },
-    "doorsAccess": {
-      "slidingDoors": {
-        "systems": ["sliding"]
-      },
-      "hingedDoors": {
-        "systems": ["structural"]
-      },
-      "foldingDoors": {
-        "tags": ["plegable", "folding"]
-      },
-      "hermeticDoors": {
-        "systems": ["hermetic"],
-        "tags": ["hermetica", "hospital"]
-      }
-    },
-    "automaticDoors": {
-      "standardAuto": {
-        "systems": ["automatic"]
-      },
-      "telescopicAuto": {
-        "systems": ["automatic", "sliding"],
-        "tags": ["telescopica"]
-      },
-      "armoredAuto": {
-        "systems": ["automatic", "armored"],
-        "tags": ["blindada"]
+      "structuralGlazing": {
+        "tags": [
+          "vidriado estructural",
+          "structural glazing"
+        ],
+        "sectors": [
+          "corporate",
+          "commercial",
+          "institutional"
+        ],
+        "systems": [
+          "structural"
+        ],
+        "materials": [
+          "aluminum",
+          "laminatedGlass",
+          "temperedGlass"
+        ],
+        "applications": [
+          "facade"
+        ]
       }
     },
     "security": {
-      "armoredPartitions": {
-        "systems": ["armored"],
-        "tags": ["mampara blindada", "balistica"]
-      },
-      "ballisticSteel": {
-        "materials": ["stainlessSteel"],
-        "systems": ["armored"],
-        "tags": ["acero balistico"]
-      },
       "gesellGlass": {
-        "sectors": ["judicial", "institutional"],
-        "tags": ["gesell", "judicial"]
+        "tags": [
+          "gesell",
+          "judicial"
+        ],
+        "sectors": [
+          "judicial",
+          "institutional"
+        ]
       },
       "guardBooths": {
-        "tags": ["garita", "caseta"]
-      }
-    },
-    "coversExteriors": {
-      "roofsSkylights": {
-        "applications": ["roof"],
-        "tags": ["claraboya", "cubierta"]
+        "tags": [
+          "garita",
+          "caseta"
+        ]
       },
-      "pergolas": {
-        "tags": ["pergola"]
+      "ballisticSteel": {
+        "tags": [
+          "acero balistico"
+        ],
+        "systems": [
+          "armored"
+        ],
+        "materials": [
+          "stainlessSteel"
+        ]
       },
-      "marquees": {
-        "tags": ["marquesina"]
-      },
-      "glassEnclosures": {
-        "tags": ["cerramiento"]
+      "armoredPartitions": {
+        "tags": [
+          "mampara blindada",
+          "balistica"
+        ],
+        "systems": [
+          "armored"
+        ]
       }
     },
     "acmLouvers": {
-      "acmPanels": {
-        "materials": ["acm"],
-        "tags": ["panel compuesto"]
-      },
       "louvers": {
-        "tags": ["louver", "celosia"]
+        "tags": [
+          "louver",
+          "celosia"
+        ]
+      },
+      "acmPanels": {
+        "tags": [
+          "panel compuesto"
+        ],
+        "materials": [
+          "acm"
+        ]
       },
       "sunBreakers": {
-        "tags": ["quiebrasol", "brise soleil"]
+        "tags": [
+          "quiebrasol",
+          "brise soleil"
+        ]
       },
       "compositeFacades": {
-        "applications": ["facade"]
+        "applications": [
+          "facade"
+        ]
       }
     },
-    "corporateInteriors": {
-      "glassPartitions": {
-        "applications": ["division"]
+    "doorsAccess": {
+      "hingedDoors": {
+        "systems": [
+          "structural"
+        ]
       },
-      "officeDivision": {
-        "applications": ["division"]
+      "foldingDoors": {
+        "tags": [
+          "plegable",
+          "folding"
+        ]
       },
-      "lobbies": {
-        "applications": ["access", "decoration"]
+      "slidingDoors": {
+        "systems": [
+          "sliding"
+        ]
       },
-      "signage": {
-        "applications": ["decoration"]
+      "hermeticDoors": {
+        "tags": [
+          "hermetica",
+          "hospital"
+        ],
+        "systems": [
+          "hermetic"
+        ]
       }
     },
-    "architecturalGlass": {
-      "glassFloors": {
-        "tags": ["piso vidrio"]
+    "automaticDoors": {
+      "armoredAuto": {
+        "tags": [
+          "blindada"
+        ],
+        "systems": [
+          "automatic",
+          "armored"
+        ]
       },
-      "handrailsMirrors": {
-        "tags": ["pasamanos", "espejo"]
+      "standardAuto": {
+        "systems": [
+          "automatic"
+        ]
       },
-      "decorativeGlass": {
-        "applications": ["decoration"]
-      },
-      "wineCellars": {
-        "tags": ["cava", "vinoteca"]
+      "telescopicAuto": {
+        "tags": [
+          "telescopica"
+        ],
+        "systems": [
+          "automatic",
+          "sliding"
+        ]
       }
     },
     "stainlessSteel": {
       "handrails": {
-        "applications": ["access", "decoration"]
+        "applications": [
+          "access",
+          "decoration"
+        ]
       },
       "ssSlidingDoors": {
-        "systems": ["sliding"]
+        "systems": [
+          "sliding"
+        ]
       },
       "bathroomPartitions": {
-        "applications": ["division"],
-        "sectors": ["commercial", "institutional"]
+        "sectors": [
+          "commercial",
+          "institutional"
+        ],
+        "applications": [
+          "division"
+        ]
+      }
+    },
+    "aluminumWindows": {
+      "sliding": {
+        "tags": [
+          "corrediza",
+          "corredizo"
+        ],
+        "systems": [
+          "sliding"
+        ]
+      },
+      "projected": {
+        "tags": [
+          "proyectable",
+          "abatible"
+        ],
+        "systems": [
+          "structural"
+        ]
+      },
+      "visusFemec": {
+        "tags": [
+          "visus",
+          "femec"
+        ]
+      },
+      "thermalSolar": {
+        "tags": [
+          "control solar",
+          "termico",
+          "dvH"
+        ]
+      }
+    },
+    "coversExteriors": {
+      "marquees": {
+        "tags": [
+          "marquesina"
+        ]
+      },
+      "pergolas": {
+        "tags": [
+          "pergola"
+        ]
+      },
+      "roofsSkylights": {
+        "tags": [
+          "claraboya",
+          "cubierta"
+        ],
+        "applications": [
+          "roof"
+        ]
+      },
+      "glassEnclosures": {
+        "tags": [
+          "cerramiento"
+        ]
+      }
+    },
+    "architecturalGlass": {
+      "glassFloors": {
+        "tags": [
+          "piso vidrio"
+        ]
+      },
+      "wineCellars": {
+        "tags": [
+          "cava",
+          "vinoteca"
+        ]
+      },
+      "decorativeGlass": {
+        "applications": [
+          "decoration"
+        ]
+      },
+      "handrailsMirrors": {
+        "tags": [
+          "pasamanos",
+          "espejo"
+        ]
+      }
+    },
+    "corporateInteriors": {
+      "lobbies": {
+        "applications": [
+          "access",
+          "decoration"
+        ]
+      },
+      "signage": {
+        "applications": [
+          "decoration"
+        ]
+      },
+      "officeDivision": {
+        "applications": [
+          "division"
+        ]
+      },
+      "glassPartitions": {
+        "applications": [
+          "division"
+        ]
       }
     }
   }

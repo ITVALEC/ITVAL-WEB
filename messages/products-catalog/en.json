@@ -3,7 +3,7 @@
     "title": "Products",
     "subtitle": "Choose a line to preview solutions: facades, windows, doors and more.",
     "viewCategory": "View category",
-    "viewDetail": "View solution",
+    "viewDetail": "View details",
     "categoriesNav": "Categories",
     "allProducts": "All products",
     "backToProducts": "Back to products",
@@ -20,7 +20,10 @@
         "title": "Energy efficiency",
         "body": "Solutions that improve comfort and reduce building energy use."
       }
-    }
+    },
+    "catalogCtaBody": "Contact us and we will send you the catalog with every ITVAL solution.",
+    "catalogCtaTitle": "Want the full catalog?",
+    "downloadCatalog": "Request catalog"
   },
   "detail": {
     "applications": "Applications",
@@ -30,7 +33,7 @@
     "options": "Options & variants",
     "relatedProjects": "Related projects",
     "previewTitle": "Product preview",
-    "previewHint": "Product gallery: finishes, details and the solution from different angles. Completed works appear in the references section.",
+    "previewHint": "Product photos only: finishes, details and the solution itself. Completed works appear in the references gallery.",
     "previewPrevious": "View previous image",
     "previewNext": "View next image",
     "previewCounter": "{current} of {total}",
@@ -54,7 +57,7 @@
     "primaryLabel": "Filter by line",
     "primary": {
       "all": "All",
-      "facades": "Facades",
+      "facades": "Envelope",
       "windows": "Windows",
       "doors": "Doors",
       "security": "Security",
@@ -116,7 +119,7 @@
   "categories": {
     "facades": {
       "title": "Architectural Envelopes",
-      "description": "Curtain wall, structural glazing and glass skin systems for corporate, commercial and institutional buildings."
+      "description": "Architectural facades protect the exterior of a building, integrating structure, glass and cladding to provide safety, efficiency and modern design."
     },
     "aluminumWindows": {
       "title": "Aluminum windows & systems",
@@ -124,7 +127,7 @@
     },
     "doorsAccess": {
       "title": "Doors & access",
-      "description": "Sliding, hinged, folding and hermetic doors for buildings, retail and industrial facilities."
+      "description": "Sliding, swinging, folding and airtight for buildings, commercial premises and industrial warehouses."
     },
     "automaticDoors": {
       "title": "Automatic doors",
