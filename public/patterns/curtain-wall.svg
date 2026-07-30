@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="240" viewBox="0 0 180 240" fill="none">
+  <!--
+    Fachada muro cortina — tile seamless 180×240.
+    Solo bordes izquierdo/superior + módulos internos (evita doble trazo al repetir).
+    Color #E5E7EB; sobre surface (#F5F7FA) queda en rango visual ~3–5%.
+  -->
+  <g stroke="#E5E7EB" stroke-linecap="square" stroke-linejoin="miter" fill="none">
+    <!-- Mullions verticales (perfil aluminio) -->
+    <path stroke-width="1" d="M0 0V240M60 0V240M120 0V240"/>
+    <!-- Doble perfil (refuerzo) -->
+    <path stroke-width="0.7" d="M1.6 0V240M58.4 0V240M61.6 0V240M118.4 0V240"/>
+
+    <!-- Transoms horizontales -->
+    <path stroke-width="1" d="M0 0H180M0 80H180M0 160H180"/>
+    <!-- Doble travesaño -->
+    <path stroke-width="0.7" d="M0 1.6H180M0 78.4H180M0 81.6H180M0 158.4H180"/>
+
+    <!-- Nudos estructurales (uniones) -->
+    <path stroke-width="1" d="M0 0H5M0 0V5"/>
+    <path stroke-width="1" d="M55 0H65M60 0V5M115 0H125M120 0V5"/>
+    <path stroke-width="1" d="M0 75V85H5M0 155V165H5"/>
+    <path stroke-width="1" d="M55 80H65M60 75V85M115 80H125M120 75V85"/>
+    <path stroke-width="1" d="M55 160H65M60 155V165M115 160H125M120 155V165"/>
+
+    <!-- Subdivisiones de panel (muy ligeras, mucho aire) -->
+    <path stroke-width="0.55" d="M30 0V80M90 80V160M150 160V240"/>
+    <path stroke-width="0.55" d="M0 40H60M60 120H120M120 200H180"/>
+  </g>
+</svg>
