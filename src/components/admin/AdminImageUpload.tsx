@@ -63,10 +63,15 @@ export function AdminImageUpload({
     try {
       const res = await fetch("/api/admin/media/upload", { method: "POST", body: form });
       let data: { error?: string; src?: string; item?: unknown; ok?: boolean } = {};
+      const raw = await res.text();
       try {
-        data = await res.json();
+        data = raw ? (JSON.parse(raw) as typeof data) : {};
       } catch {
-        data = { error: `Error del servidor (${res.status}).` };
+        data = {
+          error: raw
+            ? `Error del servidor (${res.status}): ${raw.slice(0, 180)}`
+            : `Error del servidor (${res.status}).`,
+        };
       }
       if (!res.ok) {
         const message = data.error ?? `No se pudo subir la imagen (${res.status}).`;
@@ -75,8 +80,11 @@ export function AdminImageUpload({
         return;
       }
       onSuccess?.(data);
-    } catch {
-      const message = "Error de red al subir la imagen. Revisa la conexión e inténtalo de nuevo.";
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : "";
+      const message = detail
+        ? `Error de red al subir la imagen: ${detail}`
+        : "Error de red al subir la imagen. Revisa la conexión e inténtalo de nuevo.";
       setLocalError(message);
       onError?.(message);
     } finally {

@@ -467,11 +467,45 @@ export async function listAllMedia(
 }
 
 async function afterMutation() {
-  if (isDatabaseEnabled()) {
-    await syncDatabaseToJson();
+  try {
+    if (isDatabaseEnabled()) {
+      await syncDatabaseToJson();
+    }
+    const { revalidatePublicCatalog } = await import("@/lib/catalog/revalidate-public");
+    revalidatePublicCatalog();
+  } catch (error) {
+    // La imagen ya está en disco: no tumbar el upload por un fallo de sync/revalidate.
+    console.error("[media] afterMutation failed:", error);
   }
-  const { revalidatePublicCatalog } = await import("@/lib/catalog/revalidate-public");
-  revalidatePublicCatalog();
+}
+
+function isUnderProjectDir(src: string, projectId: string): boolean {
+  return normalizePublicSrc(src).startsWith(`/images/projects/${projectId}/`);
+}
+
+function isUnderProductGalleryDir(
+  src: string,
+  category: string,
+  subcategory: string,
+): boolean {
+  return normalizePublicSrc(src).startsWith(
+    `/images/products/gallery/${category}/${subcategory}/`,
+  );
+}
+
+function dedicatedProjectSrc(projectId: string, originalName: string, ext: string): string {
+  const base = sanitizeBaseName(path.basename(originalName, ext));
+  return `/images/projects/${projectId}/${base}-${Date.now()}${ext}`;
+}
+
+function dedicatedProductGallerySrc(
+  category: string,
+  subcategory: string,
+  originalName: string,
+  ext: string,
+): string {
+  const base = sanitizeBaseName(path.basename(originalName, ext));
+  return `/images/products/gallery/${category}/${subcategory}/${base}-${Date.now()}${ext}`;
 }
 
 export async function updateMediaCaption(item: AdminMediaItem, caption: string): Promise<void> {
@@ -527,28 +561,51 @@ export async function replaceMediaImage(
   const previousSrc = normalizePublicSrc(item.src);
   let targetSrc = previousSrc;
 
+  const previousMissing =
+    item.fileMissing === true ||
+    isSharedPlaceholderSrc(previousSrc) ||
+    !mediaFileExists(previousSrc);
+
   if (item.kind === "hero") {
     // Portadas: siempre ruta propia (nunca pages/products.svg ni otros marcadores).
     targetSrc = dedicatedHeroSrc(item, ext);
-  } else if (isSharedPlaceholderSrc(previousSrc)) {
-    // Galería apuntando a un marcador compartido: crear archivo dedicado.
-    if (item.kind === "product" && item.category && item.subcategory) {
-      const base = sanitizeBaseName(path.basename(originalName, ext));
-      targetSrc = `/images/products/gallery/${item.category}/${item.subcategory}/${base}-${Date.now()}${ext}`;
-    } else if (item.kind === "project" && item.projectId) {
-      const base = sanitizeBaseName(path.basename(originalName, ext));
-      targetSrc = `/images/projects/${item.projectId}/${base}-${Date.now()}${ext}`;
-    } else {
-      throw new Error("No se puede reemplazar un marcador compartido sin destino propio.");
+  } else if (item.kind === "project" && item.projectId) {
+    // Si falta el archivo o la ruta no está bajo /projects/{id}/, crear ruta dedicada.
+    if (previousMissing || !isUnderProjectDir(previousSrc, item.projectId)) {
+      targetSrc = dedicatedProjectSrc(item.projectId, originalName, ext);
+    } else if (path.extname(previousSrc).toLowerCase() !== ext) {
+      const base = previousSrc.replace(/\.[^.]+$/, "");
+      targetSrc = `${base}${ext}`;
     }
+  } else if (item.kind === "product" && item.category && item.subcategory) {
+    if (
+      previousMissing ||
+      !isUnderProductGalleryDir(previousSrc, item.category, item.subcategory)
+    ) {
+      targetSrc = dedicatedProductGallerySrc(
+        item.category,
+        item.subcategory,
+        originalName,
+        ext,
+      );
+    } else if (path.extname(previousSrc).toLowerCase() !== ext) {
+      const base = previousSrc.replace(/\.[^.]+$/, "");
+      targetSrc = `${base}${ext}`;
+    }
+  } else if (isSharedPlaceholderSrc(previousSrc)) {
+    throw new Error("No se puede reemplazar un marcador compartido sin destino propio.");
   } else if (path.extname(previousSrc).toLowerCase() !== ext) {
     const base = previousSrc.replace(/\.[^.]+$/, "");
     targetSrc = `${base}${ext}`;
   }
 
+  // 1) Escribir archivo primero (si falla, no tocamos DB/JSON).
+  writeImageFile(buffer, targetSrc);
+
+  // 2) Actualizar metadatos solo tras escritura exitosa.
   if (targetSrc !== previousSrc) {
     await updateMediaSrc(item, targetSrc);
-    if (!isSharedPlaceholderSrc(previousSrc)) {
+    if (!isSharedPlaceholderSrc(previousSrc) && previousSrc !== targetSrc) {
       try {
         fs.unlinkSync(publicPathFromSrc(previousSrc));
       } catch {
@@ -557,7 +614,6 @@ export async function replaceMediaImage(
     }
   }
 
-  writeImageFile(buffer, targetSrc);
   await afterMutation();
   return targetSrc;
 }
