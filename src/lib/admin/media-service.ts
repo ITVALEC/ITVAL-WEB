@@ -11,6 +11,7 @@ import {
   isSharedPlaceholderSrc,
   normalizePublicSrc,
 } from "@/lib/admin/media-placeholder";
+import { getImagesRoot, resolveImageDiskPath } from "@/lib/media/images-root";
 import { MANIFEST_PATHS, readJsonFile, writeJsonFile } from "./manifests";
 import { getProductCategoryLabel, getSubcategoryLabel } from "./product-labels";
 import {
@@ -20,12 +21,10 @@ import {
   type GalleryImageSource,
 } from "@/lib/catalog/product-images";
 
-const root = process.cwd();
-const PUBLIC_IMAGES = path.join(root, "public", "images");
 const ALLOWED_EXT = new Set([".jpg", ".jpeg", ".png", ".webp", ".avif", ".gif"]);
 const MAX_BYTES = 20 * 1024 * 1024;
 
-export { MAX_PRODUCT_GALLERY_IMAGES };
+export { MAX_PRODUCT_GALLERY_IMAGES, getImagesRoot };
 
 export type MediaKind = "project" | "product" | "hero" | "other";
 
@@ -57,28 +56,8 @@ type ProductManifest = {
   [key: string]: unknown;
 };
 
-function getImagesRoot(): string {
-  try {
-    // En producción public/images es symlink a shared/images: escribir ahí persiste.
-    return fs.realpathSync(PUBLIC_IMAGES);
-  } catch {
-    return path.resolve(PUBLIC_IMAGES);
-  }
-}
-
 function publicPathFromSrc(src: string): string {
-  const normalized = src.replace(/^\//, "").replace(/\\/g, "/");
-  if (!normalized.startsWith("images/")) {
-    throw new Error("Ruta de imagen no permitida.");
-  }
-  const relative = normalized.slice("images/".length);
-  const imagesRoot = getImagesRoot();
-  const resolved = path.resolve(imagesRoot, relative);
-  const relativeToRoot = path.relative(imagesRoot, resolved);
-  if (relativeToRoot.startsWith("..") || path.isAbsolute(relativeToRoot)) {
-    throw new Error("Ruta fuera del directorio de imágenes.");
-  }
-  return resolved;
+  return resolveImageDiskPath(src);
 }
 
 function extFromName(name: string): string {
@@ -209,6 +188,7 @@ export function writeImageFile(
         "El archivo no parece una imagen válida. Usa JPG, PNG, WebP o AVIF.",
       );
     }
+    ensureDir(getImagesRoot());
     const diskPath = publicPathFromSrc(destPublicSrc);
     ensureDir(path.dirname(diskPath));
     // Si hay symlink roto o basura previa, bórralo antes de escribir.
@@ -219,6 +199,7 @@ export function writeImageFile(
       /* no existía */
     }
     fs.writeFileSync(diskPath, buffer);
+    // fsync-ish: reabrir y comprobar cabecera
     if (!isServablePublicImage(destPublicSrc)) {
       throw new Error("La imagen se guardó pero no se puede leer en el servidor.");
     }
@@ -795,6 +776,7 @@ export async function addProjectImage(
       caption: projectRows[0].name,
       projectId,
       galleryIndex: sortOrder,
+      fileMissing: false,
     };
   }
 
@@ -821,6 +803,7 @@ export async function addProjectImage(
     caption: project.name,
     projectId,
     galleryIndex: project.gallery.length - 1,
+    fileMissing: false,
   };
 }
 
@@ -954,6 +937,7 @@ export async function addProductImage(
       subcategory,
       productIndex: sortOrder,
       gallerySource: "product",
+      fileMissing: false,
     };
   }
 
@@ -983,6 +967,7 @@ export async function addProductImage(
     subcategory,
     productIndex: index,
     gallerySource: "product",
+    fileMissing: false,
   };
 }
 

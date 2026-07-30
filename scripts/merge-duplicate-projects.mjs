@@ -28,9 +28,14 @@ const manifestPath = path.join(
 const publicImages = path.join(root, "public", "images");
 
 function getImagesRoot() {
+  const fromEnv = (process.env.ITVAL_IMAGES_ROOT || "").trim();
+  if (fromEnv) return path.resolve(fromEnv);
   try {
     return fs.realpathSync(publicImages);
   } catch {
+    return publicImages;
+  }
+} catch {
     return publicImages;
   }
 }

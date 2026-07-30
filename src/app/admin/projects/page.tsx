@@ -499,7 +499,26 @@ export default function AdminProjectsPage() {
               projectId={editingProject.id}
               label="Subir nueva foto"
               variant="secondary"
-              onSuccess={async () => {
+              onSuccess={async (result) => {
+                const nextSrc =
+                  typeof result.src === "string" && result.src.trim()
+                    ? result.src.trim()
+                    : null;
+                if (nextSrc) {
+                  setEditing((current) =>
+                    current
+                      ? {
+                          ...current,
+                          gallery: [...current.gallery, nextSrc],
+                          galleryFileMissing: [
+                            ...(current.galleryFileMissing ??
+                              current.gallery.map(() => false)),
+                            false,
+                          ],
+                        }
+                      : current,
+                  );
+                }
                 setPreviewVersion((v) => v + 1);
                 setFeedback({ type: "success", message: "Foto agregada al proyecto." });
                 await refreshEditingProject();

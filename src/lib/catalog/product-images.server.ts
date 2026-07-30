@@ -1,7 +1,6 @@
 import "server-only";
 
 import fs from "node:fs";
-import path from "node:path";
 import { unstable_noStore as noStore } from "next/cache";
 import { getDocument } from "@/lib/db/documents";
 import { isDatabaseEnabled, query } from "@/lib/db/pool";
@@ -18,6 +17,7 @@ import {
   type ProductGalleryImage,
 } from "./product-images";
 import { isCatalogPlaceholderSrc } from "@/lib/media/placeholder-src";
+import { resolveImageDiskPath } from "@/lib/media/images-root";
 
 export type ProductImageManifest = {
   categories?: Partial<Record<ProductKey, string>>;
@@ -27,12 +27,12 @@ export type ProductImageManifest = {
   >;
 };
 
-/** True si el archivo existe bajo public/ (o symlink de deploy shared/images). */
+/** True si el archivo existe bajo ITVAL_IMAGES_ROOT o public/images. */
 function publicImageFileExists(src: string): boolean {
   if (!src?.trim() || isCatalogPlaceholderSrc(src)) return false;
   try {
-    const relative = src.replace(/\\/g, "/").replace(/^\//, "").split("?")[0];
-    return fs.existsSync(path.join(process.cwd(), "public", relative));
+    const clean = src.replace(/\\/g, "/").split("?")[0] ?? src;
+    return fs.existsSync(resolveImageDiskPath(clean));
   } catch {
     return false;
   }

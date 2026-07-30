@@ -139,7 +139,8 @@ jobs:
             --exclude=".env" \
             --exclude=".env.*" \
             --exclude="*.log" \
-            --exclude="public/images/" \
+            --exclude="public/images/projects/" \
+            --exclude="public/images/products/" \
             -e "ssh -p $VPS_PORT -i $HOME/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=15" \
             ./ \
             "$VPS_USER@$VPS_HOST:/var/www/itval/releases/$RELEASE/"
@@ -208,12 +209,12 @@ jobs:
             readlink -f "$ROOT/current" 2>/dev/null || true
           )"
 
-          echo "===== IMÁGENES PERSISTENTES (solo shared, sin re-subir del repo) ====="
+          echo "===== IMÁGENES PERSISTENTES (shared + ruta ITVAL_IMAGES_ROOT) ====="
 
           mkdir -p "$SHARED_IMAGES"
 
           # Si una release antigua aún tenía public/images real (no symlink),
-          # recupérala una sola vez hacia shared. No volver a mezclar el repo.
+          # recupérala una sola vez hacia shared.
           if [ -n "$PREVIOUS_RELEASE" ] &&
              [ -d "$PREVIOUS_RELEASE/public/images" ] &&
              [ ! -L "$PREVIOUS_RELEASE/public/images" ]; then
@@ -221,25 +222,37 @@ jobs:
             rsync -a "$PREVIOUS_RELEASE/public/images/" "$SHARED_IMAGES/"
           fi
 
-          # Nunca rsync del código hacia shared: eso re-subía miles de fotos
-          # en cada deploy y podía pisar subidas del admin.
-          if [ -d "$RELEASE_DIR/public/images" ] &&
-             [ ! -L "$RELEASE_DIR/public/images" ]; then
-            echo "Quitando public/images del release (las fotos viven en shared)..."
-            rm -rf "$RELEASE_DIR/public/images"
+          # Si public/images era un symlink a shared, quitarlo: Next no sirve bien
+          # symlinks fuera del proyecto (404 al subir fotos nuevas).
+          if [ -L "$RELEASE_DIR/public/images" ]; then
+            echo "Eliminando symlink public/images (se sirve vía route handler)..."
+            rm -f "$RELEASE_DIR/public/images"
+          elif [ -d "$RELEASE_DIR/public/images/projects" ] ||
+               [ -d "$RELEASE_DIR/public/images/products" ]; then
+            # Por si quedó algo del rsync; projects/products viven solo en shared.
+            rm -rf "$RELEASE_DIR/public/images/projects" "$RELEASE_DIR/public/images/products"
           fi
 
-          mkdir -p "$RELEASE_DIR/public"
-          ln -sfn "$SHARED_IMAGES" "$RELEASE_DIR/public/images"
+          mkdir -p "$RELEASE_DIR/public/images"
 
-          if [ ! -e "$RELEASE_DIR/public/images" ]; then
-            echo "ERROR: no se pudo vincular public/images -> $SHARED_IMAGES"
-            exit 1
+          # Incorporar placeholders/pages del release a shared sin borrar lo existente.
+          if [ -d "$RELEASE_DIR/public/images" ]; then
+            rsync -a "$RELEASE_DIR/public/images/" "$SHARED_IMAGES/"
           fi
+
+          # Forzar raíz de disco para subidas y para GET /images/*
+          if ! grep -qE '^ITVAL_IMAGES_ROOT=' "$ENV_FILE"; then
+            echo "ITVAL_IMAGES_ROOT=$SHARED_IMAGES" >> "$ENV_FILE"
+            echo "Añadido ITVAL_IMAGES_ROOT=$SHARED_IMAGES"
+          else
+            sed -i "s|^ITVAL_IMAGES_ROOT=.*|ITVAL_IMAGES_ROOT=$SHARED_IMAGES|" "$ENV_FILE"
+            echo "Actualizado ITVAL_IMAGES_ROOT=$SHARED_IMAGES"
+          fi
+
+          export ITVAL_IMAGES_ROOT="$SHARED_IMAGES"
 
           echo "Imágenes compartidas: $SHARED_IMAGES"
-          echo "Symlink activo: $(readlink -f "$RELEASE_DIR/public/images")"
-          echo "Contenido shared (muestra): $(find "$SHARED_IMAGES" -type f 2>/dev/null | wc -l) archivos"
+          echo "Archivos en shared: $(find "$SHARED_IMAGES" -type f 2>/dev/null | wc -l)"
 
           echo "===== VINCULANDO VARIABLES ====="
 
@@ -427,7 +440,7 @@ jobs:
           echo "ITVAL se desplegó correctamente."
           echo "Usuario Linux: $(id -un)"
           echo "Carpeta activa: $(readlink -f "$ROOT/current")"
-          echo "Imágenes persistentes: $(readlink -f "$ROOT/current/public/images")"
+          echo "Imágenes persistentes: $SHARED_IMAGES (ITVAL_IMAGES_ROOT)"
           echo "Aplicación interna: http://localhost:3001/es"
           echo "Base de datos: itval_db"
           echo "Usuario PostgreSQL: itval_app"

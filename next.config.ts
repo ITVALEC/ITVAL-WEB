@@ -15,6 +15,18 @@ const nextConfig: NextConfig = {
   serverActions: {
     bodySizeLimit: "25mb",
   },
+  // beforeFiles: Next no debe devolver 404 de public/ antes de llegar al handler.
+  // Las fotos de proyectos/productos viven en ITVAL_IMAGES_ROOT (shared en VPS).
+  async rewrites() {
+    return {
+      beforeFiles: [
+        {
+          source: "/images/:path*",
+          destination: "/api/images/:path*",
+        },
+      ],
+    };
+  },
 };
 
 export default withNextIntl(nextConfig);
