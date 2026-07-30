@@ -250,17 +250,14 @@ jobs:
           if grep -qE '^ITVAL_IMAGES_ROOT=' "$ENV_FILE"; then
             TMP_ENV="$(mktemp)"
             grep -vE '^ITVAL_IMAGES_ROOT=' "$ENV_FILE" > "$TMP_ENV"
-            printf 'ITVAL_IMAGES_ROOT=%s
-' "$SHARED_IMAGES" >> "$TMP_ENV"
+            echo "ITVAL_IMAGES_ROOT=$SHARED_IMAGES" >> "$TMP_ENV"
             chmod 600 "$TMP_ENV"
             chown --reference="$ENV_FILE" "$TMP_ENV" 2>/dev/null || true
             mv -f "$TMP_ENV" "$ENV_FILE"
             chmod 600 "$ENV_FILE"
             echo "Actualizado ITVAL_IMAGES_ROOT=$SHARED_IMAGES"
           else
-            printf '
-ITVAL_IMAGES_ROOT=%s
-' "$SHARED_IMAGES" >> "$ENV_FILE"
+            echo "ITVAL_IMAGES_ROOT=$SHARED_IMAGES" >> "$ENV_FILE"
             chmod 600 "$ENV_FILE"
             echo "Anadido ITVAL_IMAGES_ROOT=$SHARED_IMAGES"
           fi
