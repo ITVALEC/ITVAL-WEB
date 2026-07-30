@@ -57,16 +57,25 @@ type ProductManifest = {
   [key: string]: unknown;
 };
 
+function getImagesRoot(): string {
+  try {
+    // En producción public/images es symlink a shared/images: escribir ahí persiste.
+    return fs.realpathSync(PUBLIC_IMAGES);
+  } catch {
+    return path.resolve(PUBLIC_IMAGES);
+  }
+}
+
 function publicPathFromSrc(src: string): string {
   const normalized = src.replace(/^\//, "").replace(/\\/g, "/");
   if (!normalized.startsWith("images/")) {
     throw new Error("Ruta de imagen no permitida.");
   }
-  const full = path.join(root, "public", normalized);
-  const resolved = path.resolve(full);
-  const imagesRoot = path.resolve(PUBLIC_IMAGES);
-  const relative = path.relative(imagesRoot, resolved);
-  if (relative.startsWith("..") || path.isAbsolute(relative)) {
+  const relative = normalized.slice("images/".length);
+  const imagesRoot = getImagesRoot();
+  const resolved = path.resolve(imagesRoot, relative);
+  const relativeToRoot = path.relative(imagesRoot, resolved);
+  if (relativeToRoot.startsWith("..") || path.isAbsolute(relativeToRoot)) {
     throw new Error("Ruta fuera del directorio de imágenes.");
   }
   return resolved;

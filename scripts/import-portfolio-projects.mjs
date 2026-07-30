@@ -42,6 +42,8 @@ function slugify(value) {
   return value
     .normalize("NFD")
     .replace(/\p{Diacritic}/gu, "")
+    // Unificar guiones tipográficos (en-dash/em-dash) con el guion ASCII.
+    .replace(/[\u2010-\u2015\u2212]/g, "-")
     .replace(/[^a-zA-Z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
     .toLowerCase()
@@ -86,12 +88,7 @@ function parseYear(folderName) {
 }
 
 function uniqueSlug(base, used) {
-  let slug = slugify(base) || "proyecto";
-  let counter = 2;
-  while (used.has(slug)) {
-    slug = `${slugify(base)}-${counter}`;
-    counter += 1;
-  }
+  const slug = slugify(base) || "proyecto";
   used.add(slug);
   return slug;
 }
@@ -130,6 +127,7 @@ function main() {
 
   const usedSlugs = new Set();
   const projects = [];
+  const projectsById = new Map();
 
   const projectDirs = fs
     .readdirSync(projectsBase, { withFileTypes: true })
@@ -147,15 +145,33 @@ function main() {
     const name = titleCase(project || dir.name);
     const cityLabel = city;
     const projectDest = path.join(destBase, id);
+    ensureDir(projectDest);
 
-    const gallery = images.map((srcPath, index) => {
+    const existing = projectsById.get(id);
+    const startIndex = existing ? existing.gallery.length : 0;
+
+    const added = images.map((srcPath, index) => {
       const ext = path.extname(srcPath).toLowerCase() || ".jpg";
-      const fileName = index === 0 ? `cover${ext}` : `${String(index).padStart(2, "0")}${ext}`;
+      const absoluteIndex = startIndex + index;
+      const fileName =
+        absoluteIndex === 0
+          ? `cover${ext}`
+          : `${String(absoluteIndex).padStart(2, "0")}${ext}`;
       const destPath = path.join(projectDest, fileName);
       return copyTo(srcPath, destPath);
     });
 
-    projects.push({
+    if (existing) {
+      // Misma obra (slug idéntico tras normalizar guiones): una sola galería.
+      for (const src of added) {
+        if (!existing.gallery.includes(src)) existing.gallery.push(src);
+      }
+      existing.imageCount = existing.gallery.length;
+      if (!existing.cover) existing.cover = existing.gallery[0];
+      continue;
+    }
+
+    const entry = {
       id,
       name,
       city: cityLabel,
@@ -164,11 +180,13 @@ function main() {
       folder: dir.name,
       productCategory: category,
       productSubcategory: subcategory,
-      cover: gallery[0],
-      gallery,
-      imageCount: gallery.length,
+      cover: added[0],
+      gallery: added,
+      imageCount: added.length,
       featured: false,
-    });
+    };
+    projects.push(entry);
+    projectsById.set(id, entry);
   }
 
   projects.sort((a, b) => {

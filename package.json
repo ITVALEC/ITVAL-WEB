@@ -17,6 +17,7 @@
     "db:schema": "node scripts/apply-schema.mjs",
     "db:migrate": "node scripts/migrate-json-to-postgres.mjs",
     "db:seed-projects": "node scripts/seed-projects-if-empty.mjs",
+    "db:merge-projects": "node scripts/merge-duplicate-projects.mjs --db",
     "db:export": "node scripts/export-postgres-to-json.mjs",
     "db:setup": "node scripts/apply-schema.mjs && node scripts/migrate-json-to-postgres.mjs",
     "db:mongo:migrate": "node --env-file=.env.local scripts/migrate-json-to-mongo.mjs",

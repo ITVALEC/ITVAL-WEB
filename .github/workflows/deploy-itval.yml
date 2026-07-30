@@ -310,6 +310,12 @@ jobs:
             npm run db:seed-projects
           fi
 
+          echo "===== UNIFICANDO OBRAS DUPLICADAS Y LIMPIANDO FOTOS HUÉRFANAS ====="
+
+          # Une ids …-2 (misma obra) y borra project_images sin archivo en disco.
+          # Corre en el VPS (shared/images + Postgres), no desde el PC de desarrollo.
+          npm run db:merge-projects
+
           echo "===== SINCRONIZANDO POSTGRES → JSON ====="
 
           npm run db:export

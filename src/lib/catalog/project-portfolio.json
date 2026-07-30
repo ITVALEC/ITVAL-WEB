@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-07T02:21:25.241Z",
+  "generatedAt": "2026-07-30T17:42:43.633Z",
   "source": "postgresql",
   "missionImage": "/images/about/mission.jpg",
   "cities": [
@@ -37,27 +37,11 @@
       "cover": "/images/projects/2026-iglesia-iurd-quito/cover.jpeg",
       "gallery": [
         "/images/projects/2026-iglesia-iurd-quito/cover.jpeg",
-        "/images/projects/2026-iglesia-iurd-quito/01.jpeg"
-      ],
-      "imageCount": 2,
-      "featured": true,
-      "coverIndex": 0
-    },
-    {
-      "id": "2026-iglesia-iurd-quito-2",
-      "name": "2026 Iglesia Iurd",
-      "city": "Quito",
-      "location": "Quito, Ecuador",
-      "year": 2026,
-      "folder": "2026 IGLESIA IURD – QUITO",
-      "productCategory": "facades",
-      "productSubcategory": "curtainWallStick",
-      "cover": "/images/projects/2026-iglesia-iurd-quito-2/cover.jpeg",
-      "gallery": [
+        "/images/projects/2026-iglesia-iurd-quito/01.jpeg",
         "/images/projects/2026-iglesia-iurd-quito-2/cover.jpeg",
         "/images/projects/2026-iglesia-iurd-quito-2/01.jpeg"
       ],
-      "imageCount": 2,
+      "imageCount": 4,
       "featured": true,
       "coverIndex": 0
     },
@@ -98,27 +82,11 @@
       "gallery": [
         "/images/projects/2026-stihl-puembo-quito/cover.jpeg",
         "/images/projects/2026-stihl-puembo-quito/01.jpeg",
-        "/images/projects/2026-stihl-puembo-quito/02.jpeg"
-      ],
-      "imageCount": 3,
-      "featured": true,
-      "coverIndex": 0
-    },
-    {
-      "id": "2026-stihl-puembo-quito-2",
-      "name": "2026 Stihl",
-      "city": "Quito",
-      "location": "Quito, Ecuador",
-      "year": 2026,
-      "folder": "2026 STIHL – PUEMBO QUITO",
-      "productCategory": "facades",
-      "productSubcategory": "curtainWallStick",
-      "cover": "/images/projects/2026-stihl-puembo-quito-2/cover.jpeg",
-      "gallery": [
+        "/images/projects/2026-stihl-puembo-quito/02.jpeg",
         "/images/projects/2026-stihl-puembo-quito-2/cover.jpeg",
         "/images/projects/2026-stihl-puembo-quito-2/01.jpeg"
       ],
-      "imageCount": 2,
+      "imageCount": 5,
       "featured": true,
       "coverIndex": 0
     },
@@ -503,28 +471,12 @@
       "productSubcategory": "curtainWallStick",
       "cover": "/images/projects/2023-edif-parqueaderos-el-aguacate-quito/cover.jpeg",
       "gallery": [
-        "/images/projects/2023-edif-parqueaderos-el-aguacate-quito/cover.jpeg"
-      ],
-      "imageCount": 1,
-      "featured": false,
-      "coverIndex": 0
-    },
-    {
-      "id": "2023-edif-parqueaderos-el-aguacate-quito-2",
-      "name": "2023 Edif. Parqueaderos El Aguacate",
-      "city": "Quito",
-      "location": "Quito, Ecuador",
-      "year": 2023,
-      "folder": "2023 EDIF. PARQUEADEROS EL AGUACATE – QUITO",
-      "productCategory": "facades",
-      "productSubcategory": "curtainWallStick",
-      "cover": "/images/projects/2023-edif-parqueaderos-el-aguacate-quito-2/cover.jpeg",
-      "gallery": [
+        "/images/projects/2023-edif-parqueaderos-el-aguacate-quito/cover.jpeg",
         "/images/projects/2023-edif-parqueaderos-el-aguacate-quito-2/cover.jpeg",
         "/images/projects/2023-edif-parqueaderos-el-aguacate-quito-2/01.jpeg",
         "/images/projects/2023-edif-parqueaderos-el-aguacate-quito-2/02.jpeg"
       ],
-      "imageCount": 3,
+      "imageCount": 4,
       "featured": false,
       "coverIndex": 0
     },
@@ -569,29 +521,13 @@
         "/images/projects/2023-provenzana-pifo-quito/cover.jpeg",
         "/images/projects/2023-provenzana-pifo-quito/01.jpeg",
         "/images/projects/2023-provenzana-pifo-quito/02.jpeg",
-        "/images/projects/2023-provenzana-pifo-quito/03.jpg"
-      ],
-      "imageCount": 4,
-      "featured": false,
-      "coverIndex": 0
-    },
-    {
-      "id": "2023-provenzana-pifo-quito-2",
-      "name": "2023 Provenzana",
-      "city": "Quito",
-      "location": "Quito, Ecuador",
-      "year": 2023,
-      "folder": "2023 PROVENZANA – PIFO QUITO",
-      "productCategory": "facades",
-      "productSubcategory": "curtainWallStick",
-      "cover": "/images/projects/2023-provenzana-pifo-quito-2/cover.jpg",
-      "gallery": [
+        "/images/projects/2023-provenzana-pifo-quito/03.jpg",
         "/images/projects/2023-provenzana-pifo-quito-2/cover.jpg",
         "/images/projects/2023-provenzana-pifo-quito-2/01.jpg",
         "/images/projects/2023-provenzana-pifo-quito-2/02.jpg",
         "/images/projects/2023-provenzana-pifo-quito-2/03.jpg"
       ],
-      "imageCount": 4,
+      "imageCount": 8,
       "featured": false,
       "coverIndex": 0
     },
@@ -830,29 +766,13 @@
         "/images/projects/2018-edificio-equivida-quito/cover.jpeg",
         "/images/projects/2018-edificio-equivida-quito/01.jpeg",
         "/images/projects/2018-edificio-equivida-quito/02.jpeg",
-        "/images/projects/2018-edificio-equivida-quito/03.jpeg"
-      ],
-      "imageCount": 4,
-      "featured": false,
-      "coverIndex": 0
-    },
-    {
-      "id": "2018-edificio-equivida-quito-2",
-      "name": "2018 Edificio Equivida",
-      "city": "Quito",
-      "location": "Quito, Ecuador",
-      "year": 2018,
-      "folder": "2018 EDIFICIO  EQUIVIDA -QUITO",
-      "productCategory": "facades",
-      "productSubcategory": "curtainWallStick",
-      "cover": "/images/projects/2018-edificio-equivida-quito-2/cover.jpeg",
-      "gallery": [
+        "/images/projects/2018-edificio-equivida-quito/03.jpeg",
         "/images/projects/2018-edificio-equivida-quito-2/cover.jpeg",
         "/images/projects/2018-edificio-equivida-quito-2/01.jpeg",
         "/images/projects/2018-edificio-equivida-quito-2/02.jpeg",
         "/images/projects/2018-edificio-equivida-quito-2/03.jpeg"
       ],
-      "imageCount": 4,
+      "imageCount": 8,
       "featured": false,
       "coverIndex": 0
     },
@@ -986,28 +906,12 @@
         "/images/projects/2017-escuela-politecnica-del-ejercito-espe-quito/cover.jpg",
         "/images/projects/2017-escuela-politecnica-del-ejercito-espe-quito/01.jpeg",
         "/images/projects/2017-escuela-politecnica-del-ejercito-espe-quito/02.jpeg",
-        "/images/projects/2017-escuela-politecnica-del-ejercito-espe-quito/03.jpeg"
-      ],
-      "imageCount": 4,
-      "featured": false,
-      "coverIndex": 0
-    },
-    {
-      "id": "2017-escuela-politecnica-del-ejercito-espe-quito-2",
-      "name": "2017 Escuela Politecnica Del Ejercito Espe",
-      "city": "Quito",
-      "location": "Quito, Ecuador",
-      "year": 2017,
-      "folder": "2017 ESCUELA POLITECNICA DEL EJERCITO ESPE – QUITO",
-      "productCategory": "facades",
-      "productSubcategory": "curtainWallStick",
-      "cover": "/images/projects/2017-escuela-politecnica-del-ejercito-espe-quito-2/cover.jpg",
-      "gallery": [
+        "/images/projects/2017-escuela-politecnica-del-ejercito-espe-quito/03.jpeg",
         "/images/projects/2017-escuela-politecnica-del-ejercito-espe-quito-2/cover.jpg",
         "/images/projects/2017-escuela-politecnica-del-ejercito-espe-quito-2/01.jpg",
         "/images/projects/2017-escuela-politecnica-del-ejercito-espe-quito-2/02.jpg"
       ],
-      "imageCount": 3,
+      "imageCount": 7,
       "featured": false,
       "coverIndex": 0
     },
@@ -1240,29 +1144,13 @@
         "/images/projects/2016-edificio-matriz-banco-general-ruminahui-quito/03.jpg",
         "/images/projects/2016-edificio-matriz-banco-general-ruminahui-quito/04.jpg",
         "/images/projects/2016-edificio-matriz-banco-general-ruminahui-quito/05.jpeg",
-        "/images/projects/2016-edificio-matriz-banco-general-ruminahui-quito/06.jpeg"
-      ],
-      "imageCount": 7,
-      "featured": false,
-      "coverIndex": 0
-    },
-    {
-      "id": "2016-edificio-matriz-banco-general-ruminahui-quito-2",
-      "name": "2016 Edificio Matriz Banco General Rumiñahui",
-      "city": "Quito",
-      "location": "Quito, Ecuador",
-      "year": 2016,
-      "folder": "2016 EDIFICIO MATRIZ BANCO GENERAL RUMIÑAHUI – QUITO",
-      "productCategory": "facades",
-      "productSubcategory": "curtainWallStick",
-      "cover": "/images/projects/2016-edificio-matriz-banco-general-ruminahui-quito-2/cover.jpg",
-      "gallery": [
+        "/images/projects/2016-edificio-matriz-banco-general-ruminahui-quito/06.jpeg",
         "/images/projects/2016-edificio-matriz-banco-general-ruminahui-quito-2/cover.jpg",
         "/images/projects/2016-edificio-matriz-banco-general-ruminahui-quito-2/01.jpg",
         "/images/projects/2016-edificio-matriz-banco-general-ruminahui-quito-2/02.jpg",
         "/images/projects/2016-edificio-matriz-banco-general-ruminahui-quito-2/03.jpg"
       ],
-      "imageCount": 4,
+      "imageCount": 11,
       "featured": false,
       "coverIndex": 0
     },
@@ -1422,28 +1310,12 @@
       "productSubcategory": "armoredPartitions",
       "cover": "/images/projects/2013-edificio-securitas-quito/cover.jpg",
       "gallery": [
-        "/images/projects/2013-edificio-securitas-quito/cover.jpg"
-      ],
-      "imageCount": 1,
-      "featured": false,
-      "coverIndex": 0
-    },
-    {
-      "id": "2013-edificio-securitas-quito-2",
-      "name": "2013 Edificio Securitas",
-      "city": "Quito",
-      "location": "Quito, Ecuador",
-      "year": 2013,
-      "folder": "2013 EDIFICIO SECURITAS – QUITO",
-      "productCategory": "security",
-      "productSubcategory": "armoredPartitions",
-      "cover": "/images/projects/2013-edificio-securitas-quito-2/cover.jpg",
-      "gallery": [
+        "/images/projects/2013-edificio-securitas-quito/cover.jpg",
         "/images/projects/2013-edificio-securitas-quito-2/cover.jpg",
         "/images/projects/2013-edificio-securitas-quito-2/01.jpg",
         "/images/projects/2013-edificio-securitas-quito-2/02.jpg"
       ],
-      "imageCount": 3,
+      "imageCount": 4,
       "featured": false,
       "coverIndex": 0
     },
@@ -1587,23 +1459,7 @@
       "cover": "/images/projects/2011-edificio-centro-de-informacion-integral-de-la-universidad-central-del-ecuad/cover.jpeg",
       "gallery": [
         "/images/projects/2011-edificio-centro-de-informacion-integral-de-la-universidad-central-del-ecuad/cover.jpeg",
-        "/images/projects/2011-edificio-centro-de-informacion-integral-de-la-universidad-central-del-ecuad/01.jpeg"
-      ],
-      "imageCount": 2,
-      "featured": false,
-      "coverIndex": 0
-    },
-    {
-      "id": "2011-edificio-centro-de-informacion-integral-de-la-universidad-central-del-ecuad-2",
-      "name": "2011 Edificio Centro De Informacion Integral De La Universidad Central Del Ecuador",
-      "city": "Quito",
-      "location": "Quito, Ecuador",
-      "year": 2011,
-      "folder": "2011 EDIFICIO CENTRO DE INFORMACION INTEGRAL DE LA UNIVERSIDAD CENTRAL DEL ECUADOR – QUITO",
-      "productCategory": "facades",
-      "productSubcategory": "curtainWallStick",
-      "cover": "/images/projects/2011-edificio-centro-de-informacion-integral-de-la-universidad-central-del-ecuad-2/cover.jpg",
-      "gallery": [
+        "/images/projects/2011-edificio-centro-de-informacion-integral-de-la-universidad-central-del-ecuad/01.jpeg",
         "/images/projects/2011-edificio-centro-de-informacion-integral-de-la-universidad-central-del-ecuad-2/cover.jpg",
         "/images/projects/2011-edificio-centro-de-informacion-integral-de-la-universidad-central-del-ecuad-2/01.jpg",
         "/images/projects/2011-edificio-centro-de-informacion-integral-de-la-universidad-central-del-ecuad-2/02.jpg",
@@ -1615,7 +1471,7 @@
         "/images/projects/2011-edificio-centro-de-informacion-integral-de-la-universidad-central-del-ecuad-2/08.jpg",
         "/images/projects/2011-edificio-centro-de-informacion-integral-de-la-universidad-central-del-ecuad-2/09.jpg"
       ],
-      "imageCount": 10,
+      "imageCount": 12,
       "featured": false,
       "coverIndex": 0
     },
