@@ -115,9 +115,14 @@ export async function PATCH(request: Request) {
     ctaText: current.footer.es.ctaText ?? "",
   };
 
-  const socialIncoming = normalizeSocialLinks(body.social ?? current.social, {
-    keepEmpty: true,
-  });
+  // Solo tocar social si el body lo envía (guardado independiente del admin).
+  const socialProvided = Array.isArray(body.social);
+  const socialIncoming = socialProvided
+    ? normalizeSocialLinks(body.social, {
+        keepEmpty: true,
+        allowEmptyList: true,
+      })
+    : current.social;
   const socialError = validateSocialPayload(socialIncoming);
   if (socialError) {
     return NextResponse.json({ error: socialError }, { status: 400 });
@@ -132,15 +137,15 @@ export async function PATCH(request: Request) {
   const next: SiteSettings = {
     contact: {
       ...current.contact,
-      ...body.contact,
+      ...(body.contact ?? {}),
       mapsUrl: String(body.contact?.mapsUrl ?? current.contact.mapsUrl ?? "").trim(),
     },
     footer: {
       es: nextEs,
       en: nextEn,
     },
-    // URLs / iconos: no se traducen
-    social: normalizeSocialLinks(socialIncoming),
+    // Persistimos la lista tal cual (vacía, sin URL, etc.). No reinyectar defaults.
+    social: socialIncoming,
   };
 
   const mapsUrl = next.contact.mapsUrl;

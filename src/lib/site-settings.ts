@@ -125,14 +125,15 @@ function normalizeOneSocialLink(raw: unknown, index: number): SiteSocialLink | n
 
 /**
  * Acepta lista dinámica o el Record legacy de 4 redes.
- * Filtra URLs inválidas; `keepEmpty` sirve en admin mientras se edita.
- * Si no hay links útiles, cae a los 4 defaults (sección siempre visible).
+ * Filtra URLs inválidas; `keepEmpty` conserva filas sin URL (admin).
+ * `allowEmptyList` evita reinyectar defaults cuando el admin vació la lista.
  */
 export function normalizeSocialLinks(
   value?: SiteSocialLink[] | Partial<SiteSocialLinksLegacy> | null,
-  options?: { keepEmpty?: boolean },
+  options?: { keepEmpty?: boolean; allowEmptyList?: boolean },
 ): SiteSocialLink[] {
   const keepEmpty = options?.keepEmpty === true;
+  const allowEmptyList = options?.allowEmptyList === true || keepEmpty;
 
   if (Array.isArray(value)) {
     const out: SiteSocialLink[] = [];
@@ -147,7 +148,7 @@ export function normalizeSocialLinks(
       });
     });
     if (out.length === 0) {
-      return keepEmpty ? [] : getDefaultSocialLinks();
+      return allowEmptyList ? [] : getDefaultSocialLinks();
     }
     return out;
   }
@@ -206,11 +207,18 @@ export function normalizeSiteSettings(raw: unknown): SiteSettings {
       en: footerEn,
     },
     social: (() => {
-      const normalized = normalizeSocialLinks(
-        base.social ?? nestedSocial ?? defaultsTyped.social,
-        { keepEmpty: true },
-      );
-      return normalized.length > 0 ? normalized : getDefaultSocialLinks();
+      const source = base.social ?? nestedSocial ?? defaultsTyped.social;
+      // Array (aunque vacío) = lista configurada; no forzar defaults.
+      if (Array.isArray(source)) {
+        return normalizeSocialLinks(source, {
+          keepEmpty: true,
+          allowEmptyList: true,
+        });
+      }
+      if (source && typeof source === "object") {
+        return normalizeSocialLinks(source);
+      }
+      return getDefaultSocialLinks();
     })(),
   };
 }
@@ -225,7 +233,10 @@ export function packSiteSettingsForDb(settings: SiteSettings): {
     footer: {
       es: settings.footer.es,
       en: settings.footer.en,
-      social: normalizeSocialLinks(settings.social),
+      social: normalizeSocialLinks(settings.social, {
+        keepEmpty: true,
+        allowEmptyList: true,
+      }),
     },
   };
 }
@@ -275,10 +286,9 @@ export function getSiteFooterCopy(locale: string): SiteFooterCopy {
 }
 
 export function getSiteSocialLinks(): SiteSocialLink[] {
-  // Público: nunca devolver vacío. Defaults permanentes si settings/DB fallan.
   try {
-    const links = normalizeSocialLinks(getSiteSettings().social);
-    return links.length > 0 ? links : getDefaultSocialLinks();
+    // Respeta exactamente lo guardado en admin (incl. lista vacía).
+    return getSiteSettings().social;
   } catch {
     return getDefaultSocialLinks();
   }
