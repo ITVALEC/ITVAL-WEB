@@ -227,10 +227,13 @@ jobs:
             rsync -a "$PREVIOUS_RELEASE/public/images/" "$SHARED_IMAGES/"
           fi
 
-          # Igual que el deploy #65 estable: quitar public/images del release y enlazar shared.
-          if [ -d "$RELEASE_DIR/public/images" ] || [ -L "$RELEASE_DIR/public/images" ]; then
-            echo "Preparando public/images -> shared..."
+          # Copiar pages/placeholders del release a shared ANTES de sustituir por symlink.
+          if [ -d "$RELEASE_DIR/public/images" ] && [ ! -L "$RELEASE_DIR/public/images" ]; then
+            echo "Sincronizando public/images del release -> shared..."
+            rsync -a "$RELEASE_DIR/public/images/" "$SHARED_IMAGES/"
             rm -rf "$RELEASE_DIR/public/images"
+          elif [ -L "$RELEASE_DIR/public/images" ]; then
+            rm -f "$RELEASE_DIR/public/images"
           fi
 
           mkdir -p "$RELEASE_DIR/public"
